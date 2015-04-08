@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Silmoon.Windows</RootNamespace>
+    <AssemblyName>Silmoon.Windows</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Silmoon.Windows.XML</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Silmoon, Version=1.0.2.1, Culture=neutral, PublicKeyToken=8f065e8743a60f45, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dll\Silmoon.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ControlsHelper\ListViewColumnSorter.cs" />
+    <Compile Include="Controls\DoubleBufferListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Extension\GenieExtension.cs" />
+    <Compile Include="Controls\ProcessWaitingBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ProcessWaitingBar.Designer.cs">
+      <DependentUpon>ProcessWaitingBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SwitchButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SwitchButton.Designer.cs">
+      <DependentUpon>SwitchButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Desktops\Desktop.cs" />
+    <Compile Include="Forms\GenieForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GenieForm.Designer.cs">
+      <DependentUpon>GenieForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\OkConfirmDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OkConfirmDialog.Designer.cs">
+      <DependentUpon>OkConfirmDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\OpenForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OpenForm.Designer.cs">
+      <DependentUpon>OpenForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ScrollForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ScrollForm.Designer.cs">
+      <DependentUpon>ScrollForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IObjectSafety.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SAM.cs" />
+    <Compile Include="Controls\SmTrackBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SmTrackBar.Designer.cs">
+      <DependentUpon>SmTrackBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Systems\LogonUser.cs" />
+    <Compile Include="Systems\Processes.cs" />
+    <Compile Include="Systems\RDController.cs" />
+    <Compile Include="Systems\SystemInfo.cs" />
+    <Compile Include="Win32\API\APIEnum\WM_WTSSESSION_CHANGE.cs" />
+    <Compile Include="Win32\API\APIEnum\WTSInfoClass.cs" />
+    <Compile Include="Win32\API\APIStructs\WTS_CLIENT_ADDRESS.cs" />
+    <Compile Include="Win32\API\APIEnum\WTS_CONNECTSTATE_CLASS.cs" />
+    <Compile Include="Win32\API\APIStructs\WTS_SESSION_INFO.cs" />
+    <Compile Include="Win32\Hooking\Hooking.cs" />
+    <Compile Include="Systems\SystemController.cs" />
+    <Compile Include="Win32\Win32.API.cs" />
+    <Compile Include="Win32\Settings.cs" />
+    <Compile Include="WindowsResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WindowsResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Explorer\IObjectWithSite.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\ProcessWaitingBar.resx">
+      <DependentUpon>ProcessWaitingBar.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SwitchButton.resx">
+      <DependentUpon>SwitchButton.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GenieForm.resx">
+      <DependentUpon>GenieForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\OkConfirmDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>OkConfirmDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ScrollForm.resx">
+      <DependentUpon>ScrollForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SmTrackBar.resx">
+      <DependentUpon>SmTrackBar.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WindowsResource.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WindowsResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resource\SmTrackBarBottionImage1.png" />
+    <None Include="sn.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resource\SmTrackBarBottionImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resource\SmTrackBarBottionImage2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WaitingProcessPictrue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WaitingProcessPictrue_Red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SwitchButton_BackImg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SwitchButton_ButtonDown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SwitchButton_ButtonUp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SwitchButton_BackImg_Off.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
