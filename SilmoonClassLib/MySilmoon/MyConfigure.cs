@@ -30,8 +30,11 @@ namespace Silmoon.MySilmoon
                 result.ExpiredVersion = int.Parse(xml["validationResult"]["version"].Attributes["expiredVersion"].Value);
                 result.NotificationVersion = int.Parse(xml["validationResult"]["version"].Attributes["notificationVersion"].Value);
                 result.LatestVersion = int.Parse(xml["validationResult"]["version"].Attributes["latestVersion"].Value);
-                result.UserIdentityStateCode = int.Parse(xml["validationResult"]["userIdentity"].Attributes["stateCode"].Value);
-                result.UserIdentityStateMessage = xml["validationResult"]["userIdentity"].Attributes["stateMessage"].Value;
+                result.UserStateCode = int.Parse(xml["validationResult"]["userIdentity"].Attributes["stateCode"].Value);
+                result.UserStateMessage = xml["validationResult"]["userIdentity"].Attributes["stateMessage"].Value;
+                result.UpgradeNotice = xml["validationResult"]["notice"].Attributes["upgradeNotice"].Value;
+                result.ExpiredNotice = xml["validationResult"]["notice"].Attributes["expiredNotice"].Value;
+                result.Notice = xml["validationResult"]["notice"].Attributes["notice"].Value;
             }
             catch (Exception ex)
             {
