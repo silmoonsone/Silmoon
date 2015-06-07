@@ -168,6 +168,11 @@ namespace Silmoon.Windows.Systems
                 return null;
             }
         }
+        public bool TSSendMessage(int sessionid, string title, string message, MessageBoxButtons buttons, int stimeout, bool wait)
+        {
+            int resp = 7;
+            return TSControl.WTSSendMessage(IntPtr.Zero, sessionid, title, title.Length, message, message.Length, buttons, stimeout, out resp, wait);
+        }
 
         void onSessionChanged(int sessionid, WM_WTSSESSION_CHANGE change)
         {
@@ -188,19 +193,21 @@ namespace Silmoon.Windows.Systems
             [DllImport("wtsapi32.dll")]
             public static extern bool WTSLogoffSession(int hServer, long SessionId, bool bWait);
             [DllImport("Wtsapi32.dll")]
-            public static extern bool WTSQuerySessionInformation(System.IntPtr hServer, int sessionId, WTSInfoClass wtsInfoClass, out StringBuilder ppBuffer, out int pBytesReturned);
+            public static extern bool WTSQuerySessionInformation(IntPtr hServer, int sessionId, WTSInfoClass wtsInfoClass, out StringBuilder ppBuffer, out int pBytesReturned);
             [DllImport("Wtsapi32.dll")]
-            public static extern bool WTSQuerySessionInformation(System.IntPtr hServer, int sessionId, WTSInfoClass wtsInfoClass, out byte[] ppBuffer, out int pBytesReturned);
+            public static extern bool WTSQuerySessionInformation(IntPtr hServer, int sessionId, WTSInfoClass wtsInfoClass, out byte[] ppBuffer, out int pBytesReturned);
             [DllImport("Wtsapi32.dll")]
-            public static extern bool WTSQuerySessionInformation(System.IntPtr hServer, int sessionId, WTSInfoClass wtsInfoClass, out long ppBuffer, out int pBytesReturned);
+            public static extern bool WTSQuerySessionInformation(IntPtr hServer, int sessionId, WTSInfoClass wtsInfoClass, out long ppBuffer, out int pBytesReturned);
             [DllImport("Wtsapi32.dll")]
             public static extern bool WTSDisconnectSession(IntPtr hServer, int sessionid, bool bWait);
             [DllImport("Wtsapi32.dll")]
             public static extern bool WTSLogoffSession(IntPtr hServer, int sessionid, bool bWait);
             [DllImport("wtsapi32.dll")]
-            public static extern void WTSRegisterSessionNotification(System.IntPtr pWin, int wFlag);
+            public static extern void WTSRegisterSessionNotification(IntPtr pWin, int wFlag);
             [DllImport("wtsapi32.dll")]
-            public static extern void WTSUnRegisterSessionNotification(System.IntPtr pWin);
+            public static extern void WTSUnRegisterSessionNotification(IntPtr pWin);
+            [DllImport("wtsapi32.dll", SetLastError = true)]
+            public static extern bool WTSSendMessage(IntPtr hServer, int SessionId, String pTitle, [MarshalAs(UnmanagedType.U4)] int TitleLength, String pMessage, [MarshalAs(UnmanagedType.U4)] int MessageLength, [MarshalAs(UnmanagedType.U4)] MessageBoxButtons Style, [MarshalAs(UnmanagedType.U4)] int Timeout, [MarshalAs(UnmanagedType.U4)] out int pResponse, bool bWait);
 
 
 
