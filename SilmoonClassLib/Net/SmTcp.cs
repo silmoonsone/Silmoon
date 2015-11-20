@@ -64,7 +64,6 @@ namespace Silmoon.Net
         ArrayList _tcp_Reader_Array = new ArrayList();
 
         SmPackectProtocol _protocol = new SmPackectProtocol();
-        Thread _Async_thread;
         ProtocalStatusInfo _netStatusInfo;
 
         bool _listenWork = false;

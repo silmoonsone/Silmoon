@@ -12,12 +12,12 @@ namespace Silmoon.Data.SqlUtility
     /// </summary>
     public class MSSQLHelper
     {
-        SmMSSQLClient _mssql;
+        SqlUtil _mssql;
         /// <summary>
         /// 使用指定的ODBC数据连接创建MYSQL实用工具
         /// </summary>
         /// <param name="odbc">指定一个已经可以使用的ODBC连接</param>
-        public MSSQLHelper(SmMSSQLClient odbc)
+        public MSSQLHelper(SqlUtil odbc)
         {
             _mssql = odbc;
         }

@@ -55,7 +55,7 @@ namespace Silmoon.Net
                     m_Monitor.IOControl(SIO_RCVALL, BitConverter.GetBytes(1), null);
                     //m_Monitor.BeginReceive(m_Buffer, 0, m_Buffer.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
                 }
-                catch (Exception e)
+                catch
                 {
                     //m_Monitor = null;
                     //throw new SocketException();
@@ -82,20 +82,14 @@ namespace Silmoon.Net
                     {
                         byte[] pkt = new byte[received];
                         Array.Copy(Buffer, 0, pkt, 0, received);
-                        OnNewPacket(new Packet(pkt, DateTime.Now));
+                        OnNewPacket(new Packet(pkt));
                     }
                 }
-                catch (Exception e)
-                {
-                    throw;
-                }
+                catch { throw; }
 
                 m_Monitor.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
             }
-            catch (Exception e)
-            {
-
-            }
+            catch { }
         }
 
         protected void OnNewPacket(Packet p)
@@ -136,7 +130,6 @@ namespace Silmoon.Net
     public class Packet
     {
         private byte[] m_Raw;
-        private DateTime m_Time;
         private int m_Version;
         private int m_HeaderLength;
         private Precedence m_Precedence;
@@ -165,7 +158,7 @@ namespace Silmoon.Net
         //   {
         //    Packet(raw, DateTime.Now);
         //   }
-        public Packet(byte[] raw, DateTime time)
+        public Packet(byte[] raw)
         {
             if (raw == null)
             {
@@ -177,7 +170,6 @@ namespace Silmoon.Net
             }
 
             this.m_Raw = raw;
-            this.m_Time = time;
             this.m_HeaderLength = (raw[0] & 0xF) * 4;
             if ((raw[0] & 0xF) < 5) { throw new ArgumentException(); }
             this.m_Precedence = (Precedence)((raw[1] & 0xE0) >> 5);
@@ -200,10 +192,8 @@ namespace Silmoon.Net
                 m_SourceAddress = GetIPAddress(raw, 12);
                 m_DestinationAddress = GetIPAddress(raw, 16);
             }
-            catch (Exception e)
-            {
-                throw;
-            }
+            catch
+            { throw; }
 
             if (m_Protocol == InternetProtocol.Tcp || m_Protocol == InternetProtocol.Udp)
             {
@@ -234,15 +224,6 @@ namespace Silmoon.Net
         public int TotalLength
         {
             get { return m_TotalLength; }
-        }
-        public DateTime Time
-        {
-            get
-            {
-                return this.m_Time;
-
-
-            }
         }
         public InternetProtocol Protocol
         {
@@ -287,6 +268,11 @@ namespace Silmoon.Net
             {
                 return m_DestinationAddress;
             }
+        }
+        public byte[] RawData
+        {
+            get { return m_Raw; }
+            set { m_Raw = value; }
         }
     }
 }

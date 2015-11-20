@@ -85,7 +85,7 @@ namespace Silmoon
         /// </summary>
         /// <param name="s">源字符串</param>
         /// <returns></returns>
-        public static bool StringToBool(string s)
+        public static bool StringToBool(string s, bool defaultResult = false)
         {
             switch (s.ToLower())
             {
@@ -160,7 +160,7 @@ namespace Silmoon
                 case "stoped":
                     return false;
                 default:
-                    return false;
+                    return defaultResult;
             }
         }
         /// <summary>

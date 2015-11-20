@@ -14,12 +14,12 @@ namespace Silmoon.Data.SqlUtility
     /// </summary>
     public class MySQLHelper
     {
-        SmMySqlClient _odbc;
+        MySqlUtil _odbc;
         /// <summary>
         /// 使用指定的ODBC数据连接创建MYSQL实用工具
         /// </summary>
         /// <param name="odbc">指定一个已经可以使用的ODBC连接</param>
-        public MySQLHelper(SmMySqlClient odbc)
+        public MySQLHelper(MySqlUtil odbc)
         {
             _odbc = odbc;
         }

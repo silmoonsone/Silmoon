@@ -19,7 +19,6 @@ namespace Silmoon.MySilmoon
         private string _productString = "NULL";
         private int _revision = 0;
         private string _releaseVersion = "0";
-        private RunningState _runningState = RunningState.Stopped;
         private bool _initProduceInfo = false;
         private string _userIdentity = "#undefined";
 
@@ -63,27 +62,57 @@ namespace Silmoon.MySilmoon
 
         }
 
+        [Obsolete("现在推荐使用OutputText方法。")]
         public void onOutputText(string message)
         {
             onOutputText(message, 0);
         }
+        [Obsolete("现在推荐使用OutputText方法。")]
         public void onOutputText(string message, int flag)
         {
             if (OnOutputTextMessage != null) OnOutputTextMessage(message, flag);
         }
+        [Obsolete("现在推荐使用InputText方法。")]
         public void onInputText(string message)
         {
             onInputText(message, 0);
         }
+        [Obsolete("现在推荐使用InputText方法。")]
         public void onInputText(string message, int flag)
         {
             if (OnInputTextMessage != null) OnInputTextMessage(message, flag);
         }
+
+        public void OutputText(string message)
+        {
+            OutputText(message, 0);
+        }
+        public void OutputText(string message, int flag)
+        {
+            if (OnOutputTextMessage != null) OnOutputTextMessage(message, flag);
+        }
+        public void InputText(string message)
+        {
+            InputText(message, 0);
+        }
+        public void InputText(string message, int flag)
+        {
+            if (OnInputTextMessage != null) OnInputTextMessage(message, flag);
+        }
+
+        /// <summary>
+        /// 让GBC引发线程错误事件，由GBC的OnThreadException事件捕获并处理。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void onThreadException(object sender, ThreadExceptionEventArgs e)
         {
             if (OnThreadException != null) OnThreadException(sender, e);
         }
 
+        /// <summary>
+        /// 使用一个异步方法使用产品字符标识和版本Revision使用MyConfigure.GetRemoteVersion验证程序，由OnValidateVersion处理验证结果。
+        /// </summary>
         public void AsyncValidateVersion()
         {
             Threads.ExecAsync(delegate()
@@ -104,23 +133,23 @@ namespace Silmoon.MySilmoon
         {
             if (Environment.UserInteractive)
             {
-                onOutputText("GBC : Application runing at interactive mode...", -999);
+                OutputText("GBC : Application runing at interactive mode...", -999);
                 if (ServiceControl.IsExisted(serviceName))
                 {
-                    onOutputText("GBC : Application associate service(" + serviceName + ") is exist...", -999);
+                    OutputText("GBC : Application associate service(" + serviceName + ") is exist...", -999);
                     using (ServiceController sc = new ServiceController(serviceName))
                     {
                         sc.Refresh();
                         if (sc.Status == ServiceControllerStatus.Running && sc.CanStop)
                         {
-                            onOutputText("GBC : Application associate service(" + serviceName + ") is running, shutdown it...", -999);
+                            OutputText("GBC : Application associate service(" + serviceName + ") is running, shutdown it...", -999);
                             sc.Stop();
                             sc.WaitForStatus(ServiceControllerStatus.Stopped);
-                            onOutputText("GBC : Application associate service(" + serviceName + ") has been shutdown...", -999);
+                            OutputText("GBC : Application associate service(" + serviceName + ") has been shutdown...", -999);
                         }
                         else
                         {
-                            onOutputText("GBC : Application associate service(" + serviceName + ") not running or can't stop it...", -999);
+                            OutputText("GBC : Application associate service(" + serviceName + ") not running or can't stop it...", -999);
                         }
                     }
                 }

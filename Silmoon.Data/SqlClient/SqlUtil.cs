@@ -11,7 +11,7 @@ using System.Web;
 
 namespace Silmoon.Data.SqlClient
 {
-    public class SmMSSQLClient : SqlCommonTemplate,IDisposable,ISMSQL
+    public class SqlUtil : SqlCommonTemplate,IDisposable,ISMSQL
     {
         SqlConnection con = null;
 
@@ -49,7 +49,7 @@ namespace Silmoon.Data.SqlClient
         /// 创建MS SQL数据源的实例
         /// </summary>
         /// <param name="constr">连接字符串</param>
-        public SmMSSQLClient()
+        public SqlUtil()
         {
             con = new SqlConnection();
         }
@@ -57,7 +57,7 @@ namespace Silmoon.Data.SqlClient
         /// 创建MS SQL数据源的实例
         /// </summary>
         /// <param name="constr">连接字符串</param>
-        public SmMSSQLClient(string constr)
+        public SqlUtil(string constr)
         {
             con = new SqlConnection();
             conStr = constr;
@@ -66,7 +66,7 @@ namespace Silmoon.Data.SqlClient
         /// 创建MS SQL数据源的实例
         /// </summary>
         /// <param name="constr">连接字符串</param>
-        public SmMSSQLClient(SqlConnection conn)
+        public SqlUtil(SqlConnection conn)
         {
             con = conn;
         }

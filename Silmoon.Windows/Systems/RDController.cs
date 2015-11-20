@@ -59,7 +59,7 @@ namespace Silmoon.Windows.Systems
                             cum.ProtocalType = (Silmoon.Windows.Systems.LogonUser.ClientProtocalType)((int)protocalType[0]);
                             cum.ConnectState = (WTS_CONNECTSTATE_CLASS)connState[0];
 
-                            WTS_CLIENT_ADDRESS ad = new WTS_CLIENT_ADDRESS();
+                            //WTS_CLIENT_ADDRESS ad = new WTS_CLIENT_ADDRESS();
 
 
                             //var aa = clientAddress[1];

@@ -61,7 +61,6 @@ namespace Silmoon.Net
         NetworkStream _ns;
 
         ArrayList _tcp_Reader_Array = new ArrayList();
-        Thread _Async_thread;
 
         bool _listenWork = false;
 

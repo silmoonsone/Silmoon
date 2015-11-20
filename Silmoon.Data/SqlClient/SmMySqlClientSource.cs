@@ -8,9 +8,9 @@ namespace Silmoon.Data.SqlClient
     public class SmMySqlClientSource : IDisposable
     {
         MySqlConnection conn = new MySqlConnection();
-        SmMySqlClient source = new SmMySqlClient();
+        MySqlUtil source = new MySqlUtil();
 
-        public SmMySqlClient DataSource
+        public MySqlUtil DataSource
         {
             get { return source; }
             set { source = value; }

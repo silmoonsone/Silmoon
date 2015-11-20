@@ -955,7 +955,7 @@ namespace Silmoon.Net
     {
         int contentLength = 0;
         SmmpPacket packet;
-        bool MessageRead = false;
+        //bool MessageRead = false;
 
         public bool Received = false;
         /// <summary>
@@ -1043,7 +1043,6 @@ namespace Silmoon.Net
                     if (messageSplited.Length == 2)
                         packet.Messages.Add(messageSplited[0], messageSplited[1]);
                 }
-                MessageRead = true;
                 packetBuffer.Clear();
                 if (packet.Messages.Count == 0) return null;
                 if (int.TryParse(packet.Messages["ContentLength"], out contentLength))

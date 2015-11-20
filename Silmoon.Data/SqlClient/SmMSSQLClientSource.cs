@@ -8,9 +8,9 @@ namespace Silmoon.Data.SqlClient
     public class SmMSSQLClientSource : IDisposable
     {
         SqlConnection conn = new SqlConnection();
-        SmMSSQLClient source = new SmMSSQLClient();
+        SqlUtil source = new SqlUtil();
 
-        public SmMSSQLClient DataSource
+        public SqlUtil DataSource
         {
             get { return source; }
             set { source = value; }
