@@ -25,6 +25,9 @@ namespace Silmoon.MySilmoon
         public event OutputTextMessageHandler OnOutputTextMessage;
         public event OutputTextMessageHandler OnInputTextMessage;
         public event ThreadExceptionEventHandler OnThreadException;
+        /// <summary>
+        /// AsyncValidateVersion invoked.
+        /// </summary>
         public event Action<VersionResult> OnValidateVersion;
 
         /// <summary>
@@ -122,7 +125,18 @@ namespace Silmoon.MySilmoon
                     var result = MyConfigure.GetRemoteVersion(_productString, _userIdentity);
                     OnValidateVersion(result);
                 }
+                else
+                {
+                    ///当没有对回调验证事件过程调用的时候，而去调用了验证过程的处理，这里理应当抛出一个异常。
+                }
             });
+        }
+        /// <summary>
+        /// 使用产品字符标识和版本Revision使用MyConfigure.GetRemoteVersion验证程序，由OnValidateVersion处理验证结果，阻塞线程。
+        /// </summary>
+        public VersionResult ValidateVersion()
+        {
+            return MyConfigure.GetRemoteVersion(_productString, _userIdentity);
         }
 
         /// <summary>

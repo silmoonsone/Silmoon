@@ -10,49 +10,43 @@ namespace Silmoon.MySilmoon
     /// <summary>
     /// 
     /// </summary>
-    public sealed class ConnSilmoon
+    public sealed class SilmoonServer
     {
-        /// <summary>
-        /// SILMOON服务器事件
-        /// </summary>
-        public static event WebConnectionHander SilmoonServerEvent;
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="named"></param>
-        /// <param name="webAction"></param>
-        /// <returns></returns>
-        public static string ConnectionSilmoon(string named, string webAction)
+        public void PreConnectionAllServer(bool output = false)
         {
-            WebClient _wclit = new WebClient();
-            string uri = "http://www.silmoon.com/System/Interface/Receive.aspx?Action=" + webAction + "&FieldText=" + named + "&ShowTip=true";
-            string result = _wclit.DownloadString(uri);
-            _wclit.Dispose();
-            return result;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="named"></param>
-        /// <param name="webaction"></param>
-        /// <param name="_proc"></param>
-        public static void AsyncConnectionSilmoon(string named, string webaction, WebConnectionHander _proc)
-        {
-            SilmoonServerEvent = _proc;
-            WebClient _wclt = new WebClient();
-            _wclt.DownloadStringCompleted += new DownloadStringCompletedEventHandler(_wclt_DownloadStringCompleted);
-            string uri = "http://www.silmoon.com/System/Interface/Receive.aspx?Action=" + webaction + "&FieldText=" + named + "&ShowTip=true";
-            _wclt.DownloadStringAsync(new Uri(uri));
+            if (output) Console.Write(">>> Testing ");
+
+            ManualResetEvent m = new ManualResetEvent(false);
+            WebClient w1 = new WebClient();
+            WebClient w2 = new WebClient();
+            WebClient w3 = new WebClient();
+            WebClient w4 = new WebClient();
+
+            w1.DownloadStringCompleted += W_DownloadStringCompleted;
+            w2.DownloadStringCompleted += W_DownloadStringCompleted;
+            w3.DownloadStringCompleted += W_DownloadStringCompleted;
+            w4.DownloadStringCompleted += W_DownloadStringCompleted;
+
+            w1.DownloadStringAsync(new Uri("https://encrypted.silmoon.com/server.php"), m);
+            w2.DownloadStringAsync(new Uri("https://stateserver.silmoon.com/server.php"), m);
+            w3.DownloadStringAsync(new Uri("https://encrypted.silmoon.com/server.php"), m);
+            w4.DownloadStringAsync(new Uri("https://stateserver.silmoon.com/server.php"), m);
+
+
+            while (w1.IsBusy || w2.IsBusy || w3.IsBusy || w4.IsBusy)
+            {
+                m.WaitOne();
+                if (output) Console.Write(".");
+                m.Reset();
+            }
+            if (output) Console.Write(" OK... <<<");
+            if (output) Console.WriteLine();
         }
 
-        static void _wclt_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        private void W_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
-            if (SilmoonServerEvent != null)
-            {
-                string resultString = null;
-                if (e.Error != null) resultString = "000"; else resultString = e.Result;
-                SilmoonServerEvent(new SilmoonServerResultArgs(resultString, e.Error));
-            }
+            ManualResetEvent m = e.UserState as ManualResetEvent;
+            m.Set();
         }
     }
     /// <summary>

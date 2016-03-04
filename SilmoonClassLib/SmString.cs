@@ -22,6 +22,9 @@ namespace Silmoon
             set { ComparisonArrayed.excessed = value; }
         }
     }
+    /// <summary>
+    /// 银月（老子叫宋维彬）的字符串类静态方法。
+    /// </summary>
     public class SmString
     {
         /// <summary>
