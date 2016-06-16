@@ -25,5 +25,10 @@ namespace Silmoon.Net.Sockets
 
         [FieldOffset(5)]
         public byte a5;
+
+        public override string ToString()
+        {
+            return a0.ToString("X") + a1.ToString("X") + a2.ToString("X") + a3.ToString("X") + a4.ToString("X") + a5.ToString("X");
+        }
     }
 }

@@ -90,12 +90,12 @@
     <Compile Include="Net\Protocol\SDPacket.cs" />
     <Compile Include="Net\Protocol\SDProtocol.cs" />
     <Compile Include="Net\Sockets\EthHdr.cs" />
-    <Compile Include="Net\Sockets\IPHdr.cs" />
     <Compile Include="Net\Sockets\IPFlags.cs" />
+    <Compile Include="Net\Sockets\IPHdr.cs" />
     <Compile Include="Net\Sockets\MacAddress.cs" />
     <Compile Include="Net\Sockets\Sock.cs" />
-    <Compile Include="Net\Sockets\TcpHdr.cs" />
     <Compile Include="Net\Sockets\TcpFlags.cs" />
+    <Compile Include="Net\Sockets\TcpHdr.cs" />
     <Compile Include="Net\Sockets\UdpHdr.cs" />
     <Compile Include="Reflection\AssemblyUtil.cs" />
     <Compile Include="Reflection\NameObjectCollectionT.cs" />
