@@ -89,6 +89,7 @@
     <Compile Include="Net\Protocol\SDFlags.cs" />
     <Compile Include="Net\Protocol\SDPacket.cs" />
     <Compile Include="Net\Protocol\SDProtocol.cs" />
+    <Compile Include="Net\Sockets\ArpHdr.cs" />
     <Compile Include="Net\Sockets\EthHdr.cs" />
     <Compile Include="Net\Sockets\IPFlags.cs" />
     <Compile Include="Net\Sockets\IPHdr.cs" />
