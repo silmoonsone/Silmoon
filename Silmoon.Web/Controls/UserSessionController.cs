@@ -10,11 +10,22 @@ namespace Silmoon.Web.Controls
         RSACryptoServiceProvider rsa = null;
         string cookieDomain = null;
         DateTime cookieExpires = default(DateTime);
+        int sessionTimeout = 0;
 
         public int SessionTimeout
         {
-            get { return HttpContext.Current.Session.Timeout; }
-            set { HttpContext.Current.Session.Timeout = value; }
+            get
+            {
+                if (HttpContext.Current.Session != null)
+                    sessionTimeout = HttpContext.Current.Session.Timeout;
+                return sessionTimeout;
+            }
+            set
+            {
+                sessionTimeout = value;
+                if (HttpContext.Current.Session != null)
+                    HttpContext.Current.Session.Timeout = value;
+            }
         }
         public event EventHandler UserLogin;
         public event EventHandler UserLogout;
@@ -126,11 +137,22 @@ namespace Silmoon.Web.Controls
             set { cookieExpires = value; }
         }
 
-        public UserSessionController() : this(null) { }
+        public UserSessionController() : this((string)null) { }
         public UserSessionController(string cookieDomain)
         {
             this.cookieDomain = cookieDomain;
         }
+        public UserSessionController(System.Web.UI.Page page)
+        {
+            page.Load += delegate (object sender, EventArgs e)
+             {
+                 ReadSession();
+                 HttpContext.Current.Response.Write("readSession");
+             };
+        }
+
+
+
         private void check_sessionOfLogin()
         {
             if (State != LoginState.Login)
@@ -159,6 +181,7 @@ namespace Silmoon.Web.Controls
         }
         public void WriteSession(string field, string value)
         {
+            HttpContext.Current.Session.Timeout = sessionTimeout;
             HttpContext.Current.Session[field] = value;
         }
 
@@ -273,13 +296,15 @@ namespace Silmoon.Web.Controls
         }
         public virtual void DoLogin(string username, string password, int userLevel, T user)
         {
+            HttpContext.Current.Session.Timeout = sessionTimeout;
+
             Username = username;
             Password = password;
             UserLevel = userLevel;
             User = user;
             State = LoginState.Login;
 
-            if (UserLogin != null) UserLogin(this, EventArgs.Empty);
+            UserLogin?.Invoke(this, EventArgs.Empty);
         }
         public virtual void DoLogout()
         {

@@ -56,9 +56,13 @@ namespace Silmoon
         /// </summary>
         /// <param name="dateTime"></param>
         /// <returns></returns>
-        public static long UNIX_TIMESTAMP(DateTime dateTime)
+        public static long GET_UNIX_TIMESTAMP(DateTime dateTime)
         {
-            return (dateTime.Ticks - 621355968000000000) / 10000000;
+            return (dateTime.ToUniversalTime().Ticks - 621355968000000000) / 10000000;
+        }
+        public static DateTime GET_TIME_BY_UNIX_TEMPSTAMP(long timestamp)
+        {
+            return (new DateTime((timestamp * 10000000) + 621355968000000000)).ToLocalTime();
         }
     }
 }

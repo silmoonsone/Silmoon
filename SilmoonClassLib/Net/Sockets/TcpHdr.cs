@@ -17,7 +17,7 @@ namespace Silmoon.Net.Sockets
         [FieldOffset(8)]
         public uint ack_seq;
         /// <summary>
-        /// len up to 2bit
+        /// len up to 2bit, read >>, make <<.
         /// </summary>
         [FieldOffset(12)]
         public byte doff;

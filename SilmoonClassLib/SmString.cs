@@ -51,19 +51,6 @@ namespace Silmoon
             return s;
         }
         /// <summary>
-        /// 检查字段是否为空，如果不是，返回字段，否则抛出异常。
-        /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
-        public static string CheckEmpty(string s)
-        {
-            if (s.Length < 1)
-            {
-                throw new Exception("参数s为空！");
-            }
-            return s;
-        }
-        /// <summary>
         /// 如果字符串为NULL，则把字符串变成零长度的字符串。
         /// </summary>
         /// <param name="s">字符串</param>

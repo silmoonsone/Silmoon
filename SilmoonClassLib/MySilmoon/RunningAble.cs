@@ -29,9 +29,13 @@ namespace Silmoon.MySilmoon
         public bool Start()
         {
             bool success = RunningState == MySilmoon.RunningState.Stopped;
-            RunningState = MySilmoon.RunningState.Running;
-            if (OnStart != null) OnStart(ref success);
-            if (!success) RunningState = RunningState.Stopped;
+            ///这里对是否开始做了判断，对于重复开始的情况做了处理，但是下面的几个方法没有。
+            if (success)
+            {
+                RunningState = MySilmoon.RunningState.Running;
+                if (OnStart != null) OnStart(ref success);
+                if (!success) RunningState = RunningState.Stopped;
+            }
             return success;
         }
         public bool Stop()

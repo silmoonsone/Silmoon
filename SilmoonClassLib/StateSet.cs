@@ -14,6 +14,11 @@ namespace Silmoon
             Message = message;
             return this;
         }
+        public StateSet(T state, string message)
+        {
+            Set(state, message);
+        }
+        public StateSet() { }
     }
     public class StateSet<T, TO> : StateSet<T>
     {
@@ -32,6 +37,11 @@ namespace Silmoon
             UserState = default(TO);
             return this;
         }
+        public StateSet(T state, string message, TO userState)
+        {
+            Set(state, message, userState);
+        }
+        public StateSet() { }
 
     }
 }
