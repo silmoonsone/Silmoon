@@ -20,7 +20,7 @@ namespace Silmoon.Windows.Systems
         static extern void GetSystemInfo(ref CPU_INFO cpuinfo);
         [DllImport("kernel32")]
         static extern void GlobalMemoryStatus(ref MEMORY_INFO meminfo);
-        PerformanceCounter cpuTimePc;
+        //PerformanceCounter cpuTimePc;
         ManagementObjectSearcher searcher;
 
 

@@ -130,7 +130,7 @@ namespace Silmoon.Net
     public class Packet
     {
         private byte[] m_Raw;
-        private int m_Version;
+        //private int m_Version;
         private int m_HeaderLength;
         private Precedence m_Precedence;
         private Delay m_Delay;

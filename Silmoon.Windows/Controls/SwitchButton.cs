@@ -101,7 +101,7 @@ namespace Silmoon.Windows.Controls
 
         void _switch(bool on)
         {
-            Thread _t = null;
+            //Thread _t = null;
             if (on) timerOn.Start();
             else timerOff.Start();
             if (OnSwitch != null) OnSwitch(this, EventArgs.Empty);
