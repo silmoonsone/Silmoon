@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Silmoon.Security
 {
-    class EncryptHelper
+    public class EncryptHelper
     {
         public string AesEncrypt(string source, string key)
         {
