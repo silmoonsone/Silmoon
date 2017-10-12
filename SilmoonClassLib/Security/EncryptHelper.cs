@@ -11,7 +11,7 @@ namespace Silmoon.Security
         {
             using (AesCryptoServiceProvider aesProvider = new AesCryptoServiceProvider())
             {
-                aesProvider.Key = UTF8Encoding.UTF8.GetBytes(key); //GetAesKey(key);固定32位秘钥方法
+                aesProvider.Key = Encoding.UTF8.GetBytes(key); //GetAesKey(key);固定32位秘钥方法
                 aesProvider.Mode = CipherMode.ECB;
                 aesProvider.Padding = PaddingMode.PKCS7;
                 using (ICryptoTransform cryptoTransform = aesProvider.CreateEncryptor())
@@ -28,7 +28,7 @@ namespace Silmoon.Security
         {
             using (AesCryptoServiceProvider aesProvider = new AesCryptoServiceProvider())
             {
-                aesProvider.Key = UTF8Encoding.UTF8.GetBytes(key); //GetAesKey(key);固定32位秘钥方法
+                aesProvider.Key = Encoding.UTF8.GetBytes(key); //GetAesKey(key);固定32位秘钥方法
                 aesProvider.Mode = CipherMode.ECB;
                 aesProvider.Padding = PaddingMode.PKCS7;
                 using (ICryptoTransform cryptoTransform = aesProvider.CreateDecryptor())
