@@ -90,7 +90,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="SmHTTP.cs" />
+    <Compile Include="SmHttp.cs" />
     <Compile Include="Page\RewritePage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -100,7 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ISmPage.cs" />
-    <Compile Include="SmHTML.cs" />
+    <Compile Include="SmHtml.cs" />
     <Compile Include="HttpHelper.cs" />
   </ItemGroup>
   <ItemGroup>
