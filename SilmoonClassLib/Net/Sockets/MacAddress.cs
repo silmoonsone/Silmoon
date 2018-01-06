@@ -26,9 +26,47 @@ namespace Silmoon.Net.Sockets
         [FieldOffset(5)]
         public byte a5;
 
+        public MacAddress(byte a0, byte a1, byte a2, byte a3, byte a4, byte a5)
+        {
+            this.a0 = a0;
+            this.a1 = a1;
+            this.a2 = a2;
+            this.a3 = a3;
+            this.a4 = a4;
+            this.a5 = a5;
+        }
+
         public override string ToString()
         {
             return a0.ToString("X") + a1.ToString("X") + a2.ToString("X") + a3.ToString("X") + a4.ToString("X") + a5.ToString("X");
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is MacAddress))
+            {
+                return false;
+            }
+
+            var address = (MacAddress)obj;
+            return a0 == address.a0 &&
+                   a1 == address.a1 &&
+                   a2 == address.a2 &&
+                   a3 == address.a3 &&
+                   a4 == address.a4 &&
+                   a5 == address.a5;
+        }
+        public override int GetHashCode()
+        {
+            var hashCode = 405784741;
+            hashCode = hashCode * -1521134295 + base.GetHashCode();
+            hashCode = hashCode * -1521134295 + a0.GetHashCode();
+            hashCode = hashCode * -1521134295 + a1.GetHashCode();
+            hashCode = hashCode * -1521134295 + a2.GetHashCode();
+            hashCode = hashCode * -1521134295 + a3.GetHashCode();
+            hashCode = hashCode * -1521134295 + a4.GetHashCode();
+            hashCode = hashCode * -1521134295 + a5.GetHashCode();
+            return hashCode;
         }
 
         public static bool operator ==(MacAddress c1, MacAddress c2)
@@ -68,5 +106,6 @@ namespace Silmoon.Net.Sockets
                 return mac;
             }
         }
+
     }
 }
