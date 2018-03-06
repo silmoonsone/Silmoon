@@ -10,7 +10,7 @@ namespace Silmoon.Web.Controls
         RSACryptoServiceProvider rsa = null;
         string cookieDomain = null;
         DateTime cookieExpires = default(DateTime);
-        int sessionTimeout = 0;
+        int sessionTimeout = 30;
 
         public int SessionTimeout
         {
