@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Silmoon
 {
@@ -15,7 +16,6 @@ namespace Silmoon
             intResult = (long)(time - startTime).TotalSeconds;
             return intResult;
         }
-
         public static long ToTimeStamp(System.DateTime time, DateTime baseUTCTime)
         {
             long intResult = 0;
@@ -31,7 +31,6 @@ namespace Silmoon
             time = startTime.AddSeconds(d);
             return time;
         }
-
         public static System.DateTime ConvertIntDateTime(long d, DateTime baseTime)
         {
             System.DateTime time = System.DateTime.MinValue;
@@ -44,12 +43,10 @@ namespace Silmoon
         {
             return DateTime.Parse(dateTimeString).ToString("yyyy-MM-dd HH:mm:ss");
         }
-
         public static string ToChnDateTimeString(DateTime dateTime)
         {
             return dateTime.ToString("yyyy-MM-dd HH:mm:ss");
         }
-
 
         /// <summary>
         /// 将制定的时间转换成时间戳
@@ -63,6 +60,14 @@ namespace Silmoon
         public static DateTime GET_TIME_BY_UNIX_TEMPSTAMP(long timestamp)
         {
             return (new DateTime((timestamp * 10000000) + 621355968000000000)).ToLocalTime();
+        }
+        
+        public string ConvertToChinese(decimal number)
+        {
+            var format = number.ToString("#L#E#D#C#K#E#D#C#J#E#D#C#I#E#D#C#H#E#D#C#G#E#D#C#F#E#D#C#.0B0A").Replace("0B0A", "@");
+            var simplify = Regex.Replace(format, @"((?<=-|^)[^1-9]*)|((?'z'0)[0A-E]*((?=[1-9])|(?'-z'(?=[F-L\.]|$))))|((?'b'[F-L])(?'z'0)[0A-L]*((?=[1-9])|(?'-z'(?=[\.]|$))))", "${b}${z}");
+            var result = Regex.Replace(simplify, ".", match => "负元空零壹贰叁肆伍陆柒捌玖空空空空空空整分角拾佰仟万亿兆京垓秭穰"[match.Value[0] - '-'].ToString());
+            return result;
         }
     }
 }
