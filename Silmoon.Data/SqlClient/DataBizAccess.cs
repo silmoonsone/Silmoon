@@ -12,10 +12,15 @@ namespace Silmoon.Data.SqlClient
         public SqlTransaction Transaction { get; private set; }
         public DataConnector DataConnector { get; set; }
 
+        public DataBizAccess()
+        {
+
+        }
         public DataBizAccess(DataConnector dc)
         {
             this.DataConnector = dc;
         }
+        
         public SqlDataAdapter GetDataAdapter(string commandText)
         {
             SqlDataAdapter adapter = new SqlDataAdapter(GetDataCommand(commandText));

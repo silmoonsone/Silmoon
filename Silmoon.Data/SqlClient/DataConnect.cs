@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Silmoon.Data.SqlClient
 {
-    public class DataConnector
+    public class DataConnector: IDisposable
     {
         public SqlConnection connect = null;
         protected static string sqlconnectionstr = null;
