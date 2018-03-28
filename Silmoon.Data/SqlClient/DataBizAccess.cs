@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Silmoon.Data.SqlClient
 {
-    public class DataBizAccess
+    public class DataBizAccess : IDisposable
     {
         public SqlTransaction Transaction { get; private set; }
         public DataConnector DataConnector { get; set; }
@@ -61,6 +61,12 @@ namespace Silmoon.Data.SqlClient
             if (Transaction != null)
                 Transaction.Rollback();
             Transaction = null;
+        }
+
+        public void Dispose()
+        {
+            DataConnector.Dispose();
+            DataConnector = null;
         }
     }
 }
