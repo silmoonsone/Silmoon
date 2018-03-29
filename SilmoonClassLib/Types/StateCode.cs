@@ -85,5 +85,9 @@ namespace Silmoon.Types
         /// 多操作成功
         /// </summary>
         MULTI_SUCCESS = 2,
+        /// <summary>
+        /// OK
+        /// </summary>
+        OK = 3,
     }
 }
