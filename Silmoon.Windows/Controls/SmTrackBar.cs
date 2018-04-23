@@ -28,11 +28,11 @@ namespace Silmoon.Windows.Controls
         {
             get
             {
-                return (double)(((double)Button.Location.X / (double)(this.Width - Button.Width)));
+                return Button.Location.X / (double)(Width - Button.Width);
             }
             set
             {
-                double x = ((double)(this.Width - Button.Width) * value);
+                double x = (Width - Button.Width) * value;
                 Button.Location = new Point((int)x, Button.Location.Y);
             }
         }

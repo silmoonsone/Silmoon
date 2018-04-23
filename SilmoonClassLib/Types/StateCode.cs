@@ -12,7 +12,7 @@ namespace Silmoon.Types
         /// <summary>
         /// 出于系统保护的目的
         /// </summary>
-        SYSTEM_PROTECT = -15,
+        SYSTEM_PROTECT = -16,
         /// <summary>
         /// 系统级别的操作限制
         /// </summary>
