@@ -710,7 +710,7 @@ namespace Silmoon.Net
         {
             OnReceivedData = null;
             if (_tc.Connected) _tc.Close();
-            _tcp.onConnectionEvent(_tcp._localTcpStruct, _remoteTcpStruct, this, ClientID);
+            _tcp.onConnectionEvent(_tcp._localTcpStruct, _remoteTcpStruct, null, ClientID);
             _tcp.onClose(_tcp._localTcpStruct, _remoteTcpStruct, _clientID);
         }
         /// <summary>

@@ -705,7 +705,10 @@ namespace Silmoon.Net
                 while ((bit = _ns.ReadByte()) != -1) DataLoop((byte)bit, _clientID);
                 close();
             }
-            catch { close(); }
+            catch (Exception ex)
+            {
+                close();
+            }
         }
         private void DataLoop(byte data, int clientID)
         {
@@ -763,7 +766,7 @@ namespace Silmoon.Net
         {
             OnReceivedData = null;
             if (_tc.Connected) _tc.Close();
-            _tcp.onConnectionEvent(_tcp._localTcpStruct, _remoteTcpStruct, this, ClientID);
+            _tcp.onConnectionEvent(_tcp._localTcpStruct, _remoteTcpStruct, null, ClientID);
             _tcp.onClose(_tcp._localTcpStruct, _remoteTcpStruct, _clientID);
         }
         /// <summary>
