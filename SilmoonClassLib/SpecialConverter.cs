@@ -7,7 +7,7 @@ namespace Silmoon
 {
     public class SpecialConverter
     {
-        public static readonly DateTime SqlMinDateTime = DateTime.Parse("1/1/1753 0:00:00");
+        public static readonly DateTime SqlMinDateTime = DateTime.Parse("1/1/1753 00:00:00");
 
         public static long ToTimeStamp(System.DateTime time)
         {
