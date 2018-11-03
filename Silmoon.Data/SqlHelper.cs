@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Reflection;
 using System.Text;
 
 namespace Silmoon.Data
 {
-    public class SqlOption
+    public class SqlHelper
     {
         public static string SqlInjectStringFilter(string srcString)
         {
@@ -32,5 +34,22 @@ namespace Silmoon.Data
             s = s.Replace("\"\"", "\"");
             return s;
         }
+
+        public static T MakeObject<T>(DataRow row, T obj)
+        {
+            var propertyInfos = obj.GetType().GetProperties();
+            foreach (PropertyInfo item in propertyInfos)
+            {
+                string name = item.Name;
+                Type type = item.PropertyType;
+                if (row[name] != DBNull.Value)
+                {
+                    item.SetValue(obj, row[name], null);
+                }
+            }
+
+            return obj;
+        }
+
     }
 }
