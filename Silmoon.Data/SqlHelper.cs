@@ -44,7 +44,10 @@ namespace Silmoon.Data
                 Type type = item.PropertyType;
                 if (row[name] != DBNull.Value)
                 {
-                    item.SetValue(obj, row[name], null);
+                    if (type.IsEnum)
+                        item.SetValue(obj, Enum.Parse(type, row[name].ToString()), null);
+                    else
+                        item.SetValue(obj, row[name], null);
                 }
             }
 
