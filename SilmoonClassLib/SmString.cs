@@ -203,19 +203,19 @@ namespace Silmoon
             else return array[index];
         }
         /// <summary>
-        /// 把字符串数组中的所有字符全部合并。
+        /// 把数组中的所有元素作为字符串使用一个指定的分隔符合并。
         /// </summary>
-        /// <param name="array">字符串数组。</param>
+        /// <param name="array">数组，其中元素会作为字符串使用</param>
         /// <param name="perfixString">每个元素的前缀</param>
         /// <param name="suffixString">每个元素的后缀</param>
         /// <param name="SplitString">分隔符</param>
         /// <param name="RemoveLastSplitString">是否移除最后一个分隔符</param>
         /// <returns></returns>
-        public static string MergeStringArray(string[] array, string SplitString, bool RemoveLastSplitString = true, string perfixString = "", string suffixString = "")
+        public static string MergeStringArray(Array array, string SplitString, bool RemoveLastSplitString = true, string perfixString = "", string suffixString = "")
         {
             string result = "";
             if (array == null || array.Length == 0) return result;
-            foreach (string s in array)
+            foreach (object s in array)
                 result += perfixString + s + suffixString + SplitString;
             if (RemoveLastSplitString)
                 result = result.Substring(0, result.Length - SplitString.Length);
