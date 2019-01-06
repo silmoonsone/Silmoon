@@ -9,14 +9,14 @@ namespace Silmoon.Data.SqlClient
     public class DataConnector: IDisposable
     {
         public SqlConnection connect = null;
-        protected static string sqlConnectionString = null;
+        protected static string SqlConnectionString = null;
         public DataConnector()
         {
 
         }
         public DataConnector(string sqlConnectionString = null)
         {
-            DataConnector.sqlConnectionString = sqlConnectionString;
+            DataConnector.SqlConnectionString = sqlConnectionString;
         }
 
         public void Dispose()
@@ -26,9 +26,12 @@ namespace Silmoon.Data.SqlClient
             connect = null;
         }
 
-        public void Open()
+        public void Open(string sqlConnectionString = null)
         {
-            connect = new SqlConnection(sqlConnectionString);
+            if (sqlConnectionString != null) SqlConnectionString = sqlConnectionString;
+            if (SqlConnectionString == null)
+                throw new ArgumentException("连接字符串SqlConnectionString无效", "SqlConnectionString");
+            connect = new SqlConnection(SqlConnectionString);
             connect.Open();
         }
     }
