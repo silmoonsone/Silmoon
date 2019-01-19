@@ -12,6 +12,15 @@ namespace Silmoon.Web
         /// </summary>
         /// <param name="s">–≈œ¢</param>
         /// <returns></returns>
+        public static string ErrorMsgHtml(Exception exception)
+        {
+            string msg = "<style type=\"text/css\"><!--";
+            msg += "body,td,th {font-family: Verdana, Arial, Helvetica, sans-serif;	font-size: 12px;}";
+            msg += "--></style>";
+            msg += "<p style=\"background:#CCCCCC\"><strong>" + exception.Message + "£∫</strong></p>";
+            msg += "<pre>" + exception.ToString() + "</pre>";
+            return msg;
+        }
         public static string ErrorMsgHtml(string ErrTitle, string ErrText)
         {
             string msg = "<style type=\"text/css\"><!--";

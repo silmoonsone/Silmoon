@@ -35,6 +35,11 @@ namespace Silmoon.Data
             return s;
         }
 
+        public static T MakeObject<T>(DataRow row) where T : new()
+        {
+            T obj = new T();
+            return MakeObject(row, obj);
+        }
         public static T MakeObject<T>(DataRow row, T obj)
         {
             var propertyInfos = obj.GetType().GetProperties();
@@ -52,6 +57,17 @@ namespace Silmoon.Data
             }
 
             return obj;
+        }
+        public static T[] MakeObjects<T>(DataTable dt) where T : new()
+        {
+            T[] result = new T[dt.Rows.Count];
+
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = MakeObject<T>(dt.Rows[i]);
+            }
+
+            return result;
         }
     }
 }
