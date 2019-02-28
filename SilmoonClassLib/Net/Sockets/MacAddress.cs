@@ -106,6 +106,20 @@ namespace Silmoon.Net.Sockets
                 return mac;
             }
         }
+        public static MacAddress ZeroAddress
+        {
+            get
+            {
+                MacAddress mac;
+                mac.a0 = 0x0;
+                mac.a1 = 0x0;
+                mac.a2 = 0x0;
+                mac.a3 = 0x0;
+                mac.a4 = 0x0;
+                mac.a5 = 0x0;
+                return mac;
+            }
+        }
 
     }
 }
