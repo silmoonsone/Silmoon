@@ -129,11 +129,15 @@
     <Compile Include="Systems\Processes.cs" />
     <Compile Include="Systems\RDController.cs" />
     <Compile Include="Systems\SystemInfo.cs" />
+    <Compile Include="Win32\API\AdvApi32.cs" />
+    <Compile Include="Win32\API\APIEnum\ShutdownEnum.cs" />
     <Compile Include="Win32\API\APIEnum\WM_WTSSESSION_CHANGE.cs" />
     <Compile Include="Win32\API\APIEnum\WTSInfoClass.cs" />
     <Compile Include="Win32\API\APIStructs\WTS_CLIENT_ADDRESS.cs" />
     <Compile Include="Win32\API\APIEnum\WTS_CONNECTSTATE_CLASS.cs" />
     <Compile Include="Win32\API\APIStructs\WTS_SESSION_INFO.cs" />
+    <Compile Include="Win32\API\Kernel32.cs" />
+    <Compile Include="Win32\API\User32.cs" />
     <Compile Include="Win32\Hooking\Hooking.cs" />
     <Compile Include="Systems\SystemController.cs" />
     <Compile Include="Win32\Win32.API.cs" />
