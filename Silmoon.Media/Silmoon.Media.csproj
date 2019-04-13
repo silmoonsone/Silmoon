@@ -72,10 +72,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dll\Microsoft.DirectX.AudioVideoPlayback.dll</HintPath>
     </Reference>
-    <Reference Include="Silmoon, Version=1.0.1.5, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SilmoonClassLib\bin\Debug\Silmoon.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -125,6 +121,10 @@
     <ProjectReference Include="..\Silmoon.Windows\Silmoon.Windows.csproj">
       <Project>{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}</Project>
       <Name>Silmoon.Windows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SilmoonClassLib\SilmoonClassLib.csproj">
+      <Project>{c827a65d-cc9e-444b-908a-7ba70d6e6c11}</Project>
+      <Name>SilmoonClassLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

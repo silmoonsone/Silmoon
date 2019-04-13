@@ -56,10 +56,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Silmoon, Version=1.0.2.1, Culture=neutral, PublicKeyToken=8f065e8743a60f45, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dll\Silmoon.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.DirectoryServices" />
@@ -229,6 +225,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\SwitchButton_BackImg_Off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SilmoonClassLib\SilmoonClassLib.csproj">
+      <Project>{c827a65d-cc9e-444b-908a-7ba70d6e6c11}</Project>
+      <Name>SilmoonClassLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

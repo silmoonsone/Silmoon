@@ -67,12 +67,6 @@
     <Compile Include="IIS\IISManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SilmoonClassLib\SilmoonClassLib.csproj">
-      <Project>{C827A65D-CC9E-444B-908A-7BA70D6E6C11}</Project>
-      <Name>SilmoonClassLib</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -91,6 +85,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="sn.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SilmoonClassLib\SilmoonClassLib.csproj">
+      <Project>{c827a65d-cc9e-444b-908a-7ba70d6e6c11}</Project>
+      <Name>SilmoonClassLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -200,12 +200,6 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Silmoon.Windows\Silmoon.Windows.csproj">
-      <Project>{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}</Project>
-      <Name>Silmoon.Windows</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
