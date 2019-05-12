@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Reflection;
 using System.Text;
+using System.Linq;
 
 namespace Silmoon.Data
 {
@@ -33,6 +35,41 @@ namespace Silmoon.Data
             string s = srcString.Replace("''", "''");
             s = s.Replace("\"\"", "\"");
             return s;
+        }
+
+        public static T MakeObject<T>(SqlDataReader reader) where T : new()
+        {
+            T obj = new T();
+            return MakeObject(reader, obj);
+        }
+        public static T MakeObject<T>(SqlDataReader reader, T obj)
+        {
+            var propertyInfos = obj.GetType().GetProperties();
+            foreach (PropertyInfo item in propertyInfos)
+            {
+                string name = item.Name;
+                Type type = item.PropertyType;
+                if (reader[name] != DBNull.Value)
+                {
+                    if (type.IsEnum)
+                        item.SetValue(obj, Enum.Parse(type, reader[name].ToString()), null);
+                    else
+                        item.SetValue(obj, reader[name], null);
+                }
+            }
+
+            return obj;
+        }
+        public static T[] MakeObjects<T>(SqlDataReader reader) where T : new()
+        {
+            List<T> result = new List<T>();
+
+            while (reader.Read())
+            {
+                result.Add(MakeObject<T>(reader));
+            }
+
+            return result.ToArray();
         }
 
         public static T MakeObject<T>(DataRow row) where T : new()
@@ -68,6 +105,30 @@ namespace Silmoon.Data
             }
 
             return result;
+        }
+        public static void AddSqlCommandParameters(SqlCommand sqlCommand, object obj, string[] paraNames)
+        {
+            var propertyInfos = obj.GetType().GetProperties();
+            foreach (PropertyInfo item in propertyInfos)
+            {
+                string name = item.Name;
+                if (paraNames.Contains(name))
+                {
+                    object value = null;
+                    item.GetValue(value, null);
+                    Type type = item.PropertyType;
+
+                    if (value != null)
+                    {
+                        if (type.IsEnum)
+                            sqlCommand.Parameters.AddWithValue(name, obj.ToString());
+                        else
+                            sqlCommand.Parameters.AddWithValue(name, obj);
+                    }
+                    else
+                        sqlCommand.Parameters.AddWithValue(name, DBNull.Value);
+                }
+            }
         }
     }
 }
