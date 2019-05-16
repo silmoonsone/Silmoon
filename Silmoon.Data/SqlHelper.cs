@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Reflection;
 using System.Text;
 using System.Linq;
+using System.Data.SqlTypes;
 
 namespace Silmoon.Data
 {
@@ -114,16 +115,17 @@ namespace Silmoon.Data
                 string name = item.Name;
                 if (paraNames.Contains(name))
                 {
-                    object value = null;
-                    item.GetValue(value, null);
+                    var value = item.GetValue(obj, null);
                     Type type = item.PropertyType;
 
                     if (value != null)
                     {
                         if (type.IsEnum)
-                            sqlCommand.Parameters.AddWithValue(name, obj.ToString());
+                            sqlCommand.Parameters.AddWithValue(name, value.ToString());
+                        if (type.Name == "DateTime" && ((DateTime)value) == DateTime.MinValue)
+                            sqlCommand.Parameters.AddWithValue(name, SqlDateTime.MinValue);
                         else
-                            sqlCommand.Parameters.AddWithValue(name, obj);
+                            sqlCommand.Parameters.AddWithValue(name, value);
                     }
                     else
                         sqlCommand.Parameters.AddWithValue(name, DBNull.Value);

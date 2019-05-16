@@ -50,10 +50,10 @@ namespace Silmoon.Web
             IPAddress result = null;
 
             if (!string.IsNullOrEmpty(HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"]))
-                return IPAddress.Parse(HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"].Split(new string[] { " ", "," }, StringSplitOptions.RemoveEmptyEntries)[0]);
+                return IPAddress.Parse(HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"].Split(new string[] { " ", ",", ":" }, StringSplitOptions.RemoveEmptyEntries)[0]);
 
             if (!string.IsNullOrEmpty(HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"]))
-                return IPAddress.Parse(HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"].Split(new string[] { " ", "," }, StringSplitOptions.RemoveEmptyEntries)[0]);
+                return IPAddress.Parse(HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"].Split(new string[] { " ", ",", ":" }, StringSplitOptions.RemoveEmptyEntries)[0]);
 
             return result;
         }
