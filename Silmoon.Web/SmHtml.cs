@@ -61,7 +61,7 @@ namespace Silmoon.Web
         /// <param name="url">导航的URL</param>
         /// <param name="target">目标</param>
         /// <returns></returns>
-        public static string PrintMark_A(string text, string url, string target)
+        public static string MakeAMark(string text, string url, string target)
         {
             return "<a href=\"" + url + "\" target=\"" + target + "\">" + text + "</a>";
         }
@@ -73,7 +73,7 @@ namespace Silmoon.Web
         /// <param name="target">目标</param>
         /// <param name="alt">Tip文字</param>
         /// <returns></returns>
-        public static string PrintMark_A(string text, string url, string target, string alt)
+        public static string MakeAMark(string text, string url, string target, string alt)
         {
             return "<a href=\"" + url + "\" target=\"" + target + "\" alt=\"" + alt + "\">" + text + "</a>";
         }
@@ -83,13 +83,13 @@ namespace Silmoon.Web
         /// <param name="text">显示的文字</param>
         /// <param name="url">导航的URL</param>
         /// <returns></returns>
-        public static string PrintMark_A(string text, string url)
+        public static string MakeAMark(string text, string url)
         {
             return "<a href=\"" + url + "\">" + text + "</a>";
         }
-        public static string PrintMark_Img(string imgUrl, string linkTo, string target)
+        public static string MakeImgMark(string imgUrl, string linkTo, string target)
         {
-            return PrintMark_A("<img border=\"0\" src=\"" + imgUrl + "\"></img>", linkTo, target);
+            return MakeAMark("<img border=\"0\" src=\"" + imgUrl + "\"></img>", linkTo, target);
         }
 
         /// <summary>

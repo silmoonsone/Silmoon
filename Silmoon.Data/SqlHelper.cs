@@ -122,7 +122,7 @@ namespace Silmoon.Data
                     {
                         if (type.IsEnum)
                             sqlCommand.Parameters.AddWithValue(name, value.ToString());
-                        if (type.Name == "DateTime" && ((DateTime)value) == DateTime.MinValue)
+                        else if (type.Name == "DateTime" && ((DateTime)value) == DateTime.MinValue)
                             sqlCommand.Parameters.AddWithValue(name, SqlDateTime.MinValue);
                         else
                             sqlCommand.Parameters.AddWithValue(name, value);

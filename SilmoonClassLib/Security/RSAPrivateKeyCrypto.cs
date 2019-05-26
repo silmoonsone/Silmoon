@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Security.Cryptography;
 using System.Collections;
+using System.IO;
 
 namespace Silmoon.Security
 {
@@ -69,6 +70,41 @@ namespace Silmoon.Security
                 len -= blockLen;
             }
             return (byte[])temp.ToArray(typeof(byte));
+        }
+        private static int GetIntegerSize(BinaryReader binr)
+        {
+            byte bt = 0;
+            byte lowbyte = 0x00;
+            byte highbyte = 0x00;
+            int count = 0;
+            bt = binr.ReadByte();
+            if (bt != 0x02)        //expect integer
+                return 0;
+            bt = binr.ReadByte();
+
+
+            if (bt == 0x81)
+                count = binr.ReadByte();    // data size in next byte
+            else
+                if (bt == 0x82)
+            {
+                highbyte = binr.ReadByte();    // data size in next 2 bytes
+                lowbyte = binr.ReadByte();
+                byte[] modint = { lowbyte, highbyte, 0x00, 0x00 };
+                count = BitConverter.ToInt32(modint, 0);
+            }
+            else
+            {
+                count = bt;        // we already have the data size
+            }
+
+
+            while (binr.ReadByte() == 0x00)
+            {    //remove high order zeros in data
+                count -= 1;
+            }
+            //binr.BaseStream.Seek(-1, SeekOrigin.Current);        //last ReadByte wasn't a removed zero, so back up a byte
+            return count;
         }
 
         #region IDisposable 成员
