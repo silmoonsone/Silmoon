@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.IO;
-namespace Silmoon.Configure
+namespace Silmoon.Configuration
 {
     ///  <summary>
     ///  读写ini文件的类

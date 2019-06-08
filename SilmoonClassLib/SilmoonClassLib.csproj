@@ -102,7 +102,9 @@
     <Compile Include="Net\Sockets\UdpHdr.cs" />
     <Compile Include="Reflection\AssemblyUtil.cs" />
     <Compile Include="Reflection\NameObjectCollectionT.cs" />
+    <Compile Include="SDebug.cs" />
     <Compile Include="Security\EncryptHelper.cs" />
+    <Compile Include="Serializer.cs" />
     <Compile Include="Text\Punycode.cs" />
     <Compile Include="IStateFlag.cs" />
     <Compile Include="MySilmoon\RunningAble.cs" />
@@ -124,7 +126,7 @@
     </Compile>
     <Compile Include="Security\SmHash.cs" />
     <Compile Include="Service\ServiceControl.cs" />
-    <Compile Include="Configure\IniFile.cs" />
+    <Compile Include="Configuration\IniFile.cs" />
     <Compile Include="StateSet.cs" />
     <Compile Include="Threading\ActionLimit.cs" />
     <Compile Include="Threading\TimeLimit.cs" />
@@ -136,7 +138,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Compile Include="Configure\NameValueReader.cs" />
+    <Compile Include="Configuration\NameValueReader.cs" />
     <Compile Include="IO\FileWatcher.cs" />
     <Compile Include="IO\SmFile\ACL.cs" />
     <Compile Include="IO\SmFile\Searcher.cs" />

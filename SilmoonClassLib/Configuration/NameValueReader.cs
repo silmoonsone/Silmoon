@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Collections.Specialized;
 
-namespace Silmoon.Configure
+namespace Silmoon.Configuration
 {
     public class NameValueReader
     {

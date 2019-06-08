@@ -14,7 +14,9 @@ namespace Silmoon
             var p = from.GetType().GetProperties();
             foreach (var item in p)
             {
-                tto.GetProperty(item.Name).SetValue(to, item.GetValue(from, null), null);
+                var property = tto.GetProperty(item.Name);
+                if (property.GetSetMethod() != null && property.GetSetMethod().IsPublic)
+                    property.SetValue(to, item.GetValue(from, null), null);
             }
             return to;
         }
