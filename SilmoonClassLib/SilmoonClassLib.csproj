@@ -81,6 +81,7 @@
     </Compile>
     <Compile Include="BigInteger.cs" />
     <Compile Include="Copy.cs" />
+    <Compile Include="Extension\DateTimeExtension.cs" />
     <Compile Include="Imaging\ChartUtil.cs" />
     <Compile Include="MySilmoon\Instance\LicenseResult.cs" />
     <Compile Include="MySilmoon\Instance\ValidateResult.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Threading\TimeLimit.cs" />
     <Compile Include="Types\StateCode.cs" />
     <Compile Include="Types\TimeSection.cs" />
+    <Compile Include="Extension\XmlHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\Settings.settings">
