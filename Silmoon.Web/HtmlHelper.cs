@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Silmoon.Web
 {
-    public class SmHtml
+    public class HtmlHelper
     {
         /// <summary>
         /// 返回已经设计好的asp.net错误信息的HTML。

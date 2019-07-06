@@ -7,7 +7,7 @@ namespace Silmoon.Extension
 {
     public static class DateTimeExtension
     {
-        public static string GetUnixStyleTimeStamp(this DateTime datetime)
+        public static string ToUnixStyleTimeStamp(this DateTime datetime)
         {
             return SpecialConverter.GET_UNIX_TIMESTAMP(datetime).ToString();
         }

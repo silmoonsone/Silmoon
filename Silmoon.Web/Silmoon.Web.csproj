@@ -100,7 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ISmPage.cs" />
-    <Compile Include="SmHtml.cs" />
+    <Compile Include="HtmlHelper.cs" />
     <Compile Include="HttpHelper.cs" />
   </ItemGroup>
   <ItemGroup>

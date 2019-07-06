@@ -24,7 +24,7 @@ namespace Silmoon
         /// <param name="state">状态</param>
         /// <param name="message">信息</param>
         /// <returns></returns>
-        public StateSet<T> Set(T state, string message)
+        public StateSet<T> Set(T state, string message = "")
         {
             State = state;
             Message = message;
@@ -47,7 +47,7 @@ namespace Silmoon
         /// </summary>
         /// <param name="state"></param>
         /// <param name="message"></param>
-        public StateSet(T state, string message)
+        public StateSet(T state, string message = "")
         {
             Set(state, message);
         }
@@ -70,14 +70,14 @@ namespace Silmoon
         /// <param name="userState"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public StateSet<T, TO> Set(T state, TO userState, string message)
+        public StateSet<T, TO> Set(T state, TO userState, string message = "")
         {
             State = state;
             Message = message;
             UserState = userState;
             return this;
         }
-        public new StateSet<T, TO> Set(T state, string message)
+        public new StateSet<T, TO> Set(T state, string message = "")
         {
             State = state;
             Message = message;
@@ -89,7 +89,7 @@ namespace Silmoon
         {
             Set(state, userState, null);
         }
-        public StateSet(T state, TO userState, string message)
+        public StateSet(T state, TO userState, string message = "")
         {
             Set(state, userState, message);
         }

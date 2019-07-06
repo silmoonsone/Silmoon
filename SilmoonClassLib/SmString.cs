@@ -25,7 +25,7 @@ namespace Silmoon
     /// <summary>
     /// 银月（老子叫宋维彬）的字符串类静态方法。
     /// </summary>
-    public class SmString
+    public static class SmString
     {
         /// <summary>
         /// 剪裁字符串
@@ -176,7 +176,7 @@ namespace Silmoon
         /// <param name="maxlen">最大长度</param>
         /// <param name="str">衔接字符串</param>
         /// <returns></returns>
-        public static string KeepStringLenght(string s, int maxlen, string str)
+        public static string KeepStringLenght(this string s, int maxlen, string str)
         {
             if (s.Length > maxlen)
             {

@@ -9,17 +9,29 @@ namespace Silmoon.Extension
 {
     public static class XmlHelper
     {
-        public static string ToXmlString(this XmlDocument xml)
+        public static string ToXmlString(this XmlDocument xmlDocument)
         {
             using (MemoryStream ms = new MemoryStream())
             {
-                xml.Save(ms);
+                xmlDocument.Save(ms);
                 ms.Position = 0;
                 using (StreamReader sr = new StreamReader(ms))
                 {
                     string resp = sr.ReadToEnd();
                     return resp;
                 }
+            }
+        }
+        public static bool LoadXmlWithoutException(this XmlDocument xmlDocument, string xml)
+        {
+            try
+            {
+                xmlDocument.LoadXml(xml);
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
     }
