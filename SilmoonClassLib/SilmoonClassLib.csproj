@@ -102,7 +102,6 @@
     <Compile Include="Net\Sockets\TcpHdr.cs" />
     <Compile Include="Net\Sockets\UdpHdr.cs" />
     <Compile Include="Reflection\AssemblyUtil.cs" />
-    <Compile Include="Reflection\NameObjectCollectionT.cs" />
     <Compile Include="SDebug.cs" />
     <Compile Include="Security\EncryptHelper.cs" />
     <Compile Include="Serializer.cs" />

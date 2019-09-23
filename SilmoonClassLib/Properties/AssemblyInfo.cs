@@ -10,7 +10,7 @@ using System.Security;
 [assembly: AssemblyTitle("Silmoon")]
 [assembly: AssemblyDescription("Build 110924")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Silmoon Inc.")]
+[assembly: AssemblyCompany("威海银之月信息技术有限公司")]
 [assembly: AssemblyProduct("银月(SILMOON)通用类型库")]
 [assembly: AssemblyCopyright("版权所有 (C) SILMOON 2010")]
 [assembly: AssemblyTrademark("SILMOON INC.")]
