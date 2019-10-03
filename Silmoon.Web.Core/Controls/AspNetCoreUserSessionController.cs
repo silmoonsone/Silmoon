@@ -1,33 +1,22 @@
+锘縰sing Microsoft.AspNetCore.Http;
+using Silmoon.Web.Controls;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web;
-using System.Web.Mvc;
+using System.Threading.Tasks;
 
-namespace Silmoon.Web.Controls
+namespace Silmoon.Web.Core.Controls
 {
-    public abstract class UserSessionController<T> : System.Web.SessionState.IRequiresSessionState
+    public abstract class AspNetCoreUserSessionController<T>
     {
         RSACryptoServiceProvider rsa = null;
         string cookieDomain = null;
-        DateTime cookieExpires = default;
+        DateTime cookieExpires = default(DateTime);
         int sessionTimeout = 30;
-
-        public int SessionTimeout
-        {
-            get
-            {
-                if (HttpContext.Current.Session != null)
-                    sessionTimeout = HttpContext.Current.Session.Timeout;
-                return sessionTimeout;
-            }
-            set
-            {
-                sessionTimeout = value;
-                if (HttpContext.Current.Session != null)
-                    HttpContext.Current.Session.Timeout = value;
-            }
-        }
+        ISession session = null;
+        IRequestCookieCollection cookie = null;
         public event EventHandler UserLogin;
         public event EventHandler UserLogout;
 
@@ -35,91 +24,83 @@ namespace Silmoon.Web.Controls
         {
             get
             {
-                if (HttpContext.Current.Session["___silmoon_username"] != null)
-                    return HttpContext.Current.Session["___silmoon_username"].ToString();
+                if (session.GetString("___silmoon_username") != null)
+                    return session.GetString("___silmoon_username").ToString();
                 else return null;
             }
             set
             {
-                HttpContext.Current.Session["___silmoon_username"] = value;
+                session.SetString("___silmoon_username", value);
             }
         }
         public string Password
         {
             get
             {
-                if (HttpContext.Current.Session["___silmoon_password"] != null)
-                    return HttpContext.Current.Session["___silmoon_password"].ToString();
+                if (session.GetString("___silmoon_password") != null)
+                    return session.GetString("___silmoon_password").ToString();
                 else return null;
             }
             set
             {
-                HttpContext.Current.Session["___silmoon_password"] = value;
+                session.SetString("___silmoon_password", value);
             }
         }
         public int UserLevel
         {
             get
             {
-                if (HttpContext.Current.Session["___silmoon_level"] != null)
+                if (session.GetInt32("___silmoon_level").HasValue)
                 {
-                    int result = -1;
-                    int.TryParse(HttpContext.Current.Session["___silmoon_level"].ToString(), out result);
-                    return result;
+                    return session.GetInt32("___silmoon_level").Value;
                 }
                 else return -1;
             }
             set
             {
-                HttpContext.Current.Session["___silmoon_level"] = value;
+                session.SetInt32("___silmoon_level", value);
             }
         }
         public LoginState State
         {
             get
             {
-                if (HttpContext.Current.Session["___silmoon_state"] != null)
+                if (session.GetString("___silmoon_state") != null)
                 {
                     int result = (int)LoginState.None;
-                    int.TryParse(HttpContext.Current.Session["___silmoon_state"].ToString(), out result);
+                    int.TryParse(session.GetString("___silmoon_state").ToString(), out result);
                     return (LoginState)result;
                 }
                 else return LoginState.None;
             }
             set
             {
-                HttpContext.Current.Session["___silmoon_state"] = (int)value;
+                session.SetInt32("___silmoon_state", (int)value);
             }
         }
         public StateFlag UserFlag
         {
             get
             {
-                if (HttpContext.Current.Session["___silmoon_userflag"] != null)
-                    return (StateFlag)HttpContext.Current.Session["___silmoon_userflag"];
-                else return null;
+                return session.Get<StateFlag>("___silmoon_userflag");
             }
-            set { HttpContext.Current.Session["___silmoon_userflag"] = value; }
+            set { session.Set("___silmoon_userflag", value); }
         }
         public object UserObject
         {
             get
             {
-                if (HttpContext.Current.Session["___silmoon_object"] != null)
-                    return HttpContext.Current.Session["___silmoon_object"];
-                else return null;
+                return session.Get<object>("___silmoon_object");
             }
-            set { HttpContext.Current.Session["___silmoon_object"] = value; }
+            set { session.Set("___silmoon_object", value); }
         }
         public T User
         {
             get
             {
-                if (HttpContext.Current.Session["___silmoon_user"] != null)
-                    return (T)HttpContext.Current.Session["___silmoon_user"];
-                else return default(T);
+                return session.Get<T>("___silmoon_user");
             }
-            set { HttpContext.Current.Session["___silmoon_user"] = value; }
+            set { session.Set("___silmoon_user", value); }
         }
 
         public RSACryptoServiceProvider RSACookiesCrypto
@@ -138,18 +119,10 @@ namespace Silmoon.Web.Controls
             set { cookieExpires = value; }
         }
 
-        public UserSessionController() : this((string)null) { }
-        public UserSessionController(string cookieDomain)
+        public AspNetCoreUserSessionController(ISession session) : this(null, session) { }
+        public AspNetCoreUserSessionController(string cookieDomain, ISession session)
         {
             this.cookieDomain = cookieDomain;
-        }
-        public UserSessionController(System.Web.UI.Page page)
-        {
-            page.Load += delegate (object sender, EventArgs e)
-            {
-                ReadSession();
-                HttpContext.Current.Response.Write("readSession");
-            };
         }
 
 
@@ -158,13 +131,13 @@ namespace Silmoon.Web.Controls
         {
             if (State != LoginState.Login)
             {
-                throw new Exception("获取会话信息错误，用户没有登陆，或者会话已经无效！");
+                throw new Exception("鑾峰彇浼氳瘽淇℃伅閿欒锛岀敤鎴锋病鏈夌櫥闄嗭紝鎴栬�呬細璇濆凡缁忔棤鏁堬紒");
             }
         }
 
         public object ReadSession(string field)
         {
-            return HttpContext.Current.Session[field];
+            return session.Get<object>(field);
         }
         public void ReadSession(bool readCookies = true)
         {
@@ -180,21 +153,6 @@ namespace Silmoon.Web.Controls
 
             }
         }
-        public bool MvcSessionChecking(Controller controller)
-        {
-            if (State != LoginState.Login)
-            {
-                controller.Response.Redirect("~/User/Signin/");
-                return false;
-            }
-            else
-            {
-                controller.ViewBag.User = User;
-                controller.ViewBag.UserSession = this;
-                return true;
-            }
-        }
-
         public void WriteSession(string field, string value)
         {
             HttpContext.Current.Session.Timeout = sessionTimeout;
@@ -204,7 +162,7 @@ namespace Silmoon.Web.Controls
         public bool LoginFromCookie()
         {
             if (rsa == null) return false;
-            if (HttpContext.Current.Request.Cookies["___silmoon_user_session"] != null && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies["___silmoon_user_session"].Value))
+            if (cookie["___silmoon_user_session"] != null && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies["___silmoon_user_session"].Value))
             {
                 byte[] data = Convert.FromBase64String(HttpContext.Current.Request.Cookies["___silmoon_user_session"].Value);
                 data = rsa.Decrypt(data, true);
@@ -312,8 +270,6 @@ namespace Silmoon.Web.Controls
         }
         public virtual void DoLogin(string username, string password, int userLevel, T user)
         {
-            HttpContext.Current.Session.Timeout = sessionTimeout;
-
             Username = username;
             Password = password;
             UserLevel = userLevel;
@@ -325,12 +281,12 @@ namespace Silmoon.Web.Controls
         public virtual void DoLogout()
         {
             State = LoginState.Logout;
-            HttpContext.Current.Session.Remove("___silmoon_username");
-            HttpContext.Current.Session.Remove("___silmoon_password");
-            HttpContext.Current.Session.Remove("___silmoon_level");
-            HttpContext.Current.Session.Remove("___silmoon_userflag");
-            HttpContext.Current.Session.Remove("___silmoon_object");
-            HttpContext.Current.Session.Remove("___silmoon_user");
+            session.Remove("___silmoon_username");
+            session.Remove("___silmoon_password");
+            session.Remove("___silmoon_level");
+            session.Remove("___silmoon_userflag");
+            session.Remove("___silmoon_object");
+            session.Remove("___silmoon_user");
 
             if (UserLogout != null) UserLogout(this, EventArgs.Empty);
         }
@@ -356,13 +312,5 @@ namespace Silmoon.Web.Controls
             ClearCrossCookie();
             DoLogout();
         }
-    }
-
-    [Serializable]
-    public enum LoginState
-    {
-        None = 0,
-        Login = 1,
-        Logout = -1,
     }
 }

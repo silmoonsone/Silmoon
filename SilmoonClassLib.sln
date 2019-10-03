@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilmoonClassLib", "SilmoonClassLib\SilmoonClassLib.csproj", "{C827A65D-CC9E-444B-908A-7BA70D6E6C11}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Windows.Explorer.BHO", "silmoon.windows.explorer.bho\Silmoon.Windows.Explorer.BHO.csproj", "{DF03D4B1-60C9-43E7-8372-85FDBE34546B}"
@@ -22,6 +24,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Silmoon.Win32", "Silmoon.Win32\Silmoon.Win32.vcxproj", "{BD720951-9C4A-44D7-B737-10BDE6BF4D27}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Data", "Silmoon.Data\Silmoon.Data.csproj", "{5065F694-026F-4045-A446-DF860DA3F657}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Web.Core", "Silmoon.Web.Core\Silmoon.Web.Core.csproj", "{2E9E150B-CF25-4D23-980F-F30FDD56B6D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -143,11 +147,24 @@ Global
 		{5065F694-026F-4045-A446-DF860DA3F657}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{5065F694-026F-4045-A446-DF860DA3F657}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5065F694-026F-4045-A446-DF860DA3F657}.Release|Win32.ActiveCfg = Release|Any CPU
+		{2E9E150B-CF25-4D23-980F-F30FDD56B6D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E9E150B-CF25-4D23-980F-F30FDD56B6D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E9E150B-CF25-4D23-980F-F30FDD56B6D7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2E9E150B-CF25-4D23-980F-F30FDD56B6D7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2E9E150B-CF25-4D23-980F-F30FDD56B6D7}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{2E9E150B-CF25-4D23-980F-F30FDD56B6D7}.Debug|Win32.Build.0 = Debug|Any CPU
+		{2E9E150B-CF25-4D23-980F-F30FDD56B6D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E9E150B-CF25-4D23-980F-F30FDD56B6D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E9E150B-CF25-4D23-980F-F30FDD56B6D7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2E9E150B-CF25-4D23-980F-F30FDD56B6D7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2E9E150B-CF25-4D23-980F-F30FDD56B6D7}.Release|Win32.ActiveCfg = Release|Any CPU
+		{2E9E150B-CF25-4D23-980F-F30FDD56B6D7}.Release|Win32.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .
+		SolutionGuid = {18B93CD3-1A51-425B-89D1-03A0565D2E21}
 	EndGlobalSection
 EndGlobal
