@@ -82,5 +82,23 @@ namespace Silmoon.Security
 
             return Encoding.GetEncoding(encoding).GetString(cipherbytes);
         }
+
+        public static string SHA1(string s)
+        {
+            using (var c = new SHA1CryptoServiceProvider())
+            {
+                byte[] bresult = c.ComputeHash(Encoding.UTF8.GetBytes(s));
+                return BitConverter.ToString(bresult).Replace("-", "");
+            }
+        }
+        public static string MD5(string s)
+        {
+            using (var c = new MD5CryptoServiceProvider())
+            {
+                byte[] bresult = c.ComputeHash(Encoding.UTF8.GetBytes(s));
+                return BitConverter.ToString(bresult).Replace("-", "");
+            }
+        }
+
     }
 }

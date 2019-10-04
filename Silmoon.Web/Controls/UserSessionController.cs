@@ -180,11 +180,11 @@ namespace Silmoon.Web.Controls
 
             }
         }
-        public bool MvcSessionChecking(Controller controller)
+        public bool MvcSessionChecking(Controller controller, string signInUrl)
         {
             if (State != LoginState.Login)
             {
-                controller.Response.Redirect("~/User/Signin/");
+                controller.Response.Redirect(signInUrl);
                 return false;
             }
             else
