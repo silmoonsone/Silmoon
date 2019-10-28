@@ -30,8 +30,8 @@ namespace Silmoon.Windows.Controls.Extension
         public void ShowControl(Control control, bool changColor, int afterStart)
         {
             if (changColor)
-                Threads.ExecAsync(colorProc, new object[] { control, afterStart }, null);
-            Threads.ExecAsync(scrollProc, new object[] { control, afterStart }, null);
+                ThreadHelper.ExecAsync(colorProc, new object[] { control, afterStart }, null);
+            ThreadHelper.ExecAsync(scrollProc, new object[] { control, afterStart }, null);
         }
 
         public void FocusSlide(Control control, int maxSize, int minSize)
@@ -43,11 +43,11 @@ namespace Silmoon.Windows.Controls.Extension
             object obj = (object)new object[] { control, maxSize, minSize, sleep };
             control.GotFocus += new EventHandler(delegate(object sender, EventArgs e)
             {
-                Threads.ExecAsync(gotFocus, obj, null);
+                ThreadHelper.ExecAsync(gotFocus, obj, null);
             });
             control.LostFocus += new EventHandler(delegate(object sender, EventArgs e)
             {
-                Threads.ExecAsync(lostFocus, obj, null);
+                ThreadHelper.ExecAsync(lostFocus, obj, null);
             });
         }
 

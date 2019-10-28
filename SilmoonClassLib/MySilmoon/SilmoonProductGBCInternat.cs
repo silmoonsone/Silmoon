@@ -118,7 +118,7 @@ namespace Silmoon.MySilmoon
         /// </summary>
         public void AsyncValidateVersion()
         {
-            Threads.ExecAsync(delegate()
+            ThreadHelper.ExecAsync(delegate()
             {
                 if (OnValidateVersion != null)
                 {

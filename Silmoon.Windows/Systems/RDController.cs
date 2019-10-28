@@ -87,7 +87,7 @@ namespace Silmoon.Windows.Systems
         public bool RegisterSessionChangedEvent()
         {
             if (messageForm != null) return false;
-            MessageThread = Threads.ExecAsync(() =>
+            MessageThread = ThreadHelper.ExecAsync(() =>
             {
                 messageForm = new MessageForm(this);
                 messageForm.Start();
@@ -260,7 +260,7 @@ namespace Silmoon.Windows.Systems
                     {
                         int sessionid = (int)m.LParam;
                         WM_WTSSESSION_CHANGE para2 = (WM_WTSSESSION_CHANGE)m.WParam;
-                        Threads.ExecAsync(() =>
+                        ThreadHelper.ExecAsync(() =>
                         {
                             rdc.onSessionChanged(sessionid, para2);
                         });

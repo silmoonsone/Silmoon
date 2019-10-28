@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
+using System.Web.Mvc;
 
 namespace Silmoon.Web
 {
@@ -150,6 +151,24 @@ namespace Silmoon.Web
             result += "</form>\r\n";
             if (submit) result += "<script>document.forms['" + name + "'].submit();</script>";
             return result;
+        }
+        public static List<SelectListItem> MakeMvcSelectListItems(Type type, object enumObj)
+        {
+            if (type.IsEnum)
+            {
+                var names = type.GetEnumNames();
+                var values = type.GetEnumValues();
+                var result = new List<SelectListItem>();
+                for (int i = 0; i < names.Length; i++)
+                {
+                    result.Add(new SelectListItem() { Text = names[i], Value = values.GetValue(i).ToString() });
+                }
+                return result;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

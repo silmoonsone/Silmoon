@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace Silmoon.Threading
 {
-    public class Threads
+    public class ThreadHelper
     {
         public static Thread ExecAsync(ThreadStart start)
         {

@@ -173,7 +173,7 @@ namespace Silmoon.Net
             _localTcpStruct.IP = ip;
             _localTcpStruct.Port = port;
 
-            Threads.ExecAsync(async_th_listen);
+            ThreadHelper.ExecAsync(async_th_listen);
         }
         /// <summary>
         /// 异步连接到远程服务器
@@ -184,7 +184,7 @@ namespace Silmoon.Net
             _remoteTcpStruct.IP = endPoint.Address;
             _remoteTcpStruct.Port = endPoint.Port;
 
-            Threads.ExecAsync(async_th_connect);
+            ThreadHelper.ExecAsync(async_th_connect);
         }
         /// <summary>
         /// 异步连接到一个支持SM协议的计算机端口
@@ -196,7 +196,7 @@ namespace Silmoon.Net
             _remoteTcpStruct.IP = ip;
             _remoteTcpStruct.Port = port;
 
-            Threads.ExecAsync(async_th_connect);
+            ThreadHelper.ExecAsync(async_th_connect);
         }
         /// <summary>
         /// 异步连接到一个支持SM协议的计算机端口
@@ -207,7 +207,7 @@ namespace Silmoon.Net
             _remoteTcpStruct.IP = tstr.IP;
             _remoteTcpStruct.Port = tstr.Port;
 
-            Threads.ExecAsync(async_th_connect);
+            ThreadHelper.ExecAsync(async_th_connect);
         }
         /// <summary>
         /// 停止在本机的监听
@@ -279,7 +279,7 @@ namespace Silmoon.Net
             FormatIPStringToTcpStruct(_tc.Client.LocalEndPoint.ToString(), ref _localTcpStruct);
             onTcpEvents(_localTcpStruct, _remoteTcpStruct, TcpOptionType.Connected, null);
             if (!UseBlockRead)
-                Threads.ExecAsync(ReadDataFromConnectRemote);
+                ThreadHelper.ExecAsync(ReadDataFromConnectRemote);
             return result;
         }
         /// <summary>
@@ -386,7 +386,7 @@ namespace Silmoon.Net
                     __listen__readSmtcp reader = new __listen__readSmtcp(this, ref _tc, _protocol);
                     lock (_tcp_Reader_Array)
                         _tcp_Reader_Array.Add(reader);
-                    Threads.ExecAsync(reader.Start);
+                    ThreadHelper.ExecAsync(reader.Start);
                 }
                 catch { }
             }
@@ -429,7 +429,7 @@ namespace Silmoon.Net
         {
             byte[] result = null;
 
-            Threads.ExecAsync(_readByBlockInReadMethodHasTimeout);
+            ThreadHelper.ExecAsync(_readByBlockInReadMethodHasTimeout);
             int count = 0;
             while (_blockReadBufferField == null && count < totalCount)
             {

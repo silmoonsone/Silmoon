@@ -323,7 +323,7 @@ namespace Silmoon.Windows.Forms
                     {
                         closeArgs = e;
                         e.Cancel = true;
-                        Threads.ExecAsync(closeProc);
+                        ThreadHelper.ExecAsync(closeProc);
                         this.Text = "";
                         if (this.WindowState == FormWindowState.Maximized)
                             this.WindowState = FormWindowState.Normal;
@@ -341,12 +341,12 @@ namespace Silmoon.Windows.Forms
             this.Opacity = 0;
             this.Width = 1;
             this.Visible = true;
-            Threads.ExecAsync(_start_scroll_thread_proc);
+            ThreadHelper.ExecAsync(_start_scroll_thread_proc);
         }
         public virtual void HideEx()
         {
             refreshStateParam();
-            Threads.ExecAsync(hideProc);
+            ThreadHelper.ExecAsync(hideProc);
         }
         public void SetHeightEx(int newHeight)
         {
@@ -358,7 +358,7 @@ namespace Silmoon.Windows.Forms
             if (Height == newHeight) return;
             extToW = newHeight;
             extCenter = center;
-            Threads.ExecAsync(_resizeW_scroll_thread_proc);
+            ThreadHelper.ExecAsync(_resizeW_scroll_thread_proc);
         }
         public void SetWidthEx(int newWidth)
         {
@@ -370,7 +370,7 @@ namespace Silmoon.Windows.Forms
             if (Width == newWidth) return;
             extToH = newWidth;
             extCenter = center;
-            Threads.ExecAsync(_resizeH_scroll_thread_proc);
+            ThreadHelper.ExecAsync(_resizeH_scroll_thread_proc);
         }
 
         void refreshStateParam()
