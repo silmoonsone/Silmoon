@@ -9,7 +9,7 @@ namespace Silmoon.Extension.Json
 {
     public static class XmlHelper
     {
-        public static XmlDocument FromUrlGetXmlDocumentByPost(string url, string data)
+        public static XmlDocument GetXml(string url, string data)
         {
             using (WebClient wc = new WebClient())
             {
@@ -21,7 +21,7 @@ namespace Silmoon.Extension.Json
                 return xml;
             }
         }
-        public static XmlDocument FromUrlGetXmlDocumentByPost(string url, NameValueCollection data)
+        public static XmlDocument GetXmlByPost(string url, NameValueCollection data)
         {
             using (WebClient wc = new WebClient())
             {
