@@ -65,6 +65,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Drawing" />
@@ -104,6 +105,7 @@
     <Compile Include="Net\Sockets\TcpHdr.cs" />
     <Compile Include="Net\Sockets\UdpHdr.cs" />
     <Compile Include="Reflection\AssemblyUtil.cs" />
+    <Compile Include="Reflection\EnumHelper.cs" />
     <Compile Include="SDebug.cs" />
     <Compile Include="Security\EncryptHelper.cs" />
     <Compile Include="Serializer.cs" />

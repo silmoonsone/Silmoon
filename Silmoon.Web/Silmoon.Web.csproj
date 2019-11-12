@@ -93,7 +93,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\SessionRSAManager.cs" />
-    <Compile Include="MvcHtmlHelper.cs" />
     <Compile Include="Page\RewriteMasterPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
