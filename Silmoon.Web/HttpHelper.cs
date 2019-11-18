@@ -151,8 +151,11 @@ namespace Silmoon.Web
         }
         public static string MvcGetCurrentUrl(Controller controller)
         {
+            return controller.Request.Url.PathAndQuery.ToString();
+        }
+        public static string MvcGetCurrentUrlEncoded(Controller controller)
+        {
             return controller.Server.UrlEncode(controller.Request.Url.PathAndQuery.ToString());
         }
-
     }
 }
