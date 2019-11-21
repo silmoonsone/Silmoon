@@ -74,6 +74,9 @@ namespace Silmoon.Extension.Json
                 return jo;
             }
         }
-
+        public static void Remove(this JToken token, string name)
+        {
+            ((JObject)token).Remove(name);
+        }
     }
 }

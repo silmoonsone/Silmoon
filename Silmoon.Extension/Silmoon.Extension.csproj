@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <SignAssembly>false</SignAssembly>
+    <Company>威海银之月信息技术有限公司</Company>
+    <Description>Build 191121</Description>
   </PropertyGroup>
 
   <ItemGroup>
