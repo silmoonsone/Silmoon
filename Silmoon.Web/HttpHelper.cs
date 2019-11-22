@@ -149,13 +149,5 @@ namespace Silmoon.Web
             }
             return result.Substring(1, result.Length - 1);
         }
-        public static string MvcGetCurrentUrl(Controller controller)
-        {
-            return controller.Request.Url.PathAndQuery.ToString();
-        }
-        public static string MvcGetCurrentUrlEncoded(Controller controller)
-        {
-            return controller.Server.UrlEncode(controller.Request.Url.PathAndQuery.ToString());
-        }
     }
 }
