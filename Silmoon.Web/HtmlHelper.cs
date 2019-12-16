@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Dynamic;
 using System.Text;
 using System.Web.Mvc;
 
@@ -169,6 +170,34 @@ namespace Silmoon.Web
             {
                 return null;
             }
+        }
+        public static string MakeNewQueryString(NameValueCollection collection, string additionQueryString = "")
+        {
+            collection = new NameValueCollection(collection);
+            string s = "";
+            var tp = SmString.AnalyzeNameValue(additionQueryString.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries), "=");
+
+            for (int i = 0; i < tp.Count; i++)
+            {
+                string key = tp.GetKey(i);
+                string value = tp[i];
+
+                collection[key] = value;
+            }
+
+            for (int i = 0; i < collection.Count; i++)
+            {
+                string key = collection.GetKey(i);
+                string value = collection[i];
+
+                s += $"{key}={value}&";
+            }
+            if (s != "")
+            {
+                s = s.Remove(s.Length - 1);
+            }
+
+            return s;
         }
     }
 }
