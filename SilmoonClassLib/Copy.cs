@@ -15,12 +15,9 @@ namespace Silmoon
             var p = from.GetType().GetProperties();
             foreach (var item in p)
             {
-                if (string.IsNullOrEmpty(item?.Name))
-                {
-                    var property = tto.GetProperty(item.Name);
-                    if (property.GetSetMethod() != null && property.GetSetMethod().IsPublic)
-                        property.SetValue(to, item.GetValue(from, null), null);
-                }
+                var property = tto.GetProperty(item.Name);
+                if (property != null && property.GetSetMethod() != null && property.GetSetMethod().IsPublic)
+                    property.SetValue(to, item.GetValue(from, null), null);
             }
             return to;
         }
@@ -32,12 +29,9 @@ namespace Silmoon
             var p = typeof(sT).GetProperties();
             foreach (var item in p)
             {
-                if (string.IsNullOrEmpty(item?.Name))
-                {
-                    var property = tto.GetProperty(item.Name);
-                    if (property.GetSetMethod() != null && property.GetSetMethod().IsPublic)
-                        property.SetValue(dest, item.GetValue(source, null), null);
-                }
+                var property = tto.GetProperty(item.Name);
+                if (property != null && property.GetSetMethod() != null && property.GetSetMethod().IsPublic)
+                    property.SetValue(dest, item.GetValue(source, null), null);
             }
             return dest;
         }
