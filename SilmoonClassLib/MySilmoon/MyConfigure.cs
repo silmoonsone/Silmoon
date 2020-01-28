@@ -124,7 +124,7 @@ namespace Silmoon.MySilmoon
             string s = GetLicenseEncryptedString(productString);
             if (!string.IsNullOrEmpty(s))
             {
-                result = SmString.AnalyzeNameValue(s.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries), "=");
+                result = StringHelper.AnalyzeNameValue(s.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries), "=");
             }
             return result;
         }
@@ -140,7 +140,7 @@ namespace Silmoon.MySilmoon
         {
             NameValueCollection values = GetLicenseEncryptedConfigure(productString);
             string clientString = values["userIdentity"];
-            return SmString.FixNullString(clientString);
+            return StringHelper.FixNullString(clientString);
         }
     }
 }

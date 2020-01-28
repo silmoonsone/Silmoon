@@ -25,7 +25,7 @@ namespace Silmoon
     /// <summary>
     /// 银月（老子叫宋维彬）的字符串类静态方法。
     /// </summary>
-    public static class SmString
+    public static class StringHelper
     {
         /// <summary>
         /// 剪裁字符串

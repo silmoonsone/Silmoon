@@ -136,7 +136,6 @@
     <Compile Include="Threading\TimeLimit.cs" />
     <Compile Include="Types\StateCode.cs" />
     <Compile Include="Types\TimeSection.cs" />
-    <Compile Include="Extension\XmlHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\Settings.settings">
@@ -171,7 +170,7 @@
     <Compile Include="Service\Service.SystemService.cs" />
     <Compile Include="ExecProc.cs" />
     <Compile Include="SmEnvironment.cs" />
-    <Compile Include="SmString.cs" />
+    <Compile Include="StringHelper.cs" />
     <Compile Include="SmSystem.cs" />
     <Compile Include="Reflection\ReflectionXml.cs" />
     <Compile Include="SpecialConverter.cs" />

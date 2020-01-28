@@ -169,7 +169,7 @@ namespace Silmoon.Data.SqlUtility
             string[] nameArr = (string[])_array.ToArray(typeof(string));
             dt.Clear();
             dt.Dispose();
-            return SmString.FindFormStringArray(nameArr, database);
+            return StringHelper.FindFormStringArray(nameArr, database);
         }
         /// <summary>
         /// 检查一个用户名是否存在
@@ -184,7 +184,7 @@ namespace Silmoon.Data.SqlUtility
             string[] nameArr = (string[])_array.ToArray(typeof(string));
             dt.Clear();
             dt.Dispose();
-            return SmString.FindFormStringArray(nameArr, username);
+            return StringHelper.FindFormStringArray(nameArr, username);
         }
 
         /// <summary>

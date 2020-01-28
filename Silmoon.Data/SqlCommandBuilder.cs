@@ -18,7 +18,7 @@ namespace Silmoon.Data
             if (SelectTopN > 0) result += " TOP " + SelectTopN;
             if (SelectingFields == null || result.Length == 0)
                 result += " *";
-            result += SmString.MergeStringArray(SelectingFields, ",", true, "", "");
+            result += StringHelper.MergeStringArray(SelectingFields, ",", true, "", "");
             result += " FROM " + tableName;
 
             return result;

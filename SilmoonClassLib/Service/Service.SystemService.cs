@@ -31,12 +31,12 @@ namespace Silmoon.Service.SystemService
 
 
             RegistryKey k1 = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile", true);
-            if (!SmString.FindFormStringArray(k1.GetSubKeyNames(), "GloballyOpenPorts"))
+            if (!StringHelper.FindFormStringArray(k1.GetSubKeyNames(), "GloballyOpenPorts"))
                 k1.CreateSubKey("GloballyOpenPorts");
             k1.Close();
 
             RegistryKey k2 = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\GloballyOpenPorts", true);
-            if (!SmString.FindFormStringArray(k2.GetSubKeyNames(), "List"))
+            if (!StringHelper.FindFormStringArray(k2.GetSubKeyNames(), "List"))
                 k2.CreateSubKey("List");
             k2.Close();
 

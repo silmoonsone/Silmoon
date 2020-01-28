@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Xml;
 
-namespace Silmoon.Extension
+namespace Silmoon.Extension.Xml
 {
-    public static class XmlHelper
+    public static class XmlExtension
     {
         public static string ToXmlString(this XmlDocument xmlDocument)
         {
@@ -34,5 +33,6 @@ namespace Silmoon.Extension
                 return false;
             }
         }
+
     }
 }

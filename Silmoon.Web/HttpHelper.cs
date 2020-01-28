@@ -40,7 +40,7 @@ namespace Silmoon.Web
         public static string GetWebRootUri()
         {
             string http = "http";
-            if (HttpContext.Current.Request.ServerVariables["HTTPS"] != null && SmString.StringToBool(HttpContext.Current.Request.ServerVariables["HTTPS"]))
+            if (HttpContext.Current.Request.ServerVariables["HTTPS"] != null && StringHelper.StringToBool(HttpContext.Current.Request.ServerVariables["HTTPS"]))
                 http = "https";
 
             http = http + "://" + HttpContext.Current.Request.ServerVariables["HTTP_HOST"] + HttpHelper.WebRoot;

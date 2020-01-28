@@ -275,12 +275,15 @@ namespace Silmoon.Web.Controls
             data = rsa.Encrypt(data, true);
             return Convert.ToBase64String(data);
         }
-
+        /// <summary>
+        /// 写入一个在指定时间过期的【___silmoon_user_session】的Cookie，以便下次自动登录。
+        /// </summary>
+        /// <param name="Expires">过期时间</param>
         public void WriteCookie(DateTime Expires = default(DateTime))
         {
             if (rsa != null)
             {
-                if (Expires != default(DateTime)) cookieExpires = Expires;
+                if (Expires != default) cookieExpires = Expires;
 
                 if (cookieDomain != null)
                     HttpContext.Current.Response.Cookies["___silmoon_user_session"].Domain = cookieDomain;

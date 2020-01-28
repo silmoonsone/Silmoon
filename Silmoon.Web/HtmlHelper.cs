@@ -175,7 +175,7 @@ namespace Silmoon.Web
         {
             collection = new NameValueCollection(collection);
             string s = "";
-            var tp = SmString.AnalyzeNameValue(additionQueryString.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries), "=");
+            var tp = StringHelper.AnalyzeNameValue(additionQueryString.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries), "=");
 
             for (int i = 0; i < tp.Count; i++)
             {
@@ -196,6 +196,8 @@ namespace Silmoon.Web
             {
                 s = s.Remove(s.Length - 1);
             }
+            //if (s[0] != '?')
+            //    s = "?" + s;
 
             return s;
         }
