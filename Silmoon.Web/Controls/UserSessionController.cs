@@ -35,9 +35,7 @@ namespace Silmoon.Web.Controls
         {
             get
             {
-                if (HttpContext.Current.Session["___silmoon_username"] != null)
-                    return HttpContext.Current.Session["___silmoon_username"].ToString();
-                else return null;
+                return HttpContext.Current.Session["___silmoon_username"]?.ToString();
             }
             set
             {
@@ -48,9 +46,7 @@ namespace Silmoon.Web.Controls
         {
             get
             {
-                if (HttpContext.Current.Session["___silmoon_password"] != null)
-                    return HttpContext.Current.Session["___silmoon_password"].ToString();
-                else return null;
+                return HttpContext.Current.Session["___silmoon_password"]?.ToString();
             }
             set
             {
@@ -105,9 +101,7 @@ namespace Silmoon.Web.Controls
         {
             get
             {
-                if (HttpContext.Current.Session["___silmoon_object"] != null)
-                    return HttpContext.Current.Session["___silmoon_object"];
-                else return null;
+                return HttpContext.Current.Session["___silmoon_object"];
             }
             set { HttpContext.Current.Session["___silmoon_object"] = value; }
         }
@@ -117,7 +111,7 @@ namespace Silmoon.Web.Controls
             {
                 if (HttpContext.Current.Session["___silmoon_user"] != null)
                     return (T)HttpContext.Current.Session["___silmoon_user"];
-                else return default(T);
+                else return default;
             }
             set { HttpContext.Current.Session["___silmoon_user"] = value; }
         }
@@ -143,42 +137,12 @@ namespace Silmoon.Web.Controls
         {
             this.cookieDomain = cookieDomain;
         }
-        public UserSessionController(System.Web.UI.Page page)
+
+
+
+        public object ReadSession(string key)
         {
-            page.Load += delegate (object sender, EventArgs e)
-            {
-                ReadSession();
-                HttpContext.Current.Response.Write("readSession");
-            };
-        }
-
-
-
-        private void check_sessionOfLogin()
-        {
-            if (State != LoginState.Login)
-            {
-                throw new Exception("获取会话信息错误，用户没有登陆，或者会话已经无效！");
-            }
-        }
-
-        public object ReadSession(string field)
-        {
-            return HttpContext.Current.Session[field];
-        }
-        public void ReadSession(bool readCookies = true)
-        {
-            if (State != LoginState.Login)
-            {
-                if (readCookies && LoginFromCookie())
-                {
-                    State = LoginState.Login;
-                }
-            }
-            else
-            {
-
-            }
+            return HttpContext.Current.Session[key];
         }
         public bool MvcSessionChecking(Controller controller, string signInUrl)
         {
@@ -195,10 +159,10 @@ namespace Silmoon.Web.Controls
             }
         }
 
-        public void WriteSession(string field, string value)
+        public void WriteSession(string key, string value)
         {
             HttpContext.Current.Session.Timeout = sessionTimeout;
-            HttpContext.Current.Session[field] = value;
+            HttpContext.Current.Session[key] = value;
         }
 
         public bool LoginFromCookie()
