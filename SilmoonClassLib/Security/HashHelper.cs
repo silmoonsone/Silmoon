@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Silmoon.Security
 {
-    public class SmHash
+    public class HashHelper
     {
-        public SmHash()
+        public HashHelper()
         {
 
         }

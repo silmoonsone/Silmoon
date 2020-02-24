@@ -128,7 +128,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Security\SmHash.cs" />
+    <Compile Include="Security\HashHelper.cs" />
     <Compile Include="Service\ServiceControl.cs" />
     <Compile Include="Configuration\IniFile.cs" />
     <Compile Include="StateSet.cs" />
