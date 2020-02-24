@@ -79,9 +79,6 @@
   <ItemGroup>
     <Compile Include="Arrays\ArrayUtility.cs" />
     <Compile Include="Arrays\IID.cs" />
-    <Compile Include="base.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="BigInteger.cs" />
     <Compile Include="Copy.cs" />
     <Compile Include="Extension\DateTimeExtension.cs" />
@@ -180,10 +177,6 @@
     <None Include="sn.snk" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="base.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>base.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
