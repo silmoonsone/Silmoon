@@ -13,4 +13,10 @@ Build 200118</Description>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Silmoon">
+      <HintPath>..\SilmoonClassLib\bin\Release\Silmoon.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

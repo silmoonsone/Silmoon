@@ -81,7 +81,6 @@
     <Compile Include="Arrays\IID.cs" />
     <Compile Include="BigInteger.cs" />
     <Compile Include="Copy.cs" />
-    <Compile Include="Extension\DateTimeExtension.cs" />
     <Compile Include="Imaging\ChartUtil.cs" />
     <Compile Include="MySilmoon\Instance\LicenseResult.cs" />
     <Compile Include="MySilmoon\Instance\ValidateResult.cs" />
