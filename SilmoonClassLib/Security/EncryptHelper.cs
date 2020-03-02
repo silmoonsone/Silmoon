@@ -7,42 +7,52 @@ namespace Silmoon.Security
 {
     public class EncryptHelper
     {
-        public string AesEncrypt(string source, string key)
+        public static byte[] AesEncrypt(string source, string key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
         {
-            using (AesCryptoServiceProvider aesProvider = new AesCryptoServiceProvider())
+            var okey = Encoding.UTF8.GetBytes(key);
+            return AesEncrypt(source, okey, cipherMode, paddingMode);
+        }
+        public static byte[] AesEncrypt(string source, byte[] key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
+        {
+            using (RijndaelManaged aesProvider = new RijndaelManaged())
             {
-                aesProvider.Key = Encoding.UTF8.GetBytes(key); //GetAesKey(key);固定32位秘钥方法
-                aesProvider.Mode = CipherMode.ECB;
-                aesProvider.Padding = PaddingMode.PKCS7;
+                aesProvider.Key = key; //GetAesKey(key);固定32位秘钥方法
+                aesProvider.Mode = cipherMode;
+                aesProvider.Padding = paddingMode;
                 using (ICryptoTransform cryptoTransform = aesProvider.CreateEncryptor())
                 {
                     byte[] inputBuffers = Encoding.UTF8.GetBytes(source);
                     byte[] results = cryptoTransform.TransformFinalBlock(inputBuffers, 0, inputBuffers.Length);
                     aesProvider.Clear();
                     aesProvider.Dispose();
-                    return Convert.ToBase64String(results, 0, results.Length);
+                    return results;
                 }
             }
         }
-        public string AesDecrypt(string source, string key)
+        public static byte[] AesDecrypt(string source, string key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
         {
-            using (AesCryptoServiceProvider aesProvider = new AesCryptoServiceProvider())
+            var okey = Encoding.UTF8.GetBytes(key);
+            return AesDecrypt(source, okey, cipherMode, paddingMode);
+        }
+        public static byte[] AesDecrypt(string source, byte[] key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
+        {
+            using (RijndaelManaged aesProvider = new RijndaelManaged())
             {
-                aesProvider.Key = Encoding.UTF8.GetBytes(key); //GetAesKey(key);固定32位秘钥方法
-                aesProvider.Mode = CipherMode.ECB;
-                aesProvider.Padding = PaddingMode.PKCS7;
+                aesProvider.Key = key; //GetAesKey(key);固定32位秘钥方法
+                aesProvider.Mode = cipherMode;
+                aesProvider.Padding = paddingMode;
                 using (ICryptoTransform cryptoTransform = aesProvider.CreateDecryptor())
                 {
                     byte[] inputBuffers = Convert.FromBase64String(source);
                     byte[] results = cryptoTransform.TransformFinalBlock(inputBuffers, 0, inputBuffers.Length);
                     aesProvider.Clear();
-                    return Encoding.UTF8.GetString(results);
+                    return results;
                 }
             }
         }
 
 
-        public string SignData(string data, string xmlPrivateKey, string encoding = "UTF-8")
+        public static string SignData(string data, string xmlPrivateKey, string encoding = "UTF-8")
         {
             RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
             provider.FromXmlString(xmlPrivateKey);//加载私钥  
