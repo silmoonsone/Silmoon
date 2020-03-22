@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Dynamic;
 using System.Text;
 using System.Web.Mvc;
+using System.Web.Mvc.Ajax;
 
 namespace Silmoon.Web
 {
@@ -153,24 +154,6 @@ namespace Silmoon.Web
             if (submit) result += "<script>document.forms['" + name + "'].submit();</script>";
             return result;
         }
-        public static List<SelectListItem> MakeMvcSelectListItems(Type type, object enumObj)
-        {
-            if (type.IsEnum)
-            {
-                var names = type.GetEnumNames();
-                var values = type.GetEnumValues();
-                var result = new List<SelectListItem>();
-                for (int i = 0; i < names.Length; i++)
-                {
-                    result.Add(new SelectListItem() { Text = names[i], Value = values.GetValue(i).ToString() });
-                }
-                return result;
-            }
-            else
-            {
-                return null;
-            }
-        }
         public static string MakeNewQueryString(NameValueCollection collection, string additionQueryString = "")
         {
             collection = new NameValueCollection(collection);
@@ -200,6 +183,39 @@ namespace Silmoon.Web
             //    s = "?" + s;
 
             return s;
+        }
+
+
+        public static List<SelectListItem> MakeMvcSelectListItems(Type type, object enumObj)
+        {
+            if (type.IsEnum)
+            {
+                var names = type.GetEnumNames();
+                var values = type.GetEnumValues();
+                var result = new List<SelectListItem>();
+                for (int i = 0; i < names.Length; i++)
+                {
+                    result.Add(new SelectListItem() { Text = names[i], Value = values.GetValue(i).ToString() });
+                }
+                return result;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public static string GetAjaxOptionJavascriptFunctions()
+        {
+            return js.ajaxOptionFunctions;
+        }
+        public static AjaxOptions GetAjaxOptions(string senderId, string onSuccess = "null", string onFailed = "null", string onError = "null")
+        {
+            var result = new AjaxOptions()
+            {
+                OnBegin = "(function(sender){ _ajax_on_begin(sender); })('" + senderId + "')",
+                OnComplete = "(function(senderId, e, onSuccess, onFailed, onError){ _ajax_on_complete(senderId, e, onSuccess, onFailed, onError); })('" + senderId + "', arguments[0], " + onSuccess + ", " + onFailed + ", " + onError + ")"
+            };
+            return result;
         }
     }
 }

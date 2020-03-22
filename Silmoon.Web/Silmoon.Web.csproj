@@ -93,10 +93,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\SessionRSAManager.cs" />
+    <Compile Include="js.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>js.resx</DependentUpon>
+    </Compile>
     <Compile Include="Page\RewriteMasterPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="js.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>js.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -149,6 +158,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\ajaxOptionFunctions.js" />
     <Content Include="Resources\SecureException.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
