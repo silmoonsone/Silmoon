@@ -98,6 +98,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>js.resx</DependentUpon>
     </Compile>
+    <Compile Include="Mvc\MvcHelper.cs" />
     <Compile Include="Page\RewriteMasterPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

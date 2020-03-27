@@ -144,17 +144,28 @@ namespace Silmoon.Web.Controls
         {
             return HttpContext.Current.Session[key];
         }
+        /// <summary>
+        /// 检查UserSession的登录状态。
+        /// 如果用户登录，会将实例赋值到ViewBag.UserSession，用户的数据赋值到ViewBag.User。
+        /// </summary>
+        /// <param name="controller">controller传入null，将不会自动转跳，并且在登录状态下不会，将用户会话实例赋值到ViewBag.UserSession，用户的数据不会赋值到ViewBag.User。</param>
+        /// <param name="signInUrl">若传入controller，会使用转跳到本参数指定的URL。</param>
+        /// <returns></returns>
         public bool MvcSessionChecking(Controller controller, string signInUrl)
         {
             if (State != LoginState.Login)
             {
-                controller.Response.Redirect(signInUrl);
+                if (controller != null)
+                    controller.Response.Redirect(signInUrl);
                 return false;
             }
             else
             {
-                controller.ViewBag.User = User;
-                controller.ViewBag.UserSession = this;
+                if (controller != null)
+                {
+                    controller.ViewBag.User = User;
+                    controller.ViewBag.UserSession = this;
+                }
                 return true;
             }
         }

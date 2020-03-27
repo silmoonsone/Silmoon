@@ -121,12 +121,6 @@ namespace Silmoon.Web
             }
             return true;
         }
-        public static void PrintHtml(string title, string message, string filename)
-        {
-            string s = File.ReadAllText(Silmoon.Web.HttpHelper.PathRoot + "html\\" + filename);
-            s = s.Replace("{$Title$}", title).Replace("{$Message$}", message);
-            HttpContext.Current.Response.Write(s);
-        }
         internal static char IntToHex(int n)
         {
             if (n <= 9)
@@ -134,20 +128,6 @@ namespace Silmoon.Web
                 return (char)(n + 0x30);
             }
             return (char)((n - 10) + 0x61);
-        }
-        public static void Redirect(string url)
-        {
-            HttpContext.Current.Response.StatusCode = 302;
-            HttpContext.Current.Response.Headers.Add("Location", url);
-        }
-        public static string MakeQueryString(NameValueCollection parameters)
-        {
-            string result = string.Empty;
-            for (int i = 0; i < parameters.Count; i++)
-            {
-                result += "&" + HttpUtility.UrlEncode(parameters.GetKey(i)) + "=" + HttpUtility.UrlEncode(parameters[i]);
-            }
-            return result.Substring(1, result.Length - 1);
         }
     }
 }
