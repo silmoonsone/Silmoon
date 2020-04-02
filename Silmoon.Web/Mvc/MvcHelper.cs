@@ -32,14 +32,25 @@ namespace Silmoon.Web.Mvc
         {
             return js.ajaxOptionFunctions;
         }
-        public static AjaxOptions GetAjaxOptions(string senderId, string onSuccess = "null", string onFailed = "null", string onError = "null", bool onSuccessNeedRefreshPage = false)
+        public static AjaxOptions GetAjaxOptions(string senderId = "", string onSuccess = "null", string onFailed = "null", string onError = "null", string url = "", bool onSuccessNeedRefreshPage = false)
         {
             var result = new AjaxOptions()
             {
                 OnBegin = "(function(sender){ _ajax_on_begin(sender); })('" + senderId + "')",
                 OnComplete = "(function(senderId, e, onSuccess, onFailed, onError, onSuccessNeedRefreshPage){ _ajax_on_complete(senderId, e, onSuccess, onFailed, onError, onSuccessNeedRefreshPage); })('" + senderId + "', arguments[0], " + onSuccess + ", " + onFailed + ", " + onError + ", " + onSuccessNeedRefreshPage.ToString().ToLower() + ")"
             };
+            if (!string.IsNullOrEmpty(url))
+            {
+                result.Url = url;
+            }
             return result;
+        }
+        public static AjaxOptions GetAjaxOptions(AjaxOptions ajaxOptions, string senderId = "", string onSuccess = "null", string onFailed = "null", string onError = "null", bool onSuccessNeedRefreshPage = false)
+        {
+            ajaxOptions.OnBegin = "(function(sender){ _ajax_on_begin(sender); })('" + senderId + "')";
+            ajaxOptions.OnComplete = "(function(senderId, e, onSuccess, onFailed, onError, onSuccessNeedRefreshPage){ _ajax_on_complete(senderId, e, onSuccess, onFailed, onError, onSuccessNeedRefreshPage); })('" + senderId + "', arguments[0], " + onSuccess + ", " + onFailed + ", " + onError + ", " + onSuccessNeedRefreshPage.ToString().ToLower() + ")";
+
+            return ajaxOptions;
         }
 
     }
