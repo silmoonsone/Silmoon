@@ -1,4 +1,5 @@
 ﻿
+// Silmoon.Web.Mvc.MvcHelper.GetAjaxOptionJavascriptFunctions() generate javascript
 function _ajax_on_complete(senderId, e, onSuccess, onFailed, onError, onSuccessNeedRefreshPage) {
     if (e.readyState == 4) {
         var obj = JSON.parse(e.responseText);
@@ -23,3 +24,4 @@ function _ajax_on_complete(senderId, e, onSuccess, onFailed, onError, onSuccessN
 function _ajax_on_begin(senderId) {
     if (senderId != "") $("#" + senderId).html("请求中...");
 }
+// Silmoon.Web.Mvc.MvcHelper.GetAjaxOptionJavascriptFunctions() end javascript
