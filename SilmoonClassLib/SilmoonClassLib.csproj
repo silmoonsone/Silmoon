@@ -131,6 +131,7 @@
     <Compile Include="StateSet.cs" />
     <Compile Include="Threading\ActionLimit.cs" />
     <Compile Include="Threading\TimeLimit.cs" />
+    <Compile Include="Types\OperateResult.cs" />
     <Compile Include="Types\StateCode.cs" />
     <Compile Include="Types\StatusCode.cs" />
     <Compile Include="Types\TimeSection.cs" />
