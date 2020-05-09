@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Silmoon.Types
 {
+    /// <summary>
+    /// 0为无状态，负数为错误，0以上为成功，并且带有状态
+    /// </summary>
     public enum OperateResult
     {
         Repeated = -4,
