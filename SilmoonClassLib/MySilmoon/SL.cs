@@ -28,7 +28,7 @@ namespace Silmoon.MySilmoon
         /// <param name="sourceUserID">sourceUserID</param>
         /// <param name="shortLog">shortLog</param>
         /// <returns>推送结果状态</returns>
-        public StateCode PushStateLog(string sourceName, string sourceUserID, string shortLog)
+        public SystemStateCode PushStateLog(string sourceName, string sourceUserID, string shortLog)
         {
             return PushStateLog(sourceName, sourceUserID, shortLog, null);
         }
@@ -46,11 +46,11 @@ namespace Silmoon.MySilmoon
         /// <param name="flag1">flag1</param>
         /// <param name="flag2">flag2</param>
         /// <returns>推送结果状态</returns>
-        public StateCode PushStateLog(string sourceName, string sourceUserID, string shortLog, string log = null, string data = null, string data1 = null, string data2 = null, string flag = null, string flag1 = null, string flag2 = null)
+        public SystemStateCode PushStateLog(string sourceName, string sourceUserID, string shortLog, string log = null, string data = null, string data1 = null, string data2 = null, string flag = null, string flag1 = null, string flag2 = null)
         {
-            if (sourceName == null) return StateCode.PARAM_ERROR;
-            if (sourceUserID == null) return StateCode.PARAM_ERROR;
-            if (shortLog == null) return StateCode.PARAM_ERROR;
+            if (sourceName == null) return SystemStateCode.PARAM_ERROR;
+            if (sourceUserID == null) return SystemStateCode.PARAM_ERROR;
+            if (shortLog == null) return SystemStateCode.PARAM_ERROR;
 
             NameValueCollection para = new NameValueCollection();
             para.Add("sourceName", sourceName);
@@ -68,9 +68,9 @@ namespace Silmoon.MySilmoon
                 wc.Proxy = null;
                 wc.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
                 string result = wc.UploadString("https://stateserver.silmoon.com/pushStateLog", MakeQueryString(para));
-                if (result.ToLower() == "success") return StateCode.SUCCESS;
+                if (result.ToLower() == "success") return SystemStateCode.SUCCESS;
             }
-            return StateCode.FAIL;
+            return SystemStateCode.FAIL;
         }
         string MakeQueryString(NameValueCollection parameters)
         {

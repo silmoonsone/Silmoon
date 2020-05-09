@@ -670,7 +670,6 @@ namespace Silmoon.Net
         TcpStruct _remoteTcpStruct;
         NetworkStream _ns;
         SmmpPackectProtocol _protocol = new SmmpPackectProtocol();
-        StateFlag _objectFlag = new StateFlag();
 
         public event SmmpReceiveDataEventHander OnReceivedData;
         int _clientID;
@@ -689,11 +688,6 @@ namespace Silmoon.Net
         {
             get { return _tc; }
             set { _tc = value; }
-        }
-        public StateFlag ObjectFlag
-        {
-            get { return _objectFlag; }
-            set { _objectFlag = value; }
         }
 
         public __listen__readSmmp(Smmp tcp, ref TcpClient tc)

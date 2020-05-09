@@ -11,6 +11,7 @@ namespace Silmoon.Types
         Repeated = -4,
         ParameterMissing = -3,
         None = 0,
-        Success = 1
+        Success = 1,
+        Updated = 2,
     }
 }

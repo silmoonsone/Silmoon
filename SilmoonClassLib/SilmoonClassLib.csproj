@@ -132,8 +132,8 @@
     <Compile Include="Threading\ActionLimit.cs" />
     <Compile Include="Threading\TimeLimit.cs" />
     <Compile Include="Types\OperateResult.cs" />
+    <Compile Include="Types\SystemStateCode.cs" />
     <Compile Include="Types\StateCode.cs" />
-    <Compile Include="Types\StatusCode.cs" />
     <Compile Include="Types\TimeSection.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -173,7 +173,6 @@
     <Compile Include="SmSystem.cs" />
     <Compile Include="Reflection\ReflectionXml.cs" />
     <Compile Include="SpecialConverter.cs" />
-    <Compile Include="StateFlag.cs" />
     <Compile Include="Threading\ThreadHelper.cs" />
     <None Include="sn.snk" />
   </ItemGroup>

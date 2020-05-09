@@ -656,7 +656,6 @@ namespace Silmoon.Net
         TcpStruct _remoteTcpStruct;
         NetworkStream _ns;
         SmPackectProtocol _protocol;
-        StateFlag _objectFlag = new StateFlag();
 
         public event TcpReceiveDataEventHander OnReceivedData;
         int _clientID;
@@ -671,11 +670,6 @@ namespace Silmoon.Net
         public TcpClient Client
         {
             get { return _tc; }
-        }
-        public StateFlag ObjectFlag
-        {
-            get { return _objectFlag; }
-            set { _objectFlag = value; }
         }
 
         public __listen__readSmtcp(SmTcp tcp, ref TcpClient tc, SmPackectProtocol protocal)

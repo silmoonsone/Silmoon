@@ -628,7 +628,6 @@ namespace Silmoon.Net
         TcpClient _tc;
         TcpStruct _remoteTcpStruct;
         NetworkStream _ns;
-        StateFlag _objectFlag = new StateFlag();
 
         public event TcpReceiveDataEventHander OnReceivedData;
         int _bufferSize;
@@ -641,11 +640,6 @@ namespace Silmoon.Net
         public TcpClient Client
         {
             get { return _tc; }
-        }
-        public StateFlag ObjectFlag
-        {
-            get { return _objectFlag; }
-            set { _objectFlag = value; }
         }
 
         public __listen__readTcp(Tcp tcp, ref TcpClient tc)

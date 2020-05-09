@@ -17,11 +17,6 @@ namespace Silmoon.Net
         {
             get;
         }
-        StateFlag ObjectFlag
-        {
-            get;
-            set;
-        }
 
         void SendData(byte[] byteData);
         void SendString(string s);

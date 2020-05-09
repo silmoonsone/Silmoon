@@ -87,16 +87,6 @@ namespace Silmoon.Web.Controls
                 HttpContext.Current.Session["___silmoon_state"] = (int)value;
             }
         }
-        public StateFlag UserFlag
-        {
-            get
-            {
-                if (HttpContext.Current.Session["___silmoon_userflag"] != null)
-                    return (StateFlag)HttpContext.Current.Session["___silmoon_userflag"];
-                else return null;
-            }
-            set { HttpContext.Current.Session["___silmoon_userflag"] = value; }
-        }
         public object UserObject
         {
             get
