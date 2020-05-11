@@ -21,6 +21,11 @@ namespace Silmoon
             StateCode = stateCode;
             Message = message;
         }
+        public SimpleStateFlag(bool success, int stateCode)
+        {
+            Success = success;
+            StateCode = stateCode;
+        }
         public SimpleStateFlag(bool success, string message)
         {
             Success = success;

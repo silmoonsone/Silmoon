@@ -19,7 +19,7 @@ function _ajax_on_complete(senderId, e, onSuccess, onFailed, onError, onSuccessN
         //if (senderId != "") $("#" + senderId).html('错误')
         if (onError != null) onError(senderId, e);
     }
-    $("#" + senderId).html(__ajax_Request_ButtonText);
+    if (senderId != "") $("#" + senderId).html(__ajax_Request_ButtonText);
 }
 
 function _ajax_on_begin(senderId) {
