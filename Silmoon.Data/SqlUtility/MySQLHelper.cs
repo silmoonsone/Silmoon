@@ -4,7 +4,6 @@ using System.Text;
 using System.Data;
 using System.Collections;
 using Silmoon.Data;
-using Silmoon.Data.Odbc;
 using Silmoon.Data.SqlClient;
 
 namespace Silmoon.Data.SqlUtility

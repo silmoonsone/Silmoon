@@ -76,19 +76,14 @@
   <ItemGroup>
     <Compile Include="ConnectionStringMaker.cs" />
     <Compile Include="ISMSQL.cs" />
-    <Compile Include="Odbc\SmOdbcClient.cs" />
-    <Compile Include="Odbc\SmOdbcClientInternal.cs" />
-    <Compile Include="Odbc\SmOdbcClientSource.cs" />
-    <Compile Include="SmOleDbSource.cs" />
-    <Compile Include="SqlClient\DataBizAccess.cs" />
-    <Compile Include="SqlClient\DataConnect.cs" />
-    <Compile Include="SqlClient\SqlUtil.cs" />
-    <Compile Include="SqlClient\SmMSSQLClientSource.cs" />
-    <Compile Include="SqlClient\MySqlUtil.cs" />
-    <Compile Include="SqlClient\SmMySqlClientSource.cs" />
+    <Compile Include="SqlServer\DataBizAccess.cs" />
+    <Compile Include="SqlServer\DataConnect.cs" />
+    <Compile Include="SqlServer\SqlExecuter.cs" />
+    <Compile Include="MySql\MySqlUtil.cs" />
     <Compile Include="SqlCommandBuilder.cs" />
-    <Compile Include="SqlHelper.cs" />
+    <Compile Include="SqlServer\SqlHelper.cs" />
     <Compile Include="DbStateException.cs" />
+    <Compile Include="SqlServer\SqlUtil.cs" />
     <Compile Include="SqlTemplate.cs" />
     <Compile Include="SqlUtility\MSSQLHelper.cs" />
     <Compile Include="SqlUtility\MySQLHelper.cs" />

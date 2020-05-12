@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
-namespace Silmoon.Data.SqlClient
+namespace Silmoon.Data.SqlServer
 {
     public class DataBizAccess : IDisposable
     {
@@ -20,28 +20,28 @@ namespace Silmoon.Data.SqlClient
         {
             this.DataConnector = dc;
         }
-        
-        public SqlDataAdapter GetDataAdapter(string commandText)
+
+        public SqlDataAdapter GetAdapter(string commandText)
         {
-            SqlDataAdapter adapter = new SqlDataAdapter(GetDataCommand(commandText));
+            SqlDataAdapter adapter = new SqlDataAdapter(GetCommand(commandText));
             return adapter;
         }
-        public SqlDataAdapter GetDataAdapter(SqlCommand command)
+        public SqlDataAdapter GetAdapter(SqlCommand command)
         {
             SqlDataAdapter adapter = new SqlDataAdapter(command);
             return adapter;
         }
-        public SqlCommand GetDataCommand(string commandText, SqlConnection connect = null)
+        public SqlCommand GetCommand(string commandText, SqlConnection connect = null)
         {
             if (connect == null) connect = DataConnector.connect;
             SqlCommand cmd = new SqlCommand(commandText, connect);
             cmd.Transaction = Transaction;
             return cmd;
         }
-        public DataTable GetDataTable(SqlCommand command)
+        public DataTable GetTable(SqlCommand command)
         {
             DataTable dt = new DataTable();
-            var adapter = GetDataAdapter(command);
+            var adapter = GetAdapter(command);
             adapter.Fill(dt);
             return dt;
         }

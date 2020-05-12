@@ -4,9 +4,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
-namespace Silmoon.Data.SqlClient
+namespace Silmoon.Data.SqlServer
 {
-    public class DataConnector: IDisposable
+    public class DataConnector : IDisposable
     {
         public SqlConnection connect = null;
         protected static string SqlConnectionString = null;

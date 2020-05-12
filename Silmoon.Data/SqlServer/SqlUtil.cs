@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.OleDb;
@@ -11,7 +11,7 @@ using System.Web;
 
 namespace Silmoon.Data.SqlClient
 {
-    public class SqlUtil : SqlCommonTemplate,IDisposable,ISMSQL
+    public class SqlUtil : SqlCommonTemplate, IDisposable, ISMSQL
     {
         SqlConnection con = null;
 
@@ -19,7 +19,7 @@ namespace Silmoon.Data.SqlClient
         int selectCommandTimeout = 30;
 
         /// <summary>
-        /// ÔÚÊ¹ÓÃÊı¾İÊÊÅäÆ÷µÄÊ±ºò£¬Ö´ĞĞSELECT²éÑ¯µÄ³¬Ê±Ê±¼ä¡£
+        /// åœ¨ä½¿ç”¨æ•°æ®é€‚é…å™¨çš„æ—¶å€™ï¼Œæ‰§è¡ŒSELECTæŸ¥è¯¢çš„è¶…æ—¶æ—¶é—´ã€‚
         /// </summary>
         public int SelectCommandTimeout
         {
@@ -38,7 +38,7 @@ namespace Silmoon.Data.SqlClient
         }
 
         /// <summary>
-        /// »ñÈ¡SQLµØÁ¬½Ó×´Ì¬
+        /// è·å–SQLåœ°è¿æ¥çŠ¶æ€
         /// </summary>
         public ConnectionState State
         {
@@ -46,26 +46,26 @@ namespace Silmoon.Data.SqlClient
         }
 
         /// <summary>
-        /// ´´½¨MS SQLÊı¾İÔ´µÄÊµÀı
+        /// åˆ›å»ºMS SQLæ•°æ®æºçš„å®ä¾‹
         /// </summary>
-        /// <param name="constr">Á¬½Ó×Ö·û´®</param>
+        /// <param name="constr">è¿æ¥å­—ç¬¦ä¸²</param>
         public SqlUtil()
         {
             con = new SqlConnection();
         }
         /// <summary>
-        /// ´´½¨MS SQLÊı¾İÔ´µÄÊµÀı
+        /// åˆ›å»ºMS SQLæ•°æ®æºçš„å®ä¾‹
         /// </summary>
-        /// <param name="constr">Á¬½Ó×Ö·û´®</param>
+        /// <param name="constr">è¿æ¥å­—ç¬¦ä¸²</param>
         public SqlUtil(string constr)
         {
             con = new SqlConnection();
             conStr = constr;
         }
         /// <summary>
-        /// ´´½¨MS SQLÊı¾İÔ´µÄÊµÀı
+        /// åˆ›å»ºMS SQLæ•°æ®æºçš„å®ä¾‹
         /// </summary>
-        /// <param name="constr">Á¬½Ó×Ö·û´®</param>
+        /// <param name="constr">è¿æ¥å­—ç¬¦ä¸²</param>
         public SqlUtil(SqlConnection conn)
         {
             con = conn;
@@ -73,7 +73,7 @@ namespace Silmoon.Data.SqlClient
 
 
         /// <summary>
-        /// ¹Ø±ÕÊı¾İ¿âÁ¬½Ó²¢ÇÒÊÍ·ÅÁ¬½Ó¶ÔÏó¡£
+        /// å…³é—­æ•°æ®åº“è¿æ¥å¹¶ä¸”é‡Šæ”¾è¿æ¥å¯¹è±¡ã€‚
         /// </summary>
         public void Close()
         {
@@ -83,7 +83,7 @@ namespace Silmoon.Data.SqlClient
             }
         }
         /// <summary>
-        /// Ê¹ÓÃÄ¬ÈÏÁ¬½Ó²¢ÇÒ´ò¿ªÒ»¸öÊı¾İ¿â
+        /// ä½¿ç”¨é»˜è®¤è¿æ¥å¹¶ä¸”æ‰“å¼€ä¸€ä¸ªæ•°æ®åº“
         /// </summary>
         public void Open()
         {
@@ -95,7 +95,7 @@ namespace Silmoon.Data.SqlClient
         }
 
         /// <summary>
-        /// Ö´ĞĞÒ»¸öÃ»ÓĞ·µ»Ø»ò²»ĞèÒª·µ»ØµÄSQL£¬²¢ÇÒ·µ»ØÏàÓ¦ĞĞÊı
+        /// æ‰§è¡Œä¸€ä¸ªæ²¡æœ‰è¿”å›æˆ–ä¸éœ€è¦è¿”å›çš„SQLï¼Œå¹¶ä¸”è¿”å›ç›¸åº”è¡Œæ•°
         /// </summary>
         /// <returns></returns>
         public int ExecNonQuery(string sqlcommand)
@@ -107,9 +107,9 @@ namespace Silmoon.Data.SqlClient
             return reint;
         }
         /// <summary>
-        /// ·µ»ØÊı¾İ½á¹ûĞĞÊı
+        /// è¿”å›æ•°æ®ç»“æœè¡Œæ•°
         /// </summary>
-        /// <param name="sqlcommand">²éÑ¯Óï¾ä</param>
+        /// <param name="sqlcommand">æŸ¥è¯¢è¯­å¥</param>
         /// <returns></returns>
         public int GetRecordCount(string sqlcommand)
         {
@@ -120,36 +120,36 @@ namespace Silmoon.Data.SqlClient
         }
 
         /// <summary>
-        /// ·µ»ØÒ»¸öSqlDataReader¶ÔÏó
+        /// è¿”å›ä¸€ä¸ªSqlDataReaderå¯¹è±¡
         /// </summary>
-        /// <param name="sqlcommand">SQLÃüÁî</param>
+        /// <param name="sqlcommand">SQLå‘½ä»¤</param>
         /// <returns></returns>
         public object GetDataReader(string sqlcommand)
         {
             return new SqlCommand(__chkSqlstr(sqlcommand), con).ExecuteReader();
         }
         /// <summary>
-        /// ·µ»ØÒ»¸öSqlCommand¶ÔÏó
+        /// è¿”å›ä¸€ä¸ªSqlCommandå¯¹è±¡
         /// </summary>
-        /// <param name="sqlcommand">SQLÃüÁî</param>
+        /// <param name="sqlcommand">SQLå‘½ä»¤</param>
         /// <returns></returns>
         public object GetCommand(string sqlcommand)
         {
             return new SqlCommand(__chkSqlstr(sqlcommand), con);
         }
         /// <summary>
-        /// »ñÈ¡Ò»¸öÊı¾İÊÊÅäÆ÷¡£
+        /// è·å–ä¸€ä¸ªæ•°æ®é€‚é…å™¨ã€‚
         /// </summary>
-        /// <param name="sqlcommand">SQLÓï¾ä</param>
+        /// <param name="sqlcommand">SQLè¯­å¥</param>
         /// <returns></returns>
         public object GetDataAdapter(string sqlcommand)
         {
             return new SqlDataAdapter(__chkSqlstr(sqlcommand), con);
         }
         /// <summary>
-        /// »ñÈ¡Ò»¸öÄÚ´æÊı¾İ±í
+        /// è·å–ä¸€ä¸ªå†…å­˜æ•°æ®è¡¨
         /// </summary>
-        /// <param name="sqlcommand">SQLÃüÁî</param>
+        /// <param name="sqlcommand">SQLå‘½ä»¤</param>
         /// <returns></returns>
         public DataTable GetDataTable(string sqlcommand)
         {
@@ -162,12 +162,12 @@ namespace Silmoon.Data.SqlClient
         }
 
         /// <summary>
-        /// ·µ»ØÒ»¸ö´ÓÊı¾İ¿âÀïÃæ²éÑ¯³öÀ´µÄ×Ö¶ÎÖµ
+        /// è¿”å›ä¸€ä¸ªä»æ•°æ®åº“é‡Œé¢æŸ¥è¯¢å‡ºæ¥çš„å­—æ®µå€¼
         /// </summary>
-        /// <param name="tablename">±í</param>
-        /// <param name="resulefield">×Ö¶Î</param>
-        /// <param name="fieldname">Ìõ¼ş×Ö¶Î</param>
-        /// <param name="fieldvalue">Ìõ¼şÖµ</param>
+        /// <param name="tablename">è¡¨</param>
+        /// <param name="resulefield">å­—æ®µ</param>
+        /// <param name="fieldname">æ¡ä»¶å­—æ®µ</param>
+        /// <param name="fieldvalue">æ¡ä»¶å€¼</param>
         /// <returns></returns>
         public object GetFieldObjectForSingleQuery(string tablename, string resulefield, string fieldname, string fieldvalue)
         {
@@ -185,10 +185,10 @@ namespace Silmoon.Data.SqlClient
             return reobj;
         }
         /// <summary>
-        /// ·µ»ØÒ»¸ö´ÓÊı¾İ¿âÀïÃæ²éÑ¯³öÀ´µÄ×Ö¶ÎÖµ
+        /// è¿”å›ä¸€ä¸ªä»æ•°æ®åº“é‡Œé¢æŸ¥è¯¢å‡ºæ¥çš„å­—æ®µå€¼
         /// </summary>
-        /// <param name="sqlcommand">SQL²éÑ¯ÃüÁî</param>
-        /// <param name="isUseReader">ÊÇ·ñÊ¹ÓÃDataReader½øĞĞ¹¤×÷</param>
+        /// <param name="sqlcommand">SQLæŸ¥è¯¢å‘½ä»¤</param>
+        /// <param name="isUseReader">æ˜¯å¦ä½¿ç”¨DataReaderè¿›è¡Œå·¥ä½œ</param>
         /// <returns></returns>
         public object GetFieldObjectForSingleQuery(string sqlcommand, bool isUseReader)
         {
@@ -205,9 +205,9 @@ namespace Silmoon.Data.SqlClient
             }
         }
         /// <summary>
-        /// ·µ»ØÒ»¸ö´ÓÊı¾İ¿âÀïÃæ²éÑ¯³öÀ´µÄ×Ö¶ÎÖµ
+        /// è¿”å›ä¸€ä¸ªä»æ•°æ®åº“é‡Œé¢æŸ¥è¯¢å‡ºæ¥çš„å­—æ®µå€¼
         /// </summary>
-        /// <param name="sqlcommand">SQLÃüÁî£¬½öĞèÖ¸¶¨Ò»¸ö·µ»Ø×Ö¶Î</param>
+        /// <param name="sqlcommand">SQLå‘½ä»¤ï¼Œä»…éœ€æŒ‡å®šä¸€ä¸ªè¿”å›å­—æ®µ</param>
         /// <returns></returns>
         public object GetFieldObjectForSingleQuery(string sqlcommand)
         {
@@ -298,7 +298,7 @@ namespace Silmoon.Data.SqlClient
         bool isConnect;
 
         /// <summary>
-        /// »ñÈ¡¶ÔÏóÊÇ·ñÒÑ¾­´´½¨Êı¾İ¿â¶ÔÏó¡£
+        /// è·å–å¯¹è±¡æ˜¯å¦å·²ç»åˆ›å»ºæ•°æ®åº“å¯¹è±¡ã€‚
         /// </summary>
         public bool Isconnect
         {
@@ -309,7 +309,7 @@ namespace Silmoon.Data.SqlClient
         }
 
         /// <summary>
-        /// ÀàµÄ¹¹Ôìº¯Êı
+        /// ç±»çš„æ„é€ å‡½æ•°
         /// </summary>
         public SmOleDb(string constr)
         {
@@ -324,7 +324,7 @@ namespace Silmoon.Data.SqlClient
         }
 
         /// <summary>
-        /// ¹Ø±ÕÊı¾İ¿âÁ¬½Ó²¢ÇÒÊÍ·ÅÁ¬½Ó¶ÔÏó¡£
+        /// å…³é—­æ•°æ®åº“è¿æ¥å¹¶ä¸”é‡Šæ”¾è¿æ¥å¯¹è±¡ã€‚
         /// </summary>
         public void Close()
         {
@@ -333,7 +333,7 @@ namespace Silmoon.Data.SqlClient
             isConnect = false;
         }
         /// <summary>
-        /// Ê¹ÓÃÄ¬ÈÏÁ¬½Ó²¢ÇÒ´ò¿ªÒ»¸öÊı¾İ¿â
+        /// ä½¿ç”¨é»˜è®¤è¿æ¥å¹¶ä¸”æ‰“å¼€ä¸€ä¸ªæ•°æ®åº“
         /// </summary>
         public void Open()
         {
@@ -344,7 +344,7 @@ namespace Silmoon.Data.SqlClient
 
 
         /// <summary>
-        /// ÉèÖÃ»òÕß»ñÈ¡SQLÖ´ĞĞÃüÁî¡£
+        /// è®¾ç½®æˆ–è€…è·å–SQLæ‰§è¡Œå‘½ä»¤ã€‚
         /// </summary>
         public string SqlCommand
         {
@@ -352,7 +352,7 @@ namespace Silmoon.Data.SqlClient
             set { sqlCommand = value; }
         }
         /// <summary>
-        /// Ö´ĞĞÒ»¸öÃ»ÓĞ·µ»Ø»ò²»ĞèÒª·µ»ØµÄSQL£¬²¢ÇÒ·µ»ØÏàÓ¦ĞĞÊı
+        /// æ‰§è¡Œä¸€ä¸ªæ²¡æœ‰è¿”å›æˆ–ä¸éœ€è¦è¿”å›çš„SQLï¼Œå¹¶ä¸”è¿”å›ç›¸åº”è¡Œæ•°
         /// </summary>
         /// <returns></returns>
         public int ExecNonQuery()
@@ -366,12 +366,12 @@ namespace Silmoon.Data.SqlClient
             }
             else
             {
-                throw new Exception("Êı¾İ¿âÃ»ÓĞÁ¬½Ó");
+                throw new Exception("æ•°æ®åº“æ²¡æœ‰è¿æ¥");
             }
             return reint;
         }
         /// <summary>
-        /// Ö´ĞĞÒ»¸öÃ»ÓĞ·µ»Ø»ò²»ĞèÒª·µ»ØµÄSQL£¬²¢ÇÒ·µ»ØÏàÓ¦ĞĞÊı
+        /// æ‰§è¡Œä¸€ä¸ªæ²¡æœ‰è¿”å›æˆ–ä¸éœ€è¦è¿”å›çš„SQLï¼Œå¹¶ä¸”è¿”å›ç›¸åº”è¡Œæ•°
         /// </summary>
         /// <returns></returns>
         public int ExecNonQuery(string sqlcommand)
@@ -385,13 +385,13 @@ namespace Silmoon.Data.SqlClient
             }
             else
             {
-                throw new Exception("Êı¾İ¿âÃ»ÓĞÁ¬½Ó");
+                throw new Exception("æ•°æ®åº“æ²¡æœ‰è¿æ¥");
             }
             return reint;
         }
 
         /// <summary>
-        /// ·µ»ØSQL²éÑ¯SqlDataReaderÀàĞÍ½á¹û¡£
+        /// è¿”å›SQLæŸ¥è¯¢SqlDataReaderç±»å‹ç»“æœã€‚
         /// </summary>
         /// <returns></returns>
         public OleDbDataReader GetOleDbDataReader()
@@ -415,7 +415,7 @@ namespace Silmoon.Data.SqlClient
             else
             {
                 Close();
-                throw new Exception("ÎŞ·µ»ØÊı¾İ");
+                throw new Exception("æ— è¿”å›æ•°æ®");
             }
             dr.Close();
             dr.Dispose();
@@ -450,9 +450,9 @@ namespace Silmoon.Data.SqlClient
             return new OleDbDataAdapter(sqlcommand, con);
         }
         /// <summary>
-        /// »ñÈ¡Ò»¸öÄÚ´æÊı¾İ±í
+        /// è·å–ä¸€ä¸ªå†…å­˜æ•°æ®è¡¨
         /// </summary>
-        /// <param name="sqlcommand">SQLÃüÁî</param>
+        /// <param name="sqlcommand">SQLå‘½ä»¤</param>
         /// <returns></returns>
         public DataTable GetOleDbDataTable(string sqlcommand)
         {
@@ -486,7 +486,7 @@ namespace Silmoon.Data.SqlClient
 
 
         /// <summary>
-        /// »ñÈ¡¶ÔÏóÊÇ·ñÒÑ¾­´´½¨Êı¾İ¿â¶ÔÏó¡£
+        /// è·å–å¯¹è±¡æ˜¯å¦å·²ç»åˆ›å»ºæ•°æ®åº“å¯¹è±¡ã€‚
         /// </summary>
         public bool Isconnect
         {
@@ -497,7 +497,7 @@ namespace Silmoon.Data.SqlClient
         }
 
         /// <summary>
-        /// ÀàµÄ¹¹Ôìº¯Êı
+        /// ç±»çš„æ„é€ å‡½æ•°
         /// </summary>
         public SmOracleClient(string constr)
         {
@@ -512,7 +512,7 @@ namespace Silmoon.Data.SqlClient
         }
 
         /// <summary>
-        /// ¹Ø±ÕÊı¾İ¿âÁ¬½Ó²¢ÇÒÊÍ·ÅÁ¬½Ó¶ÔÏó¡£
+        /// å…³é—­æ•°æ®åº“è¿æ¥å¹¶ä¸”é‡Šæ”¾è¿æ¥å¯¹è±¡ã€‚
         /// </summary>
         public void Close()
         {
@@ -521,7 +521,7 @@ namespace Silmoon.Data.SqlClient
             isConnect = false;
         }
         /// <summary>
-        /// Ê¹ÓÃÄ¬ÈÏÁ¬½Ó²¢ÇÒ´ò¿ªÒ»¸öÊı¾İ¿â
+        /// ä½¿ç”¨é»˜è®¤è¿æ¥å¹¶ä¸”æ‰“å¼€ä¸€ä¸ªæ•°æ®åº“
         /// </summary>
         public void Open()
         {
@@ -532,7 +532,7 @@ namespace Silmoon.Data.SqlClient
 
 
         /// <summary>
-        /// ÉèÖÃ»òÕß»ñÈ¡SQLÖ´ĞĞÃüÁî¡£
+        /// è®¾ç½®æˆ–è€…è·å–SQLæ‰§è¡Œå‘½ä»¤ã€‚
         /// </summary>
         public string SqlCommand
         {
@@ -540,7 +540,7 @@ namespace Silmoon.Data.SqlClient
             set { sqlCommand = value; }
         }
         /// <summary>
-        /// Ö´ĞĞÒ»¸öÃ»ÓĞ·µ»Ø»ò²»ĞèÒª·µ»ØµÄSQL£¬²¢ÇÒ·µ»ØÏàÓ¦ĞĞÊı
+        /// æ‰§è¡Œä¸€ä¸ªæ²¡æœ‰è¿”å›æˆ–ä¸éœ€è¦è¿”å›çš„SQLï¼Œå¹¶ä¸”è¿”å›ç›¸åº”è¡Œæ•°
         /// </summary>
         /// <returns></returns>
         public int ExecNonQuery()
@@ -554,12 +554,12 @@ namespace Silmoon.Data.SqlClient
             }
             else
             {
-                throw new Exception("Êı¾İ¿âÃ»ÓĞÁ¬½Ó");
+                throw new Exception("æ•°æ®åº“æ²¡æœ‰è¿æ¥");
             }
             return reint;
         }
         /// <summary>
-        /// Ö´ĞĞÒ»¸öÃ»ÓĞ·µ»Ø»ò²»ĞèÒª·µ»ØµÄSQL£¬²¢ÇÒ·µ»ØÏàÓ¦ĞĞÊı
+        /// æ‰§è¡Œä¸€ä¸ªæ²¡æœ‰è¿”å›æˆ–ä¸éœ€è¦è¿”å›çš„SQLï¼Œå¹¶ä¸”è¿”å›ç›¸åº”è¡Œæ•°
         /// </summary>
         /// <returns></returns>
         public int ExecNonQuery(string sqlcommand)
@@ -573,12 +573,12 @@ namespace Silmoon.Data.SqlClient
             }
             else
             {
-                throw new Exception("Êı¾İ¿âÃ»ÓĞÁ¬½Ó");
+                throw new Exception("æ•°æ®åº“æ²¡æœ‰è¿æ¥");
             }
             return reint;
         }
         /// <summary>
-        /// ·µ»ØSQL²éÑ¯SqlDataReaderÀàĞÍ½á¹û¡£
+        /// è¿”å›SQLæŸ¥è¯¢SqlDataReaderç±»å‹ç»“æœã€‚
         /// </summary>
         /// <returns></returns>
         public OracleDataReader SqlDataRead()
@@ -602,7 +602,7 @@ namespace Silmoon.Data.SqlClient
             else
             {
                 Close();
-                throw new Exception("ÎŞ·µ»ØÊı¾İ");
+                throw new Exception("æ— è¿”å›æ•°æ®");
             }
             dr.Close();
             dr.Dispose();
