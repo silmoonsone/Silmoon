@@ -31,7 +31,7 @@ namespace Silmoon.Data.SqlServer
                         item.SetValue(obj, reader[name], null);
                 }
             }
-
+            reader.Close();
             return obj;
         }
         public static T[] MakeObjects<T>(SqlDataReader reader) where T : new()
@@ -42,7 +42,7 @@ namespace Silmoon.Data.SqlServer
             {
                 result.Add(MakeObject<T>(reader));
             }
-
+            reader.Close();
             return result.ToArray();
         }
 
@@ -80,28 +80,31 @@ namespace Silmoon.Data.SqlServer
 
             return result;
         }
-        public static void AddSqlCommandParameters(SqlCommand sqlCommand, object obj, string[] paraNames)
+        public static void AddSqlCommandParameters(SqlCommand sqlCommand, object obj, params string[] paraNames)
         {
-            var propertyInfos = obj.GetType().GetProperties();
-            foreach (PropertyInfo item in propertyInfos)
+            if (obj != null)
             {
-                string name = item.Name;
-                if (paraNames.Contains(name))
+                var propertyInfos = obj.GetType().GetProperties();
+                foreach (PropertyInfo item in propertyInfos)
                 {
-                    var value = item.GetValue(obj, null);
-                    Type type = item.PropertyType;
-
-                    if (value != null)
+                    string name = item.Name;
+                    if (paraNames.Contains(name))
                     {
-                        if (type.IsEnum)
-                            sqlCommand.Parameters.AddWithValue(name, value.ToString());
-                        else if (type.Name == "DateTime" && ((DateTime)value) == DateTime.MinValue)
-                            sqlCommand.Parameters.AddWithValue(name, SqlDateTime.MinValue);
+                        var value = item.GetValue(obj, null);
+                        Type type = item.PropertyType;
+
+                        if (value != null)
+                        {
+                            if (type.IsEnum)
+                                sqlCommand.Parameters.AddWithValue(name, value.ToString());
+                            else if (type.Name == "DateTime" && ((DateTime)value) == DateTime.MinValue)
+                                sqlCommand.Parameters.AddWithValue(name, SqlDateTime.MinValue);
+                            else
+                                sqlCommand.Parameters.AddWithValue(name, value);
+                        }
                         else
-                            sqlCommand.Parameters.AddWithValue(name, value);
+                            sqlCommand.Parameters.AddWithValue(name, DBNull.Value);
                     }
-                    else
-                        sqlCommand.Parameters.AddWithValue(name, DBNull.Value);
                 }
             }
         }

@@ -12,16 +12,135 @@ namespace Silmoon.Data.SqlServer
     public class SqlExecuter
     {
         SqlConnection SqlConnection = null;
+        SqlUtil sqlUtil = null;
+        DataBizAccess access = null;
         public SqlExecuter(SqlConnection sqlConnection)
         {
             SqlConnection = sqlConnection;
+            sqlUtil = new SqlUtil(sqlConnection);
+            access = new DataBizAccess(sqlConnection);
         }
-        public void AddObject<T>(T obj)
+        public SqlExecuteResult AddObject<T>(string tableName, T obj)
         {
-            string sql = "INSERT INTO ";
+            var names = getPropertyNames<T>();
+
+            string sql = $"INSERT INTO [{onlyWords(tableName)}] (";
+            foreach (var item in names)
+            {
+                sql += "[" + item + "], ";
+            }
+            sql = sql.Substring(0, sql.Length - 2);
+            sql += ") VALUES (";
+            foreach (var item in names)
+            {
+                sql += "@" + item + ", ";
+            }
+            sql = sql.Substring(0, sql.Length - 2);
+            sql += ")";
+            var cmd = access.GetCommand(sql);
+            SqlHelper.AddSqlCommandParameters(cmd, obj, names);
+            int i = cmd.ExecuteNonQuery();
+            return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
         }
-        public void CreateTable<T>(string tableName)
+        public T GetObject<T>(string tableName, object query = null, SqlQueryOptions options = null) where T : new()
         {
+            if (options == null) options = new SqlQueryOptions();
+            string sql = $"SELECT * FROM [{tableName}]";
+            var props = getProperties(query, true);
+            var names = getPropertyNames(props, true);
+            if (names.Length != 0)
+            {
+                sql += " WHERE ";
+                foreach (var item in names)
+                {
+                    sql += $"[{item}] = @{item} AND ";
+                }
+                sql = sql.Substring(0, sql.Length - 5);
+            }
+
+            var cmd = access.GetCommand(sql);
+            SqlHelper.AddSqlCommandParameters(cmd, query, names);
+            using (var reader = cmd.ExecuteReader())
+            {
+                if (!reader.Read()) return default;
+                var obj = SqlHelper.MakeObject<T>(reader, new T());
+                return (T)obj;
+            }
+        }
+        public T[] GetObjects<T>(string tableName, object query = null, SqlQueryOptions options = null) where T : new()
+        {
+            if (options == null) options = new SqlQueryOptions();
+
+            string sql = $"SELECT * FROM [{tableName}]";
+            var props = getProperties(query, true);
+            var names = getPropertyNames(props, true);
+            if (names.Length != 0)
+            {
+                sql += " WHERE ";
+                foreach (var item in names)
+                {
+                    sql += $"[{item}] = @{item} AND ";
+                }
+                sql = sql.Substring(0, sql.Length - 5);
+            }
+
+            var cmd = access.GetCommand(sql);
+            SqlHelper.AddSqlCommandParameters(cmd, query, names);
+            using (var reader = cmd.ExecuteReader())
+            {
+                //if (!reader.Read()) return default;
+                var obj = SqlHelper.MakeObjects<T>(reader);
+                return obj;
+            }
+        }
+        public T GetObjectWithWhere<T>(string tableName, string query = null, SqlQueryOptions options = null) where T : new()
+        {
+            if (options == null) options = new SqlQueryOptions();
+
+            string sql = $"SELECT * FROM [{tableName}]";
+            var props = getProperties(query, true);
+            var names = getPropertyNames(props, true);
+            if (!string.IsNullOrEmpty(query))
+            {
+                sql += " WHERE " + query;
+            }
+
+            var cmd = access.GetCommand(sql);
+            SqlHelper.AddSqlCommandParameters(cmd, query, names);
+            using (var reader = cmd.ExecuteReader())
+            {
+                if (!reader.Read()) return default;
+                var obj = SqlHelper.MakeObject<T>(reader, new T());
+                return (T)obj;
+            }
+        }
+        public T[] GetObjectsWithWhere<T>(string tableName, string query = null, SqlQueryOptions options = null) where T : new()
+        {
+            if (options == null) options = new SqlQueryOptions();
+
+            string sql = $"SELECT * FROM [{tableName}]";
+            var props = getProperties(query, true);
+            var names = getPropertyNames(props, true);
+            if (!string.IsNullOrEmpty(query))
+            {
+                sql += " WHERE " + query;
+            }
+
+            var cmd = access.GetCommand(sql);
+            SqlHelper.AddSqlCommandParameters(cmd, query, names);
+            using (var reader = cmd.ExecuteReader())
+            {
+                //if (!reader.Read()) return default;
+                var obj = SqlHelper.MakeObjects<T>(reader);
+                return obj;
+            }
+        }
+
+
+        public SqlExecuteResult<bool> CreateTable<T>(string tableName)
+        {
+            var isExistResult = TableIsExist(tableName);
+            if (isExistResult.Data) return new SqlExecuteResult<bool>() { Data = false, ResponseRows = isExistResult.ResponseRows, ExecuteSqlString = isExistResult.ExecuteSqlString };
             var props = getProperties<T>();
 
             string sql = $"CREATE TABLE {onlyWords(tableName)}\r\n";
@@ -32,31 +151,107 @@ namespace Silmoon.Data.SqlServer
                 var type = item.PropertyType;
                 if (type.IsEnum)
                 {
-
+                    sql += $"\t{item.Name} nvarchar(50),\r\n";
+                }
+                else if (type.Name == "DateTime")
+                {
+                    sql += $"\t{item.Name} datetime NULL,\r\n";
+                }
+                else if (type.Name == "String")
+                {
+                    sql += $"\t{item.Name} nvarchar(MAX) NULL,\r\n";
+                }
+                else if (type.Name == "Boolean")
+                {
+                    sql += $"\t{item.Name} bit,\r\n";
+                }
+                else if (type.Name == "Int32" || type.Name == "UInt32" || type.Name == "Int16" || type.Name == "UInt16" || type.Name == "Int64" || type.Name == "UInt64")
+                {
+                    sql += $"\t{item.Name} int,\r\n";
+                }
+                else if (type.Name == "Guid")
+                {
+                    sql += $"\t{item.Name} uniqueidentifier NULL,\r\n";
+                }
+                else if (type.Name == "ObjectId")
+                {
+                    sql += $"\t{item.Name} nvarchar(24),\r\n";
+                }
+                else
+                {
+                    throw new Exception("未知的类型处理（" + type.Name + "）");
                 }
             }
+            sql += ")  ON [PRIMARY]\r\n";
+            sql += "TEXTIMAGE_ON [PRIMARY]\r\n";
+            var i = sqlUtil.ExecNonQuery(sql);
+            return new SqlExecuteResult<bool>() { Data = true, ExecuteSqlString = sql, ResponseRows = i };
+        }
+        public SqlExecuteResult<bool> TableIsExist(string tableName)
+        {
+            string sql = $"SELECT TOP 1 * FROM [SYSOBJECTS] WHERE id = OBJECT_ID(N'{tableName}') ";
+            int i = sqlUtil.GetRecordCount(sql);
+            return new SqlExecuteResult<bool>() { Data = i != 0, ExecuteSqlString = sql, ResponseRows = i };
         }
 
 
 
-        private string[] getPropertyNames<T>()
+        private string[] getPropertyNames(object obj, bool includeId = false)
         {
             List<string> propertyNames = new List<string>();
-            var propertyInfos = typeof(T).GetType().GetProperties();
-            foreach (var item in propertyInfos)
+            if (obj != null)
             {
-                if (item.Name.ToLower() == "id") continue;
+                var propertyInfos = obj.GetType().GetProperties();
+                foreach (var item in propertyInfos)
+                {
+                    if (item.Name.ToLower() == "id" && !includeId) continue;
+                    propertyNames.Add(item.Name);
+                }
+            }
+            return propertyNames.ToArray();
+        }
+        private string[] getPropertyNames(PropertyInfo[] props, bool includeId = false)
+        {
+            List<string> propertyNames = new List<string>();
+            foreach (var item in props)
+            {
+                if (item.Name.ToLower() == "id" && !includeId) continue;
                 propertyNames.Add(item.Name);
             }
             return propertyNames.ToArray();
         }
-        private PropertyInfo[] getProperties<T>()
+        private string[] getPropertyNames<T>(bool includeId = false)
         {
-            List<PropertyInfo> propertyNames = new List<PropertyInfo>();
-            var propertyInfos = typeof(T).GetType().GetProperties();
+            List<string> propertyNames = new List<string>();
+            var propertyInfos = typeof(T).GetProperties();
             foreach (var item in propertyInfos)
             {
-                if (item.Name.ToLower() == "id") continue;
+                if (item.Name.ToLower() == "id" && !includeId) continue;
+                propertyNames.Add(item.Name);
+            }
+            return propertyNames.ToArray();
+        }
+        private PropertyInfo[] getProperties(object obj, bool includeId = false)
+        {
+            List<PropertyInfo> propertyNames = new List<PropertyInfo>();
+            if (obj != null)
+            {
+                var propertyInfos = obj.GetType().GetProperties();
+                foreach (var item in propertyInfos)
+                {
+                    if (item.Name.ToLower() == "id" && !includeId) continue;
+                    propertyNames.Add(item);
+                }
+            }
+            return propertyNames.ToArray();
+        }
+        private PropertyInfo[] getProperties<T>(bool includeId = false)
+        {
+            List<PropertyInfo> propertyNames = new List<PropertyInfo>();
+            var propertyInfos = typeof(T).GetProperties();
+            foreach (var item in propertyInfos)
+            {
+                if (item.Name.ToLower() == "id" && !includeId) continue;
                 propertyNames.Add(item);
             }
             return propertyNames.ToArray();

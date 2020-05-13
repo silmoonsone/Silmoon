@@ -5,7 +5,7 @@ using MySql.Data.MySqlClient;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace Silmoon.Data.SqlClient
+namespace Silmoon.Data.MySql
 {
     public class MySqlUtil : SqlCommonTemplate, IDisposable, ISMSQL
     {

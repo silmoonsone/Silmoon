@@ -33,7 +33,10 @@ namespace Silmoon.Web
                 else return r;
             }
         }
-        public static string PathRoot
+        /// <summary>
+        /// 获取站点物理路径，后面以/结束。
+        /// </summary>
+        public static string AppRootPath
         {
             get { return HttpRuntime.AppDomainAppPath; }
         }

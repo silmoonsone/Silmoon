@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Silmoon.Data.SqlClient;
 using System.Data;
 using System.Collections;
+using Silmoon.Data.SqlServer;
 
 namespace Silmoon.Data.SqlUtility
 {

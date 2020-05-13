@@ -4,7 +4,7 @@ using System.Text;
 using System.Data;
 using System.Collections;
 using Silmoon.Data;
-using Silmoon.Data.SqlClient;
+using Silmoon.Data.MySql;
 
 namespace Silmoon.Data.SqlUtility
 {
@@ -233,7 +233,7 @@ namespace Silmoon.Data.SqlUtility
         /// <returns></returns>
         public static string MakeConnectionString(string server, string userID, string password, string database)
         {
-            MySql.Data.MySqlClient.MySqlConnectionStringBuilder builder = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
+            global::MySql.Data.MySqlClient.MySqlConnectionStringBuilder builder = new global::MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
             builder.Server = server;
             builder.UserID = userID;
             builder.Password = password;

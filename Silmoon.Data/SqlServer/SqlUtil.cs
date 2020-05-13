@@ -9,7 +9,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Web;
 
-namespace Silmoon.Data.SqlClient
+namespace Silmoon.Data.SqlServer
 {
     public class SqlUtil : SqlCommonTemplate, IDisposable, ISMSQL
     {
@@ -113,10 +113,11 @@ namespace Silmoon.Data.SqlClient
         /// <returns></returns>
         public int GetRecordCount(string sqlcommand)
         {
-            DataTable dt = GetDataTable(sqlcommand);
-            int i = dt.Rows.Count;
-            dt.Dispose();
-            return i;
+            using (DataTable dt = GetDataTable(sqlcommand))
+            {
+                int i = dt.Rows.Count;
+                return i;
+            }
         }
 
         /// <summary>

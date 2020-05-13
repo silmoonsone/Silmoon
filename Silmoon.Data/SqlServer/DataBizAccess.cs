@@ -7,18 +7,18 @@ using System.Text;
 
 namespace Silmoon.Data.SqlServer
 {
-    public class DataBizAccess : IDisposable
+    public class DataBizAccess
     {
         public SqlTransaction Transaction { get; private set; }
-        public DataConnector DataConnector { get; set; }
+        public SqlConnection Connection { get; set; }
 
         public DataBizAccess()
         {
 
         }
-        public DataBizAccess(DataConnector dc)
+        public DataBizAccess(SqlConnection connection)
         {
-            this.DataConnector = dc;
+            this.Connection = connection;
         }
 
         public SqlDataAdapter GetAdapter(string commandText)
@@ -33,7 +33,7 @@ namespace Silmoon.Data.SqlServer
         }
         public SqlCommand GetCommand(string commandText, SqlConnection connect = null)
         {
-            if (connect == null) connect = DataConnector.connect;
+            if (connect == null) connect = Connection;
             SqlCommand cmd = new SqlCommand(commandText, connect);
             cmd.Transaction = Transaction;
             return cmd;
@@ -48,7 +48,7 @@ namespace Silmoon.Data.SqlServer
         public void BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
             if (Transaction == null)
-                Transaction = DataConnector.connect.BeginTransaction(isolationLevel);
+                Transaction = Connection.BeginTransaction(isolationLevel);
         }
         public void CommitTransaction()
         {
@@ -61,12 +61,6 @@ namespace Silmoon.Data.SqlServer
             if (Transaction != null)
                 Transaction.Rollback();
             Transaction = null;
-        }
-
-        public void Dispose()
-        {
-            DataConnector.Dispose();
-            DataConnector = null;
         }
     }
 }

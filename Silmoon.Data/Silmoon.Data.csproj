@@ -76,13 +76,17 @@
   <ItemGroup>
     <Compile Include="ConnectionStringMaker.cs" />
     <Compile Include="ISMSQL.cs" />
+    <Compile Include="QueryModel\Sort.cs" />
+    <Compile Include="QueryModel\SortMethod.cs" />
     <Compile Include="SqlServer\DataBizAccess.cs" />
     <Compile Include="SqlServer\DataConnect.cs" />
     <Compile Include="SqlServer\SqlExecuter.cs" />
     <Compile Include="MySql\MySqlUtil.cs" />
     <Compile Include="SqlCommandBuilder.cs" />
+    <Compile Include="SqlServer\SqlExecuteResult.cs" />
     <Compile Include="SqlServer\SqlHelper.cs" />
     <Compile Include="DbStateException.cs" />
+    <Compile Include="SqlServer\SqlQueryOptions.cs" />
     <Compile Include="SqlServer\SqlUtil.cs" />
     <Compile Include="SqlTemplate.cs" />
     <Compile Include="SqlUtility\MSSQLHelper.cs" />
