@@ -80,6 +80,7 @@
     <Compile Include="Arrays\ArrayUtility.cs" />
     <Compile Include="Arrays\IID.cs" />
     <Compile Include="BigInteger.cs" />
+    <Compile Include="ArrayHelper.cs" />
     <Compile Include="Copy.cs" />
     <Compile Include="Imaging\ChartUtil.cs" />
     <Compile Include="MySilmoon\Instance\LicenseResult.cs" />

@@ -93,17 +93,20 @@ namespace Silmoon.Data.SqlServer
                         var value = item.GetValue(obj, null);
                         Type type = item.PropertyType;
 
-                        if (value != null)
+                        if (!sqlCommand.Parameters.Contains(name))
                         {
-                            if (type.IsEnum)
-                                sqlCommand.Parameters.AddWithValue(name, value.ToString());
-                            else if (type.Name == "DateTime" && ((DateTime)value) == DateTime.MinValue)
-                                sqlCommand.Parameters.AddWithValue(name, SqlDateTime.MinValue);
+                            if (value != null)
+                            {
+                                if (type.IsEnum)
+                                    sqlCommand.Parameters.AddWithValue(name, value.ToString());
+                                else if (type.Name == "DateTime" && ((DateTime)value) == DateTime.MinValue)
+                                    sqlCommand.Parameters.AddWithValue(name, SqlDateTime.MinValue);
+                                else
+                                    sqlCommand.Parameters.AddWithValue(name, value);
+                            }
                             else
-                                sqlCommand.Parameters.AddWithValue(name, value);
+                                sqlCommand.Parameters.AddWithValue(name, DBNull.Value);
                         }
-                        else
-                            sqlCommand.Parameters.AddWithValue(name, DBNull.Value);
                     }
                 }
             }

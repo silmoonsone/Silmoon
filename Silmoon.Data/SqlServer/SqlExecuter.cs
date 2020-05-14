@@ -67,6 +67,27 @@ namespace Silmoon.Data.SqlServer
                 return (T)obj;
             }
         }
+        public T GetObjectWithWhere<T>(string tableName, string query = null, SqlQueryOptions options = null) where T : new()
+        {
+            if (options == null) options = new SqlQueryOptions();
+
+            string sql = $"SELECT * FROM [{tableName}]";
+            var props = getProperties(query, true);
+            var names = getPropertyNames(props, true);
+            if (!string.IsNullOrEmpty(query))
+            {
+                sql += " WHERE " + query;
+            }
+
+            var cmd = access.GetCommand(sql);
+            SqlHelper.AddSqlCommandParameters(cmd, query, names);
+            using (var reader = cmd.ExecuteReader())
+            {
+                if (!reader.Read()) return default;
+                var obj = SqlHelper.MakeObject<T>(reader, new T());
+                return (T)obj;
+            }
+        }
         public T[] GetObjects<T>(string tableName, object query = null, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = new SqlQueryOptions();
@@ -93,27 +114,6 @@ namespace Silmoon.Data.SqlServer
                 return obj;
             }
         }
-        public T GetObjectWithWhere<T>(string tableName, string query = null, SqlQueryOptions options = null) where T : new()
-        {
-            if (options == null) options = new SqlQueryOptions();
-
-            string sql = $"SELECT * FROM [{tableName}]";
-            var props = getProperties(query, true);
-            var names = getPropertyNames(props, true);
-            if (!string.IsNullOrEmpty(query))
-            {
-                sql += " WHERE " + query;
-            }
-
-            var cmd = access.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, query, names);
-            using (var reader = cmd.ExecuteReader())
-            {
-                if (!reader.Read()) return default;
-                var obj = SqlHelper.MakeObject<T>(reader, new T());
-                return (T)obj;
-            }
-        }
         public T[] GetObjectsWithWhere<T>(string tableName, string query = null, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = new SqlQueryOptions();
@@ -134,6 +134,72 @@ namespace Silmoon.Data.SqlServer
                 var obj = SqlHelper.MakeObjects<T>(reader);
                 return obj;
             }
+        }
+        public SqlExecuteResult SetObject<T>(string tableName, T obj, object query, SqlQueryOptions options = null, params string[] fieldNames)
+        {
+            string sql = $"UPDATE [{tableName}] SET ";
+            string[] setNames = fieldNames;
+            PropertyInfo[] setProps = getProperties(obj);
+
+            if (fieldNames == null || fieldNames.Length == 0)
+            {
+                setNames = getPropertyNames(setProps);
+            }
+
+            foreach (var item in setNames)
+            {
+                sql += $"[{item}] = @{item}, ";
+            }
+            sql = sql.Substring(0, sql.Length - 2);
+
+
+            var queryProps = getProperties(query, true);
+            var queryNames = getPropertyNames(queryProps, true);
+            if (queryNames.Length != 0)
+            {
+                sql += " WHERE ";
+                foreach (var item in queryNames)
+                {
+                    sql += $"[{item}] = @{item} AND ";
+                }
+                sql = sql.Substring(0, sql.Length - 5);
+            }
+            var cmd = access.GetCommand(sql);
+
+            SqlHelper.AddSqlCommandParameters(cmd, obj, setNames);
+            SqlHelper.AddSqlCommandParameters(cmd, query, queryNames);
+
+            int i = cmd.ExecuteNonQuery();
+            return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
+        }
+        public SqlExecuteResult SetObject<T>(string tableName, T obj, string query, SqlQueryOptions options = null, params string[] fieldNames)
+        {
+            string sql = $"UPDATE [{tableName}] SET ";
+            string[] setNames = fieldNames;
+            PropertyInfo[] setProps = getProperties(obj);
+
+            if (fieldNames == null || fieldNames.Length == 0)
+            {
+                setNames = getPropertyNames(setProps);
+            }
+
+            foreach (var item in setNames)
+            {
+                sql += $"[{item}] = @{item}, ";
+            }
+            sql = sql.Substring(0, sql.Length - 2);
+
+
+            if (!string.IsNullOrEmpty(query))
+            {
+                sql += " WHERE " + query;
+            }
+            var cmd = access.GetCommand(sql);
+
+            SqlHelper.AddSqlCommandParameters(cmd, obj, setNames);
+
+            int i = cmd.ExecuteNonQuery();
+            return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
         }
 
 
@@ -193,6 +259,7 @@ namespace Silmoon.Data.SqlServer
             int i = sqlUtil.GetRecordCount(sql);
             return new SqlExecuteResult<bool>() { Data = i != 0, ExecuteSqlString = sql, ResponseRows = i };
         }
+
 
 
 
