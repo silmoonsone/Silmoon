@@ -23,7 +23,10 @@ namespace Silmoon.Net.Sockets
         public void Dispose()
         {
             if (socket.Connected)
+            {
+                socket.Shutdown(SocketShutdown.Both);
                 socket.Close();
+            }
             socket.Dispose();
             socket = null;
         }

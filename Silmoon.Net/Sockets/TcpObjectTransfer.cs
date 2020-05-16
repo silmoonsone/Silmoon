@@ -107,13 +107,17 @@ namespace Silmoon.Net.Sockets
 
         public int SendObject(T obj)
         {
-            int i = 0;
+            int i = 10000;
             if (typeof(T) == typeof(string))
                 i = SendData(MakeData((string)(object)obj));
             else if (typeof(T) == typeof(byte[]))
                 i = SendData(MakeData((byte[])(object)obj));
             else if (typeof(T) == typeof(object))
                 i = SendData(MakeData(JsonConvert.SerializeObject(obj)));
+            else
+            {
+                i = SendData(MakeData(JsonConvert.SerializeObject(obj)));
+            }
             return i;
         }
         public byte[] MakeData(string str)
@@ -143,6 +147,10 @@ namespace Silmoon.Net.Sockets
                 OnObjectReceive?.Invoke(this, new TcpObjectReceiveArgs<T>() { Data = e.Data, EventType = e.EventType, IPEndPoint = e.IPEndPoint, Object = (T)(object)data.ToArray() });
             }
             else if (typeof(T) == typeof(object))
+            {
+                OnObjectReceive?.Invoke(this, new TcpObjectReceiveArgs<T>() { Data = e.Data, EventType = e.EventType, IPEndPoint = e.IPEndPoint, Object = (T)JsonConvert.DeserializeObject(Encoding.GetString(data.ToArray()), typeof(T)) });
+            }
+            else
             {
                 OnObjectReceive?.Invoke(this, new TcpObjectReceiveArgs<T>() { Data = e.Data, EventType = e.EventType, IPEndPoint = e.IPEndPoint, Object = (T)JsonConvert.DeserializeObject(Encoding.GetString(data.ToArray()), typeof(T)) });
             }
