@@ -7,7 +7,7 @@ namespace Silmoon.MySilmoon
 {
     public interface IRunningAble
     {
-        RunningState RunningState
+        RunningState State
         {
             get;
         }

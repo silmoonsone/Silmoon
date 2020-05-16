@@ -22,9 +22,9 @@ namespace Silmoon.MySilmoon
         private bool _initProduceInfo = false;
         private string _userIdentity = "#undefined";
 
-        public event OutputTextMessageHandler OnOutputTextMessage;
-        public event OutputTextMessageHandler OnInputTextMessage;
-        public event ThreadExceptionEventHandler OnThreadException;
+        public event OutputTextMessageHandler OnOutput;
+        public event OutputTextMessageHandler OnInput;
+        public event ThreadExceptionEventHandler OnException;
         /// <summary>
         /// AsyncValidateVersion invoked.
         /// </summary>
@@ -65,42 +65,22 @@ namespace Silmoon.MySilmoon
 
         }
 
-        [Obsolete("现在推荐使用OutputText方法。")]
-        public void onOutputText(string message)
-        {
-            onOutputText(message, 0);
-        }
-        [Obsolete("现在推荐使用OutputText方法。")]
-        public void onOutputText(string message, int flag)
-        {
-            if (OnOutputTextMessage != null) OnOutputTextMessage(message, flag);
-        }
-        [Obsolete("现在推荐使用InputText方法。")]
-        public void onInputText(string message)
-        {
-            onInputText(message, 0);
-        }
-        [Obsolete("现在推荐使用InputText方法。")]
-        public void onInputText(string message, int flag)
-        {
-            if (OnInputTextMessage != null) OnInputTextMessage(message, flag);
-        }
 
-        public void OutputText(string message)
+        public void Output(string message)
         {
-            OutputText(message, 0);
+            Output(message, 0);
         }
-        public void OutputText(string message, int flag)
+        public void Output(string message, int flag)
         {
-            if (OnOutputTextMessage != null) OnOutputTextMessage(message, flag);
+            OnOutput?.Invoke(message, flag);
         }
-        public void InputText(string message)
+        public void Input(string message)
         {
-            InputText(message, 0);
+            Input(message, 0);
         }
-        public void InputText(string message, int flag)
+        public void Input(string message, int flag)
         {
-            if (OnInputTextMessage != null) OnInputTextMessage(message, flag);
+            OnInput?.Invoke(message, flag);
         }
 
         /// <summary>
@@ -110,7 +90,7 @@ namespace Silmoon.MySilmoon
         /// <param name="e"></param>
         public void onThreadException(object sender, ThreadExceptionEventArgs e)
         {
-            if (OnThreadException != null) OnThreadException(sender, e);
+            if (OnException != null) OnException(sender, e);
         }
 
         /// <summary>
@@ -118,7 +98,7 @@ namespace Silmoon.MySilmoon
         /// </summary>
         public void AsyncValidateVersion()
         {
-            ThreadHelper.ExecAsync(delegate()
+            ThreadHelper.ExecAsync(delegate ()
             {
                 if (OnValidateVersion != null)
                 {
@@ -147,23 +127,23 @@ namespace Silmoon.MySilmoon
         {
             if (Environment.UserInteractive)
             {
-                OutputText("GBC : Application runing at interactive mode...", -999);
+                Output("GBC : Application runing at interactive mode...", -999);
                 if (ServiceControl.IsExisted(serviceName))
                 {
-                    OutputText("GBC : Application associate service(" + serviceName + ") is exist...", -999);
+                    Output("GBC : Application associate service(" + serviceName + ") is exist...", -999);
                     using (ServiceController sc = new ServiceController(serviceName))
                     {
                         sc.Refresh();
                         if (sc.Status == ServiceControllerStatus.Running && sc.CanStop)
                         {
-                            OutputText("GBC : Application associate service(" + serviceName + ") is running, shutdown it...", -999);
+                            Output("GBC : Application associate service(" + serviceName + ") is running, shutdown it...", -999);
                             sc.Stop();
                             sc.WaitForStatus(ServiceControllerStatus.Stopped);
-                            OutputText("GBC : Application associate service(" + serviceName + ") has been shutdown...", -999);
+                            Output("GBC : Application associate service(" + serviceName + ") has been shutdown...", -999);
                         }
                         else
                         {
-                            OutputText("GBC : Application associate service(" + serviceName + ") not running or can't stop it...", -999);
+                            Output("GBC : Application associate service(" + serviceName + ") not running or can't stop it...", -999);
                         }
                     }
                 }

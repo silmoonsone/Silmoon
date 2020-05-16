@@ -17,7 +17,7 @@ namespace Silmoon.MySilmoon
 
         #region IRunningAble 成员
         private RunningState _runningState = RunningState.Stopped;
-        public RunningState RunningState
+        public RunningState State
         {
             get { return _runningState; }
             private set { _runningState = value; }
@@ -28,39 +28,39 @@ namespace Silmoon.MySilmoon
         }
         public bool Start()
         {
-            bool success = RunningState == MySilmoon.RunningState.Stopped;
+            bool success = State == MySilmoon.RunningState.Stopped;
             ///这里对是否开始做了判断，对于重复开始的情况做了处理，但是下面的几个方法没有。
             if (success)
             {
-                RunningState = MySilmoon.RunningState.Running;
+                State = MySilmoon.RunningState.Running;
                 if (OnStart != null) OnStart(ref success);
-                if (!success) RunningState = RunningState.Stopped;
+                if (!success) State = RunningState.Stopped;
             }
             return success;
         }
         public bool Stop()
         {
-            MySilmoon.RunningState runstate = RunningState;
-            bool success = RunningState != MySilmoon.RunningState.Stopped;
-            RunningState = MySilmoon.RunningState.Stopped;
+            MySilmoon.RunningState runstate = State;
+            bool success = State != MySilmoon.RunningState.Stopped;
+            State = MySilmoon.RunningState.Stopped;
             if (OnStop != null) OnStop(ref success);
-            if (!success) RunningState = runstate;
+            if (!success) State = runstate;
             return success;
         }
         public bool Suspend()
         {
-            bool success = RunningState == MySilmoon.RunningState.Running;
-            RunningState = MySilmoon.RunningState.Suspended;
+            bool success = State == MySilmoon.RunningState.Running;
+            State = MySilmoon.RunningState.Suspended;
             OnSuspend(ref success);
-            if (!success) RunningState = RunningState.Running;
+            if (!success) State = RunningState.Running;
             return success;
         }
         public bool Resume()
         {
-            bool success = RunningState == MySilmoon.RunningState.Suspended;
-            RunningState = MySilmoon.RunningState.Running;
+            bool success = State == MySilmoon.RunningState.Suspended;
+            State = MySilmoon.RunningState.Running;
             OnResume(ref success);
-            if (!success) RunningState = RunningState.Suspended;
+            if (!success) State = RunningState.Suspended;
             return success;
         }
         #endregion
