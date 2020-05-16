@@ -27,7 +27,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Data", "Silmoon.Dat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Web.Core", "Silmoon.Web.Core\Silmoon.Web.Core.csproj", "{2E9E150B-CF25-4D23-980F-F30FDD56B6D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Extension", "Silmoon.Extension\Silmoon.Extension.csproj", "{FDAE8605-AEA1-4AF1-A9CF-BE36146EEA9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Extension", "Silmoon.Extension\Silmoon.Extension.csproj", "{FDAE8605-AEA1-4AF1-A9CF-BE36146EEA9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Net", "Silmoon.Net\Silmoon.Net.csproj", "{AF36CE64-7477-430E-BACF-A1BF9C3B1325}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -173,12 +175,24 @@ Global
 		{FDAE8605-AEA1-4AF1-A9CF-BE36146EEA9C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{FDAE8605-AEA1-4AF1-A9CF-BE36146EEA9C}.Release|Win32.ActiveCfg = Release|Any CPU
 		{FDAE8605-AEA1-4AF1-A9CF-BE36146EEA9C}.Release|Win32.Build.0 = Release|Any CPU
+		{AF36CE64-7477-430E-BACF-A1BF9C3B1325}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF36CE64-7477-430E-BACF-A1BF9C3B1325}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF36CE64-7477-430E-BACF-A1BF9C3B1325}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AF36CE64-7477-430E-BACF-A1BF9C3B1325}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AF36CE64-7477-430E-BACF-A1BF9C3B1325}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{AF36CE64-7477-430E-BACF-A1BF9C3B1325}.Debug|Win32.Build.0 = Debug|Any CPU
+		{AF36CE64-7477-430E-BACF-A1BF9C3B1325}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF36CE64-7477-430E-BACF-A1BF9C3B1325}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF36CE64-7477-430E-BACF-A1BF9C3B1325}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AF36CE64-7477-430E-BACF-A1BF9C3B1325}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AF36CE64-7477-430E-BACF-A1BF9C3B1325}.Release|Win32.ActiveCfg = Release|Any CPU
+		{AF36CE64-7477-430E-BACF-A1BF9C3B1325}.Release|Win32.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {18B93CD3-1A51-425B-89D1-03A0565D2E21}
 		VisualSVNWorkingCopyRoot = .
+		SolutionGuid = {18B93CD3-1A51-425B-89D1-03A0565D2E21}
 	EndGlobalSection
 EndGlobal

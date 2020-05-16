@@ -33,7 +33,7 @@ namespace Silmoon.Windows.Controls
         }
 
 
-        bool mouseDown = false;
+        //bool mouseDown = false;
         public SwitchButton()
         {
             InitializeComponent();
@@ -72,12 +72,12 @@ namespace Silmoon.Windows.Controls
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            mouseDown = true;
+            //mouseDown = true;
             pictureBox1.BackgroundImage = WindowsResource.SwitchButton_ButtonDown;
         }
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
-            mouseDown = false;
+            //mouseDown = false;
             pictureBox1.BackgroundImage = WindowsResource.SwitchButton_ButtonUp;
         }
 

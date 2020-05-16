@@ -28,11 +28,13 @@ namespace Silmoon.Security
             strResult = strResult.Replace("-", "");
             return strResult;
         }
+
         /// <summary> 
         /// 进行MD5的32位加密
         /// </summary> 
         /// <param name="strSource">需要加密的明文</param> 
         /// <returns>返回32位加密结果</returns> 
+        [Obsolete]
         public static string Get32MD5(string strSource)
         {
             return System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(strSource, "MD5");

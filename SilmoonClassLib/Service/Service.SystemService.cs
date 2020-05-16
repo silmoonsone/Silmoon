@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Silmoon.Net;
 using Microsoft.Win32;
+using System.Net.Sockets;
 
 namespace Silmoon.Service.SystemService
 {
@@ -18,12 +19,12 @@ namespace Silmoon.Service.SystemService
         /// <param name="protocol"></param>
         /// <param name="enable"></param>
         /// <param name="name"></param>
-        public static void AddSharedAccessFirewallPort(int port, InternetProtocol protocol, bool enable, string name)
+        public static void AddSharedAccessFirewallPort(int port, ProtocolType protocol, bool enable, string name)
         {
             string protocolStr = "";
             string enableStr = "";
-            if (protocol == InternetProtocol.Tcp) { protocolStr = "TCP"; }
-            else if (protocol == InternetProtocol.Udp) { protocolStr = "UDP"; }
+            if (protocol == ProtocolType.Tcp) { protocolStr = "TCP"; }
+            else if (protocol == ProtocolType.Udp) { protocolStr = "UDP"; }
 
             if (enable) { enableStr = "Enabled"; } else { enableStr = "Disabled"; }
 

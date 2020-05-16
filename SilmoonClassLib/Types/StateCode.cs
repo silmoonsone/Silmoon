@@ -11,6 +11,8 @@ namespace Silmoon.Types
     /// </summary>
     public enum StateCode
     {
+        NotExist = -5,
+        ParameterError = -4,
         Failure = -3,
         Reject = -2,
         Error = -1,

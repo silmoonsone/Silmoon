@@ -113,8 +113,6 @@
     <Compile Include="Security\RSAPrivateKeyCrypto.cs" />
     <Compile Include="Silmoon.cs">
     </Compile>
-    <Compile Include="Net\SmTcp.cs">
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -152,15 +150,11 @@
     <Compile Include="MySilmoon\SilmoonProductGBCInternat.cs" />
     <Compile Include="Net\Connections.cs" />
     <Compile Include="MySilmoon\MySilmoon.cs" />
-    <Compile Include="Net\ITcpReader.cs" />
-    <Compile Include="Net\Monitor.cs" />
     <Compile Include="Net\NetworkFormat.cs" />
     <Compile Include="Net\NetworkInformation\NetworkBaseInformations.cs" />
     <Compile Include="Net\NetworkInformation\NetworkInformation.cs" />
     <Compile Include="Net\NetworkPacket.cs" />
-    <Compile Include="Net\Smmp.cs" />
     <Compile Include="Net\SmProtocol.cs" />
-    <Compile Include="Net\Tcp.cs" />
     <Compile Include="Reflection\AssemblyLoader.cs" />
     <Compile Include="Reflection\NameObjectCollection.cs" />
     <Compile Include="Reflection\ProxyAssembly.cs" />

@@ -58,10 +58,6 @@ namespace Silmoon.Net
         {
             return endPoint.Address + ":" + endPoint.Port;
         }
-        public static string GetIPPortString(TcpStruct tcpStruct)
-        {
-            return tcpStruct.IP + ":" + tcpStruct.Port;
-        }
         public static uint GetNetmaskSubnetHostTotal(int mask)
         {
             return ~(0xffffffff << (int)(32 - mask));
