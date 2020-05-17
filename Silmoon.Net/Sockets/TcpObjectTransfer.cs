@@ -3,7 +3,9 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 
 namespace Silmoon.Net.Sockets
 {
@@ -15,6 +17,8 @@ namespace Silmoon.Net.Sockets
 
         string headerStr = "\x1\0\0\0s\0i\0l\0m\0o\0o\0n\0\0";
         int objectDataSize = 0;
+        T blockReadObjectCache = default;
+        ManualResetEvent blockResetEvent = null;
 
         public Encoding Encoding { get; set; } = Encoding.UTF8;
         public TcpObjectTransfer()
@@ -23,7 +27,7 @@ namespace Silmoon.Net.Sockets
             this.OnDataReceived += TcpObjectTransfer_OnDataReceived;
         }
 
-        private void TcpObjectTransfer_OnEvent(object sender, TcpEventArgs e)
+        void TcpObjectTransfer_OnEvent(object sender, TcpEventArgs e)
         {
             switch (e.EventType)
             {
@@ -34,10 +38,12 @@ namespace Silmoon.Net.Sockets
                 case TcpEventType.ServerConnecting:
                     break;
                 case TcpEventType.ServerConnected:
+                    clientCachedData.Add(e.IPEndPoint, new List<byte>());
                     break;
                 case TcpEventType.ServerConnectFailed:
                     break;
                 case TcpEventType.ServerDisconnected:
+                    clientCachedData.Remove(e.IPEndPoint);
                     break;
                 case TcpEventType.ClientConnected:
                     lock (clientCachedData)
@@ -57,8 +63,7 @@ namespace Silmoon.Net.Sockets
                     break;
             }
         }
-
-        private void TcpObjectTransfer_OnDataReceived(object sender, TcpEventArgs e)
+        void TcpObjectTransfer_OnDataReceived(object sender, TcpEventArgs e)
         {
             var clitObj = clientCachedData[e.IPEndPoint];
             clitObj.AddRange(e.Data);
@@ -92,7 +97,7 @@ namespace Silmoon.Net.Sockets
                         if (clitObj.Count >= objectDataSize)
                         {
                             ///如果收到的数据主体数量够了。
-                            onReceiveComplated(e, clitObj);
+                            onReceiveObjectComplated(e, clitObj);
                         }
 
                     }
@@ -101,7 +106,7 @@ namespace Silmoon.Net.Sockets
                     if (clitObj.Count > 1024) clitObj.Clear();
             }
             else
-                if (clitObj.Count >= objectDataSize) onReceiveComplated(e, clitObj);
+                if (clitObj.Count >= objectDataSize) onReceiveObjectComplated(e, clitObj);
 
         }
 
@@ -115,9 +120,20 @@ namespace Silmoon.Net.Sockets
             else if (typeof(T) == typeof(object))
                 i = SendData(MakeData(JsonConvert.SerializeObject(obj)));
             else
-            {
                 i = SendData(MakeData(JsonConvert.SerializeObject(obj)));
-            }
+            return i;
+        }
+        public int SendObject(T obj, Socket clientSocket)
+        {
+            int i = 10000;
+            if (typeof(T) == typeof(string))
+                i = SendData(MakeData((string)(object)obj), clientSocket);
+            else if (typeof(T) == typeof(byte[]))
+                i = SendData(MakeData((byte[])(object)obj), clientSocket);
+            else if (typeof(T) == typeof(object))
+                i = SendData(MakeData(JsonConvert.SerializeObject(obj)), clientSocket);
+            else
+                i = SendData(MakeData(JsonConvert.SerializeObject(obj)), clientSocket);
             return i;
         }
         public byte[] MakeData(string str)
@@ -135,24 +151,51 @@ namespace Silmoon.Net.Sockets
             return sendData;
         }
 
-
-        void onReceiveComplated(TcpEventArgs e, List<byte> data)
+        public T GetObject(int timeout = 10000)
         {
-            if (typeof(T) == typeof(string))
+            if (blockReadObjectCache == null)
             {
-                OnObjectReceive?.Invoke(this, new TcpObjectReceiveArgs<T>() { Data = e.Data, EventType = e.EventType, IPEndPoint = e.IPEndPoint, Object = (T)(object)Encoding.GetString(data.ToArray()) });
-            }
-            else if (typeof(T) == typeof(byte[]))
-            {
-                OnObjectReceive?.Invoke(this, new TcpObjectReceiveArgs<T>() { Data = e.Data, EventType = e.EventType, IPEndPoint = e.IPEndPoint, Object = (T)(object)data.ToArray() });
-            }
-            else if (typeof(T) == typeof(object))
-            {
-                OnObjectReceive?.Invoke(this, new TcpObjectReceiveArgs<T>() { Data = e.Data, EventType = e.EventType, IPEndPoint = e.IPEndPoint, Object = (T)JsonConvert.DeserializeObject(Encoding.GetString(data.ToArray()), typeof(T)) });
+                if (blockResetEvent == null) blockResetEvent = new ManualResetEvent(true);
+                blockResetEvent.WaitOne(timeout);
             }
             else
             {
-                OnObjectReceive?.Invoke(this, new TcpObjectReceiveArgs<T>() { Data = e.Data, EventType = e.EventType, IPEndPoint = e.IPEndPoint, Object = (T)JsonConvert.DeserializeObject(Encoding.GetString(data.ToArray()), typeof(T)) });
+                T obj = blockReadObjectCache;
+                blockReadObjectCache = default;
+
+                return obj;
+            }
+            return default;
+        }
+        void onReceiveObjectComplated(TcpEventArgs e, List<byte> data)
+        {
+            if (typeof(T) == typeof(string))
+            {
+                T obj = (T)(object)Encoding.GetString(data.ToArray());
+                blockReadObjectCache = obj;
+                blockResetEvent?.Set();
+                OnObjectReceive?.Invoke(this, new TcpObjectReceiveArgs<T>() { Data = e.Data, EventType = e.EventType, IPEndPoint = e.IPEndPoint, Object = obj, Socket = e.Socket, TcpArgs = e });
+            }
+            else if (typeof(T) == typeof(byte[]))
+            {
+                T obj = (T)(object)data.ToArray();
+                blockReadObjectCache = obj;
+                blockResetEvent?.Set();
+                OnObjectReceive?.Invoke(this, new TcpObjectReceiveArgs<T>() { Data = e.Data, EventType = e.EventType, IPEndPoint = e.IPEndPoint, Object = obj, Socket = e.Socket, TcpArgs = e });
+            }
+            else if (typeof(T) == typeof(object))
+            {
+                T obj = (T)JsonConvert.DeserializeObject(Encoding.GetString(data.ToArray()), typeof(T));
+                blockReadObjectCache = obj;
+                blockResetEvent?.Set();
+                OnObjectReceive?.Invoke(this, new TcpObjectReceiveArgs<T>() { Data = e.Data, EventType = e.EventType, IPEndPoint = e.IPEndPoint, Object = obj, Socket = e.Socket, TcpArgs = e });
+            }
+            else
+            {
+                T obj = (T)JsonConvert.DeserializeObject(Encoding.GetString(data.ToArray()), typeof(T));
+                blockReadObjectCache = obj;
+                blockResetEvent?.Set();
+                OnObjectReceive?.Invoke(this, new TcpObjectReceiveArgs<T>() { Data = e.Data, EventType = e.EventType, IPEndPoint = e.IPEndPoint, Object = obj, Socket = e.Socket, TcpArgs = e });
             }
 
             data.Clear();
