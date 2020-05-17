@@ -24,7 +24,8 @@ namespace Silmoon.Net.Sockets
 
         public void Dispose()
         {
-            Disconnect();
+            if (socket.Connected)
+                Disconnect();
             socket.Dispose();
         }
 
