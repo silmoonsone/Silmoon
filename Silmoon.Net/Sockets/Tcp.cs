@@ -16,7 +16,7 @@ namespace Silmoon.Net.Sockets
         public event TcpTransferEventHandler OnDataReceived = null;
         public Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         public List<Socket> ClientSockets = new List<Socket>();
-
+        public bool IsClientMode { get; set; }
         public Tcp()
         {
 
@@ -24,14 +24,8 @@ namespace Silmoon.Net.Sockets
 
         public void Dispose()
         {
-            if (socket.Connected)
-            {
-                socket.Shutdown(SocketShutdown.Both);
-                socket.Close();
-            }
+            Disconnect();
             socket.Dispose();
-            ClientSockets.Remove(socket);
-            socket = null;
         }
 
         public bool Connect(IPEndPoint endPoint)
@@ -45,6 +39,7 @@ namespace Silmoon.Net.Sockets
                 {
                     EnableReceive(socket);
                 }));
+                IsClientMode = true;
                 return true;
             }
             catch (Exception e)
@@ -52,6 +47,14 @@ namespace Silmoon.Net.Sockets
                 OnEvent?.Invoke(this, new TcpEventArgs() { EventType = TcpEventType.ServerConnectFailed, IPEndPoint = endPoint, Socket = socket });
                 return false;
             }
+        }
+        public void Disconnect()
+        {
+            var ep = socket.RemoteEndPoint;
+
+            socket.Shutdown(SocketShutdown.Both);
+            socket.Disconnect(true);
+            OnEvent?.Invoke(this, new TcpEventArgs() { EventType = TcpEventType.ServerDisconnected, IPEndPoint = (IPEndPoint)ep, Socket = socket });
         }
         public int SendData(byte[] data)
         {
@@ -85,6 +88,7 @@ namespace Silmoon.Net.Sockets
             socket.Listen(backlog);
             OnEvent?.Invoke(this, new TcpEventArgs() { EventType = TcpEventType.ListenStarted, IPEndPoint = endPoint, Socket = socket });
             EnableAcceptAndReceive();
+            IsClientMode = false;
             return true;
         }
         public void CloseAllClientSockets()
@@ -110,8 +114,10 @@ namespace Silmoon.Net.Sockets
             lock (clientSocket)
             {
                 var ep = clientSocket.RemoteEndPoint;
+
                 try
                 {
+
                     clientSocket.Shutdown(SocketShutdown.Both);
                     clientSocket.Disconnect(false);
                     clientSocket.Close();
@@ -141,7 +147,7 @@ namespace Silmoon.Net.Sockets
         {
             lock (ClientSockets)
             {
-                ClientSockets.Add(socket);
+                if (!IsClientMode) ClientSockets.Add(socket);
             }
             while (socket.Connected)
             {
@@ -152,16 +158,14 @@ namespace Silmoon.Net.Sockets
                 {
                     recvLen = socket.Receive(recvBuff);
                 }
-                catch
+                catch (Exception e)
                 {
-                    CloseClientSocket(socket);
-                    return;
+                    if (!IsClientMode) CloseClientSocket(socket);
                 }
 
                 if (recvLen == 0)
                 {
-                    CloseClientSocket(socket);
-                    break;
+                    if (!IsClientMode) CloseClientSocket(socket);
                 }
                 else
                 {
