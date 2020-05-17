@@ -30,6 +30,7 @@ namespace Silmoon.Net.Sockets
                 socket.Close();
             }
             socket.Dispose();
+            ClientSockets.Remove(socket);
             socket = null;
         }
 
