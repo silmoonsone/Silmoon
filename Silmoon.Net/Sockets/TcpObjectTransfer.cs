@@ -155,7 +155,7 @@ namespace Silmoon.Net.Sockets
         {
             if (blockReadObjectCache == null)
             {
-                if (blockResetEvent == null) blockResetEvent = new ManualResetEvent(true);
+                if (blockResetEvent == null) blockResetEvent = new ManualResetEvent(false);
                 blockResetEvent.WaitOne(timeout);
             }
             else
