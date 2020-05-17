@@ -88,7 +88,7 @@ namespace Silmoon.Net.Sockets
                         ///在数据头完整的情况下（接收到的数据大于23（19+4））开始分析数据长度信息。
                         int len = BitConverter.ToInt32(data, 19);
                         objectDataSize = len;
-                        Console.WriteLine("header recv " + len);
+                        //Console.WriteLine("header recv " + len);
                         clitObj.RemoveRange(0, 23);
                     }
                     if (dataStr.Length > 23)
@@ -123,6 +123,10 @@ namespace Silmoon.Net.Sockets
             else
                 i = SendData(MakeData(JsonConvert.SerializeObject(obj)));
             return i;
+        }
+        public int SendObject(T obj, TcpObjectReceiveArgs<T> args)
+        {
+            return SendObject(obj, args.Socket);
         }
         public int SendObject(T obj, Socket clientSocket)
         {
@@ -159,6 +163,11 @@ namespace Silmoon.Net.Sockets
             {
                 if (blockResetEvent == null) blockResetEvent = new ManualResetEvent(false);
                 blockResetEvent.WaitOne(timeout);
+
+                T obj = blockReadObjectCache;
+                blockReadObjectCache = default;
+
+                return obj;
             }
             else
             {
@@ -167,7 +176,6 @@ namespace Silmoon.Net.Sockets
 
                 return obj;
             }
-            return default;
         }
         void onReceiveObjectComplated(TcpEventArgs e, List<byte> data)
         {

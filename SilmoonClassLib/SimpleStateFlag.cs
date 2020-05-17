@@ -11,6 +11,7 @@ namespace Silmoon
         public int StateCode { get; set; } = 0;
         public string Message { get; set; } = "";
         public bool Success { get; set; } = false;
+        public object Data { get; set; }
         public SimpleStateFlag()
         {
 
