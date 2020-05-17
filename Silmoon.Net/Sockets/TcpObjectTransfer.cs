@@ -96,7 +96,7 @@ namespace Silmoon.Net.Sockets
                         ///这次分析数据头的时候，包含了数据主体。
                         if (clitObj.Count >= objectDataSize)
                         {
-                            ///如果收到的数据主体数量够了。
+                            ///如果收到的数据主体长度够了。
                             onReceiveObjectComplated(e, clitObj);
                         }
 
@@ -112,7 +112,8 @@ namespace Silmoon.Net.Sockets
 
         public int SendObject(T obj)
         {
-            int i = 10000;
+            int i = 0;
+            if (!socket.Connected) return i;
             if (typeof(T) == typeof(string))
                 i = SendData(MakeData((string)(object)obj));
             else if (typeof(T) == typeof(byte[]))
@@ -125,7 +126,8 @@ namespace Silmoon.Net.Sockets
         }
         public int SendObject(T obj, Socket clientSocket)
         {
-            int i = 10000;
+            int i = 0;
+            if (!clientSocket.Connected) return i;
             if (typeof(T) == typeof(string))
                 i = SendData(MakeData((string)(object)obj), clientSocket);
             else if (typeof(T) == typeof(byte[]))
@@ -151,7 +153,7 @@ namespace Silmoon.Net.Sockets
             return sendData;
         }
 
-        public T GetObject(int timeout = 10000)
+        public T GetObject(int timeout = 3000)
         {
             if (blockReadObjectCache == null)
             {

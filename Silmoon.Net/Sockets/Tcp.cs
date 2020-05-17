@@ -54,13 +54,29 @@ namespace Silmoon.Net.Sockets
         }
         public int SendData(byte[] data)
         {
-            int i = socket.Send(data);
-            return i;
+            try
+            {
+                int i = socket.Send(data);
+                return i;
+            }
+            catch
+            {
+                CloseClientSocket(socket);
+                return -1;
+            }
         }
         public int SendData(byte[] data, Socket clientSocket)
         {
-            int i = clientSocket.Send(data);
-            return i;
+            try
+            {
+                int i = clientSocket.Send(data);
+                return i;
+            }
+            catch
+            {
+                CloseClientSocket(clientSocket);
+                return -1;
+            }
         }
         public bool StartListen(int backlog, IPEndPoint endPoint)
         {
@@ -115,8 +131,8 @@ namespace Silmoon.Net.Sockets
         }
         void OnClientConnected(IAsyncResult ar)
         {
-            var acceptedSocket = this.socket.EndAccept(ar);
-            this.socket.BeginAccept(this.OnClientConnected, null);
+            var acceptedSocket = socket.EndAccept(ar);
+            this.socket.BeginAccept(OnClientConnected, null);
             OnEvent?.Invoke(this, new TcpEventArgs() { EventType = TcpEventType.ClientConnected, IPEndPoint = (IPEndPoint)acceptedSocket.RemoteEndPoint, Socket = acceptedSocket });
             EnableReceive(acceptedSocket);
         }
