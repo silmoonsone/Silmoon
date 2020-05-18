@@ -22,12 +22,12 @@ function _ajax_on_complete(senderId, e, onSuccess, onFailed, onError, onSuccessN
     if (senderId != "") $("#" + senderId).html(__ajax_Request_ButtonText);
 }
 
-function _ajax_on_begin(senderId) {
+function _ajax_on_begin(senderId, onBegin) {
     __ajax_Request_ButtonText = "";
     if (senderId != "") {
         __ajax_Request_ButtonText = $("#" + senderId)[0].innerText;
     }
-
     if (senderId != "") $("#" + senderId).html("请求中...");
+    if (onBegin != null) onBegin(senderId, onBegin);
 }
 // Silmoon.Web.Mvc.MvcHelper.GetAjaxOptionJavascriptFunctions() end javascript
