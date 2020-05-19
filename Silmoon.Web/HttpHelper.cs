@@ -62,7 +62,52 @@ namespace Silmoon.Web
             return result;
         }
 
-        internal static string UrlEncodeSpaces(string str)
+        public static string MakeNewQueryString(NameValueCollection collection, string additionQueryString = "")
+        {
+            collection = new NameValueCollection(collection);
+            string s = "";
+            var tp = StringHelper.AnalyzeNameValue(additionQueryString.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries), "=");
+
+            for (int i = 0; i < tp.Count; i++)
+            {
+                string key = tp.GetKey(i);
+                string value = tp[i];
+
+                collection[key] = value;
+            }
+
+            for (int i = 0; i < collection.Count; i++)
+            {
+                string key = collection.GetKey(i);
+                string value = collection[i];
+
+                s += $"{key}={value}&";
+            }
+            if (s != "")
+            {
+                s = s.Remove(s.Length - 1);
+            }
+            //if (s[0] != '?')
+            //    s = "?" + s;
+
+            return s;
+        }
+        public static string MakeQueryString(NameValueCollection parameters)
+        {
+            string result = string.Empty;
+            for (int i = 0; i < parameters.Count; i++)
+            {
+                result += "&" + HttpUtility.UrlEncode(parameters.GetKey(i)) + "=" + HttpUtility.UrlEncode(parameters[i]);
+            }
+            return result.Substring(1, result.Length - 1);
+        }
+
+
+
+
+
+
+        static string UrlEncodeSpaces(string str)
         {
             if ((str != null) && (str.IndexOf(' ') >= 0))
             {
@@ -70,7 +115,7 @@ namespace Silmoon.Web
             }
             return str;
         }
-        internal static string UrlEncodeNonAscii(string str, Encoding e)
+        static string UrlEncodeNonAscii(string str, Encoding e)
         {
             if (string.IsNullOrEmpty(str))
             {
@@ -84,7 +129,7 @@ namespace Silmoon.Web
             bytes = UrlEncodeBytesToBytesInternalNonAscii(bytes, 0, bytes.Length, false);
             return Encoding.ASCII.GetString(bytes);
         }
-        private static byte[] UrlEncodeBytesToBytesInternalNonAscii(byte[] bytes, int offset, int count, bool alwaysCreateReturnValue)
+        static byte[] UrlEncodeBytesToBytesInternalNonAscii(byte[] bytes, int offset, int count, bool alwaysCreateReturnValue)
         {
             int num = 0;
             for (int i = 0; i < count; i++)
@@ -116,7 +161,7 @@ namespace Silmoon.Web
             }
             return buffer;
         }
-        private static bool IsNonAsciiByte(byte b)
+        static bool IsNonAsciiByte(byte b)
         {
             if (b < 0x7f)
             {
@@ -124,7 +169,7 @@ namespace Silmoon.Web
             }
             return true;
         }
-        internal static char IntToHex(int n)
+        static char IntToHex(int n)
         {
             if (n <= 9)
             {
@@ -132,5 +177,6 @@ namespace Silmoon.Web
             }
             return (char)((n - 10) + 0x61);
         }
+
     }
 }

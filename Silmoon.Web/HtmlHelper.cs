@@ -57,6 +57,7 @@ namespace Silmoon.Web
             html = html.Replace("<br />", "\r\n");
             return html;
         }
+
         public static string MakePostFormHtml(NameValueCollection values, string postTo, string name, bool submit = false)
         {
             string result = "<form method=\"post\" action=\"" + postTo + "\" name=\"" + name + "\" id=\"" + name + "\">\r\n";
@@ -67,45 +68,6 @@ namespace Silmoon.Web
             result += "</form>\r\n";
             if (submit) result += "<script>document.forms['" + name + "'].submit();</script>";
             return result;
-        }
-        public static string MakeNewQueryString(NameValueCollection collection, string additionQueryString = "")
-        {
-            collection = new NameValueCollection(collection);
-            string s = "";
-            var tp = StringHelper.AnalyzeNameValue(additionQueryString.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries), "=");
-
-            for (int i = 0; i < tp.Count; i++)
-            {
-                string key = tp.GetKey(i);
-                string value = tp[i];
-
-                collection[key] = value;
-            }
-
-            for (int i = 0; i < collection.Count; i++)
-            {
-                string key = collection.GetKey(i);
-                string value = collection[i];
-
-                s += $"{key}={value}&";
-            }
-            if (s != "")
-            {
-                s = s.Remove(s.Length - 1);
-            }
-            //if (s[0] != '?')
-            //    s = "?" + s;
-
-            return s;
-        }
-        public static string MakeQueryString(NameValueCollection parameters)
-        {
-            string result = string.Empty;
-            for (int i = 0; i < parameters.Count; i++)
-            {
-                result += "&" + HttpUtility.UrlEncode(parameters.GetKey(i)) + "=" + HttpUtility.UrlEncode(parameters[i]);
-            }
-            return result.Substring(1, result.Length - 1);
         }
 
     }
