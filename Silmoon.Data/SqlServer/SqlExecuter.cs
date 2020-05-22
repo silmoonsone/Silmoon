@@ -42,7 +42,7 @@ namespace Silmoon.Data.SqlServer
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
         }
-        public T GetObject<T>(string tableName, object query = null, SqlQueryOptions options = null) where T : new()
+        public T GetObject<T>(string tableName, object query, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = new SqlQueryOptions();
             string sql = $"SELECT * FROM [{tableName}]";
@@ -67,7 +67,7 @@ namespace Silmoon.Data.SqlServer
                 return (T)obj;
             }
         }
-        public T GetObjectWithWhere<T>(string tableName, string query = null, SqlQueryOptions options = null) where T : new()
+        public T GetObjectWithWhere<T>(string tableName, string query, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = new SqlQueryOptions();
 
