@@ -2,6 +2,8 @@
 // Silmoon.Web.Mvc.MvcHelper.GetAjaxOptionJavascriptFunctions() generate javascript
 function _ajax_on_complete(senderId, e, onSuccess, onFailed, onError, onSuccessNeedRefreshPage) {
     if (e.readyState == 4) {
+        if (senderId != "") $("#" + senderId).html(__ajax_Request_ButtonText);
+
         var obj = JSON.parse(e.responseText);
         if (obj.Success) {
             //if (senderId != "") $("#" + senderId).html('成功');
@@ -19,7 +21,6 @@ function _ajax_on_complete(senderId, e, onSuccess, onFailed, onError, onSuccessN
         //if (senderId != "") $("#" + senderId).html('错误')
         if (onError != null) onError(senderId, e);
     }
-    if (senderId != "") $("#" + senderId).html(__ajax_Request_ButtonText);
 }
 
 function _ajax_on_begin(senderId, onBegin) {

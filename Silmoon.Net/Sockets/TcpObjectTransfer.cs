@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace Silmoon.Net.Sockets
 {
-    public class TcpObjectTransfer<T> : Tcp
+    public class TcpObjectTransfer<T> : Tcp where T : new()
     {
         Dictionary<IPEndPoint, List<byte>> clientCachedData = new Dictionary<IPEndPoint, List<byte>>();
         List<byte> serverCacheData = new List<byte>();
