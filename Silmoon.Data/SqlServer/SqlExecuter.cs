@@ -14,6 +14,9 @@ namespace Silmoon.Data.SqlServer
         SqlConnection SqlConnection = null;
         SqlUtil sqlUtil = null;
         DataBizAccess access = null;
+
+        SqlTransaction CurrentSqlTransaction = null;
+
         public SqlExecuter(SqlConnection sqlConnection)
         {
             SqlConnection = sqlConnection;
@@ -261,6 +264,41 @@ namespace Silmoon.Data.SqlServer
         }
 
 
+        public bool BeginTransaction(System.Data.IsolationLevel isolationLevel = System.Data.IsolationLevel.Serializable)
+        {
+            if (CurrentSqlTransaction == null)
+            {
+                CurrentSqlTransaction = SqlConnection.BeginTransaction(isolationLevel);
+                return true;
+            }
+            else return false;
+        }
+        public bool CommitTransaction()
+        {
+            if (CurrentSqlTransaction != null)
+            {
+                CurrentSqlTransaction.Commit();
+                CurrentSqlTransaction = null;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool RollbackTransaction()
+        {
+            if (CurrentSqlTransaction != null)
+            {
+                CurrentSqlTransaction.Rollback();
+                CurrentSqlTransaction = null;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
 
         private string[] getPropertyNames(object obj, bool includeId = false)

@@ -13,6 +13,7 @@ namespace Silmoon.Types
     {
         Repeated = -4,
         ParameterMissing = -3,
+        Exception = -2,
         None = 0,
         Success = 1,
         Updated = 2,

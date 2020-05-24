@@ -43,6 +43,7 @@ namespace Silmoon.Net.Sockets
                 case TcpEventType.ServerConnectFailed:
                     break;
                 case TcpEventType.ServerDisconnected:
+                    blockResetEvent?.Set();
                     clientCachedData.Remove(e.IPEndPoint);
                     break;
                 case TcpEventType.ClientConnected:
