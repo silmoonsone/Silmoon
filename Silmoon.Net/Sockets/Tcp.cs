@@ -51,19 +51,23 @@ namespace Silmoon.Net.Sockets
         }
         public void Disconnect()
         {
-            var ep = socket.RemoteEndPoint;
-
             try
             {
+                var ep = socket.RemoteEndPoint;
 
-                socket.Shutdown(SocketShutdown.Both);
-                socket.Disconnect(true);
-                OnEvent?.Invoke(this, new TcpEventArgs() { EventType = TcpEventType.ServerDisconnected, IPEndPoint = (IPEndPoint)ep, Socket = socket });
+                try
+                {
+
+                    socket.Shutdown(SocketShutdown.Both);
+                    socket.Disconnect(true);
+                    OnEvent?.Invoke(this, new TcpEventArgs() { EventType = TcpEventType.ServerDisconnected, IPEndPoint = (IPEndPoint)ep, Socket = socket });
+                }
+                catch
+                {
+                    OnEvent?.Invoke(this, new TcpEventArgs() { EventType = TcpEventType.ServerDisconnected, IPEndPoint = (IPEndPoint)ep, Socket = socket });
+                }
             }
-            catch
-            {
-                OnEvent?.Invoke(this, new TcpEventArgs() { EventType = TcpEventType.ServerDisconnected, IPEndPoint = (IPEndPoint)ep, Socket = socket });
-            }
+            catch { }
         }
         public int SendData(byte[] data)
         {
