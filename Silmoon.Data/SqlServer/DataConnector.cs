@@ -16,7 +16,7 @@ namespace Silmoon.Data.SqlServer
         }
         public DataConnector(string sqlConnectionString = null)
         {
-            DataConnector.SqlConnectionString = sqlConnectionString;
+            SqlConnectionString = sqlConnectionString;
         }
 
         public void Dispose()

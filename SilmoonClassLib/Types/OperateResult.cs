@@ -11,9 +11,11 @@ namespace Silmoon.Types
     /// </summary>
     public enum OperateResult
     {
+        Exception = -5,
         Repeated = -4,
         ParameterMissing = -3,
-        Exception = -2,
+        Rejected = -2,
+        Error = -1,
         None = 0,
         Success = 1,
         Updated = 2,

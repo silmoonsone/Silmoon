@@ -1,6 +1,7 @@
-﻿using Google.Protobuf;
+﻿using Silmoon.Data.SqlServer.SqlInternal;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
@@ -13,15 +14,14 @@ namespace Silmoon.Data.SqlServer
     {
         SqlConnection SqlConnection = null;
         SqlUtil sqlUtil = null;
-        DataBizAccess access = null;
+        SqlAccess access = null;
 
-        SqlTransaction CurrentSqlTransaction = null;
 
         public SqlExecuter(SqlConnection sqlConnection)
         {
             SqlConnection = sqlConnection;
             sqlUtil = new SqlUtil(sqlConnection);
-            access = new DataBizAccess(sqlConnection);
+            access = new SqlAccess(sqlConnection);
         }
         public SqlExecuteResult AddObject<T>(string tableName, T obj)
         {
@@ -44,6 +44,13 @@ namespace Silmoon.Data.SqlServer
             SqlHelper.AddSqlCommandParameters(cmd, obj, names);
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
+        }
+        public void AddObjects<T>(string tableName, T[] obj)
+        {
+            foreach (var item in obj)
+            {
+                AddObject(tableName, item);
+            }
         }
         public T GetObject<T>(string tableName, object query, SqlQueryOptions options = null) where T : new()
         {
@@ -264,40 +271,17 @@ namespace Silmoon.Data.SqlServer
         }
 
 
-        public bool BeginTransaction(System.Data.IsolationLevel isolationLevel = System.Data.IsolationLevel.Serializable)
+        public SqlAccessTransaction BeginTransaction(bool setCurrentTransaction = true, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
-            if (CurrentSqlTransaction == null)
-            {
-                CurrentSqlTransaction = SqlConnection.BeginTransaction(isolationLevel);
-                return true;
-            }
-            else return false;
+            return access.BeginTransaction(setCurrentTransaction, isolationLevel);
         }
-        public bool CommitTransaction()
+        public void CommitTransaction(SqlAccessTransaction transaction)
         {
-            if (CurrentSqlTransaction != null)
-            {
-                CurrentSqlTransaction.Commit();
-                CurrentSqlTransaction = null;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            access.CommitTransaction(transaction);
         }
-        public bool RollbackTransaction()
+        public void RollbackTransaction(SqlAccessTransaction transaction)
         {
-            if (CurrentSqlTransaction != null)
-            {
-                CurrentSqlTransaction.Rollback();
-                CurrentSqlTransaction = null;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            access.RollbackTransaction(transaction);
         }
 
 

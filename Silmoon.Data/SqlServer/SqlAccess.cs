@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Silmoon.Data.SqlServer.SqlInternal;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -7,18 +8,14 @@ using System.Text;
 
 namespace Silmoon.Data.SqlServer
 {
-    public class DataBizAccess
+    public class SqlAccess
     {
         public SqlTransaction Transaction { get; private set; }
-        public SqlConnection Connection { get; set; }
+        public SqlConnection Connection { get; private set; }
 
-        public DataBizAccess()
+        public SqlAccess(SqlConnection connection)
         {
-
-        }
-        public DataBizAccess(SqlConnection connection)
-        {
-            this.Connection = connection;
+            Connection = connection;
         }
 
         public SqlDataAdapter GetAdapter(string commandText)
@@ -31,10 +28,9 @@ namespace Silmoon.Data.SqlServer
             SqlDataAdapter adapter = new SqlDataAdapter(command);
             return adapter;
         }
-        public SqlCommand GetCommand(string commandText, SqlConnection connect = null)
+        public SqlCommand GetCommand(string commandText)
         {
-            if (connect == null) connect = Connection;
-            SqlCommand cmd = new SqlCommand(commandText, connect);
+            SqlCommand cmd = new SqlCommand(commandText, Connection);
             cmd.Transaction = Transaction;
             return cmd;
         }
@@ -45,22 +41,21 @@ namespace Silmoon.Data.SqlServer
             adapter.Fill(dt);
             return dt;
         }
-        public void BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
+        public SqlAccessTransaction BeginTransaction(bool setCurrentTransaction = true, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
-            if (Transaction == null)
-                Transaction = Connection.BeginTransaction(isolationLevel);
+            return new SqlAccessTransaction(this, setCurrentTransaction, isolationLevel);
         }
-        public void CommitTransaction()
+        public void CommitTransaction(SqlAccessTransaction transaction)
         {
-            if (Transaction != null)
-                Transaction.Commit();
-            Transaction = null;
+            transaction.Transaction.Commit();
         }
-        public void RollbackTransaction()
+        public void RollbackTransaction(SqlAccessTransaction transaction)
         {
-            if (Transaction != null)
-                Transaction.Rollback();
-            Transaction = null;
+            transaction.Transaction.Rollback();
+        }
+        public void SetCurrentTranscation(SqlTransaction transaction)
+        {
+            Transaction = transaction;
         }
     }
 }

@@ -78,14 +78,15 @@
     <Compile Include="ISMSQL.cs" />
     <Compile Include="QueryModel\Sort.cs" />
     <Compile Include="QueryModel\SortMethod.cs" />
-    <Compile Include="SqlServer\DataBizAccess.cs" />
-    <Compile Include="SqlServer\DataConnect.cs" />
+    <Compile Include="SqlServer\SqlAccess.cs" />
+    <Compile Include="SqlServer\DataConnector.cs" />
     <Compile Include="SqlServer\SqlExecuter.cs" />
     <Compile Include="MySql\MySqlUtil.cs" />
     <Compile Include="SqlCommandBuilder.cs" />
     <Compile Include="SqlServer\SqlExecuteResult.cs" />
     <Compile Include="SqlServer\SqlHelper.cs" />
     <Compile Include="DbStateException.cs" />
+    <Compile Include="SqlServer\SqlInternal\SqlAccessTransaction.cs" />
     <Compile Include="SqlServer\SqlQueryOptions.cs" />
     <Compile Include="SqlServer\SqlUtil.cs" />
     <Compile Include="SqlTemplate.cs" />
@@ -104,6 +105,7 @@
       <Name>SilmoonClassLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
