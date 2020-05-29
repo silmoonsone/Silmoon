@@ -11,12 +11,12 @@ namespace Silmoon.Data.SqlServer
 {
     public class SqlHelper
     {
-        public static T MakeObject<T>(SqlDataReader reader) where T : new()
+        public static T MakeObject<T>(SqlDataReader reader, bool closeReader = true) where T : new()
         {
             T obj = new T();
-            return MakeObject(reader, obj);
+            return MakeObject(reader, obj, closeReader);
         }
-        public static T MakeObject<T>(SqlDataReader reader, T obj)
+        public static T MakeObject<T>(SqlDataReader reader, T obj, bool closeReader = true) where T : new()
         {
             var propertyInfos = obj.GetType().GetProperties();
             foreach (PropertyInfo item in propertyInfos)
@@ -31,7 +31,7 @@ namespace Silmoon.Data.SqlServer
                         item.SetValue(obj, reader[name], null);
                 }
             }
-            reader.Close();
+            if (closeReader) reader.Close();
             return obj;
         }
         public static T[] MakeObjects<T>(SqlDataReader reader) where T : new()
@@ -40,7 +40,7 @@ namespace Silmoon.Data.SqlServer
 
             while (reader.Read())
             {
-                result.Add(MakeObject<T>(reader));
+                result.Add(MakeObject<T>(reader, false));
             }
             reader.Close();
             return result.ToArray();
@@ -51,7 +51,7 @@ namespace Silmoon.Data.SqlServer
             T obj = new T();
             return MakeObject(row, obj);
         }
-        public static T MakeObject<T>(DataRow row, T obj)
+        public static T MakeObject<T>(DataRow row, T obj) where T : new()
         {
             var propertyInfos = obj.GetType().GetProperties();
             foreach (PropertyInfo item in propertyInfos)

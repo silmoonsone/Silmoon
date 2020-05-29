@@ -55,9 +55,16 @@ namespace Silmoon.Data.SqlServer
         public T GetObject<T>(string tableName, object query, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = new SqlQueryOptions();
-            string sql = $"SELECT * FROM [{tableName}]";
+            if ((options.Count.HasValue || options.Offset.HasValue) && (options.Sorts == null || options.Sorts.Count() == 0)) throw new ArgumentException("指定分页参数的时候不能缺少Sorts指定。", "SqlQueryOptions::Sorts");
+
+            string sql = $"SELECT";
+            if (!options.Offset.HasValue && options.Count.HasValue)
+                sql += $" TOP {options.Count} * FROM [{tableName}]";
+            else sql += $" * FROM [{tableName}]";
+
             var props = getProperties(query, true);
             var names = getPropertyNames(props, true);
+
             if (names.Length != 0)
             {
                 sql += " WHERE ";
@@ -68,25 +75,72 @@ namespace Silmoon.Data.SqlServer
                 sql = sql.Substring(0, sql.Length - 5);
             }
 
+            if (options.Sorts != null && options.Sorts.Count() != 0)
+            {
+                sql += " ORDER BY";
+                foreach (var item in options.Sorts)
+                {
+                    sql += $" [{item.Name}]";
+                    if (item.Method == QueryModel.SortMethod.Asc)
+                        sql += " ASC";
+                    else sql += " DESC,";
+                }
+                sql = sql.Substring(0, sql.Length - 1);
+            }
+
+            if (options.Offset.HasValue)
+            {
+                sql += $" OFFSET {options.Offset} ROWS";
+                if (options.Count.HasValue)
+                    sql += $" FETCH NEXT {options.Count} ROWS ONLY";
+            }
+
+
             var cmd = access.GetCommand(sql);
             SqlHelper.AddSqlCommandParameters(cmd, query, names);
             using (var reader = cmd.ExecuteReader())
             {
                 if (!reader.Read()) return default;
-                var obj = SqlHelper.MakeObject<T>(reader, new T());
-                return (T)obj;
+                var obj = SqlHelper.MakeObject(reader, new T());
+                return obj;
             }
         }
         public T GetObjectWithWhere<T>(string tableName, string query, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = new SqlQueryOptions();
+            if ((options.Count.HasValue || options.Offset.HasValue) && (options.Sorts == null || options.Sorts.Count() == 0)) throw new ArgumentException("指定分页参数的时候不能缺少Sorts指定。", "SqlQueryOptions::Sorts");
 
-            string sql = $"SELECT * FROM [{tableName}]";
+            string sql = $"SELECT";
+            if (!options.Offset.HasValue && options.Count.HasValue)
+                sql += $" TOP {options.Count} * FROM [{tableName}]";
+            else sql += $" * FROM [{tableName}]";
+
             var props = getProperties(query, true);
             var names = getPropertyNames(props, true);
+
             if (!string.IsNullOrEmpty(query))
             {
                 sql += " WHERE " + query;
+            }
+
+            if (options.Sorts != null && options.Sorts.Count() != 0)
+            {
+                sql += " ORDER BY";
+                foreach (var item in options.Sorts)
+                {
+                    sql += $" [{item.Name}]";
+                    if (item.Method == QueryModel.SortMethod.Asc)
+                        sql += " ASC";
+                    else sql += " DESC,";
+                }
+                sql = sql.Substring(0, sql.Length - 1);
+            }
+
+            if (options.Offset.HasValue)
+            {
+                sql += $" OFFSET {options.Offset} ROWS";
+                if (options.Count.HasValue)
+                    sql += $" FETCH NEXT {options.Count} ROWS ONLY";
             }
 
             var cmd = access.GetCommand(sql);
@@ -94,17 +148,23 @@ namespace Silmoon.Data.SqlServer
             using (var reader = cmd.ExecuteReader())
             {
                 if (!reader.Read()) return default;
-                var obj = SqlHelper.MakeObject<T>(reader, new T());
-                return (T)obj;
+                var obj = SqlHelper.MakeObject(reader, new T());
+                return obj;
             }
         }
         public T[] GetObjects<T>(string tableName, object query = null, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = new SqlQueryOptions();
+            if ((options.Count.HasValue || options.Offset.HasValue) && (options.Sorts == null || options.Sorts.Count() == 0)) throw new ArgumentException("指定分页参数的时候不能缺少Sorts指定。", "SqlQueryOptions::Sorts");
 
-            string sql = $"SELECT * FROM [{tableName}]";
+            string sql = $"SELECT";
+            if (!options.Offset.HasValue && options.Count.HasValue)
+                sql += $" TOP {options.Count} * FROM [{tableName}]";
+            else sql += $" * FROM [{tableName}]";
+
             var props = getProperties(query, true);
             var names = getPropertyNames(props, true);
+
             if (names.Length != 0)
             {
                 sql += " WHERE ";
@@ -113,6 +173,26 @@ namespace Silmoon.Data.SqlServer
                     sql += $"[{item}] = @{item} AND ";
                 }
                 sql = sql.Substring(0, sql.Length - 5);
+            }
+
+            if (options.Sorts != null && options.Sorts.Count() != 0)
+            {
+                sql += " ORDER BY";
+                foreach (var item in options.Sorts)
+                {
+                    sql += $" [{item.Name}]";
+                    if (item.Method == QueryModel.SortMethod.Asc)
+                        sql += " ASC";
+                    else sql += " DESC,";
+                }
+                sql = sql.Substring(0, sql.Length - 1);
+            }
+
+            if (options.Offset.HasValue)
+            {
+                sql += $" OFFSET {options.Offset} ROWS";
+                if (options.Count.HasValue)
+                    sql += $" FETCH NEXT {options.Count} ROWS ONLY";
             }
 
             var cmd = access.GetCommand(sql);
@@ -127,13 +207,39 @@ namespace Silmoon.Data.SqlServer
         public T[] GetObjectsWithWhere<T>(string tableName, string query = null, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = new SqlQueryOptions();
+            if ((options.Count.HasValue || options.Offset.HasValue) && (options.Sorts == null || options.Sorts.Count() == 0)) throw new ArgumentException("指定分页参数的时候不能缺少Sorts指定。", "SqlQueryOptions::Sorts");
 
-            string sql = $"SELECT * FROM [{tableName}]";
+            string sql = $"SELECT";
+            if (!options.Offset.HasValue && options.Count.HasValue)
+                sql += $" TOP {options.Count} * FROM [{tableName}]";
+            else sql += $" * FROM [{tableName}]";
+
             var props = getProperties(query, true);
             var names = getPropertyNames(props, true);
+
             if (!string.IsNullOrEmpty(query))
             {
                 sql += " WHERE " + query;
+            }
+
+            if (options.Sorts != null && options.Sorts.Count() != 0)
+            {
+                sql += " ORDER BY";
+                foreach (var item in options.Sorts)
+                {
+                    sql += $" [{item.Name}]";
+                    if (item.Method == QueryModel.SortMethod.Asc)
+                        sql += " ASC";
+                    else sql += " DESC,";
+                }
+                sql = sql.Substring(0, sql.Length - 1);
+            }
+
+            if (options.Offset.HasValue)
+            {
+                sql += $" OFFSET {options.Offset} ROWS";
+                if (options.Count.HasValue)
+                    sql += $" FETCH NEXT {options.Count} ROWS ONLY";
             }
 
             var cmd = access.GetCommand(sql);
