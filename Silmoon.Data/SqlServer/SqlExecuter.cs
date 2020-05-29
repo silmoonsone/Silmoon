@@ -359,6 +359,10 @@ namespace Silmoon.Data.SqlServer
                 {
                     sql += $"\t{item.Name} nvarchar(24),\r\n";
                 }
+                else if (type.Name == "Byte[]")
+                {
+                    sql += $"\t{item.Name} VARBINARY(5120),\r\n";
+                }
                 else
                 {
                     throw new Exception("未知的类型处理（" + type.Name + "）");

@@ -105,7 +105,12 @@ namespace Silmoon.Data.SqlServer
                                     sqlCommand.Parameters.AddWithValue(name, value);
                             }
                             else
-                                sqlCommand.Parameters.AddWithValue(name, DBNull.Value);
+                            {
+                                if (type.Name == "Byte[]")
+                                    sqlCommand.Parameters.AddWithValue(name, SqlBinary.Null);
+                                else
+                                    sqlCommand.Parameters.AddWithValue(name, DBNull.Value);
+                            }
                         }
                     }
                 }
