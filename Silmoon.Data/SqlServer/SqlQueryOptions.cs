@@ -16,8 +16,8 @@ namespace Silmoon.Data.SqlServer
         public SqlQueryOptions(int? offset, int? count, Sort[] sorts)
         {
             Sorts = sorts;
-            offset = Offset;
-            count = Count;
+            Offset = offset;
+            Count = count;
         }
         public Sort[] Sorts { get; set; }
         public int? Offset { get; set; }
