@@ -14,9 +14,7 @@ Build 200118</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Silmoon">
-      <HintPath>..\SilmoonClassLib\bin\Release\Silmoon.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\SilmoonClassLib\SilmoonClassLib.csproj" />
   </ItemGroup>
 
 </Project>

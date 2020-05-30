@@ -169,7 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SilmoonClassLib\SilmoonClassLib.csproj">
-      <Project>{C827A65D-CC9E-444B-908A-7BA70D6E6C11}</Project>
+      <Project>{c827a65d-cc9e-444b-908a-7ba70d6e6c11}</Project>
       <Name>SilmoonClassLib</Name>
     </ProjectReference>
   </ItemGroup>
