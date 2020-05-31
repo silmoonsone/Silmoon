@@ -63,22 +63,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\SessionRSAManager.cs" />
+    <Compile Include="Controls\UserSessionController.cs" />
     <Compile Include="HtmlHelper.cs" />
     <Compile Include="HttpHelper.cs" />
     <Compile Include="ISmPage.cs" />
     <Compile Include="js.Designer.cs" />
+    <Compile Include="Mvc\MvcHelper.cs" />
+    <Compile Include="Page\RewriteMasterPage.cs" />
+    <Compile Include="Page\RewritePage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmHTTP.cs" />
+    <Compile Include="UI\WebForms.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="js.resx" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\" />
-    <Folder Include="Mvc\" />
-    <Folder Include="Page\" />
-    <Folder Include="UI\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Resources\ajaxOptionFunctions.js" />
     <Content Include="Resources\SecureException.html" />
