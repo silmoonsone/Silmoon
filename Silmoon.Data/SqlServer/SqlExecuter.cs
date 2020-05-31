@@ -115,8 +115,6 @@ namespace Silmoon.Data.SqlServer
                 sql += $" TOP {options.Count} * FROM [{tableName}]";
             else sql += $" * FROM [{tableName}]";
 
-            var props = getProperties(query, true);
-            var names = getPropertyNames(props, true);
 
             if (!string.IsNullOrEmpty(query))
             {
@@ -144,7 +142,6 @@ namespace Silmoon.Data.SqlServer
             }
 
             var cmd = access.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, query, names);
             using (var reader = cmd.ExecuteReader())
             {
                 if (!reader.Read()) return default;
@@ -214,9 +211,6 @@ namespace Silmoon.Data.SqlServer
                 sql += $" TOP {options.Count} * FROM [{tableName}]";
             else sql += $" * FROM [{tableName}]";
 
-            var props = getProperties(query, true);
-            var names = getPropertyNames(props, true);
-
             if (!string.IsNullOrEmpty(query))
             {
                 sql += " WHERE " + query;
@@ -241,9 +235,8 @@ namespace Silmoon.Data.SqlServer
                 if (options.Count.HasValue)
                     sql += $" FETCH NEXT {options.Count} ROWS ONLY";
             }
-
+            Console.WriteLine(sql);
             var cmd = access.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, query, names);
             using (var reader = cmd.ExecuteReader())
             {
                 //if (!reader.Read()) return default;
