@@ -1,34 +1,36 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Security;
 
-// 有关程序集的常规信息通过下列属性集
-// 控制。更改这些属性值可修改
+// 有关程序集的一般信息由以下
+// 控制。更改这些特性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("Silmoon.Web")]
-[assembly: AssemblyDescription("Build 191121")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("威海银之月信息技术有限公司")]
-[assembly: AssemblyProduct("银月(SILMOON)通用类型库")]
-[assembly: AssemblyCopyright("版权所有 (C) SILMOON 2019")]
-[assembly: AssemblyTrademark("SILMOON INC.")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("Silmoon.Web")]
+[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// 将 ComVisible 设置为 false 使此程序集中的类型
-// 对 COM 组件不可见。如果需要从 COM 访问此程序集中的类型，
-// 则将该类型上的 ComVisible 属性设置为 true。
+// 将 ComVisible 设置为 false 会使此程序集中的类型
+//对 COM 组件不可见。如果需要从 COM 访问此程序集中的类型
+//请将此类型的 ComVisible 特性设置为 true。
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("23685522-74ca-4129-a95e-392293a47da6")]
+[assembly: Guid("4c84e5b1-e0ca-47df-85fe-32292e771670")]
 
-// 程序集的版本信息由下面四个值组成:
+// 程序集的版本信息由下列四个值组成: 
 //
 //      主版本
-//      次版本 
-//      内部版本号
+//      次版本
+//      生成号
 //      修订号
 //
-[assembly: AssemblyVersion("0.0.0.45")]
-[assembly: AssemblyFileVersion("0.0.4.5")]
+//可以指定所有这些值，也可以使用“生成号”和“修订号”的默认值
+//通过使用 "*"，如下所示:
+// [assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
