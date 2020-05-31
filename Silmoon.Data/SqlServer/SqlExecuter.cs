@@ -235,7 +235,7 @@ namespace Silmoon.Data.SqlServer
                 if (options.Count.HasValue)
                     sql += $" FETCH NEXT {options.Count} ROWS ONLY";
             }
-            Console.WriteLine(sql);
+
             var cmd = access.GetCommand(sql);
             using (var reader = cmd.ExecuteReader())
             {
