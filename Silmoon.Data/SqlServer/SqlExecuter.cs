@@ -52,7 +52,7 @@ namespace Silmoon.Data.SqlServer
                 AddObject(tableName, item);
             }
         }
-        public T GetObject<T>(string tableName, object query, SqlQueryOptions options = null) where T : new()
+        public SqlExecuteResult<T> GetObject<T>(string tableName, object query, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = new SqlQueryOptions();
             if ((options.Count.HasValue || options.Offset.HasValue) && (options.Sorts == null || options.Sorts.Count() == 0)) throw new ArgumentException("指定分页参数的时候不能缺少Sorts指定。", "SqlQueryOptions::Sorts");
@@ -70,7 +70,10 @@ namespace Silmoon.Data.SqlServer
                 sql += " WHERE ";
                 foreach (var item in names)
                 {
-                    sql += $"[{item}] = @{item} AND ";
+                    if (props[item].GetValue(query) == null)
+                        sql += $"[{item}] IS NULL AND ";
+                    else
+                        sql += $"[{item}] = @{item} AND ";
                 }
                 sql = sql.Substring(0, sql.Length - 5);
             }
@@ -100,12 +103,12 @@ namespace Silmoon.Data.SqlServer
             SqlHelper.AddSqlCommandParameters(cmd, query, names);
             using (var reader = cmd.ExecuteReader())
             {
-                if (!reader.Read()) return default;
+                if (!reader.Read()) return new SqlExecuteResult<T>(reader.RecordsAffected, sql, default);
                 var obj = SqlHelper.MakeObject(reader, new T());
-                return obj;
+                return new SqlExecuteResult<T>(reader.RecordsAffected, sql, obj);
             }
         }
-        public T GetObjectWithWhere<T>(string tableName, string query, SqlQueryOptions options = null) where T : new()
+        public SqlExecuteResult<T> GetObjectWithWhere<T>(string tableName, string query, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = new SqlQueryOptions();
             if ((options.Count.HasValue || options.Offset.HasValue) && (options.Sorts == null || options.Sorts.Count() == 0)) throw new ArgumentException("指定分页参数的时候不能缺少Sorts指定。", "SqlQueryOptions::Sorts");
@@ -144,12 +147,12 @@ namespace Silmoon.Data.SqlServer
             var cmd = access.GetCommand(sql);
             using (var reader = cmd.ExecuteReader())
             {
-                if (!reader.Read()) return default;
+                if (!reader.Read()) return new SqlExecuteResult<T>(reader.RecordsAffected, sql, default);
                 var obj = SqlHelper.MakeObject(reader, new T());
-                return obj;
+                return new SqlExecuteResult<T>(reader.RecordsAffected, sql, obj);
             }
         }
-        public T[] GetObjects<T>(string tableName, object query = null, SqlQueryOptions options = null) where T : new()
+        public SqlExecuteResult<T[]> GetObjects<T>(string tableName, object query = null, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = new SqlQueryOptions();
             if ((options.Count.HasValue || options.Offset.HasValue) && (options.Sorts == null || options.Sorts.Count() == 0)) throw new ArgumentException("指定分页参数的时候不能缺少Sorts指定。", "SqlQueryOptions::Sorts");
@@ -167,7 +170,10 @@ namespace Silmoon.Data.SqlServer
                 sql += " WHERE ";
                 foreach (var item in names)
                 {
-                    sql += $"[{item}] = @{item} AND ";
+                    if (props[item].GetValue(query) == null)
+                        sql += $"[{item}] IS NULL AND ";
+                    else
+                        sql += $"[{item}] = @{item} AND ";
                 }
                 sql = sql.Substring(0, sql.Length - 5);
             }
@@ -198,10 +204,10 @@ namespace Silmoon.Data.SqlServer
             {
                 //if (!reader.Read()) return default;
                 var obj = SqlHelper.MakeObjects<T>(reader);
-                return obj;
+                return new SqlExecuteResult<T[]>(reader.RecordsAffected, sql, obj);
             }
         }
-        public T[] GetObjectsWithWhere<T>(string tableName, string query = null, SqlQueryOptions options = null) where T : new()
+        public SqlExecuteResult<T[]> GetObjectsWithWhere<T>(string tableName, string query = null, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = new SqlQueryOptions();
             if ((options.Count.HasValue || options.Offset.HasValue) && (options.Sorts == null || options.Sorts.Count() == 0)) throw new ArgumentException("指定分页参数的时候不能缺少Sorts指定。", "SqlQueryOptions::Sorts");
@@ -241,14 +247,14 @@ namespace Silmoon.Data.SqlServer
             {
                 //if (!reader.Read()) return default;
                 var obj = SqlHelper.MakeObjects<T>(reader);
-                return obj;
+                return new SqlExecuteResult<T[]>(reader.RecordsAffected, sql, obj);
             }
         }
         public SqlExecuteResult SetObject<T>(string tableName, T obj, object query, params string[] fieldNames)
         {
             string sql = $"UPDATE [{tableName}] SET ";
             string[] setNames = fieldNames;
-            PropertyInfo[] setProps = getProperties(obj);
+            Dictionary<string, PropertyInfo> setProps = getProperties(obj);
 
             if (fieldNames == null || fieldNames.Length == 0)
             {
@@ -262,21 +268,24 @@ namespace Silmoon.Data.SqlServer
             sql = sql.Substring(0, sql.Length - 2);
 
 
-            var queryProps = getProperties(query, true);
-            var queryNames = getPropertyNames(queryProps, true);
-            if (queryNames.Length != 0)
+            var props = getProperties(query, true);
+            var names = getPropertyNames(props, true);
+            if (names.Length != 0)
             {
                 sql += " WHERE ";
-                foreach (var item in queryNames)
+                foreach (var item in names)
                 {
-                    sql += $"[{item}] = @{item} AND ";
+                    if (props[item].GetValue(query) == null)
+                        sql += $"[{item}] IS NULL AND ";
+                    else
+                        sql += $"[{item}] = @{item} AND ";
                 }
                 sql = sql.Substring(0, sql.Length - 5);
             }
             var cmd = access.GetCommand(sql);
 
             SqlHelper.AddSqlCommandParameters(cmd, obj, setNames);
-            SqlHelper.AddSqlCommandParameters(cmd, query, queryNames);
+            SqlHelper.AddSqlCommandParameters(cmd, query, names);
 
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
@@ -285,7 +294,7 @@ namespace Silmoon.Data.SqlServer
         {
             string sql = $"UPDATE [{tableName}] SET ";
             string[] setNames = fieldNames;
-            PropertyInfo[] setProps = getProperties(obj);
+            Dictionary<string, PropertyInfo> setProps = getProperties(obj);
 
             if (fieldNames == null || fieldNames.Length == 0)
             {
@@ -322,7 +331,10 @@ namespace Silmoon.Data.SqlServer
                 sql += " WHERE ";
                 foreach (var item in names)
                 {
-                    sql += $"[{item}] = @{item} AND ";
+                    if (props[item].GetValue(query) == null)
+                        sql += $"[{item}] IS NULL AND ";
+                    else
+                        sql += $"[{item}] = @{item} AND ";
                 }
                 sql = sql.Substring(0, sql.Length - 5);
             }
@@ -442,13 +454,13 @@ namespace Silmoon.Data.SqlServer
             return propertyNames.ToArray();
         }
 
-        private string[] getPropertyNames(PropertyInfo[] props, bool includeId = false)
+        private string[] getPropertyNames(Dictionary<string, PropertyInfo> props, bool includeId = false)
         {
             List<string> propertyNames = new List<string>();
             foreach (var item in props)
             {
-                if (item.Name.ToLower() == "id" && !includeId) continue;
-                propertyNames.Add(item.Name);
+                if (item.Key.ToLower() == "id" && !includeId) continue;
+                propertyNames.Add(item.Key);
             }
             return propertyNames.ToArray();
         }
@@ -463,19 +475,19 @@ namespace Silmoon.Data.SqlServer
             }
             return propertyNames.ToArray();
         }
-        private PropertyInfo[] getProperties(object obj, bool includeId = false)
+        private Dictionary<string, PropertyInfo> getProperties(object obj, bool includeId = false)
         {
-            List<PropertyInfo> propertyNames = new List<PropertyInfo>();
+            Dictionary<string, PropertyInfo> propertyNames = new Dictionary<string, PropertyInfo>();
             if (obj != null)
             {
                 var propertyInfos = obj.GetType().GetProperties();
                 foreach (var item in propertyInfos)
                 {
                     if (item.Name.ToLower() == "id" && !includeId) continue;
-                    propertyNames.Add(item);
+                    propertyNames.Add(item.Name, item);
                 }
             }
-            return propertyNames.ToArray();
+            return propertyNames;
         }
         private PropertyInfo[] getProperties<T>(bool includeId = false)
         {
