@@ -75,7 +75,7 @@ namespace Silmoon
         /// </summary>
         /// <param name="s">源字符串</param>
         /// <returns></returns>
-        public static bool StringToBool(string s, bool defaultResult = false, bool stringNullOrEmptyResult = false)
+        public static bool GetBool(string s, bool defaultResult = false, bool stringNullOrEmptyResult = false)
         {
             if (string.IsNullOrEmpty(s)) return stringNullOrEmptyResult;
             switch (s.ToLower())

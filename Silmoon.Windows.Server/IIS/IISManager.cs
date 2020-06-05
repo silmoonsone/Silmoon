@@ -73,7 +73,7 @@ namespace Silmoon.Windows.Server.IIS
                     siteInfo.SiteName = ent.Properties[WebSiteParameter.ServerComment.ToString()].Value.ToString();
                     siteInfo.Bindings = ent.Properties[WebSiteParameter.ServerBindings.ToString()].Value;
                     siteInfo.State = (WebSiteState)ent.Properties["ServerState"].Value;
-                    siteInfo.LogFileLocaltimeRollover = StringHelper.StringToBool(ent.Properties[WebSiteParameter.LogFileLocaltimeRollover.ToString()].Value.ToString());
+                    siteInfo.LogFileLocaltimeRollover = StringHelper.GetBool(ent.Properties[WebSiteParameter.LogFileLocaltimeRollover.ToString()].Value.ToString());
                     siteInfo.LogFileDirectory = ent.Properties[WebSiteParameter.LogFileDirectory.ToString()].Value.ToString();
 
                     DirectoryEntry appInfo = ent.Children.Find("root", "IIsWebVirtualDir");

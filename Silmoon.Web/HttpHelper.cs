@@ -24,29 +24,25 @@ namespace Silmoon.Web
             }
             return UrlEncodeSpaces(UrlEncodeNonAscii(str, e));
         }
-        public static string WebRoot
-        {
-            get
-            {
-                string r = HttpRuntime.AppDomainAppVirtualPath;
-                if (r == "/" || r == "\\") return "";
-                else return r;
-            }
-        }
+        /// <summary>
+        /// 获取应用程序相对路径，含有根路径“/”，若根路径不是应用程序路径，最后不是以斜杠“/”结束，如/apps/myapp。
+        /// </summary>
+        public static string AppWebPath => HttpRuntime.AppDomainAppVirtualPath;
         /// <summary>
         /// 获取站点物理路径，后面以/结束。
         /// </summary>
-        public static string AppRootPath
-        {
-            get { return HttpRuntime.AppDomainAppPath; }
-        }
-        public static string GetWebRootUri()
+        public static string AppLocalPath => HttpRuntime.AppDomainAppPath;
+        /// <summary>
+        /// 获取应用程序完整HTTP路径，含有根路径“/”，若根路径不是应用程序路径，最后不是以斜杠“/”结束，如https://www.silmoon.com/apps/myapp。
+        /// </summary>
+        /// <returns></returns>
+        public static string GetWebAppRootUrl()
         {
             string http = "http";
-            if (HttpContext.Current.Request.ServerVariables["HTTPS"] != null && StringHelper.StringToBool(HttpContext.Current.Request.ServerVariables["HTTPS"]))
+            if (HttpContext.Current.Request.ServerVariables["HTTPS"] != null && StringHelper.GetBool(HttpContext.Current.Request.ServerVariables["HTTPS"]))
                 http = "https";
 
-            http = http + "://" + HttpContext.Current.Request.ServerVariables["HTTP_HOST"] + HttpHelper.WebRoot;
+            http = http + "://" + HttpContext.Current.Request.ServerVariables["HTTP_HOST"] + AppWebPath;
             return http;
         }
         public static IPAddress GetClientIPAddress()
