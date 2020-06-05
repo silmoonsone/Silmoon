@@ -427,7 +427,7 @@ namespace Silmoon.Data.SqlServer
         }
 
 
-        private string[] getPropertyNames(object obj, bool includeId = false)
+        public string[] GetPropertyNames(object obj, bool includeId = false)
         {
             List<string> propertyNames = new List<string>();
             if (obj != null)
@@ -441,6 +441,7 @@ namespace Silmoon.Data.SqlServer
             }
             return propertyNames.ToArray();
         }
+
         private string[] getPropertyNames(PropertyInfo[] props, bool includeId = false)
         {
             List<string> propertyNames = new List<string>();
