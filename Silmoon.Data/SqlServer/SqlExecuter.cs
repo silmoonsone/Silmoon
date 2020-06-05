@@ -52,7 +52,7 @@ namespace Silmoon.Data.SqlServer
                 AddObject(tableName, item);
             }
         }
-        public SqlExecuteResult<T> GetObject<T>(string tableName, object query, SqlQueryOptions options = null) where T : new()
+        public SqlExecuteResult<T> GetObject<T>(string tableName, object queryObj, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = new SqlQueryOptions();
             if ((options.Count.HasValue || options.Offset.HasValue) && (options.Sorts == null || options.Sorts.Count() == 0)) throw new ArgumentException("指定分页参数的时候不能缺少Sorts指定。", "SqlQueryOptions::Sorts");
@@ -62,7 +62,7 @@ namespace Silmoon.Data.SqlServer
                 sql += $" TOP {options.Count} * FROM [{tableName}]";
             else sql += $" * FROM [{tableName}]";
 
-            var props = getProperties(query, true);
+            var props = getProperties(queryObj, true);
             var names = getPropertyNames(props, true);
 
             if (names.Length != 0)
@@ -70,7 +70,7 @@ namespace Silmoon.Data.SqlServer
                 sql += " WHERE ";
                 foreach (var item in names)
                 {
-                    if (props[item].GetValue(query) == null)
+                    if (props[item].GetValue(queryObj) == null)
                         sql += $"[{item}] IS NULL AND ";
                     else
                         sql += $"[{item}] = @{item} AND ";
@@ -100,7 +100,7 @@ namespace Silmoon.Data.SqlServer
 
 
             var cmd = access.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, query, names);
+            SqlHelper.AddSqlCommandParameters(cmd, queryObj, names);
             using (var reader = cmd.ExecuteReader())
             {
                 if (!reader.Read()) return new SqlExecuteResult<T>(reader.RecordsAffected, sql, default);
@@ -108,7 +108,7 @@ namespace Silmoon.Data.SqlServer
                 return new SqlExecuteResult<T>(reader.RecordsAffected, sql, obj);
             }
         }
-        public SqlExecuteResult<T> GetObjectWithWhere<T>(string tableName, string query, SqlQueryOptions options = null) where T : new()
+        public SqlExecuteResult<T> GetObjectWithWhere<T>(string tableName, string queryStr, object queryObj = null, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = new SqlQueryOptions();
             if ((options.Count.HasValue || options.Offset.HasValue) && (options.Sorts == null || options.Sorts.Count() == 0)) throw new ArgumentException("指定分页参数的时候不能缺少Sorts指定。", "SqlQueryOptions::Sorts");
@@ -119,9 +119,9 @@ namespace Silmoon.Data.SqlServer
             else sql += $" * FROM [{tableName}]";
 
 
-            if (!string.IsNullOrEmpty(query))
+            if (!string.IsNullOrEmpty(queryStr))
             {
-                sql += " WHERE " + query;
+                sql += " WHERE " + queryStr;
             }
 
             if (options.Sorts != null && options.Sorts.Count() != 0)
@@ -145,6 +145,8 @@ namespace Silmoon.Data.SqlServer
             }
 
             var cmd = access.GetCommand(sql);
+            SqlHelper.AddSqlCommandParameters(cmd, queryObj, GetPropertyNames(queryObj, true));
+
             using (var reader = cmd.ExecuteReader())
             {
                 if (!reader.Read()) return new SqlExecuteResult<T>(reader.RecordsAffected, sql, default);
@@ -152,7 +154,7 @@ namespace Silmoon.Data.SqlServer
                 return new SqlExecuteResult<T>(reader.RecordsAffected, sql, obj);
             }
         }
-        public SqlExecuteResult<T[]> GetObjects<T>(string tableName, object query = null, SqlQueryOptions options = null) where T : new()
+        public SqlExecuteResult<T[]> GetObjects<T>(string tableName, object queryObj = null, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = new SqlQueryOptions();
             if ((options.Count.HasValue || options.Offset.HasValue) && (options.Sorts == null || options.Sorts.Count() == 0)) throw new ArgumentException("指定分页参数的时候不能缺少Sorts指定。", "SqlQueryOptions::Sorts");
@@ -162,7 +164,7 @@ namespace Silmoon.Data.SqlServer
                 sql += $" TOP {options.Count} * FROM [{tableName}]";
             else sql += $" * FROM [{tableName}]";
 
-            var props = getProperties(query, true);
+            var props = getProperties(queryObj, true);
             var names = getPropertyNames(props, true);
 
             if (names.Length != 0)
@@ -170,7 +172,7 @@ namespace Silmoon.Data.SqlServer
                 sql += " WHERE ";
                 foreach (var item in names)
                 {
-                    if (props[item].GetValue(query) == null)
+                    if (props[item].GetValue(queryObj) == null)
                         sql += $"[{item}] IS NULL AND ";
                     else
                         sql += $"[{item}] = @{item} AND ";
@@ -199,7 +201,7 @@ namespace Silmoon.Data.SqlServer
             }
 
             var cmd = access.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, query, names);
+            SqlHelper.AddSqlCommandParameters(cmd, queryObj, names);
             using (var reader = cmd.ExecuteReader())
             {
                 //if (!reader.Read()) return default;
@@ -207,7 +209,7 @@ namespace Silmoon.Data.SqlServer
                 return new SqlExecuteResult<T[]>(reader.RecordsAffected, sql, obj);
             }
         }
-        public SqlExecuteResult<T[]> GetObjectsWithWhere<T>(string tableName, string query = null, SqlQueryOptions options = null) where T : new()
+        public SqlExecuteResult<T[]> GetObjectsWithWhere<T>(string tableName, string queryStr = null, object queryObj = null, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = new SqlQueryOptions();
             if ((options.Count.HasValue || options.Offset.HasValue) && (options.Sorts == null || options.Sorts.Count() == 0)) throw new ArgumentException("指定分页参数的时候不能缺少Sorts指定。", "SqlQueryOptions::Sorts");
@@ -217,9 +219,9 @@ namespace Silmoon.Data.SqlServer
                 sql += $" TOP {options.Count} * FROM [{tableName}]";
             else sql += $" * FROM [{tableName}]";
 
-            if (!string.IsNullOrEmpty(query))
+            if (!string.IsNullOrEmpty(queryStr))
             {
-                sql += " WHERE " + query;
+                sql += " WHERE " + queryStr;
             }
 
             if (options.Sorts != null && options.Sorts.Count() != 0)
@@ -243,6 +245,8 @@ namespace Silmoon.Data.SqlServer
             }
 
             var cmd = access.GetCommand(sql);
+            SqlHelper.AddSqlCommandParameters(cmd, queryObj, GetPropertyNames(queryObj, true));
+
             using (var reader = cmd.ExecuteReader())
             {
                 //if (!reader.Read()) return default;
@@ -250,15 +254,15 @@ namespace Silmoon.Data.SqlServer
                 return new SqlExecuteResult<T[]>(reader.RecordsAffected, sql, obj);
             }
         }
-        public SqlExecuteResult SetObject<T>(string tableName, T obj, object query, params string[] fieldNames)
+        public SqlExecuteResult SetObject<T>(string tableName, T obj, object queryObj, params string[] fieldNames)
         {
             string sql = $"UPDATE [{tableName}] SET ";
             string[] setNames = fieldNames;
-            Dictionary<string, PropertyInfo> setProps = getProperties(obj);
+            Dictionary<string, PropertyInfo> setProps = getProperties(obj, false);
 
             if (fieldNames == null || fieldNames.Length == 0)
             {
-                setNames = getPropertyNames(setProps);
+                setNames = getPropertyNames(setProps, false);
             }
 
             foreach (var item in setNames)
@@ -268,14 +272,14 @@ namespace Silmoon.Data.SqlServer
             sql = sql.Substring(0, sql.Length - 2);
 
 
-            var props = getProperties(query, true);
+            var props = getProperties(queryObj, true);
             var names = getPropertyNames(props, true);
             if (names.Length != 0)
             {
                 sql += " WHERE ";
                 foreach (var item in names)
                 {
-                    if (props[item].GetValue(query) == null)
+                    if (props[item].GetValue(queryObj) == null)
                         sql += $"[{item}] IS NULL AND ";
                     else
                         sql += $"[{item}] = @{item} AND ";
@@ -285,20 +289,20 @@ namespace Silmoon.Data.SqlServer
             var cmd = access.GetCommand(sql);
 
             SqlHelper.AddSqlCommandParameters(cmd, obj, setNames);
-            SqlHelper.AddSqlCommandParameters(cmd, query, names);
+            SqlHelper.AddSqlCommandParameters(cmd, queryObj, names);
 
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
         }
-        public SqlExecuteResult SetObject<T>(string tableName, T obj, string query, params string[] fieldNames)
+        public SqlExecuteResult SetObject<T>(string tableName, T obj, string queryStr, object queryObj = null, params string[] fieldNames)
         {
             string sql = $"UPDATE [{tableName}] SET ";
             string[] setNames = fieldNames;
-            Dictionary<string, PropertyInfo> setProps = getProperties(obj);
+            Dictionary<string, PropertyInfo> setProps = getProperties(obj, false);
 
             if (fieldNames == null || fieldNames.Length == 0)
             {
-                setNames = getPropertyNames(setProps);
+                setNames = getPropertyNames(setProps, false);
             }
 
             foreach (var item in setNames)
@@ -308,22 +312,23 @@ namespace Silmoon.Data.SqlServer
             sql = sql.Substring(0, sql.Length - 2);
 
 
-            if (!string.IsNullOrEmpty(query))
+            if (!string.IsNullOrEmpty(queryStr))
             {
-                sql += " WHERE " + query;
+                sql += " WHERE " + queryStr;
             }
             var cmd = access.GetCommand(sql);
 
             SqlHelper.AddSqlCommandParameters(cmd, obj, setNames);
+            SqlHelper.AddSqlCommandParameters(cmd, queryObj, GetPropertyNames(queryObj, true));
 
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
         }
-        public SqlExecuteResult DeleteObject<T>(string tableName, object query)
+        public SqlExecuteResult DeleteObject<T>(string tableName, object queryObj)
         {
             string sql = $"DELETE [{tableName}]";
 
-            var props = getProperties(query, true);
+            var props = getProperties(queryObj, true);
             var names = getPropertyNames(props, true);
 
             if (names.Length != 0)
@@ -331,7 +336,7 @@ namespace Silmoon.Data.SqlServer
                 sql += " WHERE ";
                 foreach (var item in names)
                 {
-                    if (props[item].GetValue(query) == null)
+                    if (props[item].GetValue(queryObj) == null)
                         sql += $"[{item}] IS NULL AND ";
                     else
                         sql += $"[{item}] = @{item} AND ";
@@ -340,24 +345,26 @@ namespace Silmoon.Data.SqlServer
             }
 
             var cmd = access.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, query, names);
+            SqlHelper.AddSqlCommandParameters(cmd, queryObj, names);
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
         }
-        public SqlExecuteResult DeleteObject<T>(string tableName, string query)
+        public SqlExecuteResult DeleteObject<T>(string tableName, string queryStr, object queryObj = null)
         {
             string sql = $"DELETE [{tableName}]";
 
-            var props = getProperties(query, true);
+            var props = getProperties(queryStr, true);
             var names = getPropertyNames(props, true);
 
-            if (!string.IsNullOrEmpty(query))
+            if (!string.IsNullOrEmpty(queryStr))
             {
-                sql += " WHERE " + query;
+                sql += " WHERE " + queryStr;
             }
 
             var cmd = access.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, query, names);
+            SqlHelper.AddSqlCommandParameters(cmd, queryStr, names);
+            SqlHelper.AddSqlCommandParameters(cmd, queryObj, GetPropertyNames(queryObj, true));
+
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
         }
@@ -367,7 +374,7 @@ namespace Silmoon.Data.SqlServer
         {
             var isExistResult = TableIsExist(tableName);
             if (isExistResult.Data) return new SqlExecuteResult<bool>() { Data = false, ResponseRows = isExistResult.ResponseRows, ExecuteSqlString = isExistResult.ExecuteSqlString };
-            var props = getProperties<T>();
+            var props = getProperties<T>(false);
 
             string sql = $"CREATE TABLE {onlyWords(tableName)}\r\n";
             sql += $"(\r\n";
