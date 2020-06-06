@@ -52,6 +52,7 @@ namespace Silmoon.Data.SqlServer
                 AddObject(tableName, item);
             }
         }
+
         public SqlExecuteResult<T> GetObject<T>(string tableName, object queryObj, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = new SqlQueryOptions();
@@ -65,38 +66,9 @@ namespace Silmoon.Data.SqlServer
             var props = getProperties(queryObj, true);
             var names = getPropertyNames(props, true);
 
-            if (names.Length != 0)
-            {
-                sql += " WHERE ";
-                foreach (var item in names)
-                {
-                    if (props[item].GetValue(queryObj) == null)
-                        sql += $"[{item}] IS NULL AND ";
-                    else
-                        sql += $"[{item}] = @{item} AND ";
-                }
-                sql = sql.Substring(0, sql.Length - 5);
-            }
-
-            if (options.Sorts != null && options.Sorts.Count() != 0)
-            {
-                sql += " ORDER BY";
-                foreach (var item in options.Sorts)
-                {
-                    sql += $" [{item.Name}]";
-                    if (item.Method == QueryModel.SortMethod.Asc)
-                        sql += " ASC";
-                    else sql += " DESC,";
-                }
-                sql = sql.Substring(0, sql.Length - 1);
-            }
-
-            if (options.Offset.HasValue)
-            {
-                sql += $" OFFSET {options.Offset} ROWS";
-                if (options.Count.HasValue)
-                    sql += $" FETCH NEXT {options.Count} ROWS ONLY";
-            }
+            makeWhereString(ref sql, ref queryObj, ref props, ref names);
+            makeOrderBy(ref sql, ref options);
+            makeOffset(ref sql, ref options);
 
 
             var cmd = access.GetCommand(sql);
@@ -124,25 +96,8 @@ namespace Silmoon.Data.SqlServer
                 sql += " WHERE " + queryStr;
             }
 
-            if (options.Sorts != null && options.Sorts.Count() != 0)
-            {
-                sql += " ORDER BY";
-                foreach (var item in options.Sorts)
-                {
-                    sql += $" [{item.Name}]";
-                    if (item.Method == QueryModel.SortMethod.Asc)
-                        sql += " ASC";
-                    else sql += " DESC,";
-                }
-                sql = sql.Substring(0, sql.Length - 1);
-            }
-
-            if (options.Offset.HasValue)
-            {
-                sql += $" OFFSET {options.Offset} ROWS";
-                if (options.Count.HasValue)
-                    sql += $" FETCH NEXT {options.Count} ROWS ONLY";
-            }
+            makeOrderBy(ref sql, ref options);
+            makeOffset(ref sql, ref options);
 
             var cmd = access.GetCommand(sql);
             SqlHelper.AddSqlCommandParameters(cmd, queryObj, GetPropertyNames(queryObj, true));
@@ -167,38 +122,9 @@ namespace Silmoon.Data.SqlServer
             var props = getProperties(queryObj, true);
             var names = getPropertyNames(props, true);
 
-            if (names.Length != 0)
-            {
-                sql += " WHERE ";
-                foreach (var item in names)
-                {
-                    if (props[item].GetValue(queryObj) == null)
-                        sql += $"[{item}] IS NULL AND ";
-                    else
-                        sql += $"[{item}] = @{item} AND ";
-                }
-                sql = sql.Substring(0, sql.Length - 5);
-            }
-
-            if (options.Sorts != null && options.Sorts.Count() != 0)
-            {
-                sql += " ORDER BY";
-                foreach (var item in options.Sorts)
-                {
-                    sql += $" [{item.Name}]";
-                    if (item.Method == QueryModel.SortMethod.Asc)
-                        sql += " ASC";
-                    else sql += " DESC,";
-                }
-                sql = sql.Substring(0, sql.Length - 1);
-            }
-
-            if (options.Offset.HasValue)
-            {
-                sql += $" OFFSET {options.Offset} ROWS";
-                if (options.Count.HasValue)
-                    sql += $" FETCH NEXT {options.Count} ROWS ONLY";
-            }
+            makeWhereString(ref sql, ref queryObj, ref props, ref names);
+            makeOrderBy(ref sql, ref options);
+            makeOffset(ref sql, ref options);
 
             var cmd = access.GetCommand(sql);
             SqlHelper.AddSqlCommandParameters(cmd, queryObj, names);
@@ -224,25 +150,8 @@ namespace Silmoon.Data.SqlServer
                 sql += " WHERE " + queryStr;
             }
 
-            if (options.Sorts != null && options.Sorts.Count() != 0)
-            {
-                sql += " ORDER BY";
-                foreach (var item in options.Sorts)
-                {
-                    sql += $" [{item.Name}]";
-                    if (item.Method == QueryModel.SortMethod.Asc)
-                        sql += " ASC";
-                    else sql += " DESC,";
-                }
-                sql = sql.Substring(0, sql.Length - 1);
-            }
-
-            if (options.Offset.HasValue)
-            {
-                sql += $" OFFSET {options.Offset} ROWS";
-                if (options.Count.HasValue)
-                    sql += $" FETCH NEXT {options.Count} ROWS ONLY";
-            }
+            makeOrderBy(ref sql, ref options);
+            makeOffset(ref sql, ref options);
 
             var cmd = access.GetCommand(sql);
             SqlHelper.AddSqlCommandParameters(cmd, queryObj, GetPropertyNames(queryObj, true));
@@ -254,13 +163,22 @@ namespace Silmoon.Data.SqlServer
                 return new SqlExecuteResult<T[]>(reader.RecordsAffected, sql, obj);
             }
         }
-        public SqlExecuteResult SetObject<T>(string tableName, T obj, object queryObj, params string[] fieldNames)
+
+        public SqlExecuteResult SetObject<T>(string tableName, T obj, object queryObj, params string[] updateObjectFieldNames)
+        {
+            return SetObject(tableName, (object)obj, queryObj, updateObjectFieldNames);
+        }
+        public SqlExecuteResult SetObject<T>(string tableName, T obj, string queryStr, object queryObj = null, params string[] updateObjectFieldNames)
+        {
+            return SetObject(tableName, (object)obj, queryStr, queryObj, updateObjectFieldNames);
+        }
+        public SqlExecuteResult SetObject(string tableName, object obj, object queryObj, params string[] updateObjectFieldNames)
         {
             string sql = $"UPDATE [{tableName}] SET ";
-            string[] setNames = fieldNames;
+            string[] setNames = updateObjectFieldNames;
             Dictionary<string, PropertyInfo> setProps = getProperties(obj, false);
 
-            if (fieldNames == null || fieldNames.Length == 0)
+            if (updateObjectFieldNames == null || updateObjectFieldNames.Length == 0)
             {
                 setNames = getPropertyNames(setProps, false);
             }
@@ -274,18 +192,9 @@ namespace Silmoon.Data.SqlServer
 
             var props = getProperties(queryObj, true);
             var names = getPropertyNames(props, true);
-            if (names.Length != 0)
-            {
-                sql += " WHERE ";
-                foreach (var item in names)
-                {
-                    if (props[item].GetValue(queryObj) == null)
-                        sql += $"[{item}] IS NULL AND ";
-                    else
-                        sql += $"[{item}] = @{item} AND ";
-                }
-                sql = sql.Substring(0, sql.Length - 5);
-            }
+
+            makeWhereString(ref sql, ref queryObj, ref props, ref names);
+
             var cmd = access.GetCommand(sql);
 
             SqlHelper.AddSqlCommandParameters(cmd, obj, setNames);
@@ -294,13 +203,13 @@ namespace Silmoon.Data.SqlServer
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
         }
-        public SqlExecuteResult SetObject<T>(string tableName, T obj, string queryStr, object queryObj = null, params string[] fieldNames)
+        public SqlExecuteResult SetObject(string tableName, object obj, string queryStr, object queryObj = null, params string[] updateObjectFieldNames)
         {
             string sql = $"UPDATE [{tableName}] SET ";
-            string[] setNames = fieldNames;
+            string[] setNames = updateObjectFieldNames;
             Dictionary<string, PropertyInfo> setProps = getProperties(obj, false);
 
-            if (fieldNames == null || fieldNames.Length == 0)
+            if (updateObjectFieldNames == null || updateObjectFieldNames.Length == 0)
             {
                 setNames = getPropertyNames(setProps, false);
             }
@@ -311,11 +220,11 @@ namespace Silmoon.Data.SqlServer
             }
             sql = sql.Substring(0, sql.Length - 2);
 
-
             if (!string.IsNullOrEmpty(queryStr))
             {
                 sql += " WHERE " + queryStr;
             }
+
             var cmd = access.GetCommand(sql);
 
             SqlHelper.AddSqlCommandParameters(cmd, obj, setNames);
@@ -331,18 +240,7 @@ namespace Silmoon.Data.SqlServer
             var props = getProperties(queryObj, true);
             var names = getPropertyNames(props, true);
 
-            if (names.Length != 0)
-            {
-                sql += " WHERE ";
-                foreach (var item in names)
-                {
-                    if (props[item].GetValue(queryObj) == null)
-                        sql += $"[{item}] IS NULL AND ";
-                    else
-                        sql += $"[{item}] = @{item} AND ";
-                }
-                sql = sql.Substring(0, sql.Length - 5);
-            }
+            makeWhereString(ref sql, ref queryObj, ref props, ref names);
 
             var cmd = access.GetCommand(sql);
             SqlHelper.AddSqlCommandParameters(cmd, queryObj, names);
@@ -459,6 +357,48 @@ namespace Silmoon.Data.SqlServer
                 }
             }
             return propertyNames.ToArray();
+        }
+
+
+
+        private void makeWhereString(ref string sql, ref object queryObj, ref Dictionary<string, PropertyInfo> props, ref string[] names)
+        {
+            if (names.Length != 0)
+            {
+                sql += " WHERE ";
+                foreach (var item in names)
+                {
+                    if (props[item].GetValue(queryObj) == null)
+                        sql += $"[{item}] IS NULL AND ";
+                    else
+                        sql += $"[{item}] = @{item} AND ";
+                }
+                sql = sql.Substring(0, sql.Length - 5);
+            }
+        }
+        private void makeOrderBy(ref string sql, ref SqlQueryOptions options)
+        {
+            if (options.Sorts != null && options.Sorts.Count() != 0)
+            {
+                sql += " ORDER BY";
+                foreach (var item in options.Sorts)
+                {
+                    sql += $" [{item.Name}]";
+                    if (item.Method == QueryModel.SortMethod.Asc)
+                        sql += " ASC,";
+                    else sql += " DESC,";
+                }
+                sql = sql.Substring(0, sql.Length - 1);
+            }
+        }
+        private void makeOffset(ref string sql, ref SqlQueryOptions options)
+        {
+            if (options.Offset.HasValue)
+            {
+                sql += $" OFFSET {options.Offset} ROWS";
+                if (options.Count.HasValue)
+                    sql += $" FETCH NEXT {options.Count} ROWS ONLY";
+            }
         }
 
         private string[] getPropertyNames(Dictionary<string, PropertyInfo> props, bool includeId = false)
