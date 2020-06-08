@@ -98,6 +98,7 @@ namespace Silmoon.Data.SqlServer
                             if (value != null)
                             {
                                 if (type.IsEnum)
+                                    ///这里存储在数据库中的枚举使用字符串（.ToString()）
                                     sqlCommand.Parameters.AddWithValue(name, value.ToString());
                                 else if (type.Name == "DateTime" && ((DateTime)value) == DateTime.MinValue)
                                     sqlCommand.Parameters.AddWithValue(name, SqlDateTime.MinValue);

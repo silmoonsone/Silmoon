@@ -233,7 +233,7 @@ namespace Silmoon.Data.SqlServer
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
         }
-        public SqlExecuteResult DeleteObject<T>(string tableName, object queryObj)
+        public SqlExecuteResult DeleteObject(string tableName, object queryObj)
         {
             string sql = $"DELETE [{tableName}]";
 
@@ -247,7 +247,7 @@ namespace Silmoon.Data.SqlServer
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
         }
-        public SqlExecuteResult DeleteObject<T>(string tableName, string queryStr, object queryObj = null)
+        public SqlExecuteResult DeleteObject(string tableName, string queryStr, object queryObj = null)
         {
             string sql = $"DELETE [{tableName}]";
 
@@ -296,9 +296,17 @@ namespace Silmoon.Data.SqlServer
                 {
                     sql += $"\t{item.Name} bit,\r\n";
                 }
-                else if (type.Name == "Int32" || type.Name == "UInt32" || type.Name == "Int16" || type.Name == "UInt16" || type.Name == "Int64" || type.Name == "UInt64")
+                else if (type.Name == "Int16" || type.Name == "UInt16")
+                {
+                    sql += $"\t{item.Name} smallint,\r\n";
+                }
+                else if (type.Name == "Int32" || type.Name == "UInt32")
                 {
                     sql += $"\t{item.Name} int,\r\n";
+                }
+                else if (type.Name == "Int64" || type.Name == "UInt64")
+                {
+                    sql += $"\t{item.Name} bigint,\r\n";
                 }
                 else if (type.Name == "Guid")
                 {
