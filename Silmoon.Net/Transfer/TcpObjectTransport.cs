@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace Silmoon.Net.Transfer
 {
-    public class TcpObjectTransfer<T> : Tcp where T : new()
+    public class TcpObjectTransport<T> : Tcp where T : new()
     {
         Dictionary<IPEndPoint, List<byte>> clientCachedData = new Dictionary<IPEndPoint, List<byte>>();
         List<byte> serverCacheData = new List<byte>();
@@ -20,7 +20,7 @@ namespace Silmoon.Net.Transfer
         ManualResetEvent blockResetEvent = null;
 
         public Encoding Encoding { get; set; } = Encoding.UTF8;
-        public TcpObjectTransfer()
+        public TcpObjectTransport()
         {
             this.OnEvent += TcpObjectTransfer_OnEvent;
             this.OnDataReceived += TcpObjectTransfer_OnDataReceived;

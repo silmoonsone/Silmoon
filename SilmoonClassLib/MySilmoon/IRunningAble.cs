@@ -23,16 +23,20 @@ namespace Silmoon.MySilmoon
     public enum RunningState
     {
         /// <summary>
+        /// 刚初始化，未开始运行。
+        /// </summary>
+        Init = 0,
+        /// <summary>
         /// 运行中
         /// </summary>
-        Running = 0,
+        Running = 1,
         /// <summary>
         /// 已经停止
         /// </summary>
-        Stopped = 1,
+        Stopped = 2,
         /// <summary>
         /// 已经挂起
         /// </summary>
-        Suspended = 2,
+        Suspended = 3,
     }
 }
