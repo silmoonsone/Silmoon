@@ -274,15 +274,15 @@ namespace Silmoon.Data.SqlServer
             if (isExistResult.Data) return new SqlExecuteResult<bool>() { Data = false, ResponseRows = isExistResult.ResponseRows, ExecuteSqlString = isExistResult.ExecuteSqlString };
             var props = getProperties<T>(false);
 
-            string sql = $"CREATE TABLE {onlyWords(tableName)}\r\n";
+            string sql = $"CREATE TABLE [{onlyWords(tableName)}]\r\n";
             sql += $"(\r\n";
-            sql += $"id int NOT NULL IDENTITY (1, 1),\r\n";
+            sql += $"[id] int NOT NULL IDENTITY (1, 1),\r\n";
             foreach (var item in props)
             {
                 var type = item.PropertyType;
                 if (type.IsEnum)
                 {
-                    sql += $"\t{item.Name} nvarchar(50),\r\n";
+                    sql += $"\t[{item.Name}] nvarchar(50),\r\n";
                 }
                 else if (type.Name == "DateTime")
                 {
@@ -290,7 +290,7 @@ namespace Silmoon.Data.SqlServer
                 }
                 else if (type.Name == "String")
                 {
-                    sql += $"\t{item.Name} nvarchar(MAX) NULL,\r\n";
+                    sql += $"\t[{item.Name}] nvarchar(MAX) NULL,\r\n";
                 }
                 else if (type.Name == "Boolean")
                 {
@@ -298,27 +298,27 @@ namespace Silmoon.Data.SqlServer
                 }
                 else if (type.Name == "Int16" || type.Name == "UInt16")
                 {
-                    sql += $"\t{item.Name} smallint,\r\n";
+                    sql += $"\t[{item.Name}] smallint,\r\n";
                 }
                 else if (type.Name == "Int32" || type.Name == "UInt32")
                 {
-                    sql += $"\t{item.Name} int,\r\n";
+                    sql += $"\t[{item.Name}] int,\r\n";
                 }
                 else if (type.Name == "Int64" || type.Name == "UInt64")
                 {
-                    sql += $"\t{item.Name} bigint,\r\n";
+                    sql += $"\t[{item.Name}] bigint,\r\n";
                 }
                 else if (type.Name == "Guid")
                 {
-                    sql += $"\t{item.Name} uniqueidentifier NULL,\r\n";
+                    sql += $"\t[{item.Name}] uniqueidentifier NULL,\r\n";
                 }
                 else if (type.Name == "ObjectId")
                 {
-                    sql += $"\t{item.Name} nvarchar(24),\r\n";
+                    sql += $"\t[{item.Name}] nvarchar(24),\r\n";
                 }
                 else if (type.Name == "Byte[]")
                 {
-                    sql += $"\t{item.Name} VARBINARY(5120),\r\n";
+                    sql += $"\t[{item.Name}] VARBINARY(5120),\r\n";
                 }
                 else
                 {
