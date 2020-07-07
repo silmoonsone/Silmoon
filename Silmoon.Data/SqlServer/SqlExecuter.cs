@@ -308,6 +308,10 @@ namespace Silmoon.Data.SqlServer
                 {
                     sql += $"\t[{item.Name}] bigint,\r\n";
                 }
+                else if (type.Name == "Decimal")
+                {
+                    sql += $"\t[{item.Name}] decimal(18, 4) NULL,\r\n";
+                }
                 else if (type.Name == "Guid")
                 {
                     sql += $"\t[{item.Name}] uniqueidentifier NULL,\r\n";
