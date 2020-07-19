@@ -35,6 +35,14 @@ namespace Silmoon.Web
         {
             return "<a href=\"" + url + "\">" + text + "</a>";
         }
+        public static string MakeImage(string url, int width, int height)
+        {
+            return "<img src=\"" + url + "\" width=\"" + width + "\" height=\"" + height + "\" />";
+        }
+        public static string MakeImage(string url)
+        {
+            return "<img src=\"" + url + "\" />";
+        }
         /// <summary>
         /// 将Textarea中的HTML写入数据库的前置处理
         /// </summary>
