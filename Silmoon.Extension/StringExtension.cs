@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Silmoon.Extension
 {
-    public static class StringExtension
+    public static class String1Extension
     {
         public static bool IsNullOrEmpty(this string s)
         {
@@ -49,6 +49,12 @@ namespace Silmoon.Extension
                     i = i + 1;
             }
             return encoding.GetString(bytes, 0, i);
+        }
+        public static T ToEnum<T>(this string value) where T : Enum
+        {
+            var type = typeof(T);
+            var result = (T)Enum.Parse(type, value);
+            return result;
         }
     }
 }
