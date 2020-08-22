@@ -96,6 +96,7 @@ namespace Silmoon.Net.Transfer
                         ///这次分析数据头的时候，包含了数据主体。
                         if (clitObj.Count >= objectDataSize)
                         {
+                            ///BUG!!!
                             ///如果收到的数据主体长度够了。
                             onReceiveObjectComplated(e, clitObj);
                         }

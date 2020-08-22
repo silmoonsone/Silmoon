@@ -56,5 +56,10 @@ namespace Silmoon.Extension
             var result = (T)Enum.Parse(type, value);
             return result;
         }
+        public static string ToBase64String(this string value)
+        {
+            var data = Convert.ToBase64String(Encoding.Default.GetBytes(value));
+            return data;
+        }
     }
 }
