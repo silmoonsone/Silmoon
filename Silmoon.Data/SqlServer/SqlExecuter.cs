@@ -330,7 +330,7 @@ namespace Silmoon.Data.SqlServer
                 }
             }
             sql += ")  ON [PRIMARY]\r\n";
-            sql += "TEXTIMAGE_ON [PRIMARY]\r\n";
+            //sql += "TEXTIMAGE_ON [PRIMARY]\r\n";
             var i = sqlUtil.ExecNonQuery(sql);
             return new SqlExecuteResult<bool>() { Data = true, ExecuteSqlString = sql, ResponseRows = i };
         }
