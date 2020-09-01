@@ -121,4 +121,7 @@
   <data name="ajaxOptionFunctions" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\ajaxOptionFunctions.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="ajaxOptionFunctionsV2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ajaxOptionFunctionsV2.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
 </root>

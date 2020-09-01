@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Silmoon.Extension
 {
-    public static class String1Extension
+    public static class StringExtension
     {
         public static bool IsNullOrEmpty(this string s)
         {
@@ -60,6 +60,11 @@ namespace Silmoon.Extension
         {
             var data = Convert.ToBase64String(Encoding.Default.GetBytes(value));
             return data;
+        }
+        public static string TrimIncludeNull(this string value)
+        {
+            if (value == null) return null;
+            else return value.Trim();
         }
     }
 }

@@ -3,9 +3,8 @@
 function _ajax_on_complete(senderId, e, onSuccess, onFailed, onError, onSuccessNeedRefreshPage) {
     if (e.readyState == 4) {
         if (senderId != "") $("#" + senderId).html(__ajax_Request_ButtonText);
-
-        var obj = JSON.parse(e.responseText);
-        if (obj.Success) {
+        e.Data = JSON.parse(e.responseText);
+        if (e.Data.Success) {
             //if (senderId != "") $("#" + senderId).html('成功');
             if (onSuccess != null) onSuccess(senderId, e);
             if (onSuccessNeedRefreshPage) {

@@ -64,6 +64,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\RequireSessionSignin.cs" />
+    <Compile Include="Cache\ObjectCache.cs" />
     <Compile Include="Controls\SessionRSAManager.cs" />
     <Compile Include="Controls\UserSessionController.cs" />
     <Compile Include="HtmlHelper.cs" />
@@ -82,11 +84,14 @@
     <Compile Include="UI\WebForms.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="js.resx" />
+    <EmbeddedResource Include="js.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <Content Include="Resources\ajaxOptionFunctions.js" />
+    <None Include="Resources\ajaxOptionFunctionsV2.js" />
     <Content Include="Resources\SecureException.html" />
     <Content Include="Resources\SessionTimeout.html" />
   </ItemGroup>

@@ -12,6 +12,7 @@ namespace Silmoon.Web.Core.Authentication
         }
         public static void ConfigureAuthenticationService(IServiceCollection services, string loginPath, string accessDeniedPath)
         {
+            services.AddSession();
             services.AddAuthentication(o =>
             {
                 o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;

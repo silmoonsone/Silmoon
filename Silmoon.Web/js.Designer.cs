@@ -59,7 +59,7 @@ namespace Silmoon.Web {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
         ///   查找类似 
         ///function _ajax_on_complete(senderId, e, onSuccess, onFailed, onError) {
@@ -77,9 +77,18 @@ namespace Silmoon.Web {
         ///        $(&quot;#&quot; + senderId).html(&apos;错误&apos;)
         ///        if (onError != null) onError(sender [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
-        internal static string ajaxOptionFunctions {
-            get {
+        public static string ajaxOptionFunctions
+        {
+            get
+            {
                 return ResourceManager.GetString("ajaxOptionFunctions", resourceCulture);
+            }
+        }
+        public static string ajaxOptionFunctionsV2
+        {
+            get
+            {
+                return ResourceManager.GetString("ajaxOptionFunctionsV2", resourceCulture);
             }
         }
     }
