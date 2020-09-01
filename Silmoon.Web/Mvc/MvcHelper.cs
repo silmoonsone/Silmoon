@@ -53,8 +53,8 @@ namespace Silmoon.Web.Mvc
         {
             var result = new AjaxOptions()
             {
-                OnBegin = "(function(e, onBegin){ _ajax_on_begin(e, onBegin); })(arguments[0], " + onBegin + ")",
-                OnComplete = "(function(e, onComplated, onError){ _ajax_on_complete(e, onComplated, onError); })(arguments[0], " + onComplated + ", " + onError + ")"
+                OnBegin = "(function(e, onBegin){ _ajax_on_begin_v2(e, onBegin); })(arguments[0], " + onBegin + ")",
+                OnComplete = "(function(e, onComplated, onError){ _ajax_on_complete_v2(e, onComplated, onError); })(arguments[0], " + onComplated + ", " + onError + ")"
             };
             return result;
         }
