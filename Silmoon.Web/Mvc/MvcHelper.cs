@@ -32,6 +32,10 @@ namespace Silmoon.Web.Mvc
         {
             return js.ajaxOptionFunctions;
         }
+        public static string GetAjaxOptionJavascriptFunctionsV1()
+        {
+            return js.ajaxOptionFunctionsV1;
+        }
         public static string GetAjaxOptionJavascriptFunctionsV2()
         {
             return js.ajaxOptionFunctionsV2;
@@ -49,12 +53,25 @@ namespace Silmoon.Web.Mvc
             }
             return result;
         }
-        public static AjaxOptions GetAjaxOptionsV2(string onComplated = "null", string onError = "null", string onBegin = "null")
+        public static AjaxOptions GetAjaxOptionsV1(string senderId = "", string onSuccess = "null", string onBegin = "null", string onError = "null", string url = "")
+        {
+            var result = new AjaxOptions()
+            {
+                OnBegin = "(function(sender, onBegin){ _ajax_on_begin_v1(sender, onBegin); })('" + senderId + "', " + onBegin + ")",
+                OnComplete = "(function(senderId, e, onCompleted, onError){ _ajax_on_complete_v1(senderId, e, onCompleted, onError); })('" + senderId + "', arguments[0], " + onSuccess + ", " + onError + ")"
+            };
+            if (!string.IsNullOrEmpty(url))
+            {
+                result.Url = url;
+            }
+            return result;
+        }
+        public static AjaxOptions GetAjaxOptionsV2(string onCompleted = "null", string onError = "null", string onBegin = "null")
         {
             var result = new AjaxOptions()
             {
                 OnBegin = "(function(e, onBegin){ _ajax_on_begin_v2(e, onBegin); })(arguments[0], " + onBegin + ")",
-                OnComplete = "(function(e, onComplated, onError){ _ajax_on_complete_v2(e, onComplated, onError); })(arguments[0], " + onComplated + ", " + onError + ")"
+                OnComplete = "(function(e, onCompleted, onError){ _ajax_on_complete_v2(e, onCompleted, onError); })(arguments[0], " + onCompleted + ", " + onError + ")"
             };
             return result;
         }

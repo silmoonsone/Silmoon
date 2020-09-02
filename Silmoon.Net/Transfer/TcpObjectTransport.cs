@@ -98,7 +98,7 @@ namespace Silmoon.Net.Transfer
                         {
                             ///BUG!!!
                             ///如果收到的数据主体长度够了。
-                            onReceiveObjectComplated(e, clitObj);
+                            onReceiveObjectCompleted(e, clitObj);
                         }
 
                     }
@@ -107,7 +107,7 @@ namespace Silmoon.Net.Transfer
                     if (clitObj.Count > 1024) clitObj.Clear();
             }
             else
-                if (clitObj.Count >= objectDataSize) onReceiveObjectComplated(e, clitObj);
+                if (clitObj.Count >= objectDataSize) onReceiveObjectCompleted(e, clitObj);
 
         }
 
@@ -178,7 +178,7 @@ namespace Silmoon.Net.Transfer
                 return obj;
             }
         }
-        void onReceiveObjectComplated(TcpEventArgs e, List<byte> data)
+        void onReceiveObjectCompleted(TcpEventArgs e, List<byte> data)
         {
             if (typeof(T) == typeof(string))
             {

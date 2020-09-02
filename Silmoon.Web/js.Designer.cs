@@ -84,6 +84,14 @@ namespace Silmoon.Web {
                 return ResourceManager.GetString("ajaxOptionFunctions", resourceCulture);
             }
         }
+        public static string ajaxOptionFunctionsV1
+        {
+            get
+            {
+                return ResourceManager.GetString("ajaxOptionFunctionsV1", resourceCulture);
+            }
+        }
+
         public static string ajaxOptionFunctionsV2
         {
             get

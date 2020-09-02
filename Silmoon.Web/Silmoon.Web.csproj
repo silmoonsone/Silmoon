@@ -92,6 +92,7 @@
   <ItemGroup>
     <Content Include="Resources\ajaxOptionFunctions.js" />
     <None Include="Resources\ajaxOptionFunctionsV2.js" />
+    <None Include="Resources\ajaxOptionFunctions1.js" />
     <Content Include="Resources\SecureException.html" />
     <Content Include="Resources\SessionTimeout.html" />
   </ItemGroup>

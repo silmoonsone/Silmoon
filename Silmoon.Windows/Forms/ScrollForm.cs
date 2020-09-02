@@ -91,10 +91,10 @@ namespace Silmoon.Windows.Forms
 
         void _close_mix_thread_proc()
         {
-            bool complate = false;
-            while (!complate)
+            bool complete = false;
+            while (!complete)
             {
-                this.Invoke(new EventHandler(delegate(object sender1, EventArgs e1)
+                this.Invoke(new EventHandler(delegate (object sender1, EventArgs e1)
                 {
                     if (this.Height > 50)
                     {
@@ -113,12 +113,12 @@ namespace Silmoon.Windows.Forms
                         this.Width = fromW;
                         this.Height = fromH;
                         this.Location = new Point(location.X, location.Y);
-                        complate = true;
+                        complete = true;
                     }
                 }));
                 Thread.Sleep(3);
             }
-            this.Invoke(new EventHandler(delegate(object sender1, EventArgs e1)
+            this.Invoke(new EventHandler(delegate (object sender1, EventArgs e1)
             {
                 Close();
             }));
@@ -128,14 +128,14 @@ namespace Silmoon.Windows.Forms
             for (int i = 0; i < 50; i++)
             {
                 if (this.IsDisposed) break;
-                this.Invoke(new EventHandler(delegate(object sender1, EventArgs e1)
+                this.Invoke(new EventHandler(delegate (object sender1, EventArgs e1)
                 {
                     this.Size = new Size(this.Width + 18, this.Height + 18);
                     this.Location = new Point(this.Location.X - 9, this.Location.Y - 9);
                     Opacity = Opacity - 0.05;
                 }));
             }
-            this.Invoke(new EventHandler(delegate(object sender1, EventArgs e1)
+            this.Invoke(new EventHandler(delegate (object sender1, EventArgs e1)
             {
                 this.Width = fromW;
                 this.Height = fromH;
@@ -148,24 +148,24 @@ namespace Silmoon.Windows.Forms
         void _start_scroll_thread_proc()
         {
             Thread.Sleep(10);
-            bool complate1 = false;
-            bool complate2 = false;
-            while (!(complate1 && complate2) && !this.IsDisposed)
+            bool complete1 = false;
+            bool complete2 = false;
+            while (!(complete1 && complete2) && !this.IsDisposed)
             {
                 try
                 {
-                    this.Invoke(new EventHandler(delegate(object sender1, EventArgs e1)
+                    this.Invoke(new EventHandler(delegate (object sender1, EventArgs e1)
                     {
                         if (this.Width < fromW)
                             this.Width += 40;
                         else
                         {
                             this.Width = fromW;
-                            complate1 = true;
+                            complete1 = true;
                         }
                         if (this.Opacity != 1)
                             this.Opacity += 0.02;
-                        else complate2 = true;
+                        else complete2 = true;
                     }));
                 }
                 catch { return; }
@@ -177,10 +177,10 @@ namespace Silmoon.Windows.Forms
         {
             if (this.IsDisposed) return;
 
-            bool complate = false;
-            while (!complate)
+            bool complete = false;
+            while (!complete)
             {
-                this.Invoke(new EventHandler(delegate(object sender1, EventArgs e1)
+                this.Invoke(new EventHandler(delegate (object sender1, EventArgs e1)
                 {
                     if (this.Height > 50)
                     {
@@ -199,12 +199,12 @@ namespace Silmoon.Windows.Forms
                         this.Width = fromW;
                         this.Height = fromH;
                         this.Location = new Point(location.X, location.Y);
-                        complate = true;
+                        complete = true;
                     }
                 }));
                 Thread.Sleep(3);
             }
-            this.Invoke(new EventHandler(delegate(object sender1, EventArgs e1)
+            this.Invoke(new EventHandler(delegate (object sender1, EventArgs e1)
             {
                 this.Opacity = 0;
                 Hide();
@@ -216,7 +216,7 @@ namespace Silmoon.Windows.Forms
 
             for (int i = 0; i < 50; i++)
             {
-                this.Invoke(new EventHandler(delegate(object sender1, EventArgs e1)
+                this.Invoke(new EventHandler(delegate (object sender1, EventArgs e1)
                 {
                     this.Size = new Size(this.Width + 18, this.Height + 18);
                     this.Location = new Point(this.Location.X - 9, this.Location.Y - 9);
@@ -227,7 +227,7 @@ namespace Silmoon.Windows.Forms
             this.Height = fromH;
             this.Location = new Point(location.X, location.Y);
 
-            this.Invoke(new EventHandler(delegate(object sender1, EventArgs e1)
+            this.Invoke(new EventHandler(delegate (object sender1, EventArgs e1)
             {
                 this.Opacity = 0;
                 Hide();
@@ -236,11 +236,11 @@ namespace Silmoon.Windows.Forms
 
         void _resizeW_scroll_thread_proc()
         {
-            bool complate = false;
-            while (!complate)
+            bool complete = false;
+            while (!complete)
             {
                 if (this.Height == extToW) return;
-                this.Invoke(new EventHandler(delegate(object sender1, EventArgs e1)
+                this.Invoke(new EventHandler(delegate (object sender1, EventArgs e1)
                 {
                     if (this.Height - extToW < 0)
                     {
@@ -248,7 +248,7 @@ namespace Silmoon.Windows.Forms
                         if (this.Height > extToW)
                         {
                             this.Height = extToW;
-                            complate = true;
+                            complete = true;
                         }
                         if (extCenter)
                             this.Location = new Point(this.Location.X, this.Location.Y - 5);
@@ -260,7 +260,7 @@ namespace Silmoon.Windows.Forms
                         if (this.Height < abs)
                         {
                             this.Height = abs;
-                            complate = true;
+                            complete = true;
                         }
                         if (extCenter)
                             this.Location = new Point(this.Location.X, this.Location.Y + 5);
@@ -271,11 +271,11 @@ namespace Silmoon.Windows.Forms
         }
         void _resizeH_scroll_thread_proc()
         {
-            bool complate = false;
-            while (!complate)
+            bool complete = false;
+            while (!complete)
             {
                 if (this.Width == extToH) return;
-                this.Invoke(new EventHandler(delegate(object sender1, EventArgs e1)
+                this.Invoke(new EventHandler(delegate (object sender1, EventArgs e1)
                 {
                     if (this.Width - extToH < 0)
                     {
@@ -283,7 +283,7 @@ namespace Silmoon.Windows.Forms
                         if (this.Width > extToH)
                         {
                             this.Width = extToH;
-                            complate = true;
+                            complete = true;
                         }
                         if (extCenter)
                             this.Location = new Point(this.Location.X - 5, this.Location.Y);
@@ -295,7 +295,7 @@ namespace Silmoon.Windows.Forms
                         if (this.Width < abs)
                         {
                             this.Width = abs;
-                            complate = true;
+                            complete = true;
                         }
                         if (extCenter)
                             this.Location = new Point(this.Location.X + 5, this.Location.Y);
@@ -306,7 +306,7 @@ namespace Silmoon.Windows.Forms
         }
 
         FormClosingEventArgs closeArgs;
-        
+
         protected override void OnLoad(EventArgs e)
         {
             refreshStateParam();
@@ -382,7 +382,7 @@ namespace Silmoon.Windows.Forms
 
         public enum WindowCloseStyle
         {
-            MaxStyleExt,MixStyleExt,Undefined
+            MaxStyleExt, MixStyleExt, Undefined
         }
     }
 }
