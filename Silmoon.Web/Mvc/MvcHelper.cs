@@ -53,12 +53,12 @@ namespace Silmoon.Web.Mvc
             }
             return result;
         }
-        public static AjaxOptions GetAjaxOptionsV1(string senderId = "", string onSuccess = "null", string onBegin = "null", string onError = "null", string url = "")
+        public static AjaxOptions GetAjaxOptionsV1(string senderId = "", string onCompleted = "null", string onBegin = "null", string onError = "null", string url = "")
         {
             var result = new AjaxOptions()
             {
                 OnBegin = "(function(sender, onBegin){ _ajax_on_begin_v1(sender, onBegin); })('" + senderId + "', " + onBegin + ")",
-                OnComplete = "(function(senderId, e, onCompleted, onError){ _ajax_on_complete_v1(senderId, e, onCompleted, onError); })('" + senderId + "', arguments[0], " + onSuccess + ", " + onError + ")"
+                OnComplete = "(function(senderId, e, onCompleted, onError){ _ajax_on_complete_v1(senderId, e, onCompleted, onError); })('" + senderId + "', arguments[0], " + onCompleted + ", " + onError + ")"
             };
             if (!string.IsNullOrEmpty(url))
             {
