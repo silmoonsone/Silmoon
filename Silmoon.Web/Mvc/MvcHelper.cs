@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
+using System.Web.Routing;
 
 namespace Silmoon.Web.Mvc
 {
@@ -81,6 +84,34 @@ namespace Silmoon.Web.Mvc
             ajaxOptions.OnComplete = "(function(senderId, e, onSuccess, onFailed, onError, onSuccessNeedRefreshPage){ _ajax_on_complete(senderId, e, onSuccess, onFailed, onError, onSuccessNeedRefreshPage); })('" + senderId + "', arguments[0], " + onSuccess + ", " + onFailed + ", " + onError + ", " + onSuccessNeedRefreshPage.ToString().ToLower() + ")";
 
             return ajaxOptions;
+        }
+
+
+        public static RouteValueDictionary MakeNewRouteValue(NameValueCollection collection, string additionQueryString = "")
+        {
+            RouteValueDictionary result = new RouteValueDictionary();
+
+            collection = new NameValueCollection(collection);
+            var tp = StringHelper.AnalyzeNameValue(additionQueryString.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries), "=");
+
+            for (int i = 0; i < tp.Count; i++)
+            {
+                string key = tp.GetKey(i);
+                string value = tp[i];
+
+                collection[key] = value;
+            }
+
+            for (int i = 0; i < collection.Count; i++)
+            {
+                if (collection.GetKey(i) == null) continue;
+                string key = collection.GetKey(i);
+                string value = collection[i];
+
+                result.Add(key, value);
+            }
+
+            return result;
         }
 
     }

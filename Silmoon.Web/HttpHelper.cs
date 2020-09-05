@@ -74,6 +74,7 @@ namespace Silmoon.Web
 
             for (int i = 0; i < collection.Count; i++)
             {
+                if (collection.GetKey(i) == null) continue;
                 string key = collection.GetKey(i);
                 string value = collection[i];
 
