@@ -61,7 +61,7 @@ namespace Silmoon.Extension
             var data = Convert.ToBase64String(Encoding.Default.GetBytes(value));
             return data;
         }
-        public static string TrimIncludeNull(this string value)
+        public static string TrimWithoutNull(this string value)
         {
             if (value == null) return null;
             else return value.Trim();
