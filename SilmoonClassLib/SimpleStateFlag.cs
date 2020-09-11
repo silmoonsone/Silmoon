@@ -52,5 +52,10 @@ namespace Silmoon
         {
             return new SimpleStateFlag(success, stateCode, message);
         }
+        public SimpleStateFlag AppendData(object data)
+        {
+            Data = data;
+            return this;
+        }
     }
 }

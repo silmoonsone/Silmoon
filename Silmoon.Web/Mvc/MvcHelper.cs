@@ -69,7 +69,7 @@ namespace Silmoon.Web.Mvc
             }
             return result;
         }
-        public static AjaxOptions GetAjaxOptionsV2(string onCompleted = "null", string onError = "null", string onBegin = "null")
+        public static AjaxOptions GetAjaxOptionsV2(string onCompleted = "null", string onBegin = "null", string onError = "null")
         {
             var result = new AjaxOptions()
             {
@@ -78,6 +78,7 @@ namespace Silmoon.Web.Mvc
             };
             return result;
         }
+
         public static AjaxOptions GetAjaxOptions(AjaxOptions ajaxOptions, string senderId = "", string onSuccess = "null", string onBegin = "null", string onFailed = "null", string onError = "null", bool onSuccessNeedRefreshPage = false)
         {
             ajaxOptions.OnBegin = "(function(sender, onBegin){ _ajax_on_begin(sender, onBegin); })('" + senderId + "', " + onBegin + ")";
