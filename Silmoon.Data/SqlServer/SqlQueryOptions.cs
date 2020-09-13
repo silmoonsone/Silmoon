@@ -22,5 +22,6 @@ namespace Silmoon.Data.SqlServer
         public Sort[] Sorts { get; set; }
         public int? Offset { get; set; }
         public int? Count { get; set; }
+        public OnOption OnOption { get; set; }
     }
 }

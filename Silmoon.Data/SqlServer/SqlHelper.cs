@@ -6,18 +6,24 @@ using System.Reflection;
 using System.Text;
 using System.Linq;
 using System.Data.SqlTypes;
+using Silmoon.Reflection;
 
 namespace Silmoon.Data.SqlServer
 {
     public class SqlHelper
     {
-        public static T MakeObject<T>(SqlDataReader reader, bool closeReader = true) where T : new()
+        public static (T, NameObjectCollection<object>) MakeObject<T>(SqlDataReader reader, bool closeReader = true) where T : new()
         {
             T obj = new T();
             return MakeObject(reader, obj, closeReader);
         }
-        public static T MakeObject<T>(SqlDataReader reader, T obj, bool closeReader = true) where T : new()
+        public static (T, NameObjectCollection<object>) MakeObject<T>(SqlDataReader reader, T obj, bool closeReader = true) where T : new()
         {
+            NameObjectCollection<object> data = new NameObjectCollection<object>();
+            for (int i = 0; i < reader.FieldCount; i++)
+                data.Add(reader.GetName(i), reader[i]);
+
+
             var propertyInfos = obj.GetType().GetProperties();
             foreach (PropertyInfo item in propertyInfos)
             {
@@ -32,27 +38,33 @@ namespace Silmoon.Data.SqlServer
                 }
             }
             if (closeReader) reader.Close();
-            return obj;
+            return (obj, data);
         }
-        public static T[] MakeObjects<T>(SqlDataReader reader) where T : new()
+        public static (T[], NameObjectCollection<object>[]) MakeObjects<T>(SqlDataReader reader) where T : new()
         {
             List<T> result = new List<T>();
-
+            List<NameObjectCollection<object>> data = new List<NameObjectCollection<object>>();
             while (reader.Read())
             {
-                result.Add(MakeObject<T>(reader, false));
+                var r = MakeObject<T>(reader, false);
+                result.Add(r.Item1);
+                data.Add(r.Item2);
             }
             reader.Close();
-            return result.ToArray();
+            return (result.ToArray(), data.ToArray());
         }
 
-        public static T MakeObject<T>(DataRow row) where T : new()
+        public static (T, NameObjectCollection<object>) MakeObject<T>(DataRow row) where T : new()
         {
             T obj = new T();
             return MakeObject(row, obj);
         }
-        public static T MakeObject<T>(DataRow row, T obj) where T : new()
+        public static (T, NameObjectCollection<object>) MakeObject<T>(DataRow row, T obj) where T : new()
         {
+            NameObjectCollection<object> data = new NameObjectCollection<object>();
+            for (int i = 0; i < row.Table.Columns.Count; i++)
+                data.Add(row.Table.Columns[i].ColumnName, row[i]);
+
             var propertyInfos = obj.GetType().GetProperties();
             foreach (PropertyInfo item in propertyInfos)
             {
@@ -67,18 +79,21 @@ namespace Silmoon.Data.SqlServer
                 }
             }
 
-            return obj;
+            return (obj, data);
         }
-        public static T[] MakeObjects<T>(DataTable dt) where T : new()
+        public static (T[], NameObjectCollection<object>[]) MakeObjects<T>(DataTable dt) where T : new()
         {
             T[] result = new T[dt.Rows.Count];
+            NameObjectCollection<object>[] data = new NameObjectCollection<object>[dt.Rows.Count];
 
             for (int i = 0; i < result.Length; i++)
             {
-                result[i] = MakeObject<T>(dt.Rows[i]);
+                var r = MakeObject<T>(dt.Rows[i]);
+                result[i] = r.Item1;
+                data[i] = r.Item2;
             }
 
-            return result;
+            return (result, data);
         }
         public static void AddSqlCommandParameters(SqlCommand sqlCommand, object obj, params string[] paraNames)
         {
