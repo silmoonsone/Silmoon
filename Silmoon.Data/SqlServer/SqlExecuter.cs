@@ -384,7 +384,7 @@ namespace Silmoon.Data.SqlServer
 
         private void makeOnString(ref string sql, ref string tableName, OnOption onOption)
         {
-            sql += $"{onOption.On.ToString().ToUpper()} JOIN [{onOption.TableName}] ON (";
+            sql += $" {onOption.On.ToString().ToUpper()} JOIN [{onOption.TableName}] ON (";
             foreach (var item in onOption.FieldNames)
             {
                 sql += $"[{tableName}].[{item}] = [{onOption.TableName}].[{item}] AND ";
