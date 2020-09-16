@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Silmoon.Web.Cache
 {
+    [Serializable]
     public class CacheItem
     {
         public DateTime ExipreAt { get; set; }

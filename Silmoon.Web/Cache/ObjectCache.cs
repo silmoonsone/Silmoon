@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Silmoon.Web.Cache
 {
@@ -43,7 +44,7 @@ namespace Silmoon.Web.Cache
         }
         public static dynamic Get(string Key)
         {
-            ClearExpired();
+            Clear();
             lock (Items)
             {
                 if (Items.ContainsKey(Key))
@@ -57,7 +58,7 @@ namespace Silmoon.Web.Cache
                 }
             }
         }
-        static void ClearExpired()
+        static void Clear()
         {
             List<string> readyToClears = new List<string>();
 
