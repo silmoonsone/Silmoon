@@ -111,19 +111,18 @@ namespace Silmoon.Net.Transfer
 
         }
 
-        public int SendObject(T obj)
+        public void SendObject(T obj)
         {
             int i = 0;
-            if (!socket.Connected) return i;
+            if (!socket.Connected) return;
             if (typeof(T) == typeof(string))
-                i = SendData(MakeData((string)(object)obj));
+                SendData(MakeData((string)(object)obj));
             else if (typeof(T) == typeof(byte[]))
-                i = SendData(MakeData((byte[])(object)obj));
+                SendData(MakeData((byte[])(object)obj));
             else if (typeof(T) == typeof(object))
-                i = SendData(MakeData(JsonConvert.SerializeObject(obj)));
+                SendData(MakeData(JsonConvert.SerializeObject(obj)));
             else
-                i = SendData(MakeData(JsonConvert.SerializeObject(obj)));
-            return i;
+                SendData(MakeData(JsonConvert.SerializeObject(obj)));
         }
         public int SendObject(T obj, TcpObjectReceiveArgs<T> args)
         {
@@ -134,13 +133,13 @@ namespace Silmoon.Net.Transfer
             int i = 0;
             if (!clientSocket.Connected) return i;
             if (typeof(T) == typeof(string))
-                i = SendData(MakeData((string)(object)obj), clientSocket);
+                SendData(MakeData((string)(object)obj), clientSocket);
             else if (typeof(T) == typeof(byte[]))
-                i = SendData(MakeData((byte[])(object)obj), clientSocket);
+                SendData(MakeData((byte[])(object)obj), clientSocket);
             else if (typeof(T) == typeof(object))
-                i = SendData(MakeData(JsonConvert.SerializeObject(obj)), clientSocket);
+                SendData(MakeData(JsonConvert.SerializeObject(obj)), clientSocket);
             else
-                i = SendData(MakeData(JsonConvert.SerializeObject(obj)), clientSocket);
+                SendData(MakeData(JsonConvert.SerializeObject(obj)), clientSocket);
             return i;
         }
         public byte[] MakeData(string str)

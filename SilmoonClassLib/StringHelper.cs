@@ -333,5 +333,10 @@ namespace Silmoon
             }
             return s;
         }
+        public static string HideSomeString(this string s,int offset, int count)
+        {
+            string s1 = s.Substring(0, offset - 1);
+            return null;
+        }
     }
 }

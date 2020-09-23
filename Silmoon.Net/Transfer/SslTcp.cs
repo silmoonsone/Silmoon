@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace Silmoon.Net.Transfer
 {
-    public class SslTcp : IDisposable
+    public class SslTcp : ITcp
     {
         SslStream sslStream = null;
         NetworkStream networkStream = null;
@@ -111,17 +111,17 @@ namespace Silmoon.Net.Transfer
                 CloseClientSocket(socket);
             }
         }
-        public int SendData(byte[] data, Socket clientSocket)
+        public void SendData(byte[] data, Socket clientSocket)
         {
             try
             {
                 int i = clientSocket.Send(data);
-                return i;
+                //return i;
             }
             catch
             {
                 CloseClientSocket(clientSocket);
-                return -1;
+                //return -1;
             }
         }
         public bool StartListen(int backlog, IPEndPoint endPoint)

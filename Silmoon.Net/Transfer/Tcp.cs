@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace Silmoon.Net.Transfer
 {
-    public class Tcp : IDisposable
+    public class Tcp : ITcp
     {
         public event TcpTransferEventHandler OnEvent = null;
         public event TcpTransferEventHandler OnDataReceived = null;
@@ -69,30 +69,30 @@ namespace Silmoon.Net.Transfer
             }
             catch { }
         }
-        public int SendData(byte[] data)
+        public void SendData(byte[] data)
         {
             try
             {
                 int i = socket.Send(data);
-                return i;
+                //return i;
             }
             catch
             {
                 CloseClientSocket(socket);
-                return -1;
+                //return -1;
             }
         }
-        public int SendData(byte[] data, Socket clientSocket)
+        public void SendData(byte[] data, Socket clientSocket)
         {
             try
             {
                 int i = clientSocket.Send(data);
-                return i;
+                //return i;
             }
             catch
             {
                 CloseClientSocket(clientSocket);
-                return -1;
+                //return -1;
             }
         }
         public bool StartListen(int backlog, IPEndPoint endPoint)
@@ -176,7 +176,7 @@ namespace Silmoon.Net.Transfer
                         catch { recvLen = 0; }
                         if (recvLen != 0)
                         {
-                            Console.WriteLine(recvLen);
+                            //Console.WriteLine(recvLen);
                             byte[] tdBuff = new byte[recvLen];
                             Array.Copy(recvBuff, tdBuff, recvLen);
                             onDataReceived(socket, tdBuff);
