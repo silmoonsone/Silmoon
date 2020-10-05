@@ -7,29 +7,17 @@ namespace Silmoon.MySilmoon
 {
     public interface ISilmoonProductGBCInternat : IRunningAble
     {
-        event OutputTextMessageHandler OnOutput;
-        event OutputTextMessageHandler OnInput;
+        event OutputTextMessageHandler OnOutputLine;
+        event OutputTextMessageHandler OnInputLine;
         event ThreadExceptionEventHandler OnException;
 
-        string ProductString
-        {
-            get;
-            set;
-        }
-        int Revision
-        {
-            get;
-            set;
-        }
-        string ReleaseVersion
-        {
-            get;
-            set;
-        }
+        string ProductString { get; set; }
+        int Revision { get; set; }
+        string ReleaseVersion { get; set; }
         bool InitProductInfo(string productString, int revision, string releaseVersion = "0");
-        void Output(string message);
-        void Output(string message, int flag);
-        void Input(string message);
-        void Input(string message, int flag);
+        void OutputLine(string message);
+        void OutputLine(string message, int flag);
+        void InputLine(string message);
+        void InputLine(string message, int flag);
     }
 }

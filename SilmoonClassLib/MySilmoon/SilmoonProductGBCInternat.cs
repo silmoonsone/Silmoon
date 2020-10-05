@@ -22,8 +22,8 @@ namespace Silmoon.MySilmoon
         private bool _initProduceInfo = false;
         private string _userIdentity = "#undefined";
 
-        public event OutputTextMessageHandler OnOutput;
-        public event OutputTextMessageHandler OnInput;
+        public event OutputTextMessageHandler OnOutputLine;
+        public event OutputTextMessageHandler OnInputLine;
         public event ThreadExceptionEventHandler OnException;
         /// <summary>
         /// AsyncValidateVersion invoked.
@@ -66,21 +66,21 @@ namespace Silmoon.MySilmoon
         }
 
 
-        public void Output(string message)
+        public void OutputLine(string message)
         {
-            Output(message, 0);
+            OutputLine(message, 0);
         }
-        public void Output(string message, int flag)
+        public void OutputLine(string message, int flag)
         {
-            OnOutput?.Invoke(message, flag);
+            OnOutputLine?.Invoke(message, flag);
         }
-        public void Input(string message)
+        public void InputLine(string message)
         {
-            Input(message, 0);
+            InputLine(message, 0);
         }
-        public void Input(string message, int flag)
+        public void InputLine(string message, int flag)
         {
-            OnInput?.Invoke(message, flag);
+            OnInputLine?.Invoke(message, flag);
         }
 
         /// <summary>
@@ -127,23 +127,23 @@ namespace Silmoon.MySilmoon
         {
             if (Environment.UserInteractive)
             {
-                Output("GBC : Application runing at interactive mode...", -999);
+                OutputLine("GBC : Application runing at interactive mode...", -999);
                 if (ServiceControl.IsExisted(serviceName))
                 {
-                    Output("GBC : Application associate service(" + serviceName + ") is exist...", -999);
+                    OutputLine("GBC : Application associate service(" + serviceName + ") is exist...", -999);
                     using (ServiceController sc = new ServiceController(serviceName))
                     {
                         sc.Refresh();
                         if (sc.Status == ServiceControllerStatus.Running && sc.CanStop)
                         {
-                            Output("GBC : Application associate service(" + serviceName + ") is running, shutdown it...", -999);
+                            OutputLine("GBC : Application associate service(" + serviceName + ") is running, shutdown it...", -999);
                             sc.Stop();
                             sc.WaitForStatus(ServiceControllerStatus.Stopped);
-                            Output("GBC : Application associate service(" + serviceName + ") has been shutdown...", -999);
+                            OutputLine("GBC : Application associate service(" + serviceName + ") has been shutdown...", -999);
                         }
                         else
                         {
-                            Output("GBC : Application associate service(" + serviceName + ") not running or can't stop it...", -999);
+                            OutputLine("GBC : Application associate service(" + serviceName + ") not running or can't stop it...", -999);
                         }
                     }
                 }

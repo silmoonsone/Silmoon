@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Silmoon.Net.Transfer
 {
-    public enum TcpEventType
+    public enum TcpEventState
     {
         ListenStarted,
         ListenStoped,

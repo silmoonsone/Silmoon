@@ -22,42 +22,42 @@ namespace Silmoon.Net.Transfer
         public Encoding Encoding { get; set; } = Encoding.UTF8;
         public TcpObjectTransport()
         {
-            this.OnEvent += TcpObjectTransfer_OnEvent;
-            this.OnDataReceived += TcpObjectTransfer_OnDataReceived;
+            OnEvent += TcpObjectTransfer_OnEvent;
+            OnDataReceived += TcpObjectTransfer_OnDataReceived;
         }
 
         void TcpObjectTransfer_OnEvent(object sender, TcpEventArgs e)
         {
             switch (e.EventType)
             {
-                case TcpEventType.ListenStarted:
+                case TcpEventState.ListenStarted:
                     break;
-                case TcpEventType.ListenStoped:
+                case TcpEventState.ListenStoped:
                     break;
-                case TcpEventType.ServerConnecting:
+                case TcpEventState.ServerConnecting:
                     break;
-                case TcpEventType.ServerConnected:
+                case TcpEventState.ServerConnected:
                     clientCachedData.Add(e.IPEndPoint, new List<byte>());
                     break;
-                case TcpEventType.ServerConnectFailed:
+                case TcpEventState.ServerConnectFailed:
                     break;
-                case TcpEventType.ServerDisconnected:
+                case TcpEventState.ServerDisconnected:
                     blockResetEvent?.Set();
                     clientCachedData.Remove(e.IPEndPoint);
                     break;
-                case TcpEventType.ClientConnected:
+                case TcpEventState.ClientConnected:
                     lock (clientCachedData)
                     {
                         clientCachedData.Add(e.IPEndPoint, new List<byte>());
                     }
                     break;
-                case TcpEventType.ClientDisconnected:
+                case TcpEventState.ClientDisconnected:
                     lock (clientCachedData)
                     {
                         clientCachedData.Remove(e.IPEndPoint);
                     }
                     break;
-                case TcpEventType.ReceivedData:
+                case TcpEventState.ReceivedData:
                     break;
                 default:
                     break;

@@ -8,7 +8,7 @@ namespace Silmoon.Net.Transfer
 {
     public class TcpEventArgs : EventArgs
     {
-        public TcpEventType EventType { get; set; }
+        public TcpEventState EventType { get; set; }
         public IPEndPoint IPEndPoint { get; set; }
         public Socket Socket { get; set; }
         public byte[] Data { get; set; }

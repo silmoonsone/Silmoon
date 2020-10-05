@@ -8,6 +8,7 @@ namespace Silmoon.Net.Transfer
 {
     public interface ITcp : IDisposable
     {
+        TcpEventState State { get; set; }
         bool Connect(IPEndPoint endPoint);
         void Disconnect();
         void SendData(byte[] data);

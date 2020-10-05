@@ -10,6 +10,7 @@ using Silmoon.Security;
 
 namespace Silmoon.MySilmoon
 {
+    [Obsolete]
     public class MyConfigure
     {
         static string LicenseEncryptedString = "";
