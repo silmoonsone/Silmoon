@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,6 +9,11 @@ namespace Silmoon.Extension.Json
 {
     public static class JsonExtension
     {
+        public static void Remove(this JToken token, string name)
+        {
+            ((JObject)token).Remove(name);
+        }
+
         public static string ToJsonString(this object obj)
         {
             return JsonConvert.SerializeObject(obj);
@@ -31,5 +37,6 @@ namespace Silmoon.Extension.Json
                 return "null";
             }
         }
+
     }
 }
