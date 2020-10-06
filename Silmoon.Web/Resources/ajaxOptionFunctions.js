@@ -1,7 +1,7 @@
 ﻿
 // Silmoon.Web.Mvc.MvcHelper.GetAjaxOptionJavascriptFunctions() generate javascript
 function _ajax_on_complete(senderId, e, onSuccess, onFailed, onError, onSuccessNeedRefreshPage) {
-    if (e.readyState == 4) {
+    if (e.readyState == 4 && e.status == 200) {
         if (senderId != "") $("#" + senderId).html(__ajax_Request_ButtonText);
         e.Data = JSON.parse(e.responseText);
         if (e.Data.Success) {
