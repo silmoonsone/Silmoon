@@ -51,6 +51,16 @@ namespace Silmoon
         {
             Set(state, message);
         }
+
+        public static StateSet<T_State> Create(T_State state)
+        {
+            return new StateSet<T_State>(state);
+        }
+        public static StateSet<T_State> Create(T_State state, string message)
+        {
+            return new StateSet<T_State>(state, message);
+
+        }
     }
     /// <summary>
     /// 表示一个带有具体信息的数据和状态
@@ -94,5 +104,15 @@ namespace Silmoon
             Set(state, data, message);
         }
 
+        public static StateSet<T_State, T_Data> Create(T_State state, T_Data data)
+        {
+            return new StateSet<T_State, T_Data>(state, data);
+
+        }
+        public static StateSet<T_State, T_Data> Create(T_State state, T_Data data, string message)
+        {
+            return new StateSet<T_State, T_Data>(state, data, message);
+
+        }
     }
 }
