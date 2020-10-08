@@ -145,7 +145,7 @@ namespace Silmoon.Web.Controls
         {
             if (State != LoginState.Login)
             {
-                if (controller != null)
+                if (controller != null && !controller.Request.IsAjaxRequest())
                     controller.Response.Redirect(signInUrl);
                 return false;
             }
