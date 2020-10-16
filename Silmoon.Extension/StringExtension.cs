@@ -50,11 +50,24 @@ namespace Silmoon.Extension
             }
             return encoding.GetString(bytes, 0, i);
         }
-        public static T ToEnum<T>(this string value) where T : Enum
+        public static T ToEnum<T>(this string value, bool ignoreCase = false) where T : Enum
         {
             var type = typeof(T);
-            var result = (T)Enum.Parse(type, value);
+            var result = (T)Enum.Parse(type, value, ignoreCase);
             return result;
+        }
+        public static T ToEnum<T>(this string value, bool throwException, bool ignoreCase = false) where T : Enum
+        {
+            try
+            {
+                var type = typeof(T);
+                var result = (T)Enum.Parse(type, value, ignoreCase);
+                return result;
+            }
+            catch
+            {
+                return default;
+            }
         }
         public static string ToBase64String(this string value)
         {

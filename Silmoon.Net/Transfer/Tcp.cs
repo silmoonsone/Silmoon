@@ -78,11 +78,12 @@ namespace Silmoon.Net.Transfer
             }
             catch { }
         }
-        public void SendData(byte[] data)
+        public void SendData(byte[] data, int offset = 0, int size = -1)
         {
             try
             {
-                int i = socket.Send(data);
+                if (size == -1) size = data.Length;
+                int i = socket.Send(data, offset, size, SocketFlags.None);
                 //return i;
             }
             catch
@@ -91,11 +92,12 @@ namespace Silmoon.Net.Transfer
                 //return -1;
             }
         }
-        public void SendData(byte[] data, Socket clientSocket)
+        public void SendData(byte[] data, Socket clientSocket, int offset = 0, int size = -1)
         {
             try
             {
-                int i = clientSocket.Send(data);
+                if (size == -1) size = data.Length;
+                int i = clientSocket.Send(data, offset, size, SocketFlags.None);
                 //return i;
             }
             catch
