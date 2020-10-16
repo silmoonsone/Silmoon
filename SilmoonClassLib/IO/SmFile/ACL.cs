@@ -118,7 +118,7 @@ namespace Silmoon.IO.SmFile
         /// <param name="filePath">目标文件或者目录</param>
         /// <param name="isProtected">是否受保护的</param>
         /// <param name="preserveInheritance">是否保留设置</param>
-        public static void SetProtectionRule(string filePath,bool isProtected, bool preserveInheritance)
+        public static void SetProtectionRule(string filePath, bool isProtected, bool preserveInheritance)
         {
             if (File.Exists(filePath))
             {
