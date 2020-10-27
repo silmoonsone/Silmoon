@@ -9,6 +9,7 @@ using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Silmoon.Net.Transfer
 {
@@ -68,10 +69,11 @@ namespace Silmoon.Net.Transfer
                 X509Certificate2Collection certs = store.Certificates.Find(X509FindType.FindBySubjectName, "TestClient", false);
                 sslStream.AuthenticateAsClient("TestServer", certs, SslProtocols.Tls, false);
 
-                ThreadHelper.ExecAsync(new ThreadStart(() =>
+                Task.Run(() =>
                 {
                     EnableReceive(socket);
-                }));
+                });
+
                 IsClientMode = true;
                 return true;
             }

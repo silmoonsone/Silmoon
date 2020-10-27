@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Security.Authentication.ExtendedProtection;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Silmoon.Net.Transfer
 {
@@ -40,13 +41,14 @@ namespace Silmoon.Net.Transfer
             onEvent(TcpEventState.ServerConnecting, endPoint, socket);
             try
             {
+                //socket.BeginConnect(endPoint, null, null);
                 socket.Connect(endPoint);
                 onEvent(TcpEventState.ServerConnected, endPoint, socket);
-                ThreadHelper.ExecAsync(new ThreadStart(() =>
+                Task.Run(() =>
                 {
                     Thread.CurrentThread.Name = "socket async thread(" + socket.RemoteEndPoint + ")";
                     EnableReceive(socket);
-                }));
+                });
                 IsClientMode = true;
                 return true;
             }
