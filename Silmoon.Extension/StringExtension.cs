@@ -69,11 +69,16 @@ namespace Silmoon.Extension
                 return default;
             }
         }
-        public static string ToBase64String(this string value)
+        public static string ToBase64String(this string value, Encoding encoding = null)
         {
+            if (encoding == null) encoding = Encoding.UTF8;
             var data = Convert.ToBase64String(Encoding.Default.GetBytes(value));
             return data;
         }
+        //public static bool IsBase64String(this string value)
+        //{
+
+        //}
         public static string TrimWithoutNull(this string value)
         {
             if (value == null) return null;

@@ -30,34 +30,34 @@ namespace Silmoon.Net.Transfer
         {
             switch (e.EventType)
             {
-                case TcpEventState.ListenStarted:
+                case TcpEventType.ListenStarted:
                     break;
-                case TcpEventState.ListenStoped:
+                case TcpEventType.ListenStoped:
                     break;
-                case TcpEventState.ServerConnecting:
+                case TcpEventType.ServerConnecting:
                     break;
-                case TcpEventState.ServerConnected:
+                case TcpEventType.ServerConnected:
                     clientCachedData.Add(e.IPEndPoint, new List<byte>());
                     break;
-                case TcpEventState.ServerConnectFailed:
+                case TcpEventType.ServerConnectFailed:
                     break;
-                case TcpEventState.ServerDisconnected:
+                case TcpEventType.ServerDisconnected:
                     blockResetEvent?.Set();
                     clientCachedData.Remove(e.IPEndPoint);
                     break;
-                case TcpEventState.ClientConnected:
+                case TcpEventType.ClientConnected:
                     lock (clientCachedData)
                     {
                         clientCachedData.Add(e.IPEndPoint, new List<byte>());
                     }
                     break;
-                case TcpEventState.ClientDisconnected:
+                case TcpEventType.ClientDisconnected:
                     lock (clientCachedData)
                     {
                         clientCachedData.Remove(e.IPEndPoint);
                     }
                     break;
-                case TcpEventState.ReceivedData:
+                case TcpEventType.ReceivedData:
                     break;
                 default:
                     break;

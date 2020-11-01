@@ -24,7 +24,7 @@ namespace Silmoon.Net.Transfer
         public List<Socket> ClientSockets = new List<Socket>();
         public int BufferSize { get; set; } = 2048;
         public bool IsClientMode { get; set; }
-        public TcpEventState State { get; set; }
+        public TcpState State { get; set; }
         public SslTcp()
         {
 
@@ -32,10 +32,13 @@ namespace Silmoon.Net.Transfer
 
         public void Dispose()
         {
-            if (socket.Connected) Disconnect();
-            socket.Dispose();
-            sslStream?.Dispose();
-            networkStream?.Dispose();
+            try
+            {
+                if (socket.Connected)
+                    Disconnect();
+                socket.Dispose();
+            }
+            catch { }
         }
         public static bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
@@ -51,11 +54,13 @@ namespace Silmoon.Net.Transfer
 
         public bool Connect(IPEndPoint endPoint)
         {
-            onEvent(TcpEventState.ServerConnecting, endPoint, socket);
+            onEvent(TcpEventType.ServerConnecting, endPoint, socket);
             try
             {
+                if (State == TcpState.ServerDisconnected)
+                    socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 socket.Connect(endPoint);
-                onEvent(TcpEventState.ServerConnected, endPoint, socket);
+                onEvent(TcpEventType.ServerConnected, endPoint, socket);
                 if (networkStream != null)
                 {
                     networkStream.Close();
@@ -79,14 +84,14 @@ namespace Silmoon.Net.Transfer
             }
             catch (Exception e)
             {
-                onEvent(TcpEventState.ServerConnectFailed, endPoint, socket);
+                onEvent(TcpEventType.ServerConnectFailed, endPoint, socket);
 
                 return false;
             }
         }
         public void Disconnect()
         {
-            if (State == TcpEventState.ServerDisconnected) return;
+            if (State == TcpState.ServerDisconnected) return;
 
             try
             {
@@ -101,7 +106,7 @@ namespace Silmoon.Net.Transfer
                 { }
                 finally
                 {
-                    onEvent(TcpEventState.ServerDisconnected, (IPEndPoint)ep, socket);
+                    onEvent(TcpEventType.ServerDisconnected, (IPEndPoint)ep, socket);
                 }
             }
             catch { }
@@ -137,7 +142,7 @@ namespace Silmoon.Net.Transfer
             socket.Bind(endPoint);
             socket.Listen(backlog);
 
-            onEvent(TcpEventState.ListenStarted, endPoint, socket);
+            onEvent(TcpEventType.ListenStarted, endPoint, socket);
 
             EnableAcceptAndReceive();
             IsClientMode = false;
@@ -177,7 +182,7 @@ namespace Silmoon.Net.Transfer
                 finally
                 {
                     clientSocketCloseProcess(clientSocket);
-                    onEvent(TcpEventState.ClientDisconnected, (IPEndPoint)ep, clientSocket);
+                    onEvent(TcpEventType.ClientDisconnected, (IPEndPoint)ep, clientSocket);
                 }
             }
         }
@@ -190,7 +195,7 @@ namespace Silmoon.Net.Transfer
         {
             var acceptedSocket = socket.EndAccept(ar);
             socket.BeginAccept(OnClientConnected, null);
-            onEvent(TcpEventState.ClientConnected, (IPEndPoint)acceptedSocket.RemoteEndPoint, acceptedSocket);
+            onEvent(TcpEventType.ClientConnected, (IPEndPoint)acceptedSocket.RemoteEndPoint, acceptedSocket);
 
             EnableReceive(acceptedSocket);
         }
@@ -235,14 +240,36 @@ namespace Silmoon.Net.Transfer
                 ClientSockets.Remove(clientSocket);
             }
         }
-        void onEvent(TcpEventState eventType, IPEndPoint endPoint, Socket socket)
+        void onEvent(TcpEventType eventType, IPEndPoint endPoint, Socket socket)
         {
-            State = eventType;
+            switch (eventType)
+            {
+                case TcpEventType.ListenStarted:
+                    State = TcpState.ListenStarted;
+                    break;
+                case TcpEventType.ListenStoped:
+                    State = TcpState.ListenStoped;
+                    break;
+                case TcpEventType.ServerConnecting:
+                    State = TcpState.ServerConnecting;
+                    break;
+                case TcpEventType.ServerConnected:
+                    State = TcpState.ServerConnected;
+                    break;
+                case TcpEventType.ServerConnectFailed:
+                    State = TcpState.ServerConnectFail;
+                    break;
+                case TcpEventType.ServerDisconnected:
+                    State = TcpState.ServerDisconnected;
+                    break;
+                default:
+                    break;
+            };
             OnEvent?.Invoke(this, new TcpEventArgs() { EventType = eventType, IPEndPoint = endPoint, Socket = socket });
         }
         void onDataReceived(Socket clientSocket, byte[] data)
         {
-            OnDataReceived?.Invoke(this, new TcpEventArgs() { EventType = TcpEventState.ReceivedData, IPEndPoint = (IPEndPoint)clientSocket.RemoteEndPoint, Data = data, Socket = clientSocket });
+            OnDataReceived?.Invoke(this, new TcpEventArgs() { EventType = TcpEventType.ReceivedData, IPEndPoint = (IPEndPoint)clientSocket.RemoteEndPoint, Data = data, Socket = clientSocket });
         }
     }
 }

@@ -4,16 +4,14 @@ using System.Text;
 
 namespace Silmoon.Net.Transfer
 {
-    public enum TcpEventState
+    public enum TcpState
     {
-        ListenStarted,
-        ListenStoped,
+        Unknown,
         ServerConnecting,
         ServerConnected,
-        ServerConnectFailed,
         ServerDisconnected,
-        ClientConnected,
-        ClientDisconnected,
-        ReceivedData,
+        ServerConnectFail,
+        ListenStarted,
+        ListenStoped,
     }
 }
