@@ -181,7 +181,10 @@ namespace Silmoon.Net.Transfer
                 }
                 finally
                 {
-                    clientSocketCloseProcess(clientSocket);
+                    lock (ClientSockets)
+                    {
+                        ClientSockets.Remove(clientSocket);
+                    }
                     onEvent(TcpEventType.ClientDisconnected, (IPEndPoint)ep, clientSocket);
                 }
             }
@@ -233,13 +236,6 @@ namespace Silmoon.Net.Transfer
         }
 
 
-        void clientSocketCloseProcess(Socket clientSocket)
-        {
-            lock (ClientSockets)
-            {
-                ClientSockets.Remove(clientSocket);
-            }
-        }
         void onEvent(TcpEventType eventType, IPEndPoint endPoint, Socket socket)
         {
             switch (eventType)
