@@ -77,6 +77,7 @@
     <Compile Include="Mvc\ControllerExtension.cs" />
     <Compile Include="Mvc\HttpContextExtension.cs" />
     <Compile Include="Mvc\MvcHelper.cs" />
+    <Compile Include="Mvc\ViewHelper.cs" />
     <Compile Include="Page\RewriteMasterPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
