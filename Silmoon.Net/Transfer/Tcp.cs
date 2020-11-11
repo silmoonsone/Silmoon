@@ -60,7 +60,7 @@ namespace Silmoon.Net.Transfer
                 IsClientMode = true;
                 return true;
             }
-            catch (Exception e)
+            catch (Exception _)
             {
                 onEvent(TcpEventType.ServerConnectFailed, endPoint, socket);
                 return false;
@@ -143,24 +143,19 @@ namespace Silmoon.Net.Transfer
         }
         public void CloseClientSocket(Socket clientSocket)
         {
-            if (!ClientSockets.Contains(clientSocket)) return;
-
-            lock (clientSocket)
+            lock (ClientSockets)
             {
+                if (!ClientSockets.Contains(clientSocket)) return;
                 var ep = clientSocket.RemoteEndPoint;
 
                 try
                 {
-
                     clientSocket.Shutdown(SocketShutdown.Both);
                     clientSocket.Dispose();
                 }
                 finally
                 {
-                    lock (ClientSockets)
-                    {
-                        ClientSockets.Remove(clientSocket);
-                    }
+                    ClientSockets.Remove(clientSocket);
                     onEvent(TcpEventType.ClientDisconnected, (IPEndPoint)ep, clientSocket);
                 }
             }
@@ -212,8 +207,6 @@ namespace Silmoon.Net.Transfer
 
                     if (!IsClientMode)
                         CloseClientSocket(socket);
-                    else Disconnect();
-
                 }
             }
         }

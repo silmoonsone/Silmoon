@@ -166,25 +166,19 @@ namespace Silmoon.Net.Transfer
         }
         public void CloseClientSocket(Socket clientSocket)
         {
-            if (!ClientSockets.Contains(clientSocket)) return;
-
-            lock (clientSocket)
+            lock (ClientSockets)
             {
+                if (!ClientSockets.Contains(clientSocket)) return;
                 var ep = clientSocket.RemoteEndPoint;
 
                 try
                 {
-
                     clientSocket.Shutdown(SocketShutdown.Both);
-                    clientSocket.Disconnect(false);
                     clientSocket.Dispose();
                 }
                 finally
                 {
-                    lock (ClientSockets)
-                    {
-                        ClientSockets.Remove(clientSocket);
-                    }
+                    ClientSockets.Remove(clientSocket);
                     onEvent(TcpEventType.ClientDisconnected, (IPEndPoint)ep, clientSocket);
                 }
             }
