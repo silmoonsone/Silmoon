@@ -20,7 +20,7 @@ namespace Silmoon.Net.Transfer
 
         public event TcpTransferEventHandler OnEvent = null;
         public event TcpTransferEventHandler OnDataReceived = null;
-        public Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        public Socket socket = null;
         public List<Socket> ClientSockets = new List<Socket>();
         public int BufferSize { get; set; } = 2048;
         public bool IsClientMode { get; set; }
@@ -34,9 +34,10 @@ namespace Silmoon.Net.Transfer
         {
             try
             {
-                if (socket.Connected)
-                    Disconnect();
-                socket.Dispose();
+                Disconnect();
+                socket?.Close();
+                socket?.Dispose();
+                CloseAllClientSockets();
             }
             catch { }
         }
@@ -54,11 +55,10 @@ namespace Silmoon.Net.Transfer
 
         public bool Connect(IPEndPoint endPoint)
         {
-            onEvent(TcpEventType.ServerConnecting, endPoint, socket);
             try
             {
-                if (State == TcpState.ServerDisconnected)
-                    socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                onEvent(TcpEventType.ServerConnecting, endPoint, socket);
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 socket.Connect(endPoint);
                 onEvent(TcpEventType.ServerConnected, endPoint, socket);
                 if (networkStream != null)
@@ -91,26 +91,42 @@ namespace Silmoon.Net.Transfer
         }
         public void Disconnect()
         {
-            if (State == TcpState.ServerDisconnected) return;
-
-            try
+            if (socket.Connected)
             {
-                var ep = socket.RemoteEndPoint;
-
                 try
                 {
                     socket.Shutdown(SocketShutdown.Both);
-                    socket.Disconnect(true);
+                    socket.Disconnect(false);
                 }
                 catch
                 { }
+            }
+        }
+        void readSocketCloseProcess()
+        {
+            if (State == TcpState.ServerDisconnected || socket == null) return;
+
+            try
+            {
+                //这里在断开连接的时候，如果同时Dispose掉，可能会获取不到RemoteEndPoint，所以try外定义ep，try内获取。
+                EndPoint ep = default;
+                try
+                {
+                    ep = socket.RemoteEndPoint;
+                    socket.Shutdown(SocketShutdown.Both);
+                    socket.Close();
+                    socket.Dispose();
+                    socket = null;
+                }
+                catch (Exception _) { }
                 finally
                 {
                     onEvent(TcpEventType.ServerDisconnected, (IPEndPoint)ep, socket);
                 }
             }
-            catch { }
+            catch (Exception _) { }
         }
+
         public void SendData(byte[] data, int offset = 0, int size = -1)
         {
             try
@@ -139,6 +155,7 @@ namespace Silmoon.Net.Transfer
         }
         public bool StartListen(int backlog, IPEndPoint endPoint)
         {
+            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(endPoint);
             socket.Listen(backlog);
 
@@ -169,15 +186,16 @@ namespace Silmoon.Net.Transfer
             lock (ClientSockets)
             {
                 if (!ClientSockets.Contains(clientSocket)) return;
-                var ep = clientSocket.RemoteEndPoint;
-
+                EndPoint ep = default;
                 try
                 {
+                    ep = clientSocket.RemoteEndPoint;
                     clientSocket.Shutdown(SocketShutdown.Both);
-                    clientSocket.Dispose();
+                    clientSocket.Close();
                 }
                 finally
                 {
+                    clientSocket.Dispose();
                     ClientSockets.Remove(clientSocket);
                     onEvent(TcpEventType.ClientDisconnected, (IPEndPoint)ep, clientSocket);
                 }
@@ -225,7 +243,7 @@ namespace Silmoon.Net.Transfer
 
                 if (!IsClientMode)
                     CloseClientSocket(socket);
-                else Disconnect();
+                else readSocketCloseProcess();
             }
         }
 
