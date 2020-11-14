@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SilmoonClassLib\SilmoonClassLib.csproj" />
+    <ProjectReference Include="..\Silmoon\Silmoon.csproj" />
   </ItemGroup>
 
 </Project>

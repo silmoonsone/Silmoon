@@ -190,9 +190,9 @@ namespace Silmoon.Net.Transfer
                 if (!IsClientMode) ClientSockets.Add(socket);
             }
 
-            using (NetworkStream stream = new NetworkStream(socket))
+            if (socket.Connected)
             {
-                if (socket.Connected)
+                using (NetworkStream stream = new NetworkStream(socket))
                 {
                     int recvLen;
                     do
@@ -220,6 +220,12 @@ namespace Silmoon.Net.Transfer
                         CloseClientSocket(socket);
                     else readSocketCloseProcess();
                 }
+            }
+            else
+            {
+                if (!IsClientMode)
+                    CloseClientSocket(socket);
+                else readSocketCloseProcess();
             }
         }
 

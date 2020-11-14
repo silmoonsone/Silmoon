@@ -89,9 +89,9 @@
     <None Include="sn.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SilmoonClassLib\SilmoonClassLib.csproj">
+    <ProjectReference Include="..\Silmoon\Silmoon.csproj">
       <Project>{c827a65d-cc9e-444b-908a-7ba70d6e6c11}</Project>
-      <Name>SilmoonClassLib</Name>
+      <Name>Silmoon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilmoonClassLib", "SilmoonClassLib\SilmoonClassLib.csproj", "{C827A65D-CC9E-444B-908A-7BA70D6E6C11}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon", "Silmoon\Silmoon.csproj", "{C827A65D-CC9E-444B-908A-7BA70D6E6C11}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Windows.Explorer.BHO", "silmoon.windows.explorer.bho\Silmoon.Windows.Explorer.BHO.csproj", "{DF03D4B1-60C9-43E7-8372-85FDBE34546B}"
 EndProject

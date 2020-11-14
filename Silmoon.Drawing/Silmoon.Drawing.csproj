@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Silmoon.Extension\Silmoon.Extension.csproj" />
-    <ProjectReference Include="..\SilmoonClassLib\SilmoonClassLib.csproj" />
+    <ProjectReference Include="..\Silmoon\Silmoon.csproj" />
   </ItemGroup>
 
 </Project>
