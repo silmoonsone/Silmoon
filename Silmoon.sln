@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Media", "Silmoon.Me
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Windows.Server", "Silmoon.Windows.Server\Silmoon.Windows.Server.csproj", "{D9442201-99D5-4A5E-9FF5-7227BEE00F13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Utility", "Silmoon.Utility\Silmoon.Utility.csproj", "{1F0BE6FB-0305-4869-AC22-E62BC403CFBC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetTest", "NetTest\NetTest.csproj", "{F26527AC-76AD-437D-A0AD-963B8DFA9B09}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Silmoon.Win32", "Silmoon.Win32\Silmoon.Win32.vcxproj", "{BD720951-9C4A-44D7-B737-10BDE6BF4D27}"
@@ -33,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Web.Core", "Silmoon
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Data", "Silmoon.Data\Silmoon.Data.csproj", "{1492066C-2564-488A-8775-5BDC117DF17E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Drawing", "Silmoon.Drawing\Silmoon.Drawing.csproj", "{A4766B9C-0C2F-4341-8029-65AA4EAF08DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Drawing", "Silmoon.Drawing\Silmoon.Drawing.csproj", "{A4766B9C-0C2F-4341-8029-65AA4EAF08DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,16 +103,6 @@ Global
 		{D9442201-99D5-4A5E-9FF5-7227BEE00F13}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D9442201-99D5-4A5E-9FF5-7227BEE00F13}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D9442201-99D5-4A5E-9FF5-7227BEE00F13}.Release|Win32.ActiveCfg = Release|Any CPU
-		{1F0BE6FB-0305-4869-AC22-E62BC403CFBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F0BE6FB-0305-4869-AC22-E62BC403CFBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1F0BE6FB-0305-4869-AC22-E62BC403CFBC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{1F0BE6FB-0305-4869-AC22-E62BC403CFBC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{1F0BE6FB-0305-4869-AC22-E62BC403CFBC}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{1F0BE6FB-0305-4869-AC22-E62BC403CFBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1F0BE6FB-0305-4869-AC22-E62BC403CFBC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1F0BE6FB-0305-4869-AC22-E62BC403CFBC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{1F0BE6FB-0305-4869-AC22-E62BC403CFBC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{1F0BE6FB-0305-4869-AC22-E62BC403CFBC}.Release|Win32.ActiveCfg = Release|Any CPU
 		{F26527AC-76AD-437D-A0AD-963B8DFA9B09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F26527AC-76AD-437D-A0AD-963B8DFA9B09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F26527AC-76AD-437D-A0AD-963B8DFA9B09}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -222,7 +210,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {18B93CD3-1A51-425B-89D1-03A0565D2E21}
 		VisualSVNWorkingCopyRoot = .
+		SolutionGuid = {18B93CD3-1A51-425B-89D1-03A0565D2E21}
 	EndGlobalSection
 EndGlobal
