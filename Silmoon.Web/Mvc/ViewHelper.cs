@@ -11,11 +11,11 @@ namespace Silmoon.Web.Mvc
 {
     public static class ViewHelper
     {
-        public static IEnumerable<SelectListItem> GetSelectListItems(string[] values, string value)
+        public static IEnumerable<SelectListItem> GetSelectListItems(string[] values, string value, bool addNotExist = true)
         {
             List<SelectListItem> result = new List<SelectListItem>();
 
-            if (!values.Contains(value))
+            if (!values.Contains(value) && value != null && addNotExist)
             {
                 result.Add(new SelectListItem() { Text = value, Value = value, Selected = true });
             }
@@ -27,11 +27,11 @@ namespace Silmoon.Web.Mvc
 
             return result;
         }
-        public static IEnumerable<SelectListItem> GetSelectListItems(IName[] values, IName value)
+        public static IEnumerable<SelectListItem> GetSelectListItems(IName[] values, IName value, bool addNotExist = true)
         {
             List<SelectListItem> result = new List<SelectListItem>();
 
-            if (!values.Contains(value))
+            if (!values.Contains(value) && value != null && addNotExist)
             {
                 result.Add(new SelectListItem() { Text = value.Name, Value = value.Name, Selected = true });
             }
@@ -43,11 +43,11 @@ namespace Silmoon.Web.Mvc
 
             return result;
         }
-        public static IEnumerable<SelectListItem> GetSelectListItems(IName[] values, string value)
+        public static IEnumerable<SelectListItem> GetSelectListItems(IName[] values, string value, bool addNotExist = true)
         {
             List<SelectListItem> result = new List<SelectListItem>();
 
-            if (!values.Contains(value))
+            if (!values.Contains(value) && value != null && addNotExist)
             {
                 result.Add(new SelectListItem() { Text = value, Value = value, Selected = true });
             }
@@ -59,11 +59,11 @@ namespace Silmoon.Web.Mvc
 
             return result;
         }
-        public static IEnumerable<SelectListItem> GetSelectListItems(INameValue[] values, INameValue value)
+        public static IEnumerable<SelectListItem> GetSelectListItems(INameValue[] values, INameValue value, bool addNotExist = true)
         {
             List<SelectListItem> result = new List<SelectListItem>();
 
-            if (!values.Contains(value))
+            if (!values.Contains(value) && value != null && addNotExist)
             {
                 result.Add(new SelectListItem() { Text = value.Name, Value = value.Value, Selected = true });
             }
@@ -82,6 +82,7 @@ namespace Silmoon.Web.Mvc
 
         public static bool Contains(this IName[] names, IName name)
         {
+            if (name is null) return false;
             foreach (var item in names)
             {
                 if (item.Name == name.Name)
@@ -93,6 +94,7 @@ namespace Silmoon.Web.Mvc
         }
         public static bool Contains(this IName[] names, string name)
         {
+            if (name is null) return false;
             foreach (var item in names)
             {
                 if (item.Name == name)
@@ -104,6 +106,7 @@ namespace Silmoon.Web.Mvc
         }
         public static bool Contains(this INameValue[] names, INameValue name)
         {
+            if (name is null) return false;
             foreach (var item in names)
             {
                 if (item.Name == name.Name)
