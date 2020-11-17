@@ -71,12 +71,13 @@ namespace Silmoon.Web.Mvc
         }
         public static AjaxOptions GetAjaxOptionsV2(string onCompleted = "null", string onBegin = "null", string onError = "null")
         {
-            var result = new AjaxOptions()
-            {
-                OnBegin = "(function(e, onBegin){ _ajax_on_begin_v2(e, onBegin); })(arguments[0], " + onBegin + ")",
-                OnComplete = "(function(e, onCompleted, onError){ _ajax_on_complete_v2(e, onCompleted, onError); })(arguments[0], " + onCompleted + ", " + onError + ")"
-            };
-            return result;
+            return GetAjaxOptionsV2(new AjaxOptions(), onCompleted, onBegin, onError);
+        }
+        public static AjaxOptions GetAjaxOptionsV2(AjaxOptions options, string onCompleted = "null", string onBegin = "null", string onError = "null")
+        {
+            options.OnBegin = "(function(e, onBegin){ _ajax_on_begin_v2(e, onBegin); })(arguments[0], " + onBegin + ")";
+            options.OnComplete = "(function(e, onCompleted, onError){ _ajax_on_complete_v2(e, onCompleted, onError); })(arguments[0], " + onCompleted + ", " + onError + ")";
+            return options;
         }
 
         public static AjaxOptions GetAjaxOptions(AjaxOptions ajaxOptions, string senderId = "", string onSuccess = "null", string onBegin = "null", string onFailed = "null", string onError = "null", bool onSuccessNeedRefreshPage = false)
