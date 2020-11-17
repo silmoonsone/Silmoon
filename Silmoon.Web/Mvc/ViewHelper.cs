@@ -54,7 +54,7 @@ namespace Silmoon.Web.Mvc
 
             foreach (var item in values)
             {
-                result.Add(new SelectListItem() { Text = value, Value = value, Selected = item.Name == value });
+                result.Add(new SelectListItem() { Text = item.Name, Value = item.Name, Selected = item.Name == value });
             }
 
             return result;
