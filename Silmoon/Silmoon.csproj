@@ -84,6 +84,9 @@
     <Compile Include="ArrayHelper.cs" />
     <Compile Include="Copy.cs" />
     <Compile Include="Imaging\ChartUtil.cs" />
+    <Compile Include="Interfaces\IName.cs" />
+    <Compile Include="Interfaces\INameValue.cs" />
+    <Compile Include="Interfaces\IValue.cs" />
     <Compile Include="IO\FileHelper.cs" />
     <Compile Include="IO\IOExtension.cs" />
     <Compile Include="MySilmoon\Instance\LicenseResult.cs" />
