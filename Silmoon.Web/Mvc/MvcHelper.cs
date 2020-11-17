@@ -47,8 +47,8 @@ namespace Silmoon.Web.Mvc
         {
             var result = new AjaxOptions()
             {
-                OnBegin = "(function(sender, onBegin){ _ajax_on_begin(sender, onBegin); })('" + senderId + "', " + onBegin ?? "null" + ")",
-                OnComplete = "(function(senderId, e, onSuccess, onFailed, onError, onSuccessNeedRefreshPage){ _ajax_on_complete(senderId, e, onSuccess, onFailed, onError, onSuccessNeedRefreshPage); })('" + senderId + "', arguments[0], " + onSuccess ?? "null" + ", " + onFailed ?? "null" + ", " + onError ?? "null" + ", " + onSuccessNeedRefreshPage.ToString().ToLower() + ")"
+                OnBegin = "(function(sender, onBegin){ _ajax_on_begin(sender, onBegin); })('" + senderId + "', " + onBegin + ")",
+                OnComplete = "(function(senderId, e, onSuccess, onFailed, onError, onSuccessNeedRefreshPage){ _ajax_on_complete(senderId, e, onSuccess, onFailed, onError, onSuccessNeedRefreshPage); })('" + senderId + "', arguments[0], " + onSuccess + ", " + onFailed + ", " + onError + ", " + onSuccessNeedRefreshPage.ToString().ToLower() + ")"
             };
             if (!string.IsNullOrEmpty(url))
             {
@@ -60,8 +60,8 @@ namespace Silmoon.Web.Mvc
         {
             var result = new AjaxOptions()
             {
-                OnBegin = "(function(sender, onBegin){ _ajax_on_begin_v1(sender, onBegin); })('" + senderId + "', " + onBegin ?? "null" + ")",
-                OnComplete = "(function(senderId, e, onCompleted, onError){ _ajax_on_complete_v1(senderId, e, onCompleted, onError); })('" + senderId ?? "null" + "', arguments[0], " + onCompleted ?? "null" + ", " + onError ?? "null" + ")"
+                OnBegin = "(function(sender, onBegin){ _ajax_on_begin_v1(sender, onBegin); })('" + senderId + "', " + onBegin + ")",
+                OnComplete = "(function(senderId, e, onCompleted, onError){ _ajax_on_complete_v1(senderId, e, onCompleted, onError); })('" + senderId + "', arguments[0], " + onCompleted + ", " + onError + ")"
             };
             if (!string.IsNullOrEmpty(url))
             {
@@ -73,8 +73,8 @@ namespace Silmoon.Web.Mvc
         {
             var result = new AjaxOptions()
             {
-                OnBegin = "(function(e, onBegin){ _ajax_on_begin_v2(e, onBegin); })(arguments[0], " + onBegin ?? "null" + ")",
-                OnComplete = "(function(e, onCompleted, onError){ _ajax_on_complete_v2(e, onCompleted, onError); })(arguments[0], " + onCompleted ?? "null" + ", " + onError ?? "null" + ")"
+                OnBegin = "(function(e, onBegin){ _ajax_on_begin_v2(e, onBegin); })(arguments[0], " + onBegin + ")",
+                OnComplete = "(function(e, onCompleted, onError){ _ajax_on_complete_v2(e, onCompleted, onError); })(arguments[0], " + onCompleted + ", " + onError + ")"
             };
             return result;
         }
