@@ -1,12 +1,11 @@
-﻿using Silmoon.Extension.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Silmoon.Extension.Xml
+namespace Silmoon.Extension
 {
     public static class XmlExtension
     {

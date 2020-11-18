@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Silmoon.Extension.Json
+namespace Silmoon.Extension
 {
     public static class JsonExtension
     {

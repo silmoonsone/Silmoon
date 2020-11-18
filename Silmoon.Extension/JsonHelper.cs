@@ -7,7 +7,7 @@ using System.Net;
 using System.Text;
 using System.Xml;
 
-namespace Silmoon.Extension.Json
+namespace Silmoon.Extension
 {
     public static class JsonHelper
     {
