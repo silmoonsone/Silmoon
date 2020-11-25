@@ -56,6 +56,13 @@ namespace Silmoon.Web.Mvc
             }
             return result;
         }
+        public static AjaxOptions GetAjaxOptions(AjaxOptions ajaxOptions, string senderId = "", string onSuccess = "null", string onBegin = "null", string onFailed = "null", string onError = "null", bool onSuccessNeedRefreshPage = false)
+        {
+            ajaxOptions.OnBegin = "(function(sender, onBegin){ _ajax_on_begin(sender, onBegin); })('" + senderId + "', " + onBegin + ")";
+            ajaxOptions.OnComplete = "(function(senderId, e, onSuccess, onFailed, onError, onSuccessNeedRefreshPage){ _ajax_on_complete(senderId, e, onSuccess, onFailed, onError, onSuccessNeedRefreshPage); })('" + senderId + "', arguments[0], " + onSuccess + ", " + onFailed + ", " + onError + ", " + onSuccessNeedRefreshPage.ToString().ToLower() + ")";
+
+            return ajaxOptions;
+        }
         public static AjaxOptions GetAjaxOptionsV1(string senderId = "", string onCompleted = "null", string onBegin = "null", string onError = "null", string url = "")
         {
             var result = new AjaxOptions()
@@ -69,24 +76,27 @@ namespace Silmoon.Web.Mvc
             }
             return result;
         }
+        public static AjaxOptions GetAjaxOptionsV1(AjaxOptions ajaxOptions, string senderId = "", string onCompleted = "null", string onBegin = "null", string onError = "null", string url = "")
+        {
+            ajaxOptions.OnBegin = "(function(sender, onBegin){ _ajax_on_begin_v1(sender, onBegin); })('" + senderId + "', " + onBegin + ")";
+            ajaxOptions.OnComplete = "(function(senderId, e, onCompleted, onError){ _ajax_on_complete_v1(senderId, e, onCompleted, onError); })('" + senderId + "', arguments[0], " + onCompleted + ", " + onError + ")";
+            if (!string.IsNullOrEmpty(url))
+            {
+                ajaxOptions.Url = url;
+            }
+            return ajaxOptions;
+        }
         public static AjaxOptions GetAjaxOptionsV2(string onCompleted = "null", string onBegin = "null", string onError = "null")
         {
             return GetAjaxOptionsV2(new AjaxOptions(), onCompleted, onBegin, onError);
         }
-        public static AjaxOptions GetAjaxOptionsV2(AjaxOptions options, string onCompleted = "null", string onBegin = "null", string onError = "null")
+        public static AjaxOptions GetAjaxOptionsV2(AjaxOptions ajaxOptions, string onCompleted = "null", string onBegin = "null", string onError = "null")
         {
-            options.OnBegin = "(function(e, onBegin){ _ajax_on_begin_v2(e, onBegin); })(arguments[0], " + onBegin + ")";
-            options.OnComplete = "(function(e, onCompleted, onError){ _ajax_on_complete_v2(e, onCompleted, onError); })(arguments[0], " + onCompleted + ", " + onError + ")";
-            return options;
-        }
-
-        public static AjaxOptions GetAjaxOptions(AjaxOptions ajaxOptions, string senderId = "", string onSuccess = "null", string onBegin = "null", string onFailed = "null", string onError = "null", bool onSuccessNeedRefreshPage = false)
-        {
-            ajaxOptions.OnBegin = "(function(sender, onBegin){ _ajax_on_begin(sender, onBegin); })('" + senderId + "', " + onBegin + ")";
-            ajaxOptions.OnComplete = "(function(senderId, e, onSuccess, onFailed, onError, onSuccessNeedRefreshPage){ _ajax_on_complete(senderId, e, onSuccess, onFailed, onError, onSuccessNeedRefreshPage); })('" + senderId + "', arguments[0], " + onSuccess + ", " + onFailed + ", " + onError + ", " + onSuccessNeedRefreshPage.ToString().ToLower() + ")";
-
+            ajaxOptions.OnBegin = "(function(e, onBegin){ _ajax_on_begin_v2(e, onBegin); })(arguments[0], " + onBegin + ")";
+            ajaxOptions.OnComplete = "(function(e, onCompleted, onError){ _ajax_on_complete_v2(e, onCompleted, onError); })(arguments[0], " + onCompleted + ", " + onError + ")";
             return ajaxOptions;
         }
+
 
 
         public static RouteValueDictionary MakeNewRouteValue(NameValueCollection collection, string additionQueryString = "")
