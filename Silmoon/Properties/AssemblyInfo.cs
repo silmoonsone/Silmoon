@@ -11,9 +11,9 @@ using System.Security;
 [assembly: AssemblyDescription("Build 191121")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("威海银之月信息技术有限公司")]
-[assembly: AssemblyProduct("银月(SILMOON)通用类型库")]
-[assembly: AssemblyCopyright("版权所有 (C) SILMOON 2019")]
-[assembly: AssemblyTrademark("SILMOON INC.")]
+[assembly: AssemblyProduct("银之月 Silmoon 基础类库(.NET FX)")]
+[assembly: AssemblyCopyright("版权所有© 银之月信息技术 2020")]
+[assembly: AssemblyTrademark("银之月®、Silmoon®")]
 [assembly: AssemblyCulture("")]
 
 
