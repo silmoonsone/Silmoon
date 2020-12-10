@@ -63,6 +63,7 @@
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -123,6 +124,8 @@
     <Compile Include="Controls\SmTrackBar.Designer.cs">
       <DependentUpon>SmTrackBar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Service\Service.SystemService.cs" />
+    <Compile Include="Service\ServiceControl.cs" />
     <Compile Include="Systems\LogonUser.cs" />
     <Compile Include="Systems\Processes.cs" />
     <Compile Include="Systems\RDController.cs" />

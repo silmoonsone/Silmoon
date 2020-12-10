@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.ServiceProcess;
 using System.Text;
 using System.Threading;
 using System.Xml;
 using Silmoon.MySilmoon.Instance;
-using Silmoon.Service;
 using Silmoon.Threading;
 
 namespace Silmoon.MySilmoon
@@ -123,32 +121,32 @@ namespace Silmoon.MySilmoon
         /// 停止目前启动前台功能相应的后台服务。
         /// </summary>
         /// <param name="serviceName">后台服务名称</param>
-        public void StopAppService(string serviceName)
-        {
-            if (Environment.UserInteractive)
-            {
-                OutputLine("GBC : Application runing at interactive mode...", -999);
-                if (ServiceControl.IsExisted(serviceName))
-                {
-                    OutputLine("GBC : Application associate service(" + serviceName + ") is exist...", -999);
-                    using (ServiceController sc = new ServiceController(serviceName))
-                    {
-                        sc.Refresh();
-                        if (sc.Status == ServiceControllerStatus.Running && sc.CanStop)
-                        {
-                            OutputLine("GBC : Application associate service(" + serviceName + ") is running, shutdown it...", -999);
-                            sc.Stop();
-                            sc.WaitForStatus(ServiceControllerStatus.Stopped);
-                            OutputLine("GBC : Application associate service(" + serviceName + ") has been shutdown...", -999);
-                        }
-                        else
-                        {
-                            OutputLine("GBC : Application associate service(" + serviceName + ") not running or can't stop it...", -999);
-                        }
-                    }
-                }
-            }
-        }
+        //public void StopAppService(string serviceName)
+        //{
+        //    if (Environment.UserInteractive)
+        //    {
+        //        OutputLine("GBC : Application runing at interactive mode...", -999);
+        //        if (ServiceControl.IsExisted(serviceName))
+        //        {
+        //            OutputLine("GBC : Application associate service(" + serviceName + ") is exist...", -999);
+        //            using (ServiceController sc = new ServiceController(serviceName))
+        //            {
+        //                sc.Refresh();
+        //                if (sc.Status == ServiceControllerStatus.Running && sc.CanStop)
+        //                {
+        //                    OutputLine("GBC : Application associate service(" + serviceName + ") is running, shutdown it...", -999);
+        //                    sc.Stop();
+        //                    sc.WaitForStatus(ServiceControllerStatus.Stopped);
+        //                    OutputLine("GBC : Application associate service(" + serviceName + ") has been shutdown...", -999);
+        //                }
+        //                else
+        //                {
+        //                    OutputLine("GBC : Application associate service(" + serviceName + ") not running or can't stop it...", -999);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// 初始化公共属性

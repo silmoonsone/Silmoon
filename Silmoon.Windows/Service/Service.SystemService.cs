@@ -5,7 +5,7 @@ using Silmoon.Net;
 using Microsoft.Win32;
 using System.Net.Sockets;
 
-namespace Silmoon.Service.SystemService
+namespace Silmoon.Windows.Service.SystemService
 {
     /// <summary>
     /// 系统服务环境

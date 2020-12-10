@@ -133,7 +133,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Security\HashHelper.cs" />
-    <Compile Include="Service\ServiceControl.cs" />
     <Compile Include="Configuration\IniFile.cs" />
     <Compile Include="StateSet.cs" />
     <Compile Include="Threading\ActionLimit.cs" />
@@ -169,7 +168,6 @@
     <Compile Include="Security\CSEncrypt.cs" />
     <Compile Include="Security\IdentityAuthInfo.cs" />
     <Compile Include="Security\EncryptString.cs" />
-    <Compile Include="Service\Service.SystemService.cs" />
     <Compile Include="ExecProc.cs" />
     <Compile Include="SmEnvironment.cs" />
     <Compile Include="StringHelper.cs" />

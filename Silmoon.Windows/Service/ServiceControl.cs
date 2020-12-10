@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using Silmoon.Net;
 using Microsoft.Win32;
 
-namespace Silmoon.Service
+namespace Silmoon.Windows.Service
 {
     /// <summary>
     /// 对系统服务进程操作
