@@ -62,7 +62,8 @@ namespace Silmoon.Net.Transfer
         }
         public void Disconnect()
         {
-            if (socket.Connected)
+            if (socket?.Connected ?? false)
+            //if (socket.Connected)
             {
                 try
                 {
