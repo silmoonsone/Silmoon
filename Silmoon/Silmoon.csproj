@@ -173,7 +173,6 @@
     <Compile Include="StringHelper.cs" />
     <Compile Include="SmSystem.cs" />
     <Compile Include="Reflection\ReflectionXml.cs" />
-    <Compile Include="SpecialConverter.cs" />
     <Compile Include="Threading\ThreadHelper.cs" />
     <None Include="sn.snk" />
   </ItemGroup>
