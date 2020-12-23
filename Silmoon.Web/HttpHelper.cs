@@ -62,7 +62,7 @@ namespace Silmoon.Web
         {
             collection = new NameValueCollection(collection);
             string s = "";
-            var tp = StringHelper.AnalyzeNameValue(additionQueryString.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries), "=");
+            var tp = HttpUtility.ParseQueryString(additionQueryString);
 
             for (int i = 0; i < tp.Count; i++)
             {

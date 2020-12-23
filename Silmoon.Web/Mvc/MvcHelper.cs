@@ -5,6 +5,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
 using System.Web.Routing;
@@ -104,7 +105,8 @@ namespace Silmoon.Web.Mvc
             RouteValueDictionary result = new RouteValueDictionary();
 
             collection = new NameValueCollection(collection);
-            var tp = StringHelper.AnalyzeNameValue(additionQueryString.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries), "=");
+            var tp = HttpUtility.ParseQueryString(additionQueryString);
+            //var tp = StringHelper.AnalyzeNameValue(additionQueryString.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries), "=");
 
             for (int i = 0; i < tp.Count; i++)
             {
