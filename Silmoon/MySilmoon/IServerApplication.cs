@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace Silmoon.MySilmoon
 {
-    public interface ISilmoonProductGBCInternat : IRunningAble
+    public interface IServerApplication : IRunningAble
     {
         event OutputTextMessageHandler OnOutputLine;
         event OutputTextMessageHandler OnInputLine;

@@ -12,7 +12,7 @@ namespace Silmoon.MySilmoon
     /// <summary>
     /// 对银月产品公共库公共属性进行重用
     /// </summary>
-    public class SilmoonProductGBCInternat : RunningAble, ISilmoonProductGBCInternat
+    public class ServerApplication : RunningAble, IServerApplication
     {
         private string _productString = "NULL";
         private int _revision = 0;
@@ -58,7 +58,7 @@ namespace Silmoon.MySilmoon
             set { _userIdentity = value; }
         }
 
-        public SilmoonProductGBCInternat()
+        public ServerApplication()
         {
 
         }

@@ -62,7 +62,8 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>bin\Release\Silmoon.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -153,8 +154,8 @@
     <Compile Include="IO\SmFile\Searcher.cs" />
     <Compile Include="Memory\Memory.cs" />
     <Compile Include="MySilmoon\IRunningAble.cs" />
-    <Compile Include="MySilmoon\ISilmoonProductGBCInternat.cs" />
-    <Compile Include="MySilmoon\SilmoonProductGBCInternat.cs" />
+    <Compile Include="MySilmoon\IServerApplication.cs" />
+    <Compile Include="MySilmoon\ServerApplication.cs" />
     <Compile Include="Net\Connections.cs" />
     <Compile Include="MySilmoon\MySilmoon.cs" />
     <Compile Include="Net\NetworkFormat.cs" />
