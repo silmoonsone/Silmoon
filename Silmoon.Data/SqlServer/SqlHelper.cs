@@ -49,6 +49,7 @@ namespace Silmoon.Data.SqlServer
         {
             List<T> result = new List<T>();
             List<NameObjectCollection<object>> data = new List<NameObjectCollection<object>>();
+
             while (reader.Read())
             {
                 var r = MakeObject<T>(reader, false);
@@ -105,6 +106,7 @@ namespace Silmoon.Data.SqlServer
 
             return (result, data);
         }
+
         public static void AddSqlCommandParameters(SqlCommand sqlCommand, object obj, params string[] paraNames)
         {
             if (obj != null)
@@ -124,6 +126,8 @@ namespace Silmoon.Data.SqlServer
                             {
                                 if (type.IsEnum)
                                 {
+                                    //////////这里要注意写入枚举数据的时候，目标字段的类型。
+
                                     ///这里存储在数据库中的枚举使用字符串（.ToString()）
                                     //sqlCommand.Parameters.AddWithValue(name, value.ToString());
 
