@@ -13,16 +13,14 @@ namespace Silmoon.Data.SqlServer
 {
     public class SqlExecuter
     {
-        SqlConnection SqlConnection = null;
         SqlUtil sqlUtil = null;
-        SqlAccess access = null;
+        SqlAccess sqlAccess = null;
 
 
         public SqlExecuter(SqlConnection sqlConnection)
         {
-            SqlConnection = sqlConnection;
             sqlUtil = new SqlUtil(sqlConnection);
-            access = new SqlAccess(sqlConnection);
+            sqlAccess = new SqlAccess(sqlConnection);
         }
         public SqlExecuteResult AddObject<T>(string tableName, T obj)
         {
@@ -41,7 +39,7 @@ namespace Silmoon.Data.SqlServer
             }
             sql = sql.Substring(0, sql.Length - 2);
             sql += ")";
-            var cmd = access.GetCommand(sql);
+            var cmd = sqlAccess.GetCommand(sql);
             SqlHelper.AddSqlCommandParameters(cmd, obj, names);
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
@@ -74,7 +72,7 @@ namespace Silmoon.Data.SqlServer
             makeOffset(ref sql, ref options);
 
 
-            var cmd = access.GetCommand(sql);
+            var cmd = sqlAccess.GetCommand(sql);
             SqlHelper.AddSqlCommandParameters(cmd, whereObject, names);
             using (var reader = cmd.ExecuteReader())
             {
@@ -103,7 +101,7 @@ namespace Silmoon.Data.SqlServer
             makeOrderBy(ref sql, ref tableName, ref options);
             makeOffset(ref sql, ref options);
 
-            var cmd = access.GetCommand(sql);
+            var cmd = sqlAccess.GetCommand(sql);
             SqlHelper.AddSqlCommandParameters(cmd, whereObject, GetPropertyNames(whereObject, true));
 
             using (var reader = cmd.ExecuteReader())
@@ -132,7 +130,7 @@ namespace Silmoon.Data.SqlServer
             makeOrderBy(ref sql, ref tableName, ref options);
             makeOffset(ref sql, ref options);
 
-            var cmd = access.GetCommand(sql);
+            var cmd = sqlAccess.GetCommand(sql);
             SqlHelper.AddSqlCommandParameters(cmd, whereObject, names);
 
 
@@ -163,7 +161,7 @@ namespace Silmoon.Data.SqlServer
             makeOrderBy(ref sql, ref tableName, ref options);
             makeOffset(ref sql, ref options);
 
-            var cmd = access.GetCommand(sql);
+            var cmd = sqlAccess.GetCommand(sql);
             SqlHelper.AddSqlCommandParameters(cmd, whereObject, GetPropertyNames(whereObject, true));
 
             using (var reader = cmd.ExecuteReader())
@@ -205,7 +203,7 @@ namespace Silmoon.Data.SqlServer
 
             makeWhereString(ref sql, ref tableName, whereObject, ref props, ref names);
 
-            var cmd = access.GetCommand(sql);
+            var cmd = sqlAccess.GetCommand(sql);
 
             SqlHelper.AddSqlCommandParameters(cmd, obj, setNames);
             SqlHelper.AddSqlCommandParameters(cmd, whereObject, names);
@@ -235,7 +233,7 @@ namespace Silmoon.Data.SqlServer
                 sql += " WHERE " + whereString;
             }
 
-            var cmd = access.GetCommand(sql);
+            var cmd = sqlAccess.GetCommand(sql);
 
             SqlHelper.AddSqlCommandParameters(cmd, obj, setNames);
             SqlHelper.AddSqlCommandParameters(cmd, whereObject, GetPropertyNames(whereObject, true));
@@ -252,7 +250,7 @@ namespace Silmoon.Data.SqlServer
 
             makeWhereString(ref sql, ref tableName, whereObject, ref props, ref names);
 
-            var cmd = access.GetCommand(sql);
+            var cmd = sqlAccess.GetCommand(sql);
             SqlHelper.AddSqlCommandParameters(cmd, whereObject, names);
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
@@ -269,7 +267,7 @@ namespace Silmoon.Data.SqlServer
                 sql += " WHERE " + whereString;
             }
 
-            var cmd = access.GetCommand(sql);
+            var cmd = sqlAccess.GetCommand(sql);
             SqlHelper.AddSqlCommandParameters(cmd, whereString, names);
             SqlHelper.AddSqlCommandParameters(cmd, whereObject, GetPropertyNames(whereObject, true));
 
@@ -354,15 +352,15 @@ namespace Silmoon.Data.SqlServer
 
         public SqlAccessTransaction BeginTransaction(bool setCurrentTransaction = true, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
-            return access.BeginTransaction(setCurrentTransaction, isolationLevel);
+            return sqlAccess.BeginTransaction(setCurrentTransaction, isolationLevel);
         }
         public void CommitTransaction(SqlAccessTransaction transaction)
         {
-            access.CommitTransaction(transaction);
+            sqlAccess.CommitTransaction(transaction);
         }
         public void RollbackTransaction(SqlAccessTransaction transaction)
         {
-            access.RollbackTransaction(transaction);
+            sqlAccess.RollbackTransaction(transaction);
         }
 
 
