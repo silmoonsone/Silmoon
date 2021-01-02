@@ -290,7 +290,7 @@ namespace Silmoon.Data.SqlServer
                 var type = item.PropertyType;
                 if (type.IsEnum)
                 {
-                    sql += $"\t[{item.Name}] nvarchar(50),\r\n";
+                    sql += $"\t[{item.Name}] int,\r\n";
                 }
                 else if (type.Name == "DateTime")
                 {

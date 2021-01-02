@@ -32,7 +32,12 @@ namespace Silmoon.Data.SqlServer
                 if (reader[name] != DBNull.Value)
                 {
                     if (type.IsEnum)
-                        item.SetValue(obj, Enum.Parse(type, reader[name].ToString()), null);
+                    {
+                        if (reader[name] is string)
+                            item.SetValue(obj, Enum.Parse(type, (string)reader[name]), null);
+                        else if (reader[name] is int)
+                            item.SetValue(obj, (int)reader[name], null);
+                    }
                     else
                         item.SetValue(obj, reader[name], null);
                 }
@@ -73,7 +78,12 @@ namespace Silmoon.Data.SqlServer
                 if (row[name] != DBNull.Value)
                 {
                     if (type.IsEnum)
-                        item.SetValue(obj, Enum.Parse(type, row[name].ToString()), null);
+                    {
+                        if (row[name] is string)
+                            item.SetValue(obj, Enum.Parse(type, (string)row[name]), null);
+                        else if (row[name] is int)
+                            item.SetValue(obj, (int)row[name], null);
+                    }
                     else
                         item.SetValue(obj, row[name], null);
                 }
@@ -113,8 +123,13 @@ namespace Silmoon.Data.SqlServer
                             if (value != null)
                             {
                                 if (type.IsEnum)
+                                {
                                     ///这里存储在数据库中的枚举使用字符串（.ToString()）
-                                    sqlCommand.Parameters.AddWithValue(name, value.ToString());
+                                    //sqlCommand.Parameters.AddWithValue(name, value.ToString());
+
+                                    ///这里存储在数据库中的枚举使用数字
+                                    sqlCommand.Parameters.AddWithValue(name, value);
+                                }
                                 else if (type.Name == "DateTime" && ((DateTime)value) == DateTime.MinValue)
                                     sqlCommand.Parameters.AddWithValue(name, SqlDateTime.MinValue);
                                 else
