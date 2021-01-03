@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Silmoon.Extension
 {
-    public static class DictionaryExtensionSS
+    public static class DictionaryStringStringExtension
     {
         public static string Get(this IDictionary<string, string> dictionary, string key, string defaultValue)
         {
@@ -27,7 +27,7 @@ namespace Silmoon.Extension
             }
         }
     }
-    public static class DictionaryExtensionSO
+    public static class DictionaryStringObjectExtension
     {
         public static object Get(this IDictionary<string, object> dictionary, string key, object defaultValue)
         {

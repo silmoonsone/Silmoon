@@ -59,6 +59,15 @@ namespace Silmoon.Runtime.Cache
                 }
             }
         }
+        public static object GetInfo(string Key)
+        {
+            lock (Items)
+            {
+                if (Items.ContainsKey(Key))
+                    return Items[Key];
+                else return null;
+            }
+        }
         public object this[string Key]
         {
             get
