@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Linq;
 using System.Data.SqlTypes;
-using Silmoon.Reflection;
+using Silmoon.Runtime.Collections;
 
 namespace Silmoon.Data.SqlServer
 {

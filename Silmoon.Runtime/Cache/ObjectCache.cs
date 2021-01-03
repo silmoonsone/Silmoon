@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Silmoon.Web.Cache
+namespace Silmoon.Runtime.Cache
 {
     /// <summary>
     /// 提供对象在静态类型中的缓存服务。默认缓存超时时间为1小时。
@@ -42,14 +42,15 @@ namespace Silmoon.Web.Cache
                 }
             }
         }
-        public static dynamic Get(string Key)
+        public static dynamic Get(string Key, TimeSpan? DelayExpire = null)
         {
-            Clear();
+            Clearup();
             lock (Items)
             {
                 if (Items.ContainsKey(Key))
                 {
                     var item = Items[Key];
+                    if (DelayExpire.HasValue) item.ExipreAt.Add(DelayExpire.Value);
                     return item.Value;
                 }
                 else
@@ -58,7 +59,18 @@ namespace Silmoon.Web.Cache
                 }
             }
         }
-        static void Clear()
+        public object this[string Key]
+        {
+            get
+            {
+                return Get(Key);
+            }
+            set
+            {
+                Set(Key, value);
+            }
+        }
+        static void Clearup()
         {
             List<string> readyToClears = new List<string>();
 

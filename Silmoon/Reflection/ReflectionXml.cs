@@ -6,8 +6,10 @@ using System.Xml.Serialization;
 
 namespace Silmoon.Reflection
 {
+    [Obsolete("类型将被删除", true)]
     public class ReflectionXml
     {
+        [Obsolete("方法将被删除", true)]
         public static object LoadFile(Type type, string path)
         {
             FileStream fs = null;
@@ -31,6 +33,7 @@ namespace Silmoon.Reflection
             }
             return result;
         }
+        [Obsolete("方法将被删除", true)]
         public static void SaveFile(string path, object obj)
         {
             FileStream fs = null;

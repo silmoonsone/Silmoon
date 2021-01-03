@@ -65,8 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\RequireSessionSignin.cs" />
-    <Compile Include="Cache\CacheItem.cs" />
-    <Compile Include="Cache\ObjectCache.cs" />
     <Compile Include="Controls\SessionRSAManager.cs" />
     <Compile Include="Controls\UserSessionController.cs" />
     <Compile Include="Extension\ControllerExtension.cs" />
@@ -105,6 +103,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Silmoon.Runtime\Silmoon.Runtime.csproj">
+      <Project>{a0bddbae-4451-446f-9848-1484b3c379b3}</Project>
+      <Name>Silmoon.Runtime</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Silmoon\Silmoon.csproj">
       <Project>{c827a65d-cc9e-444b-908a-7ba70d6e6c11}</Project>
       <Name>Silmoon</Name>

@@ -109,7 +109,6 @@
     <Compile Include="Net\Sockets\TcpHdr.cs" />
     <Compile Include="Net\Sockets\UdpHdr.cs" />
     <Compile Include="Reflection\AssemblyUtil.cs" />
-    <Compile Include="Reflection\EnumHelper.cs" />
     <Compile Include="SDebug.cs" />
     <Compile Include="Security\Api\HttpRequestApiValidation.cs" />
     <Compile Include="Security\EncryptHelper.cs" />
@@ -164,7 +163,6 @@
     <Compile Include="Net\NetworkPacket.cs" />
     <Compile Include="Net\SmProtocol.cs" />
     <Compile Include="Reflection\AssemblyLoader.cs" />
-    <Compile Include="Reflection\NameObjectCollection.cs" />
     <Compile Include="Reflection\ProxyAssembly.cs" />
     <Compile Include="Security\CSEncrypt.cs" />
     <Compile Include="Security\IdentityAuthInfo.cs" />

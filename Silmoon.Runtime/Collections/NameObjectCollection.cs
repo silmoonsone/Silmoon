@@ -4,15 +4,15 @@ using System.Text;
 using System.Collections.Specialized;
 using System.Collections;
 
-namespace Silmoon.Reflection
+namespace Silmoon.Runtime.Collections
 {
     [Serializable]
     public class NameObjectCollection : NameObjectCollectionBase
     {
-        DataCacheGetEnumerator ie = null;
+        DataCacheGetEnumerator dataCacheGetEnumerator = null;
         public NameObjectCollection()
         {
-            ie = new DataCacheGetEnumerator(this);
+            dataCacheGetEnumerator = new DataCacheGetEnumerator(this);
         }
         public void Add(string name, object value)
         {
@@ -91,7 +91,7 @@ namespace Silmoon.Reflection
         }
         public override IEnumerator GetEnumerator()
         {
-            return ie;
+            return dataCacheGetEnumerator;
         }
         class DataCacheGetEnumerator : IEnumerator
         {

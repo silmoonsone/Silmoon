@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Silmoon.Web.Cache
+namespace Silmoon.Runtime.Cache
 {
     [Serializable]
     public class CacheItem
