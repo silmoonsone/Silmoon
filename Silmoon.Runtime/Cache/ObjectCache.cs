@@ -42,7 +42,7 @@ namespace Silmoon.Runtime.Cache
                 }
             }
         }
-        public static dynamic Get(string Key, TimeSpan? DelayExpire = null)
+        public static object Get(string Key, TimeSpan? DelayExpire = null)
         {
             Clearup();
             lock (Items)
