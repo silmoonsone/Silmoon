@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.Collections.Specialized;
 using System.Web.Mvc;
+using Silmoon.Extension;
 
 namespace Silmoon.Web
 {
@@ -39,7 +40,7 @@ namespace Silmoon.Web
         public static string GetWebAppRootUrl()
         {
             string http = "http";
-            if (HttpContext.Current.Request.ServerVariables["HTTPS"] != null && StringHelper.GetBool(HttpContext.Current.Request.ServerVariables["HTTPS"]))
+            if (HttpContext.Current.Request.ServerVariables["HTTPS"] != null && HttpContext.Current.Request.ServerVariables["HTTPS"].ToBool())
                 http = "https";
 
             http = http + "://" + HttpContext.Current.Request.ServerVariables["HTTP_HOST"] + AppWebPath;

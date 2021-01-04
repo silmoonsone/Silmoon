@@ -4,6 +4,7 @@ using System.Text;
 using System.DirectoryServices;
 using System.Text.RegularExpressions;
 using System.Collections;
+using Silmoon.Extension;
 using Silmoon.Security;
 using System.Windows.Forms;
 
@@ -73,7 +74,7 @@ namespace Silmoon.Windows.Server.IIS
                     siteInfo.SiteName = ent.Properties[WebSiteParameter.ServerComment.ToString()].Value.ToString();
                     siteInfo.Bindings = ent.Properties[WebSiteParameter.ServerBindings.ToString()].Value;
                     siteInfo.State = (WebSiteState)ent.Properties["ServerState"].Value;
-                    siteInfo.LogFileLocaltimeRollover = StringHelper.GetBool(ent.Properties[WebSiteParameter.LogFileLocaltimeRollover.ToString()].Value.ToString());
+                    siteInfo.LogFileLocaltimeRollover = ent.Properties[WebSiteParameter.LogFileLocaltimeRollover.ToString()].Value.ToString().ToBool();
                     siteInfo.LogFileDirectory = ent.Properties[WebSiteParameter.LogFileDirectory.ToString()].Value.ToString();
 
                     DirectoryEntry appInfo = ent.Children.Find("root", "IIsWebVirtualDir");
@@ -313,7 +314,7 @@ namespace Silmoon.Windows.Server.IIS
             return null;
         }
 
-        public void InvokeAppPool(string appPoolName,AppPoolOption option)
+        public void InvokeAppPool(string appPoolName, AppPoolOption option)
         {
             DirectoryEntry appEnt = GetDirectoryEntry("/AppPools");
             DirectoryEntry findPool = appEnt.Children.Find(appPoolName, "IIsApplicationPool");
@@ -664,9 +665,9 @@ namespace Silmoon.Windows.Server.IIS
     }
     public enum AppPoolOption
     {
-        Start=1,
-        Stop=2,
-        Recycle=3,
+        Start = 1,
+        Stop = 2,
+        Recycle = 3,
     }
     public enum AppPoolParameter
     {

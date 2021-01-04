@@ -42,7 +42,7 @@ namespace Silmoon.Runtime.Cache
                 }
             }
         }
-        public static object Get(string Key, TimeSpan? DelayExpire = null)
+        public static object Get(string Key, TimeSpan? AddExpireTime = null)
         {
             Clearup();
             lock (Items)
@@ -50,7 +50,7 @@ namespace Silmoon.Runtime.Cache
                 if (Items.ContainsKey(Key))
                 {
                     var item = Items[Key];
-                    if (DelayExpire.HasValue) item.ExipreAt.Add(DelayExpire.Value);
+                    if (AddExpireTime.HasValue) item.ExipreAt.Add(AddExpireTime.Value);
                     return item.Value;
                 }
                 else

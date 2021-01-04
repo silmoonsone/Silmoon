@@ -14,7 +14,7 @@ namespace Silmoon.Extension
             var result = (T)Enum.Parse(type, value);
             return result;
         }
-        public static string GetEnumDisplayName(this Enum @enum)
+        public static string GetDisplayName(this Enum @enum)
         {
             var type = @enum.GetType();
             var field = type.GetField(@enum.ToString());

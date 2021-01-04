@@ -141,7 +141,7 @@ namespace Silmoon.MySilmoon
         {
             NameValueCollection values = GetLicenseEncryptedConfigure(productString);
             string clientString = values["userIdentity"];
-            return StringHelper.FixNullString(clientString);
+            return clientString ?? "";
         }
     }
 }

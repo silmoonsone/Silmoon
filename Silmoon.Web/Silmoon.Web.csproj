@@ -103,6 +103,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Silmoon.Extension\Silmoon.Extension.csproj">
+      <Project>{551d2440-c3f5-40de-a7da-d278df2db027}</Project>
+      <Name>Silmoon.Extension</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Silmoon.Runtime\Silmoon.Runtime.csproj">
       <Project>{a0bddbae-4451-446f-9848-1484b3c379b3}</Project>
       <Name>Silmoon.Runtime</Name>
