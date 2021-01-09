@@ -24,7 +24,7 @@ namespace Silmoon.Data.SqlServer
         }
         public SqlExecuteResult AddObject<T>(string tableName, T obj)
         {
-            var names = getPropertyNames<T>();
+            var names = GetPropertyNames(typeof(T));
 
             string sql = $"INSERT INTO [{onlyWords(tableName)}] (";
             foreach (var item in names)
@@ -59,8 +59,8 @@ namespace Silmoon.Data.SqlServer
 
             string sql = $"SELECT";
             if (!options.Offset.HasValue && options.Count.HasValue)
-                sql += $" TOP {options.Count} * FROM [{tableName}]";
-            else sql += $" * FROM [{tableName}]";
+                sql += $" TOP {options.Count} {makeSelectFieldString(typeof(T), tableName, ref options)} FROM [{tableName}]";
+            else sql += $" {makeSelectFieldString(typeof(T), tableName, ref options)} FROM [{tableName}]";
 
             if (options.OnOption != null) makeOnString(ref sql, ref tableName, options.OnOption);
 
@@ -77,7 +77,7 @@ namespace Silmoon.Data.SqlServer
             using (var reader = cmd.ExecuteReader())
             {
                 if (!reader.Read()) return new SqlExecuteResult<T>(reader.RecordsAffected, sql, default);
-                var obj = SqlHelper.MakeObject(reader, new T());
+                var obj = SqlHelper.MakeObject(reader, new T(), options.ExcludedField);
                 return new SqlExecuteResult<T>(reader.RecordsAffected, sql, obj);
             }
         }
@@ -88,8 +88,8 @@ namespace Silmoon.Data.SqlServer
 
             string sql = $"SELECT";
             if (!options.Offset.HasValue && options.Count.HasValue)
-                sql += $" TOP {options.Count} * FROM [{tableName}]";
-            else sql += $" * FROM [{tableName}]";
+                sql += $" TOP {options.Count} {makeSelectFieldString(typeof(T), tableName, ref options)} FROM [{tableName}]";
+            else sql += $" {makeSelectFieldString(typeof(T), tableName, ref options)} FROM [{tableName}]";
 
             if (options.OnOption != null) makeOnString(ref sql, ref tableName, options.OnOption);
 
@@ -102,12 +102,12 @@ namespace Silmoon.Data.SqlServer
             makeOffset(ref sql, ref options);
 
             var cmd = sqlAccess.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, whereObject, GetPropertyNames(whereObject, true));
+            SqlHelper.AddSqlCommandParameters(cmd, whereObject, GetPropertyNames(whereObject.GetType(), true));
 
             using (var reader = cmd.ExecuteReader())
             {
                 if (!reader.Read()) return new SqlExecuteResult<T>(reader.RecordsAffected, sql, default);
-                var obj = SqlHelper.MakeObject(reader, new T());
+                var obj = SqlHelper.MakeObject(reader, new T(), options.ExcludedField);
                 return new SqlExecuteResult<T>(reader.RecordsAffected, sql, obj);
             }
         }
@@ -118,8 +118,8 @@ namespace Silmoon.Data.SqlServer
 
             string sql = $"SELECT";
             if (!options.Offset.HasValue && options.Count.HasValue)
-                sql += $" TOP {options.Count} * FROM [{tableName}]";
-            else sql += $" * FROM [{tableName}]";
+                sql += $" TOP {options.Count} {makeSelectFieldString(typeof(T), tableName, ref options)} FROM [{tableName}]";
+            else sql += $" {makeSelectFieldString(typeof(T), tableName, ref options)} FROM [{tableName}]";
 
             if (options.OnOption != null) makeOnString(ref sql, ref tableName, options.OnOption);
 
@@ -137,7 +137,7 @@ namespace Silmoon.Data.SqlServer
             using (var reader = cmd.ExecuteReader())
             {
                 //if (!reader.Read()) return default;
-                var obj = SqlHelper.MakeObjects<T>(reader);
+                var obj = SqlHelper.MakeObjects<T>(reader, options.ExcludedField);
                 return new SqlExecuteResults<T[]>(reader.RecordsAffected, sql, obj);
             }
         }
@@ -148,8 +148,8 @@ namespace Silmoon.Data.SqlServer
 
             string sql = $"SELECT";
             if (!options.Offset.HasValue && options.Count.HasValue)
-                sql += $" TOP {options.Count} * FROM [{tableName}]";
-            else sql += $" * FROM [{tableName}]";
+                sql += $" TOP {options.Count} {makeSelectFieldString(typeof(T), tableName, ref options)} FROM [{tableName}]";
+            else sql += $" {makeSelectFieldString(typeof(T), tableName, ref options)} FROM [{tableName}]";
 
             if (options.OnOption != null) makeOnString(ref sql, ref tableName, options.OnOption);
 
@@ -162,12 +162,12 @@ namespace Silmoon.Data.SqlServer
             makeOffset(ref sql, ref options);
 
             var cmd = sqlAccess.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, whereObject, GetPropertyNames(whereObject, true));
+            SqlHelper.AddSqlCommandParameters(cmd, whereObject, GetPropertyNames(whereObject.GetType(), true));
 
             using (var reader = cmd.ExecuteReader())
             {
                 //if (!reader.Read()) return default;
-                var obj = SqlHelper.MakeObjects<T>(reader);
+                var obj = SqlHelper.MakeObjects<T>(reader, options.ExcludedField);
                 return new SqlExecuteResults<T[]>(reader.RecordsAffected, sql, obj);
             }
         }
@@ -236,7 +236,7 @@ namespace Silmoon.Data.SqlServer
             var cmd = sqlAccess.GetCommand(sql);
 
             SqlHelper.AddSqlCommandParameters(cmd, obj, setNames);
-            SqlHelper.AddSqlCommandParameters(cmd, whereObject, GetPropertyNames(whereObject, true));
+            SqlHelper.AddSqlCommandParameters(cmd, whereObject, GetPropertyNames(whereObject.GetType(), true));
 
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
@@ -269,7 +269,7 @@ namespace Silmoon.Data.SqlServer
 
             var cmd = sqlAccess.GetCommand(sql);
             SqlHelper.AddSqlCommandParameters(cmd, whereString, names);
-            SqlHelper.AddSqlCommandParameters(cmd, whereObject, GetPropertyNames(whereObject, true));
+            SqlHelper.AddSqlCommandParameters(cmd, whereObject, GetPropertyNames(whereObject.GetType(), true));
 
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
@@ -280,7 +280,7 @@ namespace Silmoon.Data.SqlServer
         {
             var isExistResult = TableIsExist(tableName);
             if (isExistResult.Result) return new SqlExecuteResult<bool>() { Result = false, ResponseRows = isExistResult.ResponseRows, ExecuteSqlString = isExistResult.ExecuteSqlString };
-            var props = getProperties<T>(false);
+            var props = getProperties(typeof(T), false);
 
             string sql = $"CREATE TABLE [{onlyWords(tableName)}]\r\n";
             sql += $"(\r\n";
@@ -364,22 +364,26 @@ namespace Silmoon.Data.SqlServer
         }
 
 
-        public string[] GetPropertyNames(object obj, bool includeId = false)
+
+        private string makeSelectFieldString(Type type, string tableName, ref SqlQueryOptions options)
         {
-            List<string> propertyNames = new List<string>();
-            if (obj != null)
+            if (options.FieldOption == SelectFieldOption.All)
             {
-                var propertyInfos = obj.GetType().GetProperties();
-                foreach (var item in propertyInfos)
-                {
-                    if (item.Name.ToLower() == "id" && !includeId) continue;
-                    propertyNames.Add(item.Name);
-                }
+                return "*";
             }
-            return propertyNames.ToArray();
+            else if (options.FieldOption == SelectFieldOption.SpecifiedObject)
+            {
+                string[] names = GetPropertyNames(type);
+                string s = "";
+                foreach (var item in names)
+                {
+                    if (options.ExcludedField?.Contains(item) ?? false) continue;
+                    s += "[" + tableName + "].[" + item + "], ";
+                }
+                return s.Substring(0, s.Length - 2);
+            }
+            else return "*";
         }
-
-
         private void makeOnString(ref string sql, ref string tableName, OnOption onOption)
         {
             sql += $" {onOption.On.ToString().ToUpper()} JOIN [{onOption.TableName}] ON (";
@@ -430,6 +434,7 @@ namespace Silmoon.Data.SqlServer
             }
         }
 
+
         private string[] getPropertyNames(Dictionary<string, PropertyInfo> props, bool includeId = false)
         {
             List<string> propertyNames = new List<string>();
@@ -440,10 +445,10 @@ namespace Silmoon.Data.SqlServer
             }
             return propertyNames.ToArray();
         }
-        private string[] getPropertyNames<T>(bool includeId = false)
+        public string[] GetPropertyNames(Type type, bool includeId = false)
         {
             List<string> propertyNames = new List<string>();
-            var propertyInfos = typeof(T).GetProperties();
+            var propertyInfos = type.GetProperties();
             foreach (var item in propertyInfos)
             {
                 if (item.Name.ToLower() == "id" && !includeId) continue;
@@ -451,6 +456,7 @@ namespace Silmoon.Data.SqlServer
             }
             return propertyNames.ToArray();
         }
+
         private Dictionary<string, PropertyInfo> getProperties(object obj, bool includeId = false)
         {
             Dictionary<string, PropertyInfo> propertyNames = new Dictionary<string, PropertyInfo>();
@@ -465,10 +471,10 @@ namespace Silmoon.Data.SqlServer
             }
             return propertyNames;
         }
-        private PropertyInfo[] getProperties<T>(bool includeId = false)
+        private PropertyInfo[] getProperties(Type type, bool includeId = false)
         {
             List<PropertyInfo> propertyNames = new List<PropertyInfo>();
-            var propertyInfos = typeof(T).GetProperties();
+            var propertyInfos = type.GetProperties();
             foreach (var item in propertyInfos)
             {
                 if (item.Name.ToLower() == "id" && !includeId) continue;
@@ -476,6 +482,8 @@ namespace Silmoon.Data.SqlServer
             }
             return propertyNames.ToArray();
         }
+
+
         private string onlyWords(string s)
         {
             return s;
