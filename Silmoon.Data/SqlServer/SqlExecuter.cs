@@ -62,7 +62,7 @@ namespace Silmoon.Data.SqlServer
                 sql += $" TOP {options.Count} {makeSelectFieldString(typeof(T), tableName, ref options)} FROM [{tableName}]";
             else sql += $" {makeSelectFieldString(typeof(T), tableName, ref options)} FROM [{tableName}]";
 
-            if (options.OnOption != null) makeOnString(ref sql, ref tableName, options.OnOption);
+            if (options.Join != null) makeOnString(ref sql, ref tableName, options.Join);
 
             var props = getProperties(whereObject, true);
             var names = getPropertyNames(props, true);
@@ -91,7 +91,7 @@ namespace Silmoon.Data.SqlServer
                 sql += $" TOP {options.Count} {makeSelectFieldString(typeof(T), tableName, ref options)} FROM [{tableName}]";
             else sql += $" {makeSelectFieldString(typeof(T), tableName, ref options)} FROM [{tableName}]";
 
-            if (options.OnOption != null) makeOnString(ref sql, ref tableName, options.OnOption);
+            if (options.Join != null) makeOnString(ref sql, ref tableName, options.Join);
 
             if (!string.IsNullOrEmpty(whereString))
             {
@@ -121,7 +121,7 @@ namespace Silmoon.Data.SqlServer
                 sql += $" TOP {options.Count} {makeSelectFieldString(typeof(T), tableName, ref options)} FROM [{tableName}]";
             else sql += $" {makeSelectFieldString(typeof(T), tableName, ref options)} FROM [{tableName}]";
 
-            if (options.OnOption != null) makeOnString(ref sql, ref tableName, options.OnOption);
+            if (options.Join != null) makeOnString(ref sql, ref tableName, options.Join);
 
             var props = getProperties(whereObject, true);
             var names = getPropertyNames(props, true);
@@ -151,7 +151,7 @@ namespace Silmoon.Data.SqlServer
                 sql += $" TOP {options.Count} {makeSelectFieldString(typeof(T), tableName, ref options)} FROM [{tableName}]";
             else sql += $" {makeSelectFieldString(typeof(T), tableName, ref options)} FROM [{tableName}]";
 
-            if (options.OnOption != null) makeOnString(ref sql, ref tableName, options.OnOption);
+            if (options.Join != null) makeOnString(ref sql, ref tableName, options.Join);
 
             if (!string.IsNullOrEmpty(whereString))
             {
@@ -384,7 +384,7 @@ namespace Silmoon.Data.SqlServer
             }
             else return "*";
         }
-        private void makeOnString(ref string sql, ref string tableName, OnOption onOption)
+        private void makeOnString(ref string sql, ref string tableName, JoinOption onOption)
         {
             sql += $" {onOption.On.ToString().ToUpper()} JOIN [{onOption.TableName}] ON (";
             foreach (var item in onOption.FieldNames)
