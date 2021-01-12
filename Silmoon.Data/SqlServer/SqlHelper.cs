@@ -76,6 +76,7 @@ namespace Silmoon.Data.SqlServer
             foreach (PropertyInfo item in propertyInfos)
             {
                 string name = item.Name;
+                if (excludedField?.Contains(name) ?? false) continue;
                 Type type = item.PropertyType;
                 if (row[name] != DBNull.Value)
                 {
