@@ -435,16 +435,6 @@ namespace Silmoon.Data.SqlServer
         }
 
 
-        private string[] getPropertyNames(Dictionary<string, PropertyInfo> props, bool includeId = false)
-        {
-            List<string> propertyNames = new List<string>();
-            foreach (var item in props)
-            {
-                if (item.Key.ToLower() == "id" && !includeId) continue;
-                propertyNames.Add(item.Key);
-            }
-            return propertyNames.ToArray();
-        }
         public string[] GetPropertyNames(Type type, bool includeId = false)
         {
             List<string> propertyNames = new List<string>();
@@ -453,6 +443,16 @@ namespace Silmoon.Data.SqlServer
             {
                 if (item.Name.ToLower() == "id" && !includeId) continue;
                 propertyNames.Add(item.Name);
+            }
+            return propertyNames.ToArray();
+        }
+        private string[] getPropertyNames(Dictionary<string, PropertyInfo> props, bool includeId = false)
+        {
+            List<string> propertyNames = new List<string>();
+            foreach (var item in props)
+            {
+                if (item.Key.ToLower() == "id" && !includeId) continue;
+                propertyNames.Add(item.Key);
             }
             return propertyNames.ToArray();
         }
