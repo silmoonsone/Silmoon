@@ -7,6 +7,8 @@ function _ajax_on_complete_v1(senderId, e, onCompleted, onError) {
         if (onCompleted != null) onCompleted(senderId, e);
     }
     else {
+        //if (senderId != "") $("#" + senderId).html(__ajax_Request_ButtonText);
+        if (senderId != "") $("#" + senderId).html("错误");
         if (onError != null) onError(senderId, e);
     }
 }
