@@ -12,12 +12,12 @@ namespace Silmoon.Data.SqlServer
 {
     public class SqlHelper
     {
-        public static (T Result, NameObjectCollection<object> DataCollection) MakeObject<T>(SqlDataReader reader, string[] excludedField, bool closeReader = true) where T : new()
+        public static (T Result, NameObjectCollection<object> DataCollection) MakeObject<T>(SqlDataReader reader, string[] excludedField = null, bool closeReader = true) where T : new()
         {
             T obj = new T();
             return MakeObject(reader, obj, excludedField, closeReader);
         }
-        public static (T Result, NameObjectCollection<object> DataCollection) MakeObject<T>(SqlDataReader reader, T obj, string[] excludedField, bool closeReader = true) where T : new()
+        public static (T Result, NameObjectCollection<object> DataCollection) MakeObject<T>(SqlDataReader reader, T obj, string[] excludedField = null, bool closeReader = true) where T : new()
         {
             NameObjectCollection<object> data = new NameObjectCollection<object>();
             for (int i = 0; i < reader.FieldCount; i++)
@@ -46,7 +46,7 @@ namespace Silmoon.Data.SqlServer
             if (closeReader) reader.Close();
             return (obj, data);
         }
-        public static (T[] Results, NameObjectCollection<object>[] DataCollections) MakeObjects<T>(SqlDataReader reader, string[] excludedField) where T : new()
+        public static (T[] Results, NameObjectCollection<object>[] DataCollections) MakeObjects<T>(SqlDataReader reader, string[] excludedField = null) where T : new()
         {
             List<T> result = new List<T>();
             List<NameObjectCollection<object>> data = new List<NameObjectCollection<object>>();
@@ -61,12 +61,12 @@ namespace Silmoon.Data.SqlServer
             return (result.ToArray(), data.ToArray());
         }
 
-        public static (T Result, NameObjectCollection<object> DataCollection) MakeObject<T>(DataRow row, string[] excludedField) where T : new()
+        public static (T Result, NameObjectCollection<object> DataCollection) MakeObject<T>(DataRow row, string[] excludedField = null) where T : new()
         {
             T obj = new T();
             return MakeObject(row, obj, excludedField);
         }
-        public static (T Result, NameObjectCollection<object> DataCollection) MakeObject<T>(DataRow row, T obj, string[] excludedField) where T : new()
+        public static (T Result, NameObjectCollection<object> DataCollection) MakeObject<T>(DataRow row, T obj, string[] excludedField = null) where T : new()
         {
             NameObjectCollection<object> data = new NameObjectCollection<object>();
             for (int i = 0; i < row.Table.Columns.Count; i++)
@@ -94,7 +94,7 @@ namespace Silmoon.Data.SqlServer
 
             return (obj, data);
         }
-        public static (T[] Results, NameObjectCollection<object>[] DataCollections) MakeObjects<T>(DataTable dt, string[] excludedField) where T : new()
+        public static (T[] Results, NameObjectCollection<object>[] DataCollections) MakeObjects<T>(DataTable dt, string[] excludedField = null) where T : new()
         {
             T[] result = new T[dt.Rows.Count];
             NameObjectCollection<object>[] data = new NameObjectCollection<object>[dt.Rows.Count];
