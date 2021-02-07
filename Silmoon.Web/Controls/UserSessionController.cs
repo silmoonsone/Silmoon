@@ -1,3 +1,5 @@
+using Silmoon.Business.Core.Types;
+using Silmoon.Business.Models;
 using System;
 using System.Security.Cryptography;
 using System.Text;
@@ -6,7 +8,7 @@ using System.Web.Mvc;
 
 namespace Silmoon.Web.Controls
 {
-    public abstract class UserSessionController<T> : System.Web.SessionState.IRequiresSessionState
+    public abstract class UserSessionController<TUser> : System.Web.SessionState.IRequiresSessionState where TUser : IUser
     {
         RSACryptoServiceProvider rsa = null;
         string cookieDomain = null;
@@ -30,44 +32,22 @@ namespace Silmoon.Web.Controls
         }
         public event EventHandler UserLogin;
         public event EventHandler UserLogout;
+        public event UserSessionHanlder OnRequestRefreshUserSession;
 
         public string Username
         {
             get
             {
-                return HttpContext.Current.Session["___silmoon_username"]?.ToString();
-            }
-            set
-            {
-                HttpContext.Current.Session["___silmoon_username"] = value;
+                return User.Username;
             }
         }
-        public string Password
+        public UserRole? Role
         {
             get
             {
-                return HttpContext.Current.Session["___silmoon_password"]?.ToString();
-            }
-            set
-            {
-                HttpContext.Current.Session["___silmoon_password"] = value;
-            }
-        }
-        public int UserLevel
-        {
-            get
-            {
-                if (HttpContext.Current.Session["___silmoon_level"] != null)
-                {
-                    int result = -1;
-                    int.TryParse(HttpContext.Current.Session["___silmoon_level"].ToString(), out result);
-                    return result;
-                }
-                else return -1;
-            }
-            set
-            {
-                HttpContext.Current.Session["___silmoon_level"] = value;
+                var user = User;
+                if (user == null) return null;
+                else return user.Role;
             }
         }
         public LoginState State
@@ -87,20 +67,12 @@ namespace Silmoon.Web.Controls
                 HttpContext.Current.Session["___silmoon_state"] = (int)value;
             }
         }
-        public object UserObject
-        {
-            get
-            {
-                return HttpContext.Current.Session["___silmoon_object"];
-            }
-            set { HttpContext.Current.Session["___silmoon_object"] = value; }
-        }
-        public T User
+        public TUser User
         {
             get
             {
                 if (HttpContext.Current.Session["___silmoon_user"] != null)
-                    return (T)HttpContext.Current.Session["___silmoon_user"];
+                    return (TUser)HttpContext.Current.Session["___silmoon_user"];
                 else return default;
             }
             set { HttpContext.Current.Session["___silmoon_user"] = value; }
@@ -128,6 +100,13 @@ namespace Silmoon.Web.Controls
             this.cookieDomain = cookieDomain;
         }
 
+        public bool GteRole(UserRole role)
+        {
+            var srule = Role;
+            if (srule.HasValue)
+                return srule >= role;
+            else return false;
+        }
 
 
         public object ReadSession(string key)
@@ -141,22 +120,45 @@ namespace Silmoon.Web.Controls
         /// <param name="controller">controller传入null，将不会自动转跳，并且在登录状态下不会，将用户会话实例赋值到ViewBag.UserSession，用户的数据不会赋值到ViewBag.User。</param>
         /// <param name="signInUrl">若传入controller，会使用转跳到本参数指定的URL。</param>
         /// <returns></returns>
-        public bool MvcSessionChecking(Controller controller, string signInUrl)
+        public ActionResult MvcSessionChecking(Controller controller, UserRole? IsRole, bool refreshUrlSession = false, string signInUrl = "~/User/Signin?url=$context_raw_url")
         {
+            signInUrl = signInUrl?.Replace("$context_raw_url", controller.Request.RawUrl);
+
+
             if (State != LoginState.Login)
             {
-                if (controller != null && !controller.Request.IsAjaxRequest())
-                    controller.Response.Redirect(signInUrl);
-                return false;
+                if (controller.Request.IsAjaxRequest())
+                    return new JsonResult { Data = SimpleStateFlag.Create(false, -9999, "no signin."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                else return new RedirectResult(signInUrl);
             }
             else
             {
-                if (controller != null)
+                if (refreshUrlSession)
                 {
-                    controller.ViewBag.User = User;
-                    controller.ViewBag.UserSession = this;
+                    var userInfo = onRequestRefreshUserSession();
+                    if (userInfo != null)
+                        User = userInfo;
+                    else
+                    {
+                        if (controller.Request.IsAjaxRequest())
+                            return new JsonResult { Data = SimpleStateFlag.Create(false, -9999, "user object refresh fail."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                        else return new RedirectResult(signInUrl);
+                    }
                 }
-                return true;
+
+                if (IsRole.HasValue)
+                {
+                    if (Role < IsRole)
+                    {
+                        if (controller.Request.IsAjaxRequest())
+                            return new JsonResult { Data = SimpleStateFlag.Create(false, -9999, "access denied."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                        else return new ContentResult() { Content = "access denied", ContentType = "text/plain" };
+                    }
+                }
+
+                controller.ViewBag.User = User;
+                controller.ViewBag.UserSession = this;
+                return null;
             }
         }
 
@@ -228,8 +230,8 @@ namespace Silmoon.Web.Controls
         {
             if (rsa == null) return "";
 
-            byte[] usernameData = Encoding.Default.GetBytes(Username);
-            byte[] passwordData = Encoding.Default.GetBytes(Password);
+            byte[] usernameData = Encoding.Default.GetBytes(User.Username);
+            byte[] passwordData = Encoding.Default.GetBytes(User.Password);
             byte[] data = new byte[4 + usernameData.Length + passwordData.Length];
 
             Array.Copy(BitConverter.GetBytes((short)usernameData.Length), 0, data, 0, 2);
@@ -270,24 +272,19 @@ namespace Silmoon.Web.Controls
             }
         }
 
-        public virtual void DoLogin(string username, string password, T user)
+        public virtual void DoLogin(string username, string password, TUser user)
         {
             DoLogin(username, password, 0, user);
         }
-        public virtual void DoLogin(string username, string password, int userLevel)
+        public virtual void DoLogin(string username, string password, UserRole role)
         {
-            DoLogin(username, password, userLevel, default(T));
+            DoLogin(username, password, role, default(TUser));
         }
-        public virtual void DoLogin(string username, string password, int userLevel, T user)
+        public virtual void DoLogin(string username, string password, UserRole role, TUser user)
         {
             HttpContext.Current.Session.Timeout = sessionTimeout;
-
-            Username = username;
-            Password = password;
-            UserLevel = userLevel;
             User = user;
             State = LoginState.Login;
-
             UserLogin?.Invoke(this, EventArgs.Empty);
         }
         public virtual void DoLogout()
@@ -324,7 +321,19 @@ namespace Silmoon.Web.Controls
             ClearCrossCookie();
             DoLogout();
         }
+
+        TUser onRequestRefreshUserSession()
+        {
+            if (OnRequestRefreshUserSession == null)
+                return default(TUser);
+            else
+            {
+                return OnRequestRefreshUserSession(User);
+            }
+        }
+        public delegate TUser UserSessionHanlder(TUser User);
     }
+
 
     [Serializable]
     public enum LoginState
