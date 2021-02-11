@@ -14,7 +14,7 @@ namespace Silmoon.Runtime.Cache
     /// </summary>
     public class ObjectCache<TKey, TValue>
     {
-        public static Dictionary<TKey, CacheItem<TKey, TValue>> Items { get; set; } = new Dictionary<TKey, CacheItem<TKey, TValue>>();
+        static Dictionary<TKey, CacheItem<TKey, TValue>> Items { get; set; } = new Dictionary<TKey, CacheItem<TKey, TValue>>();
 
         public static void Set(TKey Key, TValue Value, TimeSpan ExpireTime)
         {
@@ -82,6 +82,17 @@ namespace Silmoon.Runtime.Cache
             set
             {
                 Set(Key, value);
+            }
+        }
+        public static IEnumerable<CacheItem<TKey, TValue>> GetValues()
+        {
+            Clearup();
+            lock (Items)
+            {
+                foreach (var item in Items)
+                {
+                    yield return item.Value;
+                }
             }
         }
         static void Clearup()
