@@ -12,4 +12,8 @@
     <ProjectReference Include="..\Silmoon\Silmoon.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Extension\" />
+  </ItemGroup>
+
 </Project>

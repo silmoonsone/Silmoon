@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Silmoon.Extension;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,11 +12,15 @@ namespace Silmoon.Runtime.Cache
     /// <summary>
     /// 提供对象在静态类型中的缓存服务。默认缓存超时时间为1小时。
     /// </summary>
-    public class ObjectCache
+    public class ObjectCache<TKey, TValue>
     {
-        public static Dictionary<string, CacheItem> Items { get; set; } = new Dictionary<string, CacheItem>();
+        public static Dictionary<TKey, CacheItem<TKey, TValue>> Items { get; set; } = new Dictionary<TKey, CacheItem<TKey, TValue>>();
 
-        public static void Set(string Key, object Value, DateTime? ExpireAt = null)
+        public static void Set(TKey Key, TValue Value, TimeSpan ExpireTime)
+        {
+            Set(Key, Value, DateTime.Now.Add(ExpireTime));
+        }
+        public static void Set(TKey Key, TValue Value, DateTime? ExpireAt = null)
         {
             lock (Items)
             {
@@ -24,9 +29,9 @@ namespace Silmoon.Runtime.Cache
                 if (Items.ContainsKey(Key))
                 {
                     var item = Items[Key];
-                    if (item == null)
+                    if (item.ExipreAt == default)
                     {
-                        item = new CacheItem() { Key = Key, Value = Value, ExipreAt = ExpireAt.Value };
+                        item = new CacheItem<TKey, TValue>() { Key = Key, Value = Value, ExipreAt = ExpireAt.Value };
                         Items[Key] = item;
                     }
                     else
@@ -37,12 +42,12 @@ namespace Silmoon.Runtime.Cache
                 }
                 else
                 {
-                    var item = new CacheItem() { Key = Key, Value = Value, ExipreAt = ExpireAt.Value };
+                    var item = new CacheItem<TKey, TValue>() { Key = Key, Value = Value, ExipreAt = ExpireAt.Value };
                     Items.Add(Key, item);
                 }
             }
         }
-        public static object Get(string Key, TimeSpan? AddExpireTime = null)
+        public static TValue Get(TKey Key, TimeSpan? AddExpireTime = null)
         {
             Clearup();
             lock (Items)
@@ -55,11 +60,11 @@ namespace Silmoon.Runtime.Cache
                 }
                 else
                 {
-                    return null;
+                    return default;
                 }
             }
         }
-        public static object GetInfo(string Key)
+        public static object GetInfo(TKey Key)
         {
             lock (Items)
             {
@@ -68,7 +73,7 @@ namespace Silmoon.Runtime.Cache
                 else return null;
             }
         }
-        public object this[string Key]
+        public TValue this[TKey Key]
         {
             get
             {
@@ -81,7 +86,7 @@ namespace Silmoon.Runtime.Cache
         }
         static void Clearup()
         {
-            List<string> readyToClears = new List<string>();
+            List<TKey> readyToClears = new List<TKey>();
 
             lock (Items)
             {
