@@ -132,7 +132,7 @@ namespace Silmoon
         {
             return new SimpleStateFlag<T>(success, stateCode) { Data = data };
         }
-        public static SimpleStateFlag<T> Create<T>(bool success, int stateCode, string message, T data)
+        public static SimpleStateFlag<T> Create(bool success, int stateCode, string message, T data)
         {
             return new SimpleStateFlag<T>(success, stateCode, message) { Data = data };
         }

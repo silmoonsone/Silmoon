@@ -47,7 +47,7 @@ namespace Silmoon.Runtime.Cache
                 }
             }
         }
-        public static TValue Get(TKey Key, TimeSpan? AddExpireTime = null)
+        public static (bool Matched, TValue Value) Get(TKey Key, TimeSpan? AddExpireTime = null)
         {
             Clearup();
             lock (Items)
@@ -56,28 +56,29 @@ namespace Silmoon.Runtime.Cache
                 {
                     var item = Items[Key];
                     if (AddExpireTime.HasValue) item.ExipreAt.Add(AddExpireTime.Value);
-                    return item.Value;
+                    return (true, item.Value);
                 }
                 else
                 {
-                    return default;
+                    return (false, default);
                 }
             }
         }
-        public static object GetInfo(TKey Key)
+        public static (bool Matched, CacheItem<TKey, TValue> Item) GetInfo(TKey Key)
         {
+            Clearup();
             lock (Items)
             {
                 if (Items.ContainsKey(Key))
-                    return Items[Key];
-                else return null;
+                    return (true, Items[Key]);
+                else return (false, default);
             }
         }
         public TValue this[TKey Key]
         {
             get
             {
-                return Get(Key);
+                return Get(Key).Value;
             }
             set
             {
