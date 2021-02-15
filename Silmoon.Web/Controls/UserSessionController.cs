@@ -272,6 +272,10 @@ namespace Silmoon.Web.Controls
             }
         }
 
+        public virtual void DoLogin(TUser user)
+        {
+            DoLogin(user.Username, user.Password, user.Role, user);
+        }
         public virtual void DoLogin(string username, string password, TUser user)
         {
             DoLogin(username, password, 0, user);
