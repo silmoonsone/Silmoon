@@ -10,7 +10,7 @@ namespace Silmoon.Drawing
     {
         public static Bitmap FromBytes(byte[] buffer)
         {
-            using (var stream = buffer.MakeStream())
+            using (var stream = buffer.GetStream())
             {
                 return new Bitmap(stream);
             }

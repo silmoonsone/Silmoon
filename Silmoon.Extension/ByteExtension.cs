@@ -7,10 +7,14 @@ namespace Silmoon.Extension
 {
     public static class ByteExtension
     {
-        public static MemoryStream MakeStream(this byte[] bytes)
+        public static MemoryStream GetStream(this byte[] bytes)
         {
             var stream = new MemoryStream(bytes);
             return stream;
+        }
+        public static BinaryReader GetBinaryReader(this byte[] bytes)
+        {
+            return new BinaryReader(GetStream(bytes));
         }
     }
 }
