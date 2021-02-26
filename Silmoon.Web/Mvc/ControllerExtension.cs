@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Silmoon.Business.Core.Types;
+using Silmoon.Business.Models;
+using Silmoon.Web.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +12,9 @@ namespace Silmoon.Web.Mvc
 {
     public static class ControllerExtension
     {
-
+        public static ActionResult MvcSessionChecking(this Controller controller, UserSessionController<IUser> userSession, UserRole? IsRole, bool refreshUrlSession = false, string signInUrl = "~/User/Signin?url=$context_raw_url")
+        {
+            return userSession.MvcSessionChecking(controller, IsRole, refreshUrlSession, signInUrl);
+        }
     }
 }

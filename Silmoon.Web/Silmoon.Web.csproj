@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\RequireSessionSignin.cs" />
+    <Compile Include="Controls\IUserSessionController.cs" />
     <Compile Include="Controls\SessionRSAManager.cs" />
     <Compile Include="Controls\UserSessionController.cs" />
     <Compile Include="Extension\ControllerExtension.cs" />
