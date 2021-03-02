@@ -37,6 +37,5 @@ namespace Silmoon.Extension
                 return "null";
             }
         }
-
     }
 }

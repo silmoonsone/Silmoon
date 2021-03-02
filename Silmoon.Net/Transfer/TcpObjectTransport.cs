@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Silmoon.Extension;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -120,9 +121,9 @@ namespace Silmoon.Net.Transfer
             else if (typeof(T) == typeof(byte[]))
                 SendData(MakeData((byte[])(object)obj));
             else if (typeof(T) == typeof(object))
-                SendData(MakeData(JsonConvert.SerializeObject(obj)));
+                SendData(MakeData(obj.ToJsonString()));
             else
-                SendData(MakeData(JsonConvert.SerializeObject(obj)));
+                SendData(MakeData(obj.ToJsonString()));
         }
         public int SendObject(T obj, TcpObjectReceiveArgs<T> args)
         {
@@ -137,9 +138,9 @@ namespace Silmoon.Net.Transfer
             else if (typeof(T) == typeof(byte[]))
                 SendData(MakeData((byte[])(object)obj), clientSocket);
             else if (typeof(T) == typeof(object))
-                SendData(MakeData(JsonConvert.SerializeObject(obj)), clientSocket);
+                SendData(MakeData(obj.ToJsonString()), clientSocket);
             else
-                SendData(MakeData(JsonConvert.SerializeObject(obj)), clientSocket);
+                SendData(MakeData(obj.ToJsonString()), clientSocket);
             return i;
         }
         public byte[] MakeData(string str)
