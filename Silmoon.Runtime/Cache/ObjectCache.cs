@@ -74,6 +74,12 @@ namespace Silmoon.Runtime.Cache
                 else return (false, default);
             }
         }
+        public static bool Remove(TKey Key)
+        {
+            if (Items.ContainsKey(Key))
+                return Items.Remove(Key);
+            else { return false; }
+        }
         public TValue this[TKey Key]
         {
             get
