@@ -21,6 +21,16 @@ namespace Silmoon.Extension
                 return jo;
             }
         }
+        public static JArray GetJsons(string url)
+        {
+            using (WebClient wc = new WebClient())
+            {
+                wc.Encoding = Encoding.UTF8;
+                string s = wc.DownloadString(url);
+                JArray jo = (JArray)JsonConvert.DeserializeObject(s);
+                return jo;
+            }
+        }
         public static JObject GetJsonByPost(string url, string data)
         {
             using (WebClient wc = new WebClient())
@@ -43,6 +53,16 @@ namespace Silmoon.Extension
             }
         }
 
+        public static object GetJsonObject(string url)
+        {
+            using (WebClient wc = new WebClient())
+            {
+                wc.Encoding = Encoding.UTF8;
+                string s = wc.DownloadString(url);
+                var jo = JsonConvert.DeserializeObject(s);
+                return jo;
+            }
+        }
         public static T GetJsonObject<T>(string url)
         {
             using (WebClient wc = new WebClient())

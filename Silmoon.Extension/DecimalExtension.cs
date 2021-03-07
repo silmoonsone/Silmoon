@@ -9,11 +9,15 @@ namespace Silmoon.Extension
     {
         public static string ToUSD(this decimal value)
         {
-            return value.ToString("C", new CultureInfo("en-US"));
+            var c = new CultureInfo("zh-CN");
+            c.NumberFormat.CurrencyNegativePattern = 2;
+            return value.ToString("C", c);
         }
         public static string ToRMB(this decimal value)
         {
-            return value.ToString("C", new CultureInfo("zh-CN"));
+            var c = new CultureInfo("zh-CN");
+            c.NumberFormat.CurrencyNegativePattern = 2;
+            return value.ToString("C", c);
         }
     }
 }
