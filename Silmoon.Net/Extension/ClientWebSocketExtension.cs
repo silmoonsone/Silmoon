@@ -9,26 +9,26 @@ using System.Threading.Tasks;
 
 namespace Silmoon.Net.Extension
 {
-    public static class WebSocketExtension
+    public static class ClientWebSocketExtension
     {
-        public static Task SendTask(this WebSocket webSocket, string content, Encoding encoding)
+        public static Task SendTask(this ClientWebSocket webSocket, string content, Encoding encoding)
         {
             return webSocket.SendAsync(new ArraySegment<byte>(encoding.GetBytes(content)), WebSocketMessageType.Text, true, CancellationToken.None);
         }
-        public static Task SendTask(this WebSocket webSocket, string content)
+        public static Task SendTask(this ClientWebSocket webSocket, string content)
         {
             return webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(content)), WebSocketMessageType.Text, true, CancellationToken.None);
         }
-        public static Task SendTask(this WebSocket webSocket, object jsonObject, Encoding encoding)
+        public static Task SendTask(this ClientWebSocket webSocket, object jsonObject, Encoding encoding)
         {
             return webSocket.SendAsync(new ArraySegment<byte>(encoding.GetBytes(jsonObject.ToJsonString())), WebSocketMessageType.Text, true, CancellationToken.None);
         }
-        public static Task SendTask(this WebSocket webSocket, object jsonObject)
+        public static Task SendTask(this ClientWebSocket webSocket, object jsonObject)
         {
             return webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(jsonObject.ToJsonString())), WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
-        public static Task<string> ReceiveTask(this WebSocket webSocket, int bufferSize = 5120)
+        public static Task<string> ReceiveTask(this ClientWebSocket webSocket, int bufferSize = 5120)
         {
             return Task.Run(async () =>
             {
@@ -54,7 +54,7 @@ namespace Silmoon.Net.Extension
                 catch (Exception e) { throw e; }
             });
         }
-        public static Task<string> ReceiveTask(this WebSocket webSocket, Encoding encoding, int bufferSize = 5120)
+        public static Task<string> ReceiveTask(this ClientWebSocket webSocket, Encoding encoding, int bufferSize = 5120)
         {
             return Task.Run(async () =>
             {
