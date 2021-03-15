@@ -21,7 +21,7 @@ namespace Silmoon
             }
             return to;
         }
-        public static object MemberCopy_T<sT, dT>(sT source, dT dest)
+        public static object MemberCopy<sT, dT>(sT source, dT dest)
         {
             if (source == null || dest == null) return null;
             Type tto = typeof(dT);
@@ -45,7 +45,7 @@ namespace Silmoon
         public static dT New<sT, dT>(sT obj) where dT : new()
         {
             dT t = new dT();
-            MemberCopy_T<sT, dT>(obj, t);
+            MemberCopy(obj, t);
 
             return t;
         }
