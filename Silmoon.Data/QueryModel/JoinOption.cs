@@ -11,8 +11,7 @@ namespace Silmoon.Data.QueryModel
         public On On { get; set; }
         public string TableName { get; set; }
         public string[] FieldNames { get; set; }
-        [Obsolete]
-        public JoinOption(string tableName, On on, params string[] fieldNames)
+        private JoinOption(string tableName, On on, params string[] fieldNames)
         {
             TableName = tableName;
             On = on;

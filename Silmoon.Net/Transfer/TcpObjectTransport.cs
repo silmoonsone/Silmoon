@@ -114,7 +114,7 @@ namespace Silmoon.Net.Transfer
 
         public void SendObject(T obj)
         {
-            int i = 0;
+            //int i = 0;
             if (!socket.Connected) return;
             if (typeof(T) == typeof(string))
                 SendData(MakeData((string)(object)obj));

@@ -54,7 +54,7 @@ namespace Silmoon.Data.SqlServer
 
         public SqlExecuteResult<T> GetObject<T>(string tableName, object whereObject, SqlQueryOptions options = null) where T : new()
         {
-            if (options == null) options = new SqlQueryOptions();
+            if (options == null) options = SqlQueryOptions.Create();
             if ((options.Count.HasValue || options.Offset.HasValue) && (options.Sorts == null || options.Sorts.Count() == 0)) throw new ArgumentException("指定分页参数的时候不能缺少Sorts指定。", "SqlQueryOptions::Sorts");
 
             string sql = $"SELECT";
@@ -83,7 +83,7 @@ namespace Silmoon.Data.SqlServer
         }
         public SqlExecuteResult<T> GetObjectWithWhere<T>(string tableName, string whereString, object whereObject = null, SqlQueryOptions options = null) where T : new()
         {
-            if (options == null) options = new SqlQueryOptions();
+            if (options == null) options = SqlQueryOptions.Create();
             if ((options.Count.HasValue || options.Offset.HasValue) && (options.Sorts == null || options.Sorts.Count() == 0)) throw new ArgumentException("指定分页参数的时候不能缺少Sorts指定。", "SqlQueryOptions::Sorts");
 
             string sql = $"SELECT";
@@ -113,7 +113,7 @@ namespace Silmoon.Data.SqlServer
         }
         public SqlExecuteResults<T[]> GetObjects<T>(string tableName, object whereObject = null, SqlQueryOptions options = null) where T : new()
         {
-            if (options == null) options = new SqlQueryOptions();
+            if (options == null) options = SqlQueryOptions.Create();
             if ((options.Count.HasValue || options.Offset.HasValue) && (options.Sorts == null || options.Sorts.Count() == 0)) throw new ArgumentException("指定分页参数的时候不能缺少Sorts指定。", "SqlQueryOptions::Sorts");
 
             string sql = $"SELECT";
@@ -143,7 +143,7 @@ namespace Silmoon.Data.SqlServer
         }
         public SqlExecuteResults<T[]> GetObjectsWithWhere<T>(string tableName, string whereString = null, object whereObject = null, SqlQueryOptions options = null) where T : new()
         {
-            if (options == null) options = new SqlQueryOptions();
+            if (options == null) options = SqlQueryOptions.Create();
             if ((options.Count.HasValue || options.Offset.HasValue) && (options.Sorts == null || options.Sorts.Count() == 0)) throw new ArgumentException("指定分页参数的时候不能缺少Sorts指定。", "SqlQueryOptions::Sorts");
 
             string sql = $"SELECT";

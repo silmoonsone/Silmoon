@@ -8,13 +8,7 @@ namespace Silmoon.Data.QueryModel
 {
     public class Sort
     {
-        [Obsolete]
-        public Sort()
-        {
-
-        }
-        [Obsolete]
-        public Sort(string name, SortMethod method)
+        private Sort(string name, SortMethod method)
         {
             Name = name;
             Method = method;

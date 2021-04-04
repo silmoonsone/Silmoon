@@ -9,33 +9,29 @@ namespace Silmoon.Data.SqlServer
 {
     public class SqlQueryOptions
     {
-        public SqlQueryOptions()
+        private SqlQueryOptions()
         {
 
         }
-        [Obsolete]
-        public SqlQueryOptions(int? offset, int? count)
+        private SqlQueryOptions(int? offset, int? count)
         {
             Offset = offset;
             Count = count;
         }
-        [Obsolete]
-        public SqlQueryOptions(int? offset, int? count, Sort[] sorts)
+        private SqlQueryOptions(int? offset, int? count, Sort[] sorts)
         {
             Sorts = sorts;
             Offset = offset;
             Count = count;
         }
-        [Obsolete]
-        public SqlQueryOptions(int? offset, int? count, Sort[] sorts, SelectFieldOption fieldOption)
+        private SqlQueryOptions(int? offset, int? count, Sort[] sorts, SelectFieldOption fieldOption)
         {
             Sorts = sorts;
             Offset = offset;
             Count = count;
             FieldOption = fieldOption;
         }
-        [Obsolete]
-        public SqlQueryOptions(int? offset, int? count, Sort[] sorts, SelectFieldOption fieldOption, string[] excludedField)
+        private SqlQueryOptions(int? offset, int? count, Sort[] sorts, SelectFieldOption fieldOption, string[] excludedField)
         {
             Sorts = sorts;
             Offset = offset;
@@ -43,8 +39,7 @@ namespace Silmoon.Data.SqlServer
             FieldOption = fieldOption;
             ExcludedField = excludedField;
         }
-        [Obsolete]
-        public SqlQueryOptions(int? offset, int? count, Sort[] sorts, SelectFieldOption fieldOption, string[] excludedField, JoinOption join)
+        private SqlQueryOptions(int? offset, int? count, Sort[] sorts, SelectFieldOption fieldOption, string[] excludedField, JoinOption join)
         {
             Sorts = sorts;
             Offset = offset;
@@ -59,6 +54,10 @@ namespace Silmoon.Data.SqlServer
         public JoinOption Join { get; set; }
         public SelectFieldOption FieldOption { get; set; } = SelectFieldOption.All;
         public string[] ExcludedField { get; set; }
+        public static SqlQueryOptions Create()
+        {
+            return new SqlQueryOptions();
+        }
         public static SqlQueryOptions Create(int? offset, int? count)
         {
             return new SqlQueryOptions(offset, count);

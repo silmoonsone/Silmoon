@@ -9,33 +9,29 @@ namespace Silmoon.Extension
     {
         public static readonly DateTime SqlMinDateTime = DateTime.Parse("1/1/1753 00:00:00");
 
-        public static long ToTimeStamp(System.DateTime time)
+        public static long ToTimeStamp(DateTime time)
         {
-            long intResult = 0;
-            System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
-            intResult = (long)(time - startTime).TotalSeconds;
+            DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+            long intResult = (long)(time - startTime).TotalSeconds;
             return intResult;
         }
-        public static long ToTimeStamp(System.DateTime time, DateTime baseUTCTime)
+        public static long ToTimeStamp(DateTime time, DateTime baseUTCTime)
         {
-            long intResult = 0;
-            System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(baseUTCTime);
-            intResult = (long)(time - startTime).TotalSeconds;
+            DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(baseUTCTime);
+            long intResult = (long)(time - startTime).TotalSeconds;
             return intResult;
         }
 
-        public static System.DateTime ConvertIntDateTime(long d)
+        public static DateTime ConvertIntDateTime(long d)
         {
-            System.DateTime time = System.DateTime.MinValue;
-            System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
-            time = startTime.AddSeconds(d);
+            DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+            DateTime time = startTime.AddSeconds(d);
             return time;
         }
-        public static System.DateTime ConvertIntDateTime(long d, DateTime baseTime)
+        public static DateTime ConvertIntDateTime(long d, DateTime baseTime)
         {
-            System.DateTime time = System.DateTime.MinValue;
-            System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(baseTime);
-            time = startTime.AddSeconds(d);
+            DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(baseTime);
+            DateTime time = startTime.AddSeconds(d);
             return time;
         }
 
