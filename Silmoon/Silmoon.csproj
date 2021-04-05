@@ -83,7 +83,6 @@
     <Compile Include="Arrays\IID.cs" />
     <Compile Include="BigInteger.cs" />
     <Compile Include="ArrayHelper.cs" />
-    <Compile Include="Copy.cs" />
     <Compile Include="Imaging\ChartUtil.cs" />
     <Compile Include="Interfaces\IName.cs" />
     <Compile Include="Interfaces\INameValue.cs" />
@@ -151,7 +150,6 @@
     <Compile Include="IO\FileWatcher.cs" />
     <Compile Include="IO\SmFile\ACL.cs" />
     <Compile Include="IO\SmFile\Searcher.cs" />
-    <Compile Include="Memory\Memory.cs" />
     <Compile Include="MySilmoon\IRunningAble.cs" />
     <Compile Include="MySilmoon\IServerApplication.cs" />
     <Compile Include="MySilmoon\ServerApplication.cs" />

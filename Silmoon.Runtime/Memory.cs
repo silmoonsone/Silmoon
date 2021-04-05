@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Collections;
 
-namespace Silmoon.Memory
+namespace Silmoon.Runtime
 {
     public class Memory
     {
@@ -136,7 +136,7 @@ namespace Silmoon.Memory
         /// <param name="destIndex">目标数组开始位置</param>
         /// <param name="scrIndex">源数组开始位置</param>
         /// <param name="offset">复制长度，如果超出了源和目标数组，复制将会失败</param>
-        public static bool MemCpy(ref byte[] destByte, ref byte[] scrByte,int destIndex, int scrIndex, int offset)
+        public static bool MemCpy(ref byte[] destByte, ref byte[] scrByte, int destIndex, int scrIndex, int offset)
         {
             if (destByte == null || destByte.Length == 0) return false;
             if (scrByte == null || scrByte.Length == 0) return false;
