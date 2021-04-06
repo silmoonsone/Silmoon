@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Net;
 using System.Text;
 using System.Xml;
@@ -94,5 +95,20 @@ namespace Silmoon.Extension
                 return jo;
             }
         }
+
+        public static JObject LoadJsonFromFile(string path)
+        {
+            string s = File.ReadAllText(path);
+            JObject jo = (JObject)JsonConvert.DeserializeObject(s);
+            return jo;
+        }
+        public static T LoadJsonFromFile<T>(string path)
+        {
+            string s = File.ReadAllText(path);
+            T jo = JsonConvert.DeserializeObject<T>(s);
+            return jo;
+        }
+
+
     }
 }
