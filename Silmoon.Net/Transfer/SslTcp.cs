@@ -76,7 +76,7 @@ namespace Silmoon.Net.Transfer
 
                 Task.Run(() =>
                 {
-                    EnableReceive(socket);
+                    Receive(socket);
                 });
 
                 IsClientMode = true;
@@ -158,10 +158,9 @@ namespace Silmoon.Net.Transfer
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(endPoint);
             socket.Listen(backlog);
-
             onEvent(TcpEventType.ListenStarted, endPoint, socket);
+            socket.BeginAccept(OnClientConnected, null);
 
-            EnableAcceptAndReceive();
             IsClientMode = false;
             return true;
         }
@@ -193,6 +192,7 @@ namespace Silmoon.Net.Transfer
                     clientSocket.Shutdown(SocketShutdown.Both);
                     clientSocket.Close();
                 }
+                catch { }
                 finally
                 {
                     clientSocket.Dispose();
@@ -202,25 +202,19 @@ namespace Silmoon.Net.Transfer
             }
         }
 
-        void EnableAcceptAndReceive()
-        {
-            socket.BeginAccept(OnClientConnected, null);
-        }
         void OnClientConnected(IAsyncResult ar)
         {
-            var acceptedSocket = socket.EndAccept(ar);
             socket.BeginAccept(OnClientConnected, null);
-            onEvent(TcpEventType.ClientConnected, (IPEndPoint)acceptedSocket.RemoteEndPoint, acceptedSocket);
-
-            EnableReceive(acceptedSocket);
-        }
-        void EnableReceive(Socket socket)
-        {
+            var acceptedSocket = socket.EndAccept(ar);
             lock (ClientSockets)
             {
-                if (!IsClientMode) ClientSockets.Add(socket);
+                if (!IsClientMode) ClientSockets.Add(acceptedSocket);
             }
-
+            onEvent(TcpEventType.ClientConnected, (IPEndPoint)acceptedSocket.RemoteEndPoint, acceptedSocket);
+            Receive(acceptedSocket);
+        }
+        void Receive(Socket socket)
+        {
             if (socket.Connected)
             {
                 int recvLen;

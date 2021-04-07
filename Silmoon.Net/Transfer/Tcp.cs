@@ -49,7 +49,7 @@ namespace Silmoon.Net.Transfer
                 Task.Run(() =>
                 {
                     Thread.CurrentThread.Name = "socket async thread(" + socket.RemoteEndPoint + ")";
-                    EnableReceive(socket);
+                    Receive(socket);
                 });
                 IsClientMode = true;
                 return true;
@@ -132,7 +132,8 @@ namespace Silmoon.Net.Transfer
             socket.Bind(endPoint);
             socket.Listen(backlog);
             onEvent(TcpEventType.ListenStarted, endPoint, socket);
-            EnableAcceptAndReceive();
+            socket.BeginAccept(OnClientConnected, null);
+
             IsClientMode = false;
             return true;
         }
@@ -164,70 +165,58 @@ namespace Silmoon.Net.Transfer
                     clientSocket.Shutdown(SocketShutdown.Both);
                     clientSocket.Close();
                 }
+                catch { }
                 finally
                 {
-                    clientSocket.Dispose();
                     ClientSockets.Remove(clientSocket);
+                    clientSocket.Dispose();
                     onEvent(TcpEventType.ClientDisconnected, (IPEndPoint)ep, clientSocket);
                 }
             }
         }
 
-        void EnableAcceptAndReceive()
-        {
-            socket.BeginAccept(OnClientConnected, null);
-        }
         void OnClientConnected(IAsyncResult ar)
         {
-            var acceptedSocket = socket.EndAccept(ar);
             socket.BeginAccept(OnClientConnected, null);
-            onEvent(TcpEventType.ClientConnected, (IPEndPoint)acceptedSocket.RemoteEndPoint, acceptedSocket);
-            EnableReceive(acceptedSocket);
-        }
-        void EnableReceive(Socket socket)
-        {
+            var acceptedSocket = socket.EndAccept(ar);
             lock (ClientSockets)
             {
-                if (!IsClientMode) ClientSockets.Add(socket);
+                if (!IsClientMode) ClientSockets.Add(acceptedSocket);
             }
-
-            if (socket.Connected)
+            onEvent(TcpEventType.ClientConnected, (IPEndPoint)acceptedSocket.RemoteEndPoint, acceptedSocket);
+            Receive(acceptedSocket);
+        }
+        Task Receive(Socket socket)
+        {
+            return Task.Run(() =>
             {
-                using (NetworkStream stream = new NetworkStream(socket))
+                try
                 {
                     int recvLen;
+                    byte[] recvBuff = new byte[BufferSize];
                     do
                     {
-                        byte[] recvBuff = new byte[BufferSize];
-                        try
-                        {
-                            recvLen = stream.Read(recvBuff, 0, recvBuff.Length);
-                        }
-                        catch
-                        {
-                            recvLen = 0;
-                        }
+                        recvLen = socket.Receive(recvBuff);
                         if (recvLen != 0)
                         {
-                            //Console.WriteLine(recvLen);
                             byte[] tdBuff = new byte[recvLen];
                             Array.Copy(recvBuff, tdBuff, recvLen);
                             onDataReceived(socket, tdBuff);
-
                         }
                     } while (socket.Connected && recvLen != 0);
-
-                    if (!IsClientMode)
-                        CloseClientSocket(socket);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    if (!IsClientMode) CloseClientSocket(socket);
                     else readSocketCloseProcess();
                 }
-            }
-            else
-            {
-                if (!IsClientMode)
-                    CloseClientSocket(socket);
-                else readSocketCloseProcess();
-            }
+            });
+
+
         }
 
         void onEvent(TcpEventType eventType, IPEndPoint endPoint, Socket socket)
