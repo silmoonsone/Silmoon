@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Silmoon.Runtime
 {
-    public class ObjectRef
+    public static class ObjectRef
     {
         public static string[] GetPropertyNames(Type type, params string[] exclude)
         {
@@ -19,8 +19,24 @@ namespace Silmoon.Runtime
             }
             return propertyNames.ToArray();
         }
+        public static string[] GetPropertyNames<T>()
+        {
+            return GetPropertyNames(typeof(T));
+        }
+        public static string[] GetPropertyNames<T>(params string[] exclude)
+        {
+            return GetPropertyNames(typeof(T), exclude);
+        }
+        public static string[] GetPropertyNames(this object obj)
+        {
+            return GetPropertyNames(obj.GetType());
+        }
+        public static string[] GetPropertyNames(this object obj, params string[] exclude)
+        {
+            return GetPropertyNames(obj.GetType(), exclude);
+        }
 
-        public static Dictionary<string, PropertyInfo> GetProperties(object obj, params string[] exclude)
+        public static Dictionary<string, PropertyInfo> GetProperties(this object obj, params string[] exclude)
         {
             Dictionary<string, PropertyInfo> propertyNames = new Dictionary<string, PropertyInfo>();
             if (obj != null)

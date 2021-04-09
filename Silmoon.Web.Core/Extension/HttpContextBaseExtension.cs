@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Silmoon.Web.Core.Extension
 {
-    public static class HttpContextExtension
+    public static class HttpContextBaseExtension
     {
         public static async void Signin(this HttpContext httpContext, ClaimsPrincipal principal)
         {
