@@ -126,5 +126,9 @@ namespace Silmoon.Runtime.Cache
                 }
             }
         }
+        public static void Clear()
+        {
+            Items.Clear();
+        }
     }
 }
