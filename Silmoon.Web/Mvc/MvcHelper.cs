@@ -14,6 +14,7 @@ namespace Silmoon.Web.Mvc
 {
     public class MvcHelper
     {
+        [Obsolete]
         public static List<SelectListItem> MakeMvcSelectListItems(Type type, object enumObj)
         {
             if (type.IsEnum)
