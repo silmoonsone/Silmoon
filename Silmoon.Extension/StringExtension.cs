@@ -16,7 +16,7 @@ namespace Silmoon.Extension
             return encoding.GetByteCount(value);
         }
 
-        public static string SubStringEncoded(this string s, int length, Encoding encoding)
+        public static string SubstringEncoded(this string s, int length, Encoding encoding)
         {
             byte[] bytes = encoding.GetBytes(s);
             int n = 0;  //  表示当前的字节数
@@ -87,75 +87,42 @@ namespace Silmoon.Extension
             switch (value.ToLower())
             {
                 case null:
-                    return false;
                 case "":
-                    return false;
-                case "1":
-                    return true;
                 case "0":
-                    return false;
-                case "y":
-                    return true;
                 case "n":
-                    return false;
-                case "yes":
-                    return true;
                 case "no":
-                    return false;
-                case "ok":
-                    return true;
-                case "not":
-                    return true;
-                case "on":
-                    return true;
                 case "off":
-                    return false;
-                case "是":
-                    return true;
                 case "否":
-                    return false;
-                case "对":
-                    return true;
                 case "错":
-                    return false;
-                case "真":
-                    return true;
                 case "假":
-                    return false;
                 case "禁用":
-                    return false;
-                case "启用":
-                    return true;
-                case "true":
-                    return true;
                 case "false":
-                    return false;
-                case "enable":
-                    return true;
                 case "disable":
-                    return false;
-                case "enabled":
-                    return true;
                 case "disabled":
-                    return false;
-                case "open":
-                    return true;
                 case "close":
-                    return false;
-                case "openning":
-                    return true;
-                case "opening":
-                    return true;
                 case "closed":
-                    return false;
-                case "start":
-                    return true;
                 case "stop":
-                    return false;
-                case "started":
-                    return true;
                 case "stoped":
                     return false;
+                case "1":
+                case "y":
+                case "yes":
+                case "ok":
+                case "not":
+                case "on":
+                case "是":
+                case "对":
+                case "真":
+                case "启用":
+                case "true":
+                case "enable":
+                case "enabled":
+                case "open":
+                case "openning":
+                case "opening":
+                case "start":
+                case "started":
+                    return true;
                 default:
                     return defaultResult;
             }
@@ -239,6 +206,14 @@ namespace Silmoon.Extension
             if (iNum == 0) return Strength.Normal; //字母和符号构成的密码
             if (password.Length <= 10) return Strength.Normal; //长度不大于10的密码
             return Strength.Strong; //由数字、字母、符号构成的密码
+        }
+        public static string Substring(this string str, int count, string perfix = "")
+        {
+            if (str.Length > count)
+            {
+                return str.Substring(0, count) + perfix;
+            }
+            else { return str; }
         }
     }
 }
