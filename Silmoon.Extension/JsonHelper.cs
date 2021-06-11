@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace Silmoon.Extension
@@ -22,6 +23,17 @@ namespace Silmoon.Extension
                 return jo;
             }
         }
+        public async static Task<JObject> GetJsonAsync(string url)
+        {
+            using (WebClient wc = new WebClient())
+            {
+                wc.Encoding = Encoding.UTF8;
+                string s = await wc.DownloadStringTaskAsync(url);
+                JObject jo = (JObject)JsonConvert.DeserializeObject(s);
+                return jo;
+            }
+        }
+
         public static JArray GetJsons(string url)
         {
             using (WebClient wc = new WebClient())
@@ -32,6 +44,17 @@ namespace Silmoon.Extension
                 return jo;
             }
         }
+        public async static Task<JArray> GetJsonsAsync(string url)
+        {
+            using (WebClient wc = new WebClient())
+            {
+                wc.Encoding = Encoding.UTF8;
+                string s = await wc.DownloadStringTaskAsync(url);
+                JArray jo = (JArray)JsonConvert.DeserializeObject(s);
+                return jo;
+            }
+        }
+
         public static JObject GetJsonByPost(string url, string data)
         {
             using (WebClient wc = new WebClient())
@@ -42,6 +65,17 @@ namespace Silmoon.Extension
                 return jo;
             }
         }
+        public async static Task<JObject> GetJsonByPostAsync(string url, string data)
+        {
+            using (WebClient wc = new WebClient())
+            {
+                wc.Encoding = Encoding.UTF8;
+                string s = await wc.UploadStringTaskAsync(url, data);
+                JObject jo = (JObject)JsonConvert.DeserializeObject(s);
+                return jo;
+            }
+        }
+
         public static JObject GetJsonByPost(string url, NameValueCollection values)
         {
             using (WebClient wc = new WebClient())
@@ -53,6 +87,20 @@ namespace Silmoon.Extension
                 return jo;
             }
         }
+        public async static Task<JObject> GetJsonByPostAsync(string url, NameValueCollection values)
+        {
+            using (WebClient wc = new WebClient())
+            {
+                wc.Encoding = Encoding.UTF8;
+                var data = await wc.UploadValuesTaskAsync(url, values);
+                var s = Encoding.UTF8.GetString(data);
+                JObject jo = (JObject)JsonConvert.DeserializeObject(s);
+                return jo;
+            }
+        }
+
+
+
 
         public static object GetJsonObject(string url)
         {
@@ -64,6 +112,17 @@ namespace Silmoon.Extension
                 return jo;
             }
         }
+        public async static Task<object> GetJsonObjectAsync(string url)
+        {
+            using (WebClient wc = new WebClient())
+            {
+                wc.Encoding = Encoding.UTF8;
+                string s = await wc.DownloadStringTaskAsync(url);
+                var jo = JsonConvert.DeserializeObject(s);
+                return jo;
+            }
+        }
+
         public static T GetJsonObject<T>(string url)
         {
             using (WebClient wc = new WebClient())
@@ -74,6 +133,17 @@ namespace Silmoon.Extension
                 return jo;
             }
         }
+        public async static Task<T> GetJsonObjectAsync<T>(string url)
+        {
+            using (WebClient wc = new WebClient())
+            {
+                wc.Encoding = Encoding.UTF8;
+                string s = await wc.DownloadStringTaskAsync(url);
+                T jo = JsonConvert.DeserializeObject<T>(s);
+                return jo;
+            }
+        }
+
         public static T GetJsonObjectByPost<T>(string url, string data)
         {
             using (WebClient wc = new WebClient())
@@ -84,6 +154,17 @@ namespace Silmoon.Extension
                 return jo;
             }
         }
+        public async static Task<T> GetJsonObjectByPostAsync<T>(string url, string data)
+        {
+            using (WebClient wc = new WebClient())
+            {
+                wc.Encoding = Encoding.UTF8;
+                string s = await wc.UploadStringTaskAsync(url, data);
+                T jo = JsonConvert.DeserializeObject<T>(s);
+                return jo;
+            }
+        }
+
         public static T GetJsonObjectByPost<T>(string url, NameValueCollection values)
         {
             using (WebClient wc = new WebClient())
@@ -95,6 +176,20 @@ namespace Silmoon.Extension
                 return jo;
             }
         }
+        public async static Task<T> GetJsonObjectByPostAsync<T>(string url, NameValueCollection values)
+        {
+            using (WebClient wc = new WebClient())
+            {
+                wc.Encoding = Encoding.UTF8;
+                var data = await wc.UploadValuesTaskAsync(url, values);
+                var s = Encoding.UTF8.GetString(data);
+                T jo = JsonConvert.DeserializeObject<T>(s);
+                return jo;
+            }
+        }
+
+
+
 
         public static JObject LoadJsonFromFile(string path)
         {

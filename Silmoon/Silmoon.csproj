@@ -113,9 +113,7 @@
     <Compile Include="Security\EncryptHelper.cs" />
     <Compile Include="Security\Util\DictionarySort.cs" />
     <Compile Include="Serializer.cs" />
-    <Compile Include="SimpleStateFlag.cs" />
     <Compile Include="Text\Punycode.cs" />
-    <Compile Include="IStateFlag.cs" />
     <Compile Include="MySilmoon\RunningAble.cs" />
     <Compile Include="Security\RSAPrivateKeyCrypto.cs" />
     <Compile Include="Silmoon.cs">
@@ -133,7 +131,6 @@
     </Compile>
     <Compile Include="Security\HashHelper.cs" />
     <Compile Include="Configuration\IniFile.cs" />
-    <Compile Include="StateSet.cs" />
     <Compile Include="Threading\ActionLimit.cs" />
     <Compile Include="Threading\TimeLimit.cs" />
     <Compile Include="Types\OperateResult.cs" />

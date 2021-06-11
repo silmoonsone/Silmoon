@@ -36,61 +36,82 @@ namespace Silmoon.Net.Extension
             return webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(jsonObject.ToJsonString())), WebSocketMessageType.Text, true, cancellationToken.Value);
         }
 
-        public static Task<string> ReceiveTask(this ClientWebSocket webSocket, CancellationToken? cancellationToken = null, int bufferSize = 5120)
+        public static async Task<string> ReceiveTask(this ClientWebSocket webSocket, long sizeLimit = 0, CancellationToken? cancellationToken = null, int bufferSize = 5120)
         {
             if (!cancellationToken.HasValue) cancellationToken = CancellationToken.None;
 
-            return Task.Run(async () =>
+            try
             {
-                try
+                var buffer = new byte[bufferSize];
+                var array = new ArraySegment<byte>(buffer);
+                var bufferList = new List<byte[]>();
+
+                var receiveCount = 0;
+                WebSocketReceiveResult result = null;
+                do
                 {
-                    var buffer = new byte[bufferSize];
-                    var array = new ArraySegment<byte>(buffer);
-                    var bufferList = new List<byte[]>();
-
-                    var receiveCount = 0;
-                    WebSocketReceiveResult result = null;
-                    do
-                    {
-                        result = await webSocket.ReceiveAsync(array, cancellationToken.Value);
-                        receiveCount += result.Count;
-                        bufferList.Add(buffer.Take(result.Count).ToArray());
-
-                    } while (!result.EndOfMessage);
-                    byte[] completedData = new byte[0];
-                    bufferList.ForEach(d => completedData = completedData.Concat(d).ToArray());
-                    return Encoding.UTF8.GetString(completedData, 0, receiveCount);
-                }
-                catch (Exception e) { throw e; }
-            });
+                    result = await webSocket.ReceiveAsync(array, cancellationToken.Value);
+                    receiveCount += result.Count;
+                    bufferList.Add(buffer.Take(result.Count).ToArray());
+                    if (sizeLimit != 0 && receiveCount > sizeLimit) break;
+                } while (!result.EndOfMessage);
+                byte[] completedData = new byte[0];
+                bufferList.ForEach(d => completedData = completedData.Concat(d).ToArray());
+                return Encoding.UTF8.GetString(completedData, 0, receiveCount);
+            }
+            catch (Exception e) { throw e; }
         }
-        public static Task<string> ReceiveTask(this ClientWebSocket webSocket, Encoding encoding, CancellationToken? cancellationToken = null, int bufferSize = 5120)
+        public static async Task<string> ReceiveTask(this ClientWebSocket webSocket, Encoding encoding, long sizeLimit = 0, CancellationToken? cancellationToken = null, int bufferSize = 5120)
         {
             if (!cancellationToken.HasValue) cancellationToken = CancellationToken.None;
 
-            return Task.Run(async () =>
+            try
             {
-                try
+                var buffer = new byte[bufferSize];
+                var array = new ArraySegment<byte>(buffer);
+                var bufferList = new List<byte[]>();
+
+                var receiveCount = 0;
+                WebSocketReceiveResult result = null;
+                do
                 {
-                    var buffer = new byte[bufferSize];
-                    var array = new ArraySegment<byte>(buffer);
-                    var bufferList = new List<byte[]>();
-
-                    var receiveCount = 0;
-                    WebSocketReceiveResult result = null;
-                    do
-                    {
-                        result = await webSocket.ReceiveAsync(array, cancellationToken.Value);
-                        receiveCount += result.Count;
-                        bufferList.Add(buffer.Take(result.Count).ToArray());
-
-                    } while (!result.EndOfMessage);
-                    byte[] completedData = new byte[0];
-                    bufferList.ForEach(d => completedData = completedData.Concat(d).ToArray());
-                    return encoding.GetString(completedData, 0, receiveCount);
-                }
-                catch (Exception e) { throw e; }
-            });
+                    result = await webSocket.ReceiveAsync(array, cancellationToken.Value);
+                    receiveCount += result.Count;
+                    bufferList.Add(buffer.Take(result.Count).ToArray());
+                    if (sizeLimit != 0 && receiveCount > sizeLimit) break;
+                } while (!result.EndOfMessage);
+                byte[] completedData = new byte[0];
+                bufferList.ForEach(d => completedData = completedData.Concat(d).ToArray());
+                return encoding.GetString(completedData, 0, receiveCount);
+            }
+            catch (Exception e) { throw e; }
         }
+        public static async Task<string> ReceiveOnceTask(this ClientWebSocket webSocket, CancellationToken? cancellationToken = null, int bufferSize = 5120)
+        {
+            if (!cancellationToken.HasValue) cancellationToken = CancellationToken.None;
+
+            try
+            {
+                var buffer = new byte[bufferSize];
+                var array = new ArraySegment<byte>(buffer);
+                var result = await webSocket.ReceiveAsync(array, cancellationToken.Value);
+                return Encoding.UTF8.GetString(buffer, 0, result.Count);
+            }
+            catch (Exception e) { throw e; }
+        }
+        public static async Task<string> ReceiveOnceTask(this ClientWebSocket webSocket, Encoding encoding, CancellationToken? cancellationToken = null, int bufferSize = 5120)
+        {
+            if (!cancellationToken.HasValue) cancellationToken = CancellationToken.None;
+
+            try
+            {
+                var buffer = new byte[bufferSize];
+                var array = new ArraySegment<byte>(buffer);
+                var result = await webSocket.ReceiveAsync(array, cancellationToken.Value);
+                return encoding.GetString(buffer, 0, result.Count);
+            }
+            catch (Exception e) { throw e; }
+        }
+
     }
 }

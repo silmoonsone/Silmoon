@@ -1,5 +1,7 @@
 using Silmoon.Business.Core.Types;
 using Silmoon.Business.Models;
+using Silmoon.Extension;
+using Silmoon.Models;
 using System;
 using System.Security.Cryptography;
 using System.Text;
@@ -33,6 +35,7 @@ namespace Silmoon.Web.Controls
         public event EventHandler UserLogin;
         public event EventHandler UserLogout;
         public event UserSessionHanlder OnRequestRefreshUserSession;
+        public event UserTokenHanlder OnRequestUserToken;
 
         public string Username
         {
@@ -120,16 +123,49 @@ namespace Silmoon.Web.Controls
         /// <param name="controller">controller传入null，将不会自动转跳，并且在登录状态下不会，将用户会话实例赋值到ViewBag.UserSession，用户的数据不会赋值到ViewBag.User。</param>
         /// <param name="signInUrl">若传入controller，会使用转跳到本参数指定的URL。</param>
         /// <returns></returns>
-        public ActionResult MvcSessionChecking(Controller controller, UserRole? IsRole, bool refreshUrlSession = false, string signInUrl = "~/User/Signin?url=$context_raw_url")
+        public ActionResult MvcSessionChecking(Controller controller, UserRole? IsRole, bool refreshUrlSession = false, string signInUrl = "~/User/Signin?url=$SigninUrl")
         {
-            signInUrl = signInUrl?.Replace("$context_raw_url", controller.Request.RawUrl);
+            signInUrl = signInUrl?.Replace("$SigninUrl", controller.Request.RawUrl);
+            var username = controller.Request.QueryString["username"];
+            var usertoken = controller.Request.QueryString["UserToken"] ?? controller.Request.QueryString["AppUserToken"];
+
 
 
             if (State != LoginState.Login)
             {
-                if (controller.Request.IsAjaxRequest())
-                    return new JsonResult { Data = SimpleStateFlag.Create(false, -9999, "no signin."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-                else return new RedirectResult(signInUrl);
+                if (usertoken.IsNullOrEmpty())
+                {
+                    if (controller.Request.IsAjaxRequest())
+                        return new JsonResult { Data = SimpleStateFlag.Create(false, -9999, "no signin."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                    else return new RedirectResult(signInUrl);
+                }
+                else
+                {
+                    var userInfo = OnRequestUserToken(username, usertoken);
+                    if (userInfo != null)
+                    {
+                        User = userInfo;
+                        DoLogin(User);
+                    }
+                    else
+                    {
+                        if (controller.Request.IsAjaxRequest())
+                            return new JsonResult { Data = SimpleStateFlag.Create(false, -9999, "signin by usertoken fail."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                        else return new RedirectResult(signInUrl);
+                    }
+                    if (IsRole.HasValue)
+                    {
+                        if (Role < IsRole)
+                        {
+                            if (controller.Request.IsAjaxRequest())
+                                return new JsonResult { Data = SimpleStateFlag.Create(false, -9999, "access denied."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                            else return new ContentResult() { Content = "access denied", ContentType = "text/plain" };
+                        }
+                    }
+                    controller.ViewBag.User = User;
+                    controller.ViewBag.UserSession = this;
+                    return null;
+                }
             }
             else
             {
@@ -336,6 +372,7 @@ namespace Silmoon.Web.Controls
             }
         }
         public delegate TUser UserSessionHanlder(TUser User);
+        public delegate TUser UserTokenHanlder(string Username, string UserToken);
     }
 
 

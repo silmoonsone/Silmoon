@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Silmoon.Extension
 {
@@ -214,6 +215,10 @@ namespace Silmoon.Extension
                 return str.Substring(0, count) + perfix;
             }
             else { return str; }
+        }
+        public static string StripHtml(this string input)
+        {
+            return Regex.Replace(input, "<.*?>", string.Empty);
         }
     }
 }

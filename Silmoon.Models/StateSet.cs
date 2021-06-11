@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Silmoon
+namespace Silmoon.Models
 {
     /// <summary>
     /// 表示一个带有具体信息的状态
     /// </summary>
-    /// <typeparam name="T_State">状态的类型</typeparam>
-    public class StateSet<T_State>
+    /// <typeparam name="TState">状态的类型</typeparam>
+    public class StateSet<TState>
     {
         /// <summary>
         /// 状态
         /// </summary>
-        public T_State State { get; set; }
+        public TState State { get; set; }
         /// <summary>
         /// 信息
         /// </summary>
@@ -24,7 +24,7 @@ namespace Silmoon
         /// <param name="state">状态</param>
         /// <param name="message">信息</param>
         /// <returns></returns>
-        public StateSet<T_State> Set(T_State state, string message = "")
+        public StateSet<TState> Set(TState state, string message = "")
         {
             State = state;
             Message = message;
@@ -38,7 +38,7 @@ namespace Silmoon
         /// 构建实例，并且指定状态
         /// </summary>
         /// <param name="state"></param>
-        public StateSet(T_State state)
+        public StateSet(TState state)
         {
             Set(state, null);
         }
@@ -47,32 +47,32 @@ namespace Silmoon
         /// </summary>
         /// <param name="state"></param>
         /// <param name="message"></param>
-        public StateSet(T_State state, string message = "")
+        public StateSet(TState state, string message = "")
         {
             Set(state, message);
         }
 
-        public static StateSet<T_State> Create(T_State state)
+        public static StateSet<TState> Create(TState state)
         {
-            return new StateSet<T_State>(state);
+            return new StateSet<TState>(state);
         }
-        public static StateSet<T_State> Create(T_State state, string message)
+        public static StateSet<TState> Create(TState state, string message)
         {
-            return new StateSet<T_State>(state, message);
+            return new StateSet<TState>(state, message);
 
         }
     }
     /// <summary>
     /// 表示一个带有具体信息的数据和状态
     /// </summary>
-    /// <typeparam name="T_State">状态的类型</typeparam>
-    /// <typeparam name="T_Data">包含数据的类型</typeparam>
-    public class StateSet<T_State, T_Data> : StateSet<T_State>
+    /// <typeparam name="TState">状态的类型</typeparam>
+    /// <typeparam name="TData">包含数据的类型</typeparam>
+    public class StateSet<TState, TData> : StateSet<TState>
     {
         /// <summary>
         /// 包含的数据
         /// </summary>
-        public T_Data Data { get; set; }
+        public TData Data { get; set; }
         /// <summary>
         /// 构建实例，指定信息、状态和数据
         /// </summary>
@@ -80,38 +80,38 @@ namespace Silmoon
         /// <param name="userState"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public StateSet<T_State, T_Data> Set(T_State state, T_Data data, string message = "")
+        public StateSet<TState, TData> Set(TState state, TData data, string message = "")
         {
             State = state;
             Message = message;
             Data = data;
             return this;
         }
-        public new StateSet<T_State, T_Data> Set(T_State state, string message = "")
+        public new StateSet<TState, TData> Set(TState state, string message = "")
         {
             State = state;
             Message = message;
-            Data = default(T_Data);
+            Data = default(TData);
             return this;
         }
         public StateSet() { }
-        public StateSet(T_State state, T_Data data)
+        public StateSet(TState state, TData data)
         {
             Set(state, data, null);
         }
-        public StateSet(T_State state, T_Data data, string message = "")
+        public StateSet(TState state, TData data, string message = "")
         {
             Set(state, data, message);
         }
 
-        public static StateSet<T_State, T_Data> Create(T_State state, T_Data data)
+        public static StateSet<TState, TData> Create(TState state, TData data)
         {
-            return new StateSet<T_State, T_Data>(state, data);
+            return new StateSet<TState, TData>(state, data);
 
         }
-        public static StateSet<T_State, T_Data> Create(T_State state, T_Data data, string message)
+        public static StateSet<TState, TData> Create(TState state, TData data, string message)
         {
-            return new StateSet<T_State, T_Data>(state, data, message);
+            return new StateSet<TState, TData>(state, data, message);
 
         }
     }

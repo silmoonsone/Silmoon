@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Silmoon
+namespace Silmoon.Models
 {
     public interface IStateFlag
     {
