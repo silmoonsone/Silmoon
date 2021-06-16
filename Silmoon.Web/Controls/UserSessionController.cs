@@ -125,15 +125,14 @@ namespace Silmoon.Web.Controls
         /// <returns></returns>
         public ActionResult MvcSessionChecking(Controller controller, UserRole? IsRole, bool refreshUrlSession = false, string signInUrl = "~/User/Signin?url=$SigninUrl")
         {
-            signInUrl = signInUrl?.Replace("$SigninUrl", controller.Request.RawUrl);
-            var username = controller.Request.QueryString["username"];
-            var usertoken = controller.Request.QueryString["UserToken"] ?? controller.Request.QueryString["AppUserToken"];
-
+            signInUrl = signInUrl?.Replace("$SigninUrl", controller.Server.UrlEncode(controller.Request.RawUrl));
+            var username = controller.Request.QueryString["Username"];
+            var userToken = controller.Request.QueryString["UserToken"] ?? controller.Request.QueryString["AppUserToken"];
 
 
             if (State != LoginState.Login)
             {
-                if (usertoken.IsNullOrEmpty())
+                if (userToken.IsNullOrEmpty())
                 {
                     if (controller.Request.IsAjaxRequest())
                         return new JsonResult { Data = SimpleStateFlag.Create(false, -9999, "no signin."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -141,7 +140,7 @@ namespace Silmoon.Web.Controls
                 }
                 else
                 {
-                    var userInfo = OnRequestUserToken(username, usertoken);
+                    var userInfo = OnRequestUserToken(username, userToken);
                     if (userInfo != null)
                     {
                         User = userInfo;
@@ -153,6 +152,8 @@ namespace Silmoon.Web.Controls
                             return new JsonResult { Data = SimpleStateFlag.Create(false, -9999, "signin by usertoken fail."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                         else return new RedirectResult(signInUrl);
                     }
+
+                    ///使用UserToken登录后处理
                     if (IsRole.HasValue)
                     {
                         if (Role < IsRole)
