@@ -129,8 +129,9 @@ namespace Silmoon.Web.Controls
             var username = controller.Request.QueryString["Username"];
             var userToken = controller.Request.QueryString["UserToken"] ?? controller.Request.QueryString["AppUserToken"];
             var tokenNoSession = controller.Request.QueryString["TokenNoSession"].ToBool(false, false);
+            var ignoreUserToken = controller.Request.QueryString["ignoreUserToken"].ToBool(false, false);
 
-            if (State != LoginState.Login)
+            if (State != LoginState.Login || (!userToken.IsNullOrEmpty() && !ignoreUserToken))
             {
                 if (userToken.IsNullOrEmpty())
                 {
