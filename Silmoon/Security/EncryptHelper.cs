@@ -9,10 +9,11 @@ namespace Silmoon.Security
     {
         public static byte[] AesEncrypt(string source, string key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
         {
+            var osource = Encoding.UTF8.GetBytes(source);
             var okey = Encoding.UTF8.GetBytes(key);
-            return AesEncrypt(source, okey, cipherMode, paddingMode);
+            return AesEncrypt(osource, okey, cipherMode, paddingMode);
         }
-        public static byte[] AesEncrypt(string source, byte[] key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
+        public static byte[] AesEncrypt(byte[] source, byte[] key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
         {
             using (RijndaelManaged aesProvider = new RijndaelManaged())
             {
@@ -21,7 +22,7 @@ namespace Silmoon.Security
                 aesProvider.Padding = paddingMode;
                 using (ICryptoTransform cryptoTransform = aesProvider.CreateEncryptor())
                 {
-                    byte[] inputBuffers = Encoding.UTF8.GetBytes(source);
+                    byte[] inputBuffers = source;
                     byte[] results = cryptoTransform.TransformFinalBlock(inputBuffers, 0, inputBuffers.Length);
                     aesProvider.Clear();
                     aesProvider.Dispose();
@@ -31,10 +32,11 @@ namespace Silmoon.Security
         }
         public static byte[] AesDecrypt(string source, string key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
         {
+            var osource = Encoding.UTF8.GetBytes(source);
             var okey = Encoding.UTF8.GetBytes(key);
-            return AesDecrypt(source, okey, cipherMode, paddingMode);
+            return AesDecrypt(osource, okey, cipherMode, paddingMode);
         }
-        public static byte[] AesDecrypt(string source, byte[] key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
+        public static byte[] AesDecrypt(byte[] source, byte[] key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
         {
             using (RijndaelManaged aesProvider = new RijndaelManaged())
             {
@@ -43,7 +45,7 @@ namespace Silmoon.Security
                 aesProvider.Padding = paddingMode;
                 using (ICryptoTransform cryptoTransform = aesProvider.CreateDecryptor())
                 {
-                    byte[] inputBuffers = Convert.FromBase64String(source);
+                    byte[] inputBuffers = source;
                     byte[] results = cryptoTransform.TransformFinalBlock(inputBuffers, 0, inputBuffers.Length);
                     aesProvider.Clear();
                     return results;

@@ -142,7 +142,7 @@ namespace Silmoon.Extension
             }
             return s;
         }
-        public static string FillLength(string value, int length, string fillStr, bool onAfter)
+        public static string Fill(this string value, int length, string fillStr, bool onAfter = true)
         {
             int fInChrC = length - value.Length;
             if (fInChrC < 1) return value;
