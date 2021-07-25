@@ -50,6 +50,12 @@ namespace Silmoon.Web
         {
             IPAddress result = null;
 
+            if (!string.IsNullOrEmpty(HttpContext.Current.Request.Headers["X-Forwarded-For"]))
+                return IPAddress.Parse(HttpContext.Current.Request.Headers["X-Forwarded-For"].Split(new string[] { " ", ",", ":" }, StringSplitOptions.RemoveEmptyEntries)[0]);
+
+            if (!string.IsNullOrEmpty(HttpContext.Current.Request.Headers["CF-Connecting-IP"]))
+                return IPAddress.Parse(HttpContext.Current.Request.Headers["CF-Connecting-IP"].Split(new string[] { " ", ",", ":" }, StringSplitOptions.RemoveEmptyEntries)[0]);
+
             if (!string.IsNullOrEmpty(HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"]))
                 return IPAddress.Parse(HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"].Split(new string[] { " ", ",", ":" }, StringSplitOptions.RemoveEmptyEntries)[0]);
 

@@ -17,6 +17,7 @@ namespace Silmoon.Extension
         {
             using (WebClient wc = new WebClient())
             {
+                wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
                 string s = wc.DownloadString(url);
                 JObject jo = (JObject)JsonConvert.DeserializeObject(s);
@@ -27,6 +28,7 @@ namespace Silmoon.Extension
         {
             using (WebClient wc = new WebClient())
             {
+                wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
                 string s = await wc.DownloadStringTaskAsync(url);
                 JObject jo = (JObject)JsonConvert.DeserializeObject(s);
@@ -38,6 +40,7 @@ namespace Silmoon.Extension
         {
             using (WebClient wc = new WebClient())
             {
+                wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
                 string s = wc.DownloadString(url);
                 JArray jo = (JArray)JsonConvert.DeserializeObject(s);
@@ -48,6 +51,7 @@ namespace Silmoon.Extension
         {
             using (WebClient wc = new WebClient())
             {
+                wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
                 string s = await wc.DownloadStringTaskAsync(url);
                 JArray jo = (JArray)JsonConvert.DeserializeObject(s);
@@ -59,6 +63,7 @@ namespace Silmoon.Extension
         {
             using (WebClient wc = new WebClient())
             {
+                wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
                 string s = wc.UploadString(url, data);
                 JObject jo = (JObject)JsonConvert.DeserializeObject(s);
@@ -69,6 +74,7 @@ namespace Silmoon.Extension
         {
             using (WebClient wc = new WebClient())
             {
+                wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
                 string s = await wc.UploadStringTaskAsync(url, data);
                 JObject jo = (JObject)JsonConvert.DeserializeObject(s);
@@ -80,6 +86,7 @@ namespace Silmoon.Extension
         {
             using (WebClient wc = new WebClient())
             {
+                wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
                 var data = wc.UploadValues(url, values);
                 var s = Encoding.UTF8.GetString(data);
@@ -91,6 +98,7 @@ namespace Silmoon.Extension
         {
             using (WebClient wc = new WebClient())
             {
+                wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
                 var data = await wc.UploadValuesTaskAsync(url, values);
                 var s = Encoding.UTF8.GetString(data);
@@ -98,8 +106,6 @@ namespace Silmoon.Extension
                 return jo;
             }
         }
-
-
 
 
         public static object GetJsonObject(string url)
@@ -116,6 +122,7 @@ namespace Silmoon.Extension
         {
             using (WebClient wc = new WebClient())
             {
+                wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
                 string s = await wc.DownloadStringTaskAsync(url);
                 var jo = JsonConvert.DeserializeObject(s);
@@ -127,6 +134,7 @@ namespace Silmoon.Extension
         {
             using (WebClient wc = new WebClient())
             {
+                wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
                 string s = wc.DownloadString(url);
                 T jo = JsonConvert.DeserializeObject<T>(s);
@@ -137,6 +145,7 @@ namespace Silmoon.Extension
         {
             using (WebClient wc = new WebClient())
             {
+                wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
                 string s = await wc.DownloadStringTaskAsync(url);
                 T jo = JsonConvert.DeserializeObject<T>(s);
@@ -148,6 +157,7 @@ namespace Silmoon.Extension
         {
             using (WebClient wc = new WebClient())
             {
+                wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
                 string s = wc.UploadString(url, data);
                 T jo = JsonConvert.DeserializeObject<T>(s);
@@ -158,6 +168,7 @@ namespace Silmoon.Extension
         {
             using (WebClient wc = new WebClient())
             {
+                wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
                 string s = await wc.UploadStringTaskAsync(url, data);
                 T jo = JsonConvert.DeserializeObject<T>(s);
@@ -169,6 +180,7 @@ namespace Silmoon.Extension
         {
             using (WebClient wc = new WebClient())
             {
+                wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
                 var data = wc.UploadValues(url, values);
                 var s = Encoding.UTF8.GetString(data);
@@ -180,6 +192,7 @@ namespace Silmoon.Extension
         {
             using (WebClient wc = new WebClient())
             {
+                wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
                 var data = await wc.UploadValuesTaskAsync(url, values);
                 var s = Encoding.UTF8.GetString(data);
