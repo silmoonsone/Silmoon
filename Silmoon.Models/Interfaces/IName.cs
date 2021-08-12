@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Silmoon.Interfaces
+namespace Silmoon.Models.Interfaces
 {
-    public interface INameValue : IName, IValue
+    public interface IName
     {
-
+        string Name { get; set; }
     }
 }

@@ -97,7 +97,7 @@ namespace Silmoon.Web.Controls
             set { cookieExpires = value; }
         }
 
-        public UserSessionController() : this((string)null) { }
+        public UserSessionController() : this(null) { }
         public UserSessionController(string cookieDomain)
         {
             this.cookieDomain = cookieDomain;
@@ -123,7 +123,7 @@ namespace Silmoon.Web.Controls
         /// <param name="controller">controller传入null，将不会自动转跳，并且在登录状态下不会，将用户会话实例赋值到ViewBag.UserSession，用户的数据不会赋值到ViewBag.User。</param>
         /// <param name="signInUrl">若传入controller，会使用转跳到本参数指定的URL。</param>
         /// <returns></returns>
-        public ActionResult MvcSessionChecking(Controller controller, UserRole? IsRole, bool requestUserSession = false, bool isApiRequest = false, string signInUrl = "~/User/Signin?url=$SigninUrl")
+        public ActionResult MvcSessionChecking(Controller controller, UserRole? IsRole, bool requestRefreshUserSession = false, bool isApiRequest = false, string signInUrl = "~/User/Signin?url=$SigninUrl")
         {
             signInUrl = signInUrl?.Replace("$SigninUrl", controller.Server.UrlEncode(controller.Request.RawUrl));
             var username = controller.Request.QueryString["Username"];
@@ -181,7 +181,7 @@ namespace Silmoon.Web.Controls
             }
             else
             {
-                if (requestUserSession)
+                if (requestRefreshUserSession)
                 {
                     var userInfo = onRequestRefreshUserSession();
                     if (userInfo != null)

@@ -64,19 +64,22 @@ namespace Silmoon.MySilmoon
         }
 
 
-        public void OutputLine(string message)
+        public void OutputLine()
         {
-            OutputLine(message, 0);
+            OutputLine(null, 0);
         }
-        public void OutputLine(string message, int flag)
+        public void OutputLine(object message, int flag = 0)
+        {
+            if (message is null)
+                OutputLine(null, flag);
+            else
+                OutputLine(message.ToString(), flag);
+        }
+        public void OutputLine(string message, int flag = 0)
         {
             OnOutputLine?.Invoke(message, flag);
         }
-        public void InputLine(string message)
-        {
-            InputLine(message, 0);
-        }
-        public void InputLine(string message, int flag)
+        public void InputLine(string message, int flag = 0)
         {
             OnInputLine?.Invoke(message, flag);
         }
