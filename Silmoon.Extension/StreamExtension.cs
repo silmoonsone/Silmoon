@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Silmoon.IO
+namespace Silmoon.Extension
 {
-    public static class IOExtension
+    public static class StreamExtension
     {
         public static byte[] ToBytes(this Stream stream)
         {

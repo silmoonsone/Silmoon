@@ -2,26 +2,21 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Silmoon.Models
+namespace Silmoon.Models.Interfaces
 {
-    public interface IStateFlag
+    public interface IStateFlagBase
     {
         string Message
         {
             get;
             set;
         }
-        int Code
+        int StateCode
         {
             get;
             set;
         }
         bool Success
-        {
-            get;
-            set;
-        }
-        object UserState
         {
             get;
             set;

@@ -85,7 +85,6 @@
     <Compile Include="ArrayHelper.cs" />
     <Compile Include="Imaging\ChartUtil.cs" />
     <Compile Include="IO\FileHelper.cs" />
-    <Compile Include="IO\IOExtension.cs" />
     <Compile Include="MySilmoon\Instance\LicenseResult.cs" />
     <Compile Include="MySilmoon\Instance\ValidateResult.cs" />
     <Compile Include="MySilmoon\MyConfigure.cs" />

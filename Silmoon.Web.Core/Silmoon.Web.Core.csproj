@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Silmoon.Extension\Silmoon.Extension.csproj" />
     <ProjectReference Include="..\Silmoon.Web\Silmoon.Web.csproj" />
   </ItemGroup>
 

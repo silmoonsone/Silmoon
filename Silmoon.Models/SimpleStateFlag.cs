@@ -68,6 +68,16 @@ namespace Silmoon.Models
         {
             return new SimpleStateFlag(success, stateCode, message) { Data = data };
         }
+        public static SimpleStateFlag FromStateFlag(StateFlag stateFlag)
+        {
+            return new SimpleStateFlag()
+            {
+                Data = stateFlag.Data,
+                Message = stateFlag.Message,
+                StateCode = stateFlag.StateCode,
+                Success = stateFlag.Success
+            };
+        }
         public SimpleStateFlag AppendData(object data)
         {
             Data = data;
@@ -135,6 +145,16 @@ namespace Silmoon.Models
         public static SimpleStateFlag<T> Create(bool success, int stateCode, string message, T data)
         {
             return new SimpleStateFlag<T>(success, stateCode, message) { Data = data };
+        }
+        public static SimpleStateFlag<T> FromStateFlag(StateFlag<T> stateFlag)
+        {
+            return new SimpleStateFlag<T>()
+            {
+                Data = stateFlag.Data,
+                Message = stateFlag.Message,
+                StateCode = stateFlag.StateCode,
+                Success = stateFlag.Success
+            };
         }
         public SimpleStateFlag<T> AppendData(T data)
         {
