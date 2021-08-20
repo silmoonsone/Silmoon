@@ -121,7 +121,10 @@ namespace Silmoon.Web.Controls
         /// 如果用户登录，会将实例赋值到ViewBag.UserSession，用户的数据赋值到ViewBag.User。
         /// </summary>
         /// <param name="controller">controller传入null，将不会自动转跳，并且在登录状态下不会，将用户会话实例赋值到ViewBag.UserSession，用户的数据不会赋值到ViewBag.User。</param>
-        /// <param name="signInUrl">若传入controller，会使用转跳到本参数指定的URL。</param>
+        /// <param name="IsRole">如果传入IsRule，同时判断用户角色</param>
+        /// <param name="requestRefreshUserSession">若传入True，会调用OnRequestRefreshUserSession事件请求，以重新获取用户实例</param>
+        /// <param name="isApiRequest">判断是否是Api请求，若不是Api请求会返回Redirect，若为Api请求，将返回Json</param>
+        /// <param name="signInUrl">若传入controller，获取用户UserToken等参数，并且如果没有登录会使用转跳到本参数指定的URL。</param>
         /// <returns></returns>
         public ActionResult MvcSessionChecking(Controller controller, UserRole? IsRole, bool requestRefreshUserSession = false, bool isApiRequest = false, string signInUrl = "~/User/Signin?url=$SigninUrl")
         {
