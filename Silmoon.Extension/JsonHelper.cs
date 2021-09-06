@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Silmoon.Extension.Network;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -13,9 +15,10 @@ namespace Silmoon.Extension
 {
     public static class JsonHelper
     {
+        public static int WebClientTime { get; set; }
         public static JObject GetJson(string url)
         {
-            using (WebClient wc = new WebClient())
+            using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -27,7 +30,7 @@ namespace Silmoon.Extension
         }
         public async static Task<JObject> GetJsonAsync(string url)
         {
-            using (WebClient wc = new WebClient())
+            using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -40,7 +43,7 @@ namespace Silmoon.Extension
 
         public static JArray GetJsons(string url)
         {
-            using (WebClient wc = new WebClient())
+            using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -52,7 +55,7 @@ namespace Silmoon.Extension
         }
         public async static Task<JArray> GetJsonsAsync(string url)
         {
-            using (WebClient wc = new WebClient())
+            using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -65,7 +68,7 @@ namespace Silmoon.Extension
 
         public static JObject GetJsonByPost(string url, string data)
         {
-            using (WebClient wc = new WebClient())
+            using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -77,7 +80,7 @@ namespace Silmoon.Extension
         }
         public async static Task<JObject> GetJsonByPostAsync(string url, string data)
         {
-            using (WebClient wc = new WebClient())
+            using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -90,7 +93,7 @@ namespace Silmoon.Extension
 
         public static JObject GetJsonByPost(string url, NameValueCollection values)
         {
-            using (WebClient wc = new WebClient())
+            using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -103,7 +106,7 @@ namespace Silmoon.Extension
         }
         public async static Task<JObject> GetJsonByPostAsync(string url, NameValueCollection values)
         {
-            using (WebClient wc = new WebClient())
+            using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -118,7 +121,7 @@ namespace Silmoon.Extension
 
         public static object GetJsonObject(string url)
         {
-            using (WebClient wc = new WebClient())
+            using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -130,7 +133,7 @@ namespace Silmoon.Extension
         }
         public async static Task<object> GetJsonObjectAsync(string url)
         {
-            using (WebClient wc = new WebClient())
+            using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -143,7 +146,7 @@ namespace Silmoon.Extension
 
         public static T GetJsonObject<T>(string url)
         {
-            using (WebClient wc = new WebClient())
+            using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -155,7 +158,7 @@ namespace Silmoon.Extension
         }
         public async static Task<T> GetJsonObjectAsync<T>(string url)
         {
-            using (WebClient wc = new WebClient())
+            using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -168,7 +171,7 @@ namespace Silmoon.Extension
 
         public static T GetJsonObjectByPost<T>(string url, string data)
         {
-            using (WebClient wc = new WebClient())
+            using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -180,7 +183,7 @@ namespace Silmoon.Extension
         }
         public async static Task<T> GetJsonObjectByPostAsync<T>(string url, string data)
         {
-            using (WebClient wc = new WebClient())
+            using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -193,7 +196,7 @@ namespace Silmoon.Extension
 
         public static T GetJsonObjectByPost<T>(string url, NameValueCollection values)
         {
-            using (WebClient wc = new WebClient())
+            using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -206,7 +209,7 @@ namespace Silmoon.Extension
         }
         public async static Task<T> GetJsonObjectByPostAsync<T>(string url, NameValueCollection values)
         {
-            using (WebClient wc = new WebClient())
+            using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
