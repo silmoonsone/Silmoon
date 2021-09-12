@@ -10,7 +10,7 @@ namespace Silmoon.Extension.Network
         public int Timeout { get; set; } = 60000;
         public WebClientEx()
         {
-
+            Timeout = 60000;
         }
         public WebClientEx(int timeout)
         {

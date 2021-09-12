@@ -15,7 +15,7 @@ namespace Silmoon.Extension
 {
     public static class JsonHelper
     {
-        public static int WebClientTime { get; set; }
+        public static int WebClientTime { get; set; } = 10000;
         public static JObject GetJson(string url)
         {
             using (WebClientEx wc = new WebClientEx(WebClientTime))
