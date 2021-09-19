@@ -26,7 +26,7 @@ namespace Silmoon.Runtime
             if (source == null || dest == null) return null;
             Type tto = typeof(dT);
 
-            var p = typeof(sT).GetProperties();
+            var p = source.GetType().GetProperties();
             foreach (var item in p)
             {
                 var property = tto.GetProperty(item.Name);
