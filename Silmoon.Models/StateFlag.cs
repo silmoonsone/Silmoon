@@ -33,21 +33,26 @@ namespace Silmoon.Models
         {
             return new StateFlag() { Success = Success, Message = Message, StateCode = Code };
         }
-        public static StateFlag Create(bool Success, object UserState)
+        public static StateFlag Create(bool Success, object Data)
         {
-            return new StateFlag() { Success = Success, Data = UserState };
+            return new StateFlag() { Success = Success, Data = Data };
         }
-        public static StateFlag Create(bool Success, string Message, object UserState)
+        public static StateFlag Create(bool Success, string Message, object Data)
         {
-            return new StateFlag() { Success = Success, Message = Message, Data = UserState };
+            return new StateFlag() { Success = Success, Message = Message, Data = Data };
         }
-        public static StateFlag Create(bool Success, int Code, object UserState)
+        public static StateFlag Create(bool Success, int Code, object Data)
         {
-            return new StateFlag() { Success = Success, StateCode = Code, Data = UserState };
+            return new StateFlag() { Success = Success, StateCode = Code, Data = Data };
         }
-        public static StateFlag Create(bool Success, int Code, string Message, object UserState)
+        public static StateFlag Create(bool Success, int Code, string Message, object Data)
         {
-            return new StateFlag() { Success = Success, Message = Message, StateCode = Code, Data = UserState };
+            return new StateFlag() { Success = Success, Message = Message, StateCode = Code, Data = Data };
+        }
+        public StateFlag AppendData(object data)
+        {
+            Data = data;
+            return this;
         }
     }
 
@@ -79,21 +84,26 @@ namespace Silmoon.Models
         {
             return new StateFlag<T>() { Success = Success, Message = Message, StateCode = Code };
         }
-        public static StateFlag<T> Create(bool Success, T UserState)
+        public static StateFlag<T> Create(bool Success, T Data)
         {
-            return new StateFlag<T>() { Success = Success, Data = UserState };
+            return new StateFlag<T>() { Success = Success, Data = Data };
         }
-        public static StateFlag<T> Create(bool Success, string Message, T UserState)
+        public static StateFlag<T> Create(bool Success, string Message, T Data)
         {
-            return new StateFlag<T>() { Success = Success, Message = Message, Data = UserState };
+            return new StateFlag<T>() { Success = Success, Message = Message, Data = Data };
         }
-        public static StateFlag<T> Create(bool Success, int Code, T UserState)
+        public static StateFlag<T> Create(bool Success, int Code, T Data)
         {
-            return new StateFlag<T>() { Success = Success, StateCode = Code, Data = UserState };
+            return new StateFlag<T>() { Success = Success, StateCode = Code, Data = Data };
         }
-        public static StateFlag<T> Create(bool Success, int Code, string Message, T UserState)
+        public static StateFlag<T> Create(bool Success, int Code, string Message, T Data)
         {
-            return new StateFlag<T>() { Success = Success, Message = Message, StateCode = Code, Data = UserState };
+            return new StateFlag<T>() { Success = Success, Message = Message, StateCode = Code, Data = Data };
+        }
+        public StateFlag<T> AppendData(T data)
+        {
+            Data = data;
+            return this;
         }
     }
 
