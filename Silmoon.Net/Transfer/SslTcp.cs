@@ -225,28 +225,40 @@ namespace Silmoon.Net.Transfer
         {
             return Task.Run(() =>
             {
-                int recvLen;
                 byte[] recvBuff = new byte[BufferSize];
 
                 SocketAsyncEventArgs args = new SocketAsyncEventArgs();
                 args.SetBuffer(recvBuff, 0, BufferSize);
+
                 args.Completed += (s, e) =>
                 {
-                    recvLen = e.BytesTransferred;
-                    if (recvLen > 0)
-                    {
-                        byte[] copiedBuffer = new byte[recvLen];
-                        Array.Copy(recvBuff, copiedBuffer, recvLen);
-                        socket.ReceiveAsync(args);
-                        onDataReceived(socket, copiedBuffer);
-                    }
+                    Console.WriteLine($"len={e.BytesTransferred}, error={e.SocketError}");
+                    if (args.BytesTransferred > 0) onDataReceived(socket, recvBuff, args.BytesTransferred);
                     else
                     {
-                        if (!IsClientMode) CloseClientSocket(socket);
-                        else readSocketCloseProcess();
+                        if (!IsClientMode) CloseClientSocket(socket); else readSocketCloseProcess();
+                        return;
+                    }
+
+                    while (!socket.ReceiveAsync(args))
+                    {
+                        if (args.BytesTransferred > 0) onDataReceived(socket, recvBuff, args.BytesTransferred);
+                        else
+                        {
+                            if (!IsClientMode) CloseClientSocket(socket); else readSocketCloseProcess();
+                            break;
+                        }
                     }
                 };
-                socket.ReceiveAsync(args);
+                while (!socket.ReceiveAsync(args))
+                {
+                    if (args.BytesTransferred > 0) onDataReceived(socket, recvBuff, args.BytesTransferred);
+                    else
+                    {
+                        if (!IsClientMode) CloseClientSocket(socket); else readSocketCloseProcess();
+                        break;
+                    }
+                }
             });
         }
         void Receive(Socket socket)
@@ -264,10 +276,7 @@ namespace Silmoon.Net.Transfer
                     catch { recvLen = 0; }
                     if (recvLen != 0)
                     {
-                        byte[] tdBuff = new byte[recvLen];
-                        Array.Copy(recvBuff, tdBuff, recvLen);
-                        onDataReceived(socket, tdBuff);
-
+                        onDataReceived(socket, recvBuff, recvLen);
                     }
                 } while (socket.Connected && recvLen != 0);
 
@@ -304,9 +313,13 @@ namespace Silmoon.Net.Transfer
             };
             OnEvent?.Invoke(this, new TcpEventArgs() { EventType = eventType, IPEndPoint = endPoint, Socket = socket });
         }
-        void onDataReceived(Socket clientSocket, byte[] data)
+        void onDataReceived(Socket clientSocket, byte[] buffer, int len)
         {
-            OnDataReceived?.Invoke(this, new TcpEventArgs() { EventType = TcpEventType.ReceivedData, IPEndPoint = (IPEndPoint)clientSocket.RemoteEndPoint, Data = data, Socket = clientSocket });
+            Console.WriteLine($"event recv len={len}");
+            byte[] copiedBuffer = new byte[len];
+            Array.Copy(buffer, copiedBuffer, len);
+
+            OnDataReceived?.Invoke(this, new TcpEventArgs() { EventType = TcpEventType.ReceivedData, IPEndPoint = (IPEndPoint)clientSocket.RemoteEndPoint, Data = copiedBuffer, Socket = clientSocket });
         }
     }
 }

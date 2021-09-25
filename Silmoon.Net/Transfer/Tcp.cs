@@ -17,7 +17,7 @@ namespace Silmoon.Net.Transfer
         public event TcpTransferEventHandler OnDataReceived = null;
         public Socket socket = null;
         public List<Socket> ClientSockets = new List<Socket>();
-        public int BufferSize { get; set; } = 2048;
+        public int BufferSize { get; set; } = 20480;
         public bool IsClientMode { get; set; }
         public TcpState State { get; set; }
         public Tcp()
@@ -195,35 +195,45 @@ namespace Silmoon.Net.Transfer
             Receive(acceptedSocket);
         }
 
-        Task Receive2(Socket socket)
+        Task Receive(Socket socket)
         {
             return Task.Run(() =>
             {
-                int recvLen;
                 byte[] recvBuff = new byte[BufferSize];
 
                 SocketAsyncEventArgs args = new SocketAsyncEventArgs();
                 args.SetBuffer(recvBuff, 0, BufferSize);
+
                 args.Completed += (s, e) =>
                 {
-                    recvLen = e.BytesTransferred;
-                    if (recvLen > 0)
-                    {
-                        byte[] copiedBuffer = new byte[recvLen];
-                        Array.Copy(recvBuff, copiedBuffer, recvLen);
-                        socket.ReceiveAsync(args);
-                        onDataReceived(socket, copiedBuffer);
-                    }
+                    if (args.BytesTransferred > 0) onDataReceived(socket, recvBuff, args.BytesTransferred);
                     else
                     {
-                        if (!IsClientMode) CloseClientSocket(socket);
-                        else readSocketCloseProcess();
+                        if (!IsClientMode) CloseClientSocket(socket); else readSocketCloseProcess();
+                        return;
+                    }
+                    while (socket.Connected && !socket.ReceiveAsync(args))
+                    {
+                        if (args.BytesTransferred > 0) onDataReceived(socket, recvBuff, args.BytesTransferred);
+                        else
+                        {
+                            if (!IsClientMode) CloseClientSocket(socket); else readSocketCloseProcess();
+                            break;
+                        }
                     }
                 };
-                socket.ReceiveAsync(args);
+                while (!socket.ReceiveAsync(args))
+                {
+                    if (args.BytesTransferred > 0) onDataReceived(socket, recvBuff, args.BytesTransferred);
+                    else
+                    {
+                        if (!IsClientMode) CloseClientSocket(socket); else readSocketCloseProcess();
+                        break;
+                    }
+                }
             });
         }
-        Task Receive(Socket socket)
+        Task Receive2(Socket socket)
         {
             return Task.Run(() =>
             {
@@ -236,9 +246,7 @@ namespace Silmoon.Net.Transfer
                         recvLen = socket.Receive(recvBuff);
                         if (recvLen != 0)
                         {
-                            byte[] tdBuff = new byte[recvLen];
-                            Array.Copy(recvBuff, tdBuff, recvLen);
-                            onDataReceived(socket, tdBuff);
+                            onDataReceived(socket, recvBuff, recvLen);
                         }
                     } while (socket.Connected && recvLen != 0);
                 }
@@ -283,9 +291,12 @@ namespace Silmoon.Net.Transfer
             };
             OnEvent?.Invoke(this, new TcpEventArgs() { EventType = eventType, IPEndPoint = endPoint, Socket = socket });
         }
-        void onDataReceived(Socket clientSocket, byte[] data)
+        void onDataReceived(Socket clientSocket, byte[] buffer, int len)
         {
-            OnDataReceived?.Invoke(this, new TcpEventArgs() { EventType = TcpEventType.ReceivedData, IPEndPoint = (IPEndPoint)clientSocket.RemoteEndPoint, Data = data, Socket = clientSocket });
+            byte[] copiedBuffer = new byte[len];
+            Array.Copy(buffer, copiedBuffer, len);
+
+            OnDataReceived?.Invoke(this, new TcpEventArgs() { EventType = TcpEventType.ReceivedData, IPEndPoint = (IPEndPoint)clientSocket.RemoteEndPoint, Data = copiedBuffer, Socket = clientSocket });
         }
     }
     public delegate void TcpTransferEventHandler(object sender, TcpEventArgs e);
