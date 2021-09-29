@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Silmoon.Models
 {
+    [Obsolete]
     public class SimpleStateFlag
     {
         public int StateCode { get; set; } = 0;
@@ -84,6 +85,7 @@ namespace Silmoon.Models
             return this;
         }
     }
+    [Obsolete]
     public class SimpleStateFlag<T>
     {
         public int StateCode { get; set; } = 0;

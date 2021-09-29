@@ -55,7 +55,7 @@ namespace Silmoon.Net.Transfer
                 IsClientMode = true;
                 return true;
             }
-            catch (Exception _)
+            catch
             {
                 onEvent(TcpEventType.ServerConnectFailed, endPoint, socket);
                 return false;
@@ -91,13 +91,13 @@ namespace Silmoon.Net.Transfer
                     socket.Dispose();
                     socket = null;
                 }
-                catch (Exception _) { }
+                catch { }
                 finally
                 {
                     onEvent(TcpEventType.ServerDisconnected, (IPEndPoint)ep, socket);
                 }
             }
-            catch (Exception _) { }
+            catch { }
         }
         public void SendData(byte[] data, int offset = 0, int size = -1)
         {

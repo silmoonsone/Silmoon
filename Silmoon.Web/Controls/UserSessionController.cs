@@ -139,7 +139,7 @@ namespace Silmoon.Web.Controls
                 if (userToken.IsNullOrEmpty())
                 {
                     if (controller.Request.IsAjaxRequest())
-                        return new JsonResult { Data = SimpleStateFlag.Create(false, -9999, "no signin."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                        return new JsonResult { Data = StateFlag.Create(false, -9999, "no signin."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                     else return new RedirectResult(signInUrl);
                 }
                 else
@@ -147,7 +147,7 @@ namespace Silmoon.Web.Controls
                     if (userToken.ToLower() == "null")
                     {
                         if (controller.Request.IsAjaxRequest() || isApiRequest)
-                            return new JsonResult { Data = SimpleStateFlag.Create(false, -9999, "usertoken is \"null\"."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                            return new JsonResult { Data = StateFlag.Create(false, -9999, "usertoken is \"null\"."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                         else return new RedirectResult(signInUrl);
                     }
                     else
@@ -162,7 +162,7 @@ namespace Silmoon.Web.Controls
                         else
                         {
                             if (controller.Request.IsAjaxRequest() || isApiRequest)
-                                return new JsonResult { Data = SimpleStateFlag.Create(false, -9999, "OnRequestUserToken return null."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                                return new JsonResult { Data = StateFlag.Create(false, -9999, "OnRequestUserToken return null."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                             else return new RedirectResult(signInUrl);
                         }
 
@@ -172,7 +172,7 @@ namespace Silmoon.Web.Controls
                             if (Role < IsRole)
                             {
                                 if (controller.Request.IsAjaxRequest() || isApiRequest)
-                                    return new JsonResult { Data = SimpleStateFlag.Create(false, -9999, "access denied."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                                    return new JsonResult { Data = StateFlag.Create(false, -9999, "access denied."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                                 else return new ContentResult() { Content = "access denied", ContentType = "text/plain" };
                             }
                         }
@@ -192,7 +192,7 @@ namespace Silmoon.Web.Controls
                     else
                     {
                         if (controller.Request.IsAjaxRequest() || isApiRequest)
-                            return new JsonResult { Data = SimpleStateFlag.Create(false, -9999, "onRequestRefreshUserSession return null."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                            return new JsonResult { Data = StateFlag.Create(false, -9999, "onRequestRefreshUserSession return null."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                         else return new RedirectResult(signInUrl);
                     }
                 }
@@ -202,7 +202,7 @@ namespace Silmoon.Web.Controls
                     if (Role < IsRole)
                     {
                         if (controller.Request.IsAjaxRequest() || isApiRequest)
-                            return new JsonResult { Data = SimpleStateFlag.Create(false, -9999, "access denied."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                            return new JsonResult { Data = StateFlag.Create(false, -9999, "access denied."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                         else return new ContentResult() { Content = "access denied", ContentType = "text/plain" };
                     }
                 }
