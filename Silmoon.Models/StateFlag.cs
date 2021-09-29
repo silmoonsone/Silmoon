@@ -12,7 +12,7 @@ namespace Silmoon.Models
         public bool Success { get; set; } = false;
         public object Data { get; set; }
 
-        StateFlag()
+        public StateFlag()
         {
 
         }
@@ -63,7 +63,7 @@ namespace Silmoon.Models
         public bool Success { get; set; } = false;
         public T Data { get; set; }
 
-        StateFlag()
+        public StateFlag()
         {
 
         }
