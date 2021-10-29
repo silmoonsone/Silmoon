@@ -75,7 +75,8 @@
     <Compile Include="Controls\IUserSessionController.cs" />
     <Compile Include="Controls\SessionRSAManager.cs" />
     <Compile Include="Controls\UserSessionController.cs" />
-    <Compile Include="Extension\ControllerExtension.cs" />
+    <Compile Include="Extension\ControllerBaseExtension.cs" />
+    <Compile Include="Extension\HttpContextBaseExtension.cs" />
     <Compile Include="HtmlHelper.cs" />
     <Compile Include="HttpHelper.cs" />
     <Compile Include="ISmPage.cs" />

@@ -41,16 +41,14 @@ namespace Silmoon.Web.Controls
         {
             get
             {
-                return User.Username;
+                return User?.Username;
             }
         }
         public UserRole? Role
         {
             get
             {
-                var user = User;
-                if (user == null) return null;
-                else return user.Role;
+                return User?.Role;
             }
         }
         public LoginState State
@@ -65,7 +63,7 @@ namespace Silmoon.Web.Controls
                 }
                 else return LoginState.None;
             }
-            set
+            private set
             {
                 HttpContext.Current.Session["___silmoon_state"] = (int)value;
             }
@@ -78,7 +76,7 @@ namespace Silmoon.Web.Controls
                     return (TUser)HttpContext.Current.Session["___silmoon_user"];
                 else return default;
             }
-            set { HttpContext.Current.Session["___silmoon_user"] = value; }
+            private set { HttpContext.Current.Session["___silmoon_user"] = value; }
         }
 
         public RSACryptoServiceProvider RSACookiesCrypto
@@ -331,11 +329,7 @@ namespace Silmoon.Web.Controls
         {
             DoLogin(username, password, 0, user);
         }
-        public virtual void DoLogin(string username, string password, UserRole role)
-        {
-            DoLogin(username, password, role, default(TUser));
-        }
-        public virtual void DoLogin(string username, string password, UserRole role, TUser user)
+        public virtual void DoLogin(string username, string password, UserRole role, TUser user = default)
         {
             HttpContext.Current.Session.Timeout = sessionTimeout;
             User = user;
