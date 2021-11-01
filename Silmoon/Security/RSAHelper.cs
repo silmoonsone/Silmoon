@@ -6,10 +6,10 @@ using System.Text;
 
 namespace Silmoon.Security
 {
-    public class RsaHelper
+    public class RSAHelper
     {
 
-        public RsaHelper()
+        public RSAHelper()
         {
 
         }

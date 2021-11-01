@@ -105,6 +105,10 @@ namespace Silmoon.Web
             }
             return result.Substring(1, result.Length - 1);
         }
+        public static string ReturnShortURL()
+        {
+            return HttpContext.Current.Request.FilePath.ToString() + "?" + HttpContext.Current.Request.ServerVariables["QUERY_STRING"];
+        }
 
 
 

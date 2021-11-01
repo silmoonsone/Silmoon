@@ -3,7 +3,7 @@ using System.IO;
 using System.Web;
 using System.Web.UI;
 
-namespace Silmoon.Web.Page
+namespace Silmoon.Web.PageEx
 {
     public class RewritePage : System.Web.UI.Page
     {

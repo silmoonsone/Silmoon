@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Silmoon.Web
 {
-    public interface ISmPage
+    public interface IBindWebPage
     {
         void InitPage();
         void DrawPage();
