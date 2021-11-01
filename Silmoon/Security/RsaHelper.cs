@@ -4,27 +4,14 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Silmoon.Web.Controls
+namespace Silmoon.Security
 {
-    public class SessionRSAManager
+    public class RsaHelper
     {
 
-        public SessionRSAManager()
+        public RsaHelper()
         {
 
-        }
-
-        /// <summary>
-        /// 获取当前的用户会话控制器使用的RSA密钥，需要现调用LoadDefaultRSAKeyFile方法载入密钥。
-        /// </summary>
-        static RSACryptoServiceProvider defaultRSA = null;
-        public static RSACryptoServiceProvider DefaultRSA
-        {
-            get
-            {
-                if (defaultRSA == null) LoadDefaultRSAKeyFile();
-                return defaultRSA;
-            }
         }
 
         public static RSACryptoServiceProvider LoadDefaultRSAKeyFile(string rsaXmlFileName = @"C:\rsa_private.xml")
@@ -43,11 +30,10 @@ namespace Silmoon.Web.Controls
                     rsa.Clear();
                     throw ex;
                 }
-                defaultRSA = rsa;
+                return rsa;
             }
             else
                 throw new FileNotFoundException("RSA密钥XML字符串文件没有找到。", rsaXmlFileName);
-            return defaultRSA;
         }
         public static string GeneratorPrivateKey(int keyBytes = 1024)
         {
@@ -58,11 +44,11 @@ namespace Silmoon.Web.Controls
             }
             return result;
         }
-        public static string FromPrivateGetPublicKey(string privateXml)
+        public static string GetPublicKey(string privateKeyXml)
         {
             using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
             {
-                rsa.FromXmlString(privateXml);
+                rsa.FromXmlString(privateKeyXml);
                 return rsa.ToXmlString(false);
             }
         }

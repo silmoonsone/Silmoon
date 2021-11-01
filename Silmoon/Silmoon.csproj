@@ -107,6 +107,7 @@
     <Compile Include="SDebug.cs" />
     <Compile Include="Security\Api\HttpRequestApiValidation.cs" />
     <Compile Include="Security\EncryptHelper.cs" />
+    <Compile Include="Security\RsaHelper.cs" />
     <Compile Include="Security\Util\DictionarySort.cs" />
     <Compile Include="Serializer.cs" />
     <Compile Include="Text\Punycode.cs" />
