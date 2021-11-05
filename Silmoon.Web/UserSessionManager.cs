@@ -136,47 +136,52 @@ namespace Silmoon.Web
             {
                 if (userToken.IsNullOrEmpty())
                 {
+                    ///不是登录状态，并且没有提供AppUserToken的情况下。
                     if (controller.Request.IsAjaxRequest())
                         return new JsonResult { Data = StateFlag.Create(false, -9999, "no signin."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                     else return new RedirectResult(signInUrl);
                 }
                 else
                 {
+                    ///提供了AppUserToken的情况下
                     if (userToken.ToLower() == "null")
                     {
+                        ///提供的AppUserToken的字符串是null。
                         if (controller.Request.IsAjaxRequest() || isAppApiRequest)
                             return new JsonResult { Data = StateFlag.Create(false, -9999, "usertoken is \"null\"."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                         else return new RedirectResult(signInUrl);
                     }
                     else
                     {
+                        ///调用UserToken登录验证处理过程，获取用户实体。
                         var userInfo = OnRequestUserToken(username, userToken);
                         if (userInfo != null)
                         {
+                            ///如果AppUserToken验证过程返回了用户实体。
                             User = userInfo;
-                            if (!tokenNoSession)
-                                DoLogin(User);
-                        }
-                        else
-                        {
-                            if (controller.Request.IsAjaxRequest() || isAppApiRequest)
-                                return new JsonResult { Data = StateFlag.Create(false, -9999, "OnRequestUserToken return null."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-                            else return new RedirectResult(signInUrl);
-                        }
+                            if (!tokenNoSession) DoLogin(User);
 
-                        ///使用UserToken登录后处理
-                        if (IsRole.HasValue)
-                        {
-                            if (Role < IsRole)
+                            ///使用UserToken登录后处理
+                            if (IsRole.HasValue && Role < IsRole)
                             {
                                 if (controller.Request.IsAjaxRequest() || isAppApiRequest)
                                     return new JsonResult { Data = StateFlag.Create(false, -9999, "access denied."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                                 else return new ContentResult() { Content = "access denied", ContentType = "text/plain" };
                             }
+                            controller.ViewBag.User = User;
+                            controller.ViewBag.UserSession = this;
+                            return null;
                         }
-                        controller.ViewBag.User = User;
-                        controller.ViewBag.UserSession = this;
-                        return null;
+                        else
+                        {
+                            if (controller.Request.IsAjaxRequest() || isAppApiRequest)
+                                return new JsonResult { Data = StateFlag.Create(false, -9999, "OnRequestUserToken return null."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                            else
+                            {
+                                ///这里存在一个冲突，如果当前是登录状态，并且使用AppUserToken登录，AppUserToken登录失败，会转跳到登录页面，但是又是由于登录状态，会再次跳回当前页面，会造成死循环。
+                                return new RedirectResult(signInUrl);
+                            }
+                        }
                     }
                 }
             }
