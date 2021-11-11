@@ -126,10 +126,10 @@ namespace Silmoon.Web
         /// <returns></returns>
         public ActionResult MvcSessionChecking(Controller controller, IdentityRole? IsRole, bool requestRefreshUserSession = false, bool isAppApiRequest = false, string signInUrl = "~/User/Signin?url=$SigninUrl")
         {
-            if (IsRole is null)
-            {
-                throw new ArgumentNullException(nameof(IsRole));
-            }
+            //if (IsRole is null)
+            //{
+            //    throw new ArgumentNullException(nameof(IsRole));
+            //}
 
             signInUrl = signInUrl?.Replace("$SigninUrl", controller.Server.UrlEncode(controller.Request.RawUrl));
             var username = controller.Request.QueryString["Username"];
