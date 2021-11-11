@@ -1,7 +1,7 @@
-using Silmoon.Business.Core.Types;
-using Silmoon.Business.Models;
 using Silmoon.Extension;
 using Silmoon.Models;
+using Silmoon.Models.Identities;
+using Silmoon.Models.Identities.Enums;
 using System;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace Silmoon.Web
 {
-    public abstract class UserSessionManager<TUser> : System.Web.SessionState.IRequiresSessionState where TUser : IUser
+    public abstract class UserSessionManager<TUser> : System.Web.SessionState.IRequiresSessionState where TUser : IDefaultUserIdentity
     {
         RSACryptoServiceProvider rsa = null;
         string cookieDomain = null;
@@ -44,7 +44,7 @@ namespace Silmoon.Web
                 return User?.Username;
             }
         }
-        public UserRole? Role
+        public IdentityRole? Role
         {
             get
             {
@@ -101,7 +101,7 @@ namespace Silmoon.Web
             this.cookieDomain = cookieDomain;
         }
 
-        public bool GteRole(UserRole role)
+        public bool GteRole(IdentityRole role)
         {
             var srule = Role;
             if (srule.HasValue)
@@ -124,8 +124,13 @@ namespace Silmoon.Web
         /// <param name="isAppApiRequest">判断是否是Api请求，若不是Api请求会返回Redirect，若为Api请求，将返回Json</param>
         /// <param name="signInUrl">若传入controller，获取用户UserToken等参数，并且如果没有登录会使用转跳到本参数指定的URL。</param>
         /// <returns></returns>
-        public ActionResult MvcSessionChecking(Controller controller, UserRole? IsRole, bool requestRefreshUserSession = false, bool isAppApiRequest = false, string signInUrl = "~/User/Signin?url=$SigninUrl")
+        public ActionResult MvcSessionChecking(Controller controller, IdentityRole? IsRole, bool requestRefreshUserSession = false, bool isAppApiRequest = false, string signInUrl = "~/User/Signin?url=$SigninUrl")
         {
+            if (IsRole is null)
+            {
+                throw new ArgumentNullException(nameof(IsRole));
+            }
+
             signInUrl = signInUrl?.Replace("$SigninUrl", controller.Server.UrlEncode(controller.Request.RawUrl));
             var username = controller.Request.QueryString["Username"];
             var userToken = controller.Request.QueryString["UserToken"] ?? controller.Request.QueryString["AppUserToken"];
@@ -334,8 +339,18 @@ namespace Silmoon.Web
         {
             DoLogin(username, password, 0, user);
         }
-        public virtual void DoLogin(string username, string password, UserRole role, TUser user = default)
+        public virtual void DoLogin(string username, string password, IdentityRole role, TUser user = default)
         {
+            if (string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentException($"“{nameof(username)}”不能为 null 或空。", nameof(username));
+            }
+
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new ArgumentException($"“{nameof(password)}”不能为 null 或空。", nameof(password));
+            }
+
             HttpContext.Current.Session.Timeout = sessionTimeout;
             User = user;
             State = LoginState.Login;
