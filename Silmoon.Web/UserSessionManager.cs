@@ -131,6 +131,7 @@ namespace Silmoon.Web
             //    throw new ArgumentNullException(nameof(IsRole));
             //}
 
+            controller.ViewBag.UserSession = this;
             signInUrl = signInUrl?.Replace("$SigninUrl", controller.Server.UrlEncode(controller.Request.RawUrl));
             var username = controller.Request.QueryString["Username"];
             var userToken = controller.Request.QueryString["UserToken"] ?? controller.Request.QueryString["AppUserToken"];
@@ -174,7 +175,6 @@ namespace Silmoon.Web
                                 else return new ContentResult() { Content = "access denied", ContentType = "text/plain" };
                             }
                             controller.ViewBag.User = User;
-                            controller.ViewBag.UserSession = this;
                             return null;
                         }
                         else
@@ -216,7 +216,6 @@ namespace Silmoon.Web
                 }
 
                 controller.ViewBag.User = User;
-                controller.ViewBag.UserSession = this;
                 return null;
             }
         }
