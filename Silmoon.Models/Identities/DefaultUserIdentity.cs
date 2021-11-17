@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Silmoon.Models.Identities
 {
+    [Serializable]
     public class DefaultUserIdentity : IDefaultUserIdentity
     {
         [DisplayName("登录名")]
