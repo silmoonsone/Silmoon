@@ -1,5 +1,4 @@
-﻿using Silmoon.Security.Util;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -30,7 +29,7 @@ namespace Silmoon.Security.Api
 
             data += keyName + "=" + key;
 
-            var sign = HashHelper.Get32MD5(data);
+            var sign = HashHelper.MD5(data);
 
             return (data, sign);
         }

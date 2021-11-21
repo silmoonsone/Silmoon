@@ -80,7 +80,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arrays\ArrayUtility.cs" />
-    <Compile Include="Arrays\IID.cs" />
+    <Compile Include="Arrays\DictionarySort.cs" />
+    <Compile Include="IId.cs" />
     <Compile Include="BigInteger.cs" />
     <Compile Include="ArrayHelper.cs" />
     <Compile Include="Imaging\ChartUtil.cs" />
@@ -108,7 +109,6 @@
     <Compile Include="Security\Api\HttpRequestApiValidation.cs" />
     <Compile Include="Security\EncryptHelper.cs" />
     <Compile Include="Security\RSAHelper.cs" />
-    <Compile Include="Security\Util\DictionarySort.cs" />
     <Compile Include="Serializer.cs" />
     <Compile Include="Text\Punycode.cs" />
     <Compile Include="MySilmoon\RunningAble.cs" />

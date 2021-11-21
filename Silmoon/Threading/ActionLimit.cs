@@ -10,7 +10,7 @@ namespace Silmoon.Threading
     /// <summary>
     /// 对于多个时间段，一定时间内次数限制的控制类
     /// </summary>
-    public class ActionLimit : IID
+    public class ActionLimit : IId
     {
         int _id;
         ArrayList timesLimit = new ArrayList();
@@ -160,7 +160,7 @@ namespace Silmoon.Threading
 
         #region IID 成员
 
-        public int ID
+        public int Id
         {
             get
             {

@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Silmoon.Security.Util
+namespace Silmoon.Arrays
 {
     public class DictionarySort : System.Collections.IComparer
     {
-        public int Compare(object oLeft, object oRight)
+        public int Compare(object left, object right)
         {
-            string sLeft = oLeft as string;
-            string sRight = oRight as string;
+            string sLeft = left as string;
+            string sRight = right as string;
             int iLeftLength = sLeft.Length;
             int iRightLength = sRight.Length;
             int index = 0;

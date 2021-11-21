@@ -113,7 +113,7 @@ namespace Silmoon.Extension
         }
 
 
-        public static object GetJsonObject(string url)
+        public static object GetObject(string url)
         {
             using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
@@ -124,7 +124,7 @@ namespace Silmoon.Extension
                 return jo;
             }
         }
-        public async static Task<object> GetJsonObjectAsync(string url)
+        public async static Task<object> GetObjectAsync(string url)
         {
             using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
@@ -136,7 +136,7 @@ namespace Silmoon.Extension
             }
         }
 
-        public static T GetJsonObject<T>(string url)
+        public static T GetObject<T>(string url)
         {
             using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
@@ -147,7 +147,7 @@ namespace Silmoon.Extension
                 return jo;
             }
         }
-        public async static Task<T> GetJsonObjectAsync<T>(string url)
+        public async static Task<T> GetObjectAsync<T>(string url)
         {
             using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
@@ -159,7 +159,7 @@ namespace Silmoon.Extension
             }
         }
 
-        public static T GetJsonObjectByPost<T>(string url, string data, bool jsonContent = false)
+        public static T GetObjectByPost<T>(string url, string data, bool jsonContent = false)
         {
             using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
@@ -171,7 +171,7 @@ namespace Silmoon.Extension
                 return jo;
             }
         }
-        public async static Task<T> GetJsonObjectByPostAsync<T>(string url, string data, bool jsonContent = false)
+        public async static Task<T> GetObjectByPostAsync<T>(string url, string data, bool jsonContent = false)
         {
             using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
@@ -184,7 +184,7 @@ namespace Silmoon.Extension
             }
         }
 
-        public static T GetJsonObjectByPost<T>(string url, NameValueCollection values)
+        public static T GetObjectByPost<T>(string url, NameValueCollection values)
         {
             using (WebClientEx wc = new WebClientEx(WebClientTime))
             {
@@ -196,7 +196,7 @@ namespace Silmoon.Extension
                 return jo;
             }
         }
-        public async static Task<T> GetJsonObjectByPostAsync<T>(string url, NameValueCollection values)
+        public async static Task<T> GetObjectByPostAsync<T>(string url, NameValueCollection values)
         {
             using (WebClientEx wc = new WebClientEx(WebClientTime))
             {

@@ -18,19 +18,19 @@ namespace Silmoon.Arrays
         /// <param name="array">可变的数组</param>
         /// <param name="id">IID的ID</param>
         /// <returns></returns>
-        public static IID FindIIDFromArray(ArrayList array, int id)
+        public static IId FindIIDFromArray(ArrayList array, int id)
         {
-            IID o = null;
+            IId o = null;
             lock (array)
             {
                 foreach (object item in array)
                 {
                     if (item != null)
                     {
-                        IID iID = item as IID;
+                        IId iID = item as IId;
                         if (iID != null)
                         {
-                            if (iID.ID == id)
+                            if (iID.Id == id)
                             {
                                 o = iID;
                                 break;

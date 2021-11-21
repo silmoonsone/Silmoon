@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Silmoon.Security
@@ -38,6 +39,15 @@ namespace Silmoon.Security
         public static string Get32MD5(string strSource)
         {
             return System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(strSource, "MD5");
+        }
+
+        public static string MD5(string s)
+        {
+            using (var c = new MD5CryptoServiceProvider())
+            {
+                byte[] bresult = c.ComputeHash(Encoding.UTF8.GetBytes(s));
+                return BitConverter.ToString(bresult).Replace("-", "");
+            }
         }
 
         public static string GenerateCheckCodeNum(int codeCount)

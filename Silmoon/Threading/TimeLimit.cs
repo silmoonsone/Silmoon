@@ -8,7 +8,7 @@ namespace Silmoon.Threading
     /// <summary>
     /// 控制一个动作或者行为在一定的时间内可以执行几次。
     /// </summary>
-    public class TimeLimit : IID
+    public class TimeLimit : IId
     {
         int iD = 0;
         ulong resetMilliseconds = 1000;
@@ -19,7 +19,7 @@ namespace Silmoon.Threading
         /// <summary>
         /// 表示当前类型的id标记
         /// </summary>
-        public int ID
+        public int Id
         {
             get { return iD; }
             set { iD = value; }
