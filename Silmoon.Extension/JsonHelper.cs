@@ -15,10 +15,10 @@ namespace Silmoon.Extension
 {
     public static class JsonHelper
     {
-        public static int WebClientTime { get; set; } = 10000;
+        public static int WebClientTimeout { get; set; } = 30000;
         public static JObject GetJson(string url)
         {
-            using (WebClientEx wc = new WebClientEx(WebClientTime))
+            using (WebClientEx wc = new WebClientEx(WebClientTimeout))
             {
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
@@ -29,7 +29,7 @@ namespace Silmoon.Extension
         }
         public async static Task<JObject> GetJsonAsync(string url)
         {
-            using (WebClientEx wc = new WebClientEx(WebClientTime))
+            using (WebClientEx wc = new WebClientEx(WebClientTimeout))
             {
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
@@ -41,7 +41,7 @@ namespace Silmoon.Extension
 
         public static JArray GetJsons(string url)
         {
-            using (WebClientEx wc = new WebClientEx(WebClientTime))
+            using (WebClientEx wc = new WebClientEx(WebClientTimeout))
             {
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
@@ -52,7 +52,7 @@ namespace Silmoon.Extension
         }
         public async static Task<JArray> GetJsonsAsync(string url)
         {
-            using (WebClientEx wc = new WebClientEx(WebClientTime))
+            using (WebClientEx wc = new WebClientEx(WebClientTimeout))
             {
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
@@ -64,7 +64,7 @@ namespace Silmoon.Extension
 
         public static JObject GetJsonByPost(string url, string data, bool jsonContent = false)
         {
-            using (WebClientEx wc = new WebClientEx(WebClientTime))
+            using (WebClientEx wc = new WebClientEx(WebClientTimeout))
             {
                 if (jsonContent) wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -76,7 +76,7 @@ namespace Silmoon.Extension
         }
         public async static Task<JObject> GetJsonByPostAsync(string url, string data, bool jsonContent = false)
         {
-            using (WebClientEx wc = new WebClientEx(WebClientTime))
+            using (WebClientEx wc = new WebClientEx(WebClientTimeout))
             {
                 if (jsonContent) wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -89,7 +89,7 @@ namespace Silmoon.Extension
 
         public static JObject GetJsonByPost(string url, NameValueCollection values)
         {
-            using (WebClientEx wc = new WebClientEx(WebClientTime))
+            using (WebClientEx wc = new WebClientEx(WebClientTimeout))
             {
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
@@ -101,7 +101,7 @@ namespace Silmoon.Extension
         }
         public async static Task<JObject> GetJsonByPostAsync(string url, NameValueCollection values)
         {
-            using (WebClientEx wc = new WebClientEx(WebClientTime))
+            using (WebClientEx wc = new WebClientEx(WebClientTimeout))
             {
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
@@ -115,7 +115,7 @@ namespace Silmoon.Extension
 
         public static object GetObject(string url)
         {
-            using (WebClientEx wc = new WebClientEx(WebClientTime))
+            using (WebClientEx wc = new WebClientEx(WebClientTimeout))
             {
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
@@ -126,7 +126,7 @@ namespace Silmoon.Extension
         }
         public async static Task<object> GetObjectAsync(string url)
         {
-            using (WebClientEx wc = new WebClientEx(WebClientTime))
+            using (WebClientEx wc = new WebClientEx(WebClientTimeout))
             {
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
@@ -138,7 +138,7 @@ namespace Silmoon.Extension
 
         public static T GetObject<T>(string url)
         {
-            using (WebClientEx wc = new WebClientEx(WebClientTime))
+            using (WebClientEx wc = new WebClientEx(WebClientTimeout))
             {
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
@@ -149,7 +149,7 @@ namespace Silmoon.Extension
         }
         public async static Task<T> GetObjectAsync<T>(string url)
         {
-            using (WebClientEx wc = new WebClientEx(WebClientTime))
+            using (WebClientEx wc = new WebClientEx(WebClientTimeout))
             {
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
@@ -161,7 +161,7 @@ namespace Silmoon.Extension
 
         public static T GetObjectByPost<T>(string url, string data, bool jsonContent = false)
         {
-            using (WebClientEx wc = new WebClientEx(WebClientTime))
+            using (WebClientEx wc = new WebClientEx(WebClientTimeout))
             {
                 if (jsonContent) wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -173,7 +173,7 @@ namespace Silmoon.Extension
         }
         public async static Task<T> GetObjectByPostAsync<T>(string url, string data, bool jsonContent = false)
         {
-            using (WebClientEx wc = new WebClientEx(WebClientTime))
+            using (WebClientEx wc = new WebClientEx(WebClientTimeout))
             {
                 if (jsonContent) wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
@@ -186,7 +186,7 @@ namespace Silmoon.Extension
 
         public static T GetObjectByPost<T>(string url, NameValueCollection values)
         {
-            using (WebClientEx wc = new WebClientEx(WebClientTime))
+            using (WebClientEx wc = new WebClientEx(WebClientTimeout))
             {
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
@@ -198,7 +198,7 @@ namespace Silmoon.Extension
         }
         public async static Task<T> GetObjectByPostAsync<T>(string url, NameValueCollection values)
         {
-            using (WebClientEx wc = new WebClientEx(WebClientTime))
+            using (WebClientEx wc = new WebClientEx(WebClientTimeout))
             {
                 wc.Headers[HttpRequestHeader.UserAgent] = "Silmoon.Extension_JsonHelper/1.0";
                 wc.Encoding = Encoding.UTF8;
