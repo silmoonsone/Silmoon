@@ -51,14 +51,14 @@ namespace Silmoon.Web
                 return User?.Role;
             }
         }
+        [Obsolete]
         public LoginState State
         {
             get
             {
                 if (HttpContext.Current.Session["___silmoon_state"] != null)
                 {
-                    int result = (int)LoginState.None;
-                    int.TryParse(HttpContext.Current.Session["___silmoon_state"].ToString(), out result);
+                    int.TryParse(HttpContext.Current.Session["___silmoon_state"].ToString(), out int result);
                     return (LoginState)result;
                 }
                 else return LoginState.None;
@@ -77,6 +77,13 @@ namespace Silmoon.Web
                 else return default;
             }
             private set { HttpContext.Current.Session["___silmoon_user"] = value; }
+        }
+        public bool IsSignin
+        {
+            get
+            {
+                return State == LoginState.Login;
+            }
         }
 
         public RSACryptoServiceProvider RSACookiesCrypto
