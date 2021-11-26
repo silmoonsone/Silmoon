@@ -6,50 +6,19 @@ using System.Text;
 
 namespace Silmoon.Extension
 {
-    public static class DictionaryStringStringExtension
+    public static class DictionaryExtension
     {
-        [Obsolete]
-        public static string Get(this IDictionary<string, string> dictionary, string key, string defaultValue)
+        public static TValue Get<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue)
         {
             var has = dictionary.ContainsKey(key);
             if (!has) return defaultValue;
-            else
-            {
-                return dictionary[key];
-            }
+            else return dictionary[key];
         }
-        [Obsolete]
-        public static string Get(this IDictionary<string, string> dictionary, string key)
+        public static TValue Get<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
         {
             var has = dictionary.ContainsKey(key);
-            if (!has) return null;
-            else
-            {
-                return dictionary[key];
-            }
-        }
-    }
-    public static class DictionaryStringObjectExtension
-    {
-        [Obsolete]
-        public static object Get(this IDictionary<string, object> dictionary, string key, object defaultValue)
-        {
-            var has = dictionary.ContainsKey(key);
-            if (!has) return defaultValue;
-            else
-            {
-                return dictionary[key];
-            }
-        }
-        [Obsolete]
-        public static object Get(this IDictionary<string, object> dictionary, string key)
-        {
-            var has = dictionary.ContainsKey(key);
-            if (!has) return null;
-            else
-            {
-                return dictionary[key];
-            }
+            if (!has) return default;
+            else return dictionary[key];
         }
     }
 }

@@ -5,105 +5,71 @@ using System.Text;
 
 namespace Silmoon.Security
 {
-    public class HashHelper
+    public static class HashHelper
     {
-        public HashHelper()
-        {
+        private static Random Random { get; set; } = new Random();
 
-        }
-
-        public static string Get16MD5(string strSource)
-        {
-            //new 
-            System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-
-            //获取密文字节数组 
-            byte[] bytResult = md5.ComputeHash(System.Text.Encoding.Default.GetBytes(strSource));
-
-            //转换成字符串，并取9到25位 
-            string strResult = BitConverter.ToString(bytResult, 4, 8);
-            //转换成字符串，32位 
-            //string strResult = BitConverter.ToString(bytResult); 
-
-            //BitConverter转换出来的字符串会在每个字符中间产生一个分隔符，需要去除掉 
-            strResult = strResult.Replace("-", "");
-            return strResult;
-        }
-
-        /// <summary> 
-        /// 进行MD5的32位加密
-        /// </summary> 
-        /// <param name="strSource">需要加密的明文</param> 
-        /// <returns>返回32位加密结果</returns> 
-        [Obsolete]
-        public static string Get32MD5(string strSource)
-        {
-            return System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(strSource, "MD5");
-        }
-
-        public static string MD5(string s)
+        public static string MD5(this string s)
         {
             using (var c = new MD5CryptoServiceProvider())
             {
-                byte[] bresult = c.ComputeHash(Encoding.UTF8.GetBytes(s));
-                return BitConverter.ToString(bresult).Replace("-", "");
+                byte[] data = c.ComputeHash(Encoding.UTF8.GetBytes(s));
+                string result = BitConverter.ToString(data).Replace("-", "").ToLower();
+                return result;
             }
         }
+        public static string RandomNumbers(int length, bool firstNotZero = true)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            lock (Random)
+            {
+                for (int i = 0; i < length; i++)
+                {
+                    int num = Random.Next(0, 9);
+                    if (firstNotZero && stringBuilder.Length == 0 && num == 0)
+                    {
+                        i--;
+                        continue;
+                    }
+                    stringBuilder.Append(num);
+                }
+            }
+            return stringBuilder.ToString();
+        }
+        public static string RandomChars(int length, bool IncludeUpper = true, bool IncludeLower = true, bool IncludeNumbers = true)
+        {
+            if (!IncludeLower && !IncludeLower && !IncludeNumbers) throw new InvalidOperationException("指定的随机选项全部是False，也就是说随机不出来任何字符");
+            StringBuilder stringBuilder = new StringBuilder();
+            lock (Random)
+            {
+                for (int i = 0; i < length; i++)
+                {
+                    int code = Random.Next('0', 'z');
+                    if ((code >= ':' && code <= '@') || code >= '[' && code <= '`')
+                    {
+                        i--;
+                        continue;
+                    }
+                    if (!IncludeUpper && (code >= 'A' && code <= 'Z'))
+                    {
+                        i--;
+                        continue;
+                    }
+                    if (!IncludeLower && (code >= 'a' && code <= 'z'))
+                    {
+                        i--;
+                        continue;
+                    }
+                    if (!IncludeNumbers && (code >= '0' && code <= '9'))
+                    {
+                        i--;
+                        continue;
+                    }
 
-        public static string GenerateCheckCodeNum(int codeCount)
-        {
-            return GenerateCheckCodeNum(codeCount, 1);
-        }
-        /// <summary>
-        /// 生成随机数字字符串
-        /// </summary>
-        /// <param name="codeCount">待生成的位数</param>
-        /// <param name="seed">随机种子</param>
-        /// <returns>生成的数字字符串</returns>
-        public static string GenerateCheckCodeNum(int codeCount, int seed)
-        {
-            string str = string.Empty;
-            long num2 = DateTime.Now.Ticks + seed;
-            seed++;
-            Random random = new Random(((int)(((ulong)num2) & 0xffffffffL)) | ((int)(num2 >> seed)));
-            for (int i = 0; i < codeCount; i++)
-            {
-                int num = random.Next();
-                str = str + ((char)(0x30 + ((ushort)(num % 10)))).ToString();
-            }
-            return str;
-        }
-        public static string GenerateCheckCode(int codeCount)
-        {
-            return GenerateCheckCode(codeCount, 1);
-        }
-        /// <summary>
-        /// 生成随机字母字符串(数字字母混和)
-        /// </summary>
-        /// <param name="codeCount">待生成的位数</param>
-        /// <param name="seed">随机种子</param>
-        /// <returns>生成的字母字符串</returns>
-        public static string GenerateCheckCode(int codeCount, int seed)
-        {
-            string str = string.Empty;
-            long num2 = DateTime.Now.Ticks + seed;
-            seed++;
-            Random random = new Random(((int)(((ulong)num2) & 0xffffffffL)) | ((int)(num2 >> seed)));
-            for (int i = 0; i < codeCount; i++)
-            {
-                char ch;
-                int num = random.Next();
-                if ((num % 2) == 0)
-                {
-                    ch = (char)(0x30 + ((ushort)(num % 10)));
+                    stringBuilder.Append((char)code);
                 }
-                else
-                {
-                    ch = (char)(0x41 + ((ushort)(num % 0x1a)));
-                }
-                str = str + ch.ToString();
             }
-            return str;
+            return stringBuilder.ToString();
         }
     }
 }
