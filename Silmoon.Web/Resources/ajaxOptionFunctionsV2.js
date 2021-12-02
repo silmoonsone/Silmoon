@@ -11,6 +11,6 @@ function _ajax_on_complete_v2(e, onCompleted, onError, flag) {
 }
 
 function _ajax_on_begin_v2(e, onBegin, flag) {
-    if (typeof (onBegin) == "function") onBegin(e);
+    if (typeof (onBegin) == "function") onBegin(e, flag);
 }
 // .Web.Mvc.MvcHelper.GetAjaxOptionJavascriptFunctionsV2() end javascript

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Silmoon.Arrays;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -9,7 +10,7 @@ using System.Web;
 
 namespace Silmoon.Security.Api
 {
-    public class HttpRequestApiValidation
+    public static class HttpRequestApiValidation
     {
         public static (string data, string sign) GetHttpRequestCollectionSign(NameValueCollection nameValueCollectionWithoutKey, string keyName, string key, params string[] excludedParams)
         {
@@ -44,5 +45,6 @@ namespace Silmoon.Security.Api
             }
             return collection;
         }
+
     }
 }

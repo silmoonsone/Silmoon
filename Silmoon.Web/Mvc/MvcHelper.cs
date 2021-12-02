@@ -109,7 +109,7 @@ namespace Silmoon.Web.Mvc
             if (onBegin is null) onBegin = "null";
             if (onError is null) onError = "null";
 
-            ajaxOptions.OnBegin = "(function(e, onBegin){ _ajax_on_begin_v2(e, onBegin, flag); })(arguments[0], " + onBegin + ", '" + flag + "')";
+            ajaxOptions.OnBegin = "(function(e, onBegin, flag){ _ajax_on_begin_v2(e, onBegin, flag); })(arguments[0], " + onBegin + ", '" + flag + "')";
             ajaxOptions.OnComplete = "(function(e, onCompleted, onError, flag){ _ajax_on_complete_v2(e, onCompleted, onError, flag); })(arguments[0], " + onCompleted + ", " + onError + ", '" + flag + "')";
             return ajaxOptions;
         }
