@@ -45,6 +45,5 @@ namespace Silmoon.Security.Api
             }
             return collection;
         }
-
     }
 }

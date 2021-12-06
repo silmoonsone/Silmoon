@@ -145,7 +145,7 @@ namespace Silmoon.Web
             var tokenNoSession = controller.Request.QueryString["TokenNoSession"].ToBool(false, false);
             var ignoreUserToken = controller.Request.QueryString["ignoreUserToken"].ToBool(false, false);
 
-            if (State != LoginState.Login || (!userToken.IsNullOrEmpty() && !ignoreUserToken))
+            if (!IsSignin || (!userToken.IsNullOrEmpty() && !ignoreUserToken))
             {
                 if (userToken.IsNullOrEmpty())
                 {
@@ -337,14 +337,17 @@ namespace Silmoon.Web
             }
         }
 
+        [Obsolete]
         public virtual void DoLogin(TUser user)
         {
             DoLogin(user.Username, user.Password, user.Role, user);
         }
+        [Obsolete]
         public virtual void DoLogin(string username, string password, TUser user)
         {
-            DoLogin(username, password, 0, user);
+            DoLogin(username, password, user.Role, user);
         }
+        [Obsolete]
         public virtual void DoLogin(string username, string password, IdentityRole role, TUser user = default)
         {
             if (string.IsNullOrEmpty(username))
@@ -362,7 +365,22 @@ namespace Silmoon.Web
             State = LoginState.Login;
             UserLogin?.Invoke(this, EventArgs.Empty);
         }
-        public virtual void DoLogout()
+        public virtual void Signin(TUser user)
+        {
+            Signin(user.Username, user.Role, user);
+        }
+        public virtual void Signin(string username, TUser user)
+        {
+            Signin(username, user.Role, user);
+        }
+        public virtual void Signin(string username, IdentityRole role, TUser user = default)
+        {
+            HttpContext.Current.Session.Timeout = sessionTimeout;
+            User = user;
+            State = LoginState.Login;
+            UserLogin?.Invoke(this, EventArgs.Empty);
+        }
+        public virtual void Signout()
         {
             State = LoginState.Logout;
             HttpContext.Current.Session.Remove("___silmoon_username");
@@ -390,11 +408,11 @@ namespace Silmoon.Web
                 HttpContext.Current.Response.Cookies["___silmoon_user_session"].Domain = cookieDomain;
             HttpContext.Current.Response.Cookies["___silmoon_user_session"].Expires = DateTime.Now.AddYears(-10);
         }
-        public virtual void Clear()
+        public virtual void Clearup()
         {
             ClearUserCookie();
             ClearCrossCookie();
-            DoLogout();
+            Signout();
         }
 
         TUser onRequestRefreshUserSession()
