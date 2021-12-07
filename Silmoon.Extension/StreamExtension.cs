@@ -23,16 +23,26 @@ namespace Silmoon.Extension
                 throw new NotSupportedException("流不支持读取或者搜索，无法操作");
             }
         }
-        public static string Read(this Stream stream, Encoding encoding = default)
+        public static string MakeToString(this Stream stream, Encoding encoding = default)
         {
             if (encoding == null) encoding = Encoding.UTF8;
             if (stream.CanSeek && stream.CanRead)
             {
+                long postion = stream.Position;
+
                 stream.Position = 0;
-                using (StreamReader reader = new StreamReader(stream, encoding))
-                {
-                    return reader.ReadToEnd();
-                }
+
+                string result = encoding.GetString(stream.ToBytes());
+                //byte[] buff = new byte[stream.Length];
+                //fixed (byte* pB = buff)
+                //{
+                //    stream.Read(buff, 0, buff.Length);
+                //    string s = new string((sbyte*)pB, 0, buff.Length, encoding);
+                //    stream.Position = postion;
+                //    return s;
+                //}
+                stream.Position = postion;
+                return result;
             }
             else
             {
