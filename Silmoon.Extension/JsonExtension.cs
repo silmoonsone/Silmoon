@@ -37,5 +37,15 @@ namespace Silmoon.Extension
                 return "null";
             }
         }
+        public static T[] ToObjects<T>(this JArray array)
+        {
+            T[] result = new T[array.Count];
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = array[i].ToObject<T>();
+            }
+            return result;
+        }
+
     }
 }
