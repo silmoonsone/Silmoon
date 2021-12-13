@@ -113,10 +113,6 @@
       <Project>{e0866d63-ec50-4a2c-aed2-2de469ba0f80}</Project>
       <Name>Silmoon.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Silmoon.Runtime\Silmoon.Runtime.csproj">
-      <Project>{a0bddbae-4451-446f-9848-1484b3c379b3}</Project>
-      <Name>Silmoon.Runtime</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
