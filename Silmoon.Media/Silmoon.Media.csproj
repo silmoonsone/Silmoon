@@ -124,10 +124,6 @@
       <Project>{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}</Project>
       <Name>Silmoon.Windows</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Silmoon\Silmoon.csproj">
-      <Project>{c827a65d-cc9e-444b-908a-7ba70d6e6c11}</Project>
-      <Name>Silmoon</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

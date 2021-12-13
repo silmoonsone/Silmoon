@@ -68,9 +68,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\RequireSessionSignin.cs" />
+    <Compile Include="Extensions\HttpRequestExtension.cs" />
     <Compile Include="UserSessionManager.cs" />
-    <Compile Include="Extension\ControllerBaseExtension.cs" />
-    <Compile Include="Extension\HttpContextBaseExtension.cs" />
+    <Compile Include="Extensions\ControllerBaseExtension.cs" />
+    <Compile Include="Extensions\HttpContextBaseExtension.cs" />
     <Compile Include="HtmlHelper.cs" />
     <Compile Include="HttpHelper.cs" />
     <Compile Include="IBindWebPage.cs" />
@@ -115,10 +116,6 @@
     <ProjectReference Include="..\Silmoon.Runtime\Silmoon.Runtime.csproj">
       <Project>{a0bddbae-4451-446f-9848-1484b3c379b3}</Project>
       <Name>Silmoon.Runtime</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Silmoon\Silmoon.csproj">
-      <Project>{c827a65d-cc9e-444b-908a-7ba70d6e6c11}</Project>
-      <Name>Silmoon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

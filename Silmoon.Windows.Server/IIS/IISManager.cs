@@ -5,7 +5,6 @@ using System.DirectoryServices;
 using System.Text.RegularExpressions;
 using System.Collections;
 using Silmoon.Extension;
-using Silmoon.Security;
 using System.Windows.Forms;
 
 namespace Silmoon.Windows.Server.IIS
@@ -34,8 +33,8 @@ namespace Silmoon.Windows.Server.IIS
             newSiteEntry.Properties[WebSiteParameter.ServerBindings.ToString()].Value = siteInfo.Bindings;
             newSiteEntry.Properties[WebSiteParameter.ServerComment.ToString()].Value = siteInfo.SiteName;
             newSiteEntry.Properties[WebSiteParameter.AccessFlags.ToString()].Value = 512 | 1;
-            newSiteEntry.Properties[WebSiteParameter.AnonymousUserName.ToString()].Value = siteInfo.AccessUser.IdentityString;
-            newSiteEntry.Properties[WebSiteParameter.AnonymousUserPass.ToString()].Value = siteInfo.AccessUser.PasswordCode;
+            newSiteEntry.Properties[WebSiteParameter.AnonymousUserName.ToString()].Value = siteInfo.UserName;
+            newSiteEntry.Properties[WebSiteParameter.AnonymousUserPass.ToString()].Value = siteInfo.Password;
             newSiteEntry.Properties[WebSiteParameter.ScriptMaps.ToString()].Value = siteInfo.ScriptMaps;
             newSiteEntry.Properties[WebSiteParameter.LogFileLocaltimeRollover.ToString()].Value = siteInfo.LogFileLocaltimeRollover.ToString();
             newSiteEntry.Properties[WebSiteParameter.LogFileDirectory.ToString()].Value = siteInfo.LogFileDirectory;
@@ -78,7 +77,8 @@ namespace Silmoon.Windows.Server.IIS
                     siteInfo.LogFileDirectory = ent.Properties[WebSiteParameter.LogFileDirectory.ToString()].Value.ToString();
 
                     DirectoryEntry appInfo = ent.Children.Find("root", "IIsWebVirtualDir");
-                    siteInfo.AccessUser = new IdentityAuthInfo(appInfo.Properties[WebVirtualDirParameter.AnonymousUserName.ToString()].Value.ToString(), appInfo.Properties[WebVirtualDirParameter.AnonymousUserPass.ToString()].Value.ToString());
+                    siteInfo.UserName = appInfo.Properties[WebVirtualDirParameter.AnonymousUserName.ToString()].Value.ToString();
+                    siteInfo.Password = appInfo.Properties[WebVirtualDirParameter.AnonymousUserPass.ToString()].Value.ToString();
                     siteInfo.AppPoolName = appInfo.Properties[WebVirtualDirParameter.AppPoolId.ToString()].Value.ToString();
                     siteInfo.DirectoryPath = appInfo.Properties[WebVirtualDirParameter.Path.ToString()].Value.ToString();
                     siteInfo.ScriptMaps = appInfo.Properties[WebVirtualDirParameter.ScriptMaps.ToString()].Value;
@@ -490,7 +490,8 @@ namespace Silmoon.Windows.Server.IIS
         public object Bindings;
         public string SiteName;
         public string DirectoryPath;
-        public IdentityAuthInfo AccessUser;
+        public string UserName;
+        public string Password;
         public string[] ScriptMaps;
         public string AppPoolName;
 
@@ -502,7 +503,8 @@ namespace Silmoon.Windows.Server.IIS
         public object Bindings;
         public string SiteName;
         public string DirectoryPath;
-        public IdentityAuthInfo AccessUser;
+        public string UserName;
+        public string Password;
         public object ScriptMaps;
         public string AppPoolName;
         public WebSiteState State;

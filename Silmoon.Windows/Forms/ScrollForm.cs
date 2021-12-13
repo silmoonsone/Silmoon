@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
-using Silmoon.Threading;
 using Silmoon.Windows.Controls.Extension;
 
 namespace Silmoon.Windows.Forms

@@ -111,6 +111,13 @@
       <DependentUpon>ScrollForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IObjectSafety.cs" />
+    <Compile Include="IO\FileHelper.cs" />
+    <Compile Include="IO\FileWatcher.cs" />
+    <Compile Include="IO\SmFile\ACL.cs" />
+    <Compile Include="IO\SmFile\Searcher.cs" />
+    <Compile Include="Net\Connections.cs" />
+    <Compile Include="Net\NetworkBaseInformations.cs" />
+    <Compile Include="Net\NetworkInformation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -126,6 +133,7 @@
     </Compile>
     <Compile Include="Service\Service.SystemService.cs" />
     <Compile Include="Service\ServiceControl.cs" />
+    <Compile Include="SmSystem.cs" />
     <Compile Include="Systems\LogonUser.cs" />
     <Compile Include="Systems\Processes.cs" />
     <Compile Include="Systems\RDController.cs" />
@@ -230,12 +238,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\SwitchButton_BackImg_Off.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Silmoon\Silmoon.csproj">
-      <Project>{c827a65d-cc9e-444b-908a-7ba70d6e6c11}</Project>
-      <Name>Silmoon</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
