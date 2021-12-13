@@ -112,7 +112,6 @@
     </Compile>
     <Compile Include="IniFile.cs" />
     <Compile Include="IObjectSafety.cs" />
-    <Compile Include="IO\SmFile\ACL.cs" />
     <Compile Include="Net\Connections.cs" />
     <Compile Include="Net\NetworkBaseInformations.cs" />
     <Compile Include="Net\NetworkInformation.cs" />
