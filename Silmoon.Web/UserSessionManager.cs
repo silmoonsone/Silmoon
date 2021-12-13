@@ -172,7 +172,7 @@ namespace Silmoon.Web
                         {
                             ///如果AppUserToken验证过程返回了用户实体。
                             User = userInfo;
-                            if (!tokenNoSession) DoLogin(User);
+                            if (!tokenNoSession) Signin(User);
 
                             ///使用UserToken登录后处理
                             if (IsRole.HasValue && Role < IsRole)
