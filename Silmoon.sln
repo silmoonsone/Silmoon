@@ -35,6 +35,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Runtime", "Silmoon.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Models", "Silmoon.Models\Silmoon.Models.csproj", "{E0866D63-EC50-4A2C-AED2-2DE469BA0F80}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon", "Silmoon\Silmoon.csproj", "{F6BB3CE1-6918-414D-B83E-D5D80F2C76DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -221,6 +223,18 @@ Global
 		{E0866D63-EC50-4A2C-AED2-2DE469BA0F80}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E0866D63-EC50-4A2C-AED2-2DE469BA0F80}.Release|Win32.ActiveCfg = Release|Any CPU
 		{E0866D63-EC50-4A2C-AED2-2DE469BA0F80}.Release|Win32.Build.0 = Release|Any CPU
+		{F6BB3CE1-6918-414D-B83E-D5D80F2C76DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6BB3CE1-6918-414D-B83E-D5D80F2C76DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6BB3CE1-6918-414D-B83E-D5D80F2C76DF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F6BB3CE1-6918-414D-B83E-D5D80F2C76DF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F6BB3CE1-6918-414D-B83E-D5D80F2C76DF}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{F6BB3CE1-6918-414D-B83E-D5D80F2C76DF}.Debug|Win32.Build.0 = Debug|Any CPU
+		{F6BB3CE1-6918-414D-B83E-D5D80F2C76DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6BB3CE1-6918-414D-B83E-D5D80F2C76DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6BB3CE1-6918-414D-B83E-D5D80F2C76DF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F6BB3CE1-6918-414D-B83E-D5D80F2C76DF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F6BB3CE1-6918-414D-B83E-D5D80F2C76DF}.Release|Win32.ActiveCfg = Release|Any CPU
+		{F6BB3CE1-6918-414D-B83E-D5D80F2C76DF}.Release|Win32.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Silmoon.Runtime\Silmoon.Runtime.csproj" />
+    <ProjectReference Include="..\Silmoon\Silmoon.csproj" />
   </ItemGroup>
 
 </Project>

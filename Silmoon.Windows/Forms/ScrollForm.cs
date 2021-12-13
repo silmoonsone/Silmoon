@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using Silmoon.Windows.Controls.Extension;
+using Silmoon.Threading;
 
 namespace Silmoon.Windows.Forms
 {

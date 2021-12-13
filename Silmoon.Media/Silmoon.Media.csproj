@@ -121,7 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Silmoon.Windows\Silmoon.Windows.csproj">
-      <Project>{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}</Project>
+      <Project>{46a25db6-96c7-48c5-b73d-24f8ebc1102d}</Project>
       <Name>Silmoon.Windows</Name>
     </ProjectReference>
   </ItemGroup>

@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Silmoon.Windows</RootNamespace>
     <AssemblyName>Silmoon.Windows</AssemblyName>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -110,11 +110,9 @@
     <Compile Include="Forms\ScrollForm.Designer.cs">
       <DependentUpon>ScrollForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="IniFile.cs" />
     <Compile Include="IObjectSafety.cs" />
-    <Compile Include="IO\FileHelper.cs" />
-    <Compile Include="IO\FileWatcher.cs" />
     <Compile Include="IO\SmFile\ACL.cs" />
-    <Compile Include="IO\SmFile\Searcher.cs" />
     <Compile Include="Net\Connections.cs" />
     <Compile Include="Net\NetworkBaseInformations.cs" />
     <Compile Include="Net\NetworkInformation.cs" />
@@ -238,6 +236,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\SwitchButton_BackImg_Off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Silmoon.Net\Silmoon.Net.csproj">
+      <Project>{D595A3FA-798E-44A8-9CDA-AA688AF4A3B6}</Project>
+      <Name>Silmoon.Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Silmoon\Silmoon.csproj">
+      <Project>{F6BB3CE1-6918-414D-B83E-D5D80F2C76DF}</Project>
+      <Name>Silmoon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

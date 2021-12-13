@@ -1,0 +1,55 @@
+﻿using Silmoon.Arrays;
+using Silmoon.Secure;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Text;
+using System.Web;
+
+namespace Silmoon.Extension
+{
+    public static class NameValueCollectionExtension
+    {
+        public static string[] GetValues(this NameValueCollection NameValueCollection, string Key)
+        {
+            List<string> result = new List<string>();
+            for (int i = 0; i < NameValueCollection.Count; i++)
+            {
+                if (NameValueCollection.GetKey(i) == Key)
+                {
+                    result.Add(NameValueCollection[i]);
+                }
+            }
+            return result.ToArray();
+        }
+        public static string ToQueryString(this NameValueCollection NameValueCollection)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < NameValueCollection.Count; i++)
+            {
+                stringBuilder.Append(HttpUtility.UrlEncode(NameValueCollection.GetKey(i)) + "=" + HttpUtility.UrlEncode(NameValueCollection[i]) + "&");
+            }
+            return stringBuilder.ToString().Remove(stringBuilder.Length - 1);
+        }
+
+        public static string GetSign(this NameValueCollection NameValueCollection, string Key, string Value, string IgnoreKey = "sign")
+        {
+            List<string> array = new List<string>();
+            for (int i = 0; i < NameValueCollection.Count; i++)
+            {
+                if (NameValueCollection.GetKey(i).ToLower() == IgnoreKey.ToLower()) continue;
+                array.Add(NameValueCollection.GetKey(i) + "=" + NameValueCollection[i]);
+            }
+            array.Sort();
+
+            string s = "";
+
+            foreach (var item in array) s += item + "&";
+
+            s += Key + "=" + Value;
+            return HashHelper.MD5(s);
+        }
+
+    }
+}
