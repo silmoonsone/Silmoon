@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Silmoon.Web.Core.Authentication
+namespace Silmoon.Web.AspNetCore.Authentication
 {
     public class AuthenticationManager
     {

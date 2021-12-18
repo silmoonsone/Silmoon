@@ -1,13 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Silmoon.Extension\Silmoon.Extension.csproj" />
-    <ProjectReference Include="..\Silmoon.Web\Silmoon.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Silmoon.Models">
+      <HintPath>..\Silmoon.Models\obj\Release\netstandard2.0\Silmoon.Models.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

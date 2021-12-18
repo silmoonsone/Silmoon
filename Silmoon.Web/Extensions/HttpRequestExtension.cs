@@ -14,6 +14,11 @@ namespace Silmoon.Web.Extensions
         {
             NameValueCollection collection = request.QueryString;
             NameValueCollection collection2 = request.Form;
+            foreach (var item in collection.AllKeys)
+            {
+                if (collection.AllKeys.Contains(item)) continue;
+                else collection.Add(item, collection2[item]);
+            }
             foreach (var item in collection2.AllKeys)
             {
                 if (collection.AllKeys.Contains(item)) continue;
