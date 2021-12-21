@@ -192,19 +192,19 @@ namespace Silmoon.Web.AspNetCore
 
 
 
-        static async Task<TUser> onRequestRefreshUserSession<TUser>(HttpContext httpContext, string Name, string NameIdentifier) where TUser : IDefaultUserIdentity
+        static async Task<TUser> onRequestRefreshUserSession<TUser>(HttpContext httpContext, string Username, string NameIdentifier) where TUser : IDefaultUserIdentity
         {
-            var user = await GetCachedUser<TUser>(httpContext);
-            if (user == null) return default;
 
             if (OnRequestRefreshUserSession == null)
                 return default;
             else
             {
-                return (TUser)OnRequestRefreshUserSession(Name, NameIdentifier, user);
+                var user = await GetCachedUser<TUser>(httpContext);
+                if (user == null) return default;
+                return (TUser)OnRequestRefreshUserSession(Username, NameIdentifier, user);
             }
         }
-        public delegate TUser UserSessionHanlder<TUser>(string Name, string NameIdentifier, TUser User);
-        public delegate TUser UserTokenHanlder<TUser>(string Name, string NameIdentifier, string UserToken);
+        public delegate TUser UserSessionHanlder<TUser>(string Username, string NameIdentifier, TUser User);
+        public delegate TUser UserTokenHanlder<TUser>(string Username, string NameIdentifier, string UserToken);
     }
 }
