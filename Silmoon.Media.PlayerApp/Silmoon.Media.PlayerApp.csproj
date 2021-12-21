@@ -111,16 +111,6 @@
     <None Include="Resources\wmp_1.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Silmoon.Media\Silmoon.Media.csproj">
-      <Project>{1631b051-29b4-4d13-8aa3-325abe41a307}</Project>
-      <Name>Silmoon.Media</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Silmoon.Windows\Silmoon.Windows.csproj">
-      <Project>{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}</Project>
-      <Name>Silmoon.Windows</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -136,6 +126,16 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Silmoon.Media\Silmoon.Media.csproj">
+      <Project>{1631b051-29b4-4d13-8aa3-325abe41a307}</Project>
+      <Name>Silmoon.Media</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Silmoon.Windows\Silmoon.Windows.csproj">
+      <Project>{46a25db6-96c7-48c5-b73d-24f8ebc1102d}</Project>
+      <Name>Silmoon.Windows</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
