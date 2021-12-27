@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Silmoon.Drawing
@@ -60,6 +61,42 @@ namespace Silmoon.Drawing
             g.CompositingQuality = quality;
             g.DrawImage(bitmap, 0, 0, img.Width, img.Height);
             return img;
+        }
+
+
+        public static Image FixiPhoneOrientation(Image ImageData)
+        {
+            if (ImageData.PropertyIdList.Contains(0x0112))
+            {
+                int rotationValue = ImageData.GetPropertyItem(0x0112)?.Value[0] ?? 1;
+                switch (rotationValue)
+                {
+                    case 1: // landscape, do nothing
+                        break;
+
+                    case 8: // rotated 90 right
+                            // de-rotate:
+                        ImageData.RotateFlip(rotateFlipType: RotateFlipType.Rotate270FlipNone);
+                        break;
+
+                    case 3: // bottoms up
+                        ImageData.RotateFlip(rotateFlipType: RotateFlipType.Rotate180FlipNone);
+                        break;
+
+                    case 6: // rotated 90 left
+                        ImageData.RotateFlip(rotateFlipType: RotateFlipType.Rotate90FlipNone);
+                        break;
+                }
+            }
+            return ImageData;
+        }
+        public static byte[] FixiPhoneOrientation(byte[] ImageData)
+        {
+            using (Image image = Image.FromStream(ImageData.GetStream()))
+            {
+                var result = FixiPhoneOrientation(image);
+                return result.GetBytes(image.RawFormat);
+            }
         }
     }
 }
