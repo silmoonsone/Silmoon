@@ -17,15 +17,15 @@ namespace Silmoon.Web.AspNetCore
     public static class UserSessionManager
     {
         public static event UserSessionHanlder<IDefaultUserIdentity> OnRequestRefreshUserSession;
-        public static event UserTokenHanlder<IDefaultUserIdentity> OnRequestUserToken;
         public static event UserSessionHanlder<IDefaultUserIdentity> OnRequestUserData;
+        public static event UserTokenHanlder<IDefaultUserIdentity> OnRequestUserToken;
 
         public static async Task<bool> IsSignin(this HttpContext httpContext)
         {
             var result = await httpContext.AuthenticateAsync();
             return result.Succeeded;
         }
-        public static async Task Signin<TUser>(this HttpContext httpContext, TUser User, string NameIdentifier = null) where TUser : IDefaultUserIdentity
+        public static async Task Signin<TUser>(this HttpContext httpContext, TUser User, string NameIdentifier = null) where TUser : IDefaultUserIdentity, new()
         {
             if (User.Username.IsNullOrEmpty() && NameIdentifier.IsNullOrEmpty()) throw new ArgumentNullException(nameof(User.Username));
             NameIdentifier = NameIdentifier.IsNullOrEmpty() ? User.Username : NameIdentifier;
@@ -57,7 +57,7 @@ namespace Silmoon.Web.AspNetCore
                 return false;
             }
         }
-        public static async Task<IActionResult> MvcSessionChecking<TUser>(this ControllerBase controller, Models.Identities.Enums.IdentityRole? IsRole, bool requestRefreshUserSession = false, bool isAppApiRequest = false, string signInUrl = "~/User/Signin?url=$SigninUrl") where TUser : IDefaultUserIdentity
+        public static async Task<IActionResult> MvcSessionChecking<TUser>(this ControllerBase controller, Models.Identities.Enums.IdentityRole? IsRole, bool requestRefreshUserSession = false, bool isAppApiRequest = false, string signInUrl = "~/User/Signin?url=$SigninUrl") where TUser : IDefaultUserIdentity, new()
         {
             var User = await GetCachedUser<TUser>(controller.HttpContext);
 
@@ -95,7 +95,7 @@ namespace Silmoon.Web.AspNetCore
                         {
                             ///如果AppUserToken验证过程返回了用户实体。
                             User = (TUser)userInfo;
-                            SetUserCache(controller.HttpContext, userInfo);
+                            SetUserCache(controller.HttpContext, (TUser)userInfo);
                             if (!tokenNoSession) await Signin(controller.HttpContext, User);
 
                             ///使用UserToken登录后处理
@@ -105,7 +105,7 @@ namespace Silmoon.Web.AspNetCore
                                     return new JsonResult(StateFlag.Create(false, -9999, "access denied."));
                                 else return new ContentResult() { Content = "access denied", ContentType = "text/plain" };
                             }
-                            if (controller.GetType() == typeof(Controller)) ((Controller)controller).ViewBag.User = User;
+                            if (controller is Controller) ((Controller)controller).ViewBag.User = User;
                             return null;
                         }
                         else
@@ -152,12 +152,12 @@ namespace Silmoon.Web.AspNetCore
                     }
                 }
 
-                if (controller.GetType() == typeof(Controller)) ((Controller)controller).ViewBag.User = User;
+                if (controller is Controller) ((Controller)controller).ViewBag.User = User;
                 return null;
             }
         }
 
-        public static async Task<TUser> GetCachedUser<TUser>(this HttpContext httpContext)
+        public static async Task<TUser> GetCachedUser<TUser>(this HttpContext httpContext) where TUser : IDefaultUserIdentity, new()
         {
             if (await IsSignin(httpContext))
             {
@@ -168,8 +168,8 @@ namespace Silmoon.Web.AspNetCore
                 TUser user = default;
                 if (json.IsNullOrEmpty())
                 {
-                    user = (TUser)OnRequestUserData?.Invoke(Name, NameIdentifier, (IDefaultUserIdentity)user);
-                    SetUserCache(httpContext, (IDefaultUserIdentity)user);
+                    user = (TUser)OnRequestUserData?.Invoke(Name, NameIdentifier, user);
+                    SetUserCache(httpContext, user);
                 }
                 else
                 {
@@ -182,17 +182,17 @@ namespace Silmoon.Web.AspNetCore
                 return default;
             }
         }
-        public static void SetUserCache<TUser>(this HttpContext httpContext, TUser user) where TUser : IDefaultUserIdentity
+        public static void SetUserCache<TUser>(this HttpContext httpContext, TUser User) where TUser : IDefaultUserIdentity, new()
         {
             var NameIdentifier = httpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
 
-            string json = JsonSerializer.Serialize(user);
-            httpContext.Session.SetString("SessionCache:NameIdentifier+Username=" + NameIdentifier + "+" + user.Username, json);
+            string json = JsonSerializer.Serialize(User);
+            httpContext.Session.SetString("SessionCache:NameIdentifier+Username=" + NameIdentifier + "+" + User.Username, json);
         }
 
 
 
-        static async Task<TUser> onRequestRefreshUserSession<TUser>(HttpContext httpContext, string Username, string NameIdentifier) where TUser : IDefaultUserIdentity
+        static async Task<TUser> onRequestRefreshUserSession<TUser>(HttpContext httpContext, string Username, string NameIdentifier) where TUser : IDefaultUserIdentity, new()
         {
 
             if (OnRequestRefreshUserSession == null)
