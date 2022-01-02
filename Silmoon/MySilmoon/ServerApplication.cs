@@ -11,51 +11,19 @@ namespace Silmoon.MySilmoon
     /// <summary>
     /// 对银月产品公共库公共属性进行重用
     /// </summary>
-    public class ServerApplication : RunningAble, IServerApplication
+    public class ServerApplication : Runable, IServerApplication
     {
-        private string _productString = "NULL";
-        private int _revision = 0;
-        private string _releaseVersion = "0";
         private bool _initProduceInfo = false;
-        private string _userIdentity = "#undefined";
 
         public event OutputTextMessageHandler OnOutputLine;
         public event OutputTextMessageHandler OnInputLine;
-        public event ThreadExceptionEventHandler OnException;
-        /// <summary>
-        /// AsyncValidateVersion invoked.
-        /// </summary>
+        public event ThreadExceptionEventHandler OnError;
         public event Action<VersionResult> OnValidateVersion;
 
-        /// <summary>
-        /// 标识产品名称字符串
-        /// </summary>
-        public string ProductString
-        {
-            get { return _productString; }
-            set { _productString = value; }
-        }
-        /// <summary>
-        /// 产品发布序号
-        /// </summary>
-        public int Revision
-        {
-            get { return _revision; }
-            set { _revision = value; }
-        }
-        /// <summary>
-        /// 版本号
-        /// </summary>
-        public string ReleaseVersion
-        {
-            get { return _releaseVersion; }
-            set { _releaseVersion = value; }
-        }
-        public string UserIdentity
-        {
-            get { return _userIdentity; }
-            set { _userIdentity = value; }
-        }
+        public string ProductString { get; set; } = "NULL";
+        public int Revision { get; set; } = 0;
+        public string ReleaseVersion { get; set; } = "0";
+        public string UserIdentity { get; set; } = "#undefined";
 
         public ServerApplication()
         {
@@ -63,34 +31,31 @@ namespace Silmoon.MySilmoon
         }
 
 
+
         public void OutputLine()
         {
             OutputLine(null, 0);
         }
-        public void OutputLine(object message, int flag = 0)
-        {
-            if (message is null)
-                OutputLine(null, flag);
-            else
-                OutputLine(message.ToString(), flag);
-        }
         public void OutputLine(string message, int flag = 0)
         {
-            OnOutputLine?.Invoke(message, flag);
+            OnOutputLine?.Invoke(this, ServerApplicationEventArgs.Create(message, flag));
         }
         public void InputLine(string message, int flag = 0)
         {
-            OnInputLine?.Invoke(message, flag);
+            OnInputLine?.Invoke(this, ServerApplicationEventArgs.Create(message, flag));
+        }
+        public void RunAndWaitConsoleLine()
+        {
+            while (State != RunningState.Stopped && State != RunningState.Init && State != RunningState.Unstarted)
+            {
+                var consoleInput = Console.ReadLine();
+                InputLine(consoleInput, 0);
+            }
         }
 
-        /// <summary>
-        /// 让GBC引发线程错误事件，由GBC的OnThreadException事件捕获并处理。
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void onThreadException(object sender, ThreadExceptionEventArgs e)
+        public void Error(object sender, ThreadExceptionEventArgs e)
         {
-            if (OnException != null) OnException(sender, e);
+            if (OnError != null) OnError(sender, e);
         }
 
         /// <summary>
@@ -102,7 +67,7 @@ namespace Silmoon.MySilmoon
             {
                 if (OnValidateVersion != null)
                 {
-                    var result = MyConfigure.GetRemoteVersion(_productString, _userIdentity);
+                    var result = MyConfigure.GetRemoteVersion(ProductString, UserIdentity);
                     OnValidateVersion(result);
                 }
                 else
@@ -116,7 +81,7 @@ namespace Silmoon.MySilmoon
         /// </summary>
         public VersionResult ValidateVersion()
         {
-            return MyConfigure.GetRemoteVersion(_productString, _userIdentity);
+            return MyConfigure.GetRemoteVersion(ProductString, UserIdentity);
         }
 
         /// <summary>
@@ -159,9 +124,9 @@ namespace Silmoon.MySilmoon
         {
             if (!_initProduceInfo)
             {
-                _productString = productString;
-                _revision = revision;
-                _releaseVersion = releaseVersion;
+                ProductString = productString;
+                Revision = revision;
+                ReleaseVersion = releaseVersion;
                 _initProduceInfo = true;
                 return true;
             }
@@ -169,5 +134,5 @@ namespace Silmoon.MySilmoon
                 return false;
         }
     }
-    public delegate void OutputTextMessageHandler(string message, int flag);
+    public delegate void OutputTextMessageHandler(IServerApplication sender, ServerApplicationEventArgs e);
 }

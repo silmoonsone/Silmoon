@@ -17,8 +17,9 @@ namespace Silmoon.Extension
             return encoding.GetByteCount(value);
         }
 
-        public static string SubstringEncoded(this string s, int length, Encoding encoding)
+        public static string EncodeSubstring(this string s, int length, Encoding encoding)
         {
+            if (s.IsNullOrEmpty()) return s;
             byte[] bytes = encoding.GetBytes(s);
             int n = 0;  //  表示当前的字节数
             int i = 0;  //  要截取的字节数
@@ -220,5 +221,26 @@ namespace Silmoon.Extension
         {
             return Regex.Replace(input, "<.*?>", string.Empty);
         }
+        public static bool LastSubstringEqual(this string s, string str)
+        {
+            if (s.IsNullOrEmpty() || str.IsNullOrEmpty()) return false;
+            var lastIndexOf = s.LastIndexOf(str);
+            if (lastIndexOf == -1) return false;
+            else
+            {
+                return lastIndexOf == s.Length - str.Length;
+            }
+        }
+        public static bool StartSubstringEqual(this string s, string str)
+        {
+            if (s.IsNullOrEmpty() || str.IsNullOrEmpty()) return false;
+            var indexOf = s.IndexOf(str);
+            if (indexOf == -1) return false;
+            else
+            {
+                return indexOf == 0;
+            }
+        }
+
     }
 }
