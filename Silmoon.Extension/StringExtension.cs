@@ -17,7 +17,7 @@ namespace Silmoon.Extension
             return encoding.GetByteCount(value);
         }
 
-        public static string EncodeSubstring(this string s, int length, Encoding encoding)
+        public static string SubstringEncoded(this string s, int length, Encoding encoding)
         {
             if (s.IsNullOrEmpty()) return s;
             byte[] bytes = encoding.GetBytes(s);
