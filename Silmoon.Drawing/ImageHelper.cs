@@ -94,8 +94,16 @@ namespace Silmoon.Drawing
         {
             using (Image image = Image.FromStream(ImageData.GetStream()))
             {
-                var result = FixiPhoneOrientation(image);
-                return result.GetBytes(image.RawFormat);
+                if (image.PropertyIdList.Contains(0x0112))
+                {
+                    var rotationValue = image.GetPropertyItem(0x0112)?.Value[0] ?? 1;
+                    if (rotationValue != 1)
+                    {
+                        var result = FixiPhoneOrientation(image);
+                        return result.GetBytes(image.RawFormat);
+                    }
+                }
+                return ImageData;
             }
         }
     }

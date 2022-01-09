@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Silmoon.Drawing
 {
-    public static class BitmapExtension
+    public static class ImageExtension
     {
         public static byte[] GetBytes(this Bitmap bitmap, ImageFormat imageFormat)
         {
@@ -36,6 +36,10 @@ namespace Silmoon.Drawing
                 //image.Save(stream, imageFormat);
                 return stream.ToArray();
             }
+        }
+        public static byte[] GetBytes(this Image image)
+        {
+            return GetBytes(image, image.RawFormat);
         }
     }
 }

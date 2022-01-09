@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Silmoon.Runtime.Cache
 {
     [Serializable]
-    public struct CacheItem<TKey, TValue>
+    public class CacheItem<TKey, TValue>
     {
         public DateTime ExipreAt { get; set; }
         public TValue Value { get; set; }
