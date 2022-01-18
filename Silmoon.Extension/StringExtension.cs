@@ -221,26 +221,5 @@ namespace Silmoon.Extension
         {
             return Regex.Replace(input, "<.*?>", string.Empty);
         }
-        public static bool LastSubstringEqual(this string s, string str)
-        {
-            if (s.IsNullOrEmpty() || str.IsNullOrEmpty()) return false;
-            var lastIndexOf = s.LastIndexOf(str);
-            if (lastIndexOf == -1) return false;
-            else
-            {
-                return lastIndexOf == s.Length - str.Length;
-            }
-        }
-        public static bool StartSubstringEqual(this string s, string str)
-        {
-            if (s.IsNullOrEmpty() || str.IsNullOrEmpty()) return false;
-            var indexOf = s.IndexOf(str);
-            if (indexOf == -1) return false;
-            else
-            {
-                return indexOf == 0;
-            }
-        }
-
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Text;
 
 namespace Silmoon.Drawing
@@ -10,10 +11,8 @@ namespace Silmoon.Drawing
     {
         public static Bitmap FromBytes(byte[] buffer)
         {
-            using (var stream = buffer.GetStream())
-            {
-                return new Bitmap(stream);
-            }
+            var stream = buffer.GetStream();
+            return new Bitmap(stream);
         }
     }
 }
