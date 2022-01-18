@@ -12,36 +12,30 @@ namespace Silmoon.Drawing
 {
     public class ImageHelper
     {
+        public static Bitmap Resize(Bitmap BitmapData, int Width, int Height)
+        {
+            Bitmap bitmap = new Bitmap(Width, Height);
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+            {
+                graphics.DrawImage(BitmapData, 0, 0, Width, Height);
+            }
+            return bitmap;
+        }
         public static byte[] Resize(byte[] ImageData, int Width, int Height)
         {
             using (Bitmap bitmap = new Bitmap(ImageData.GetStream()))
             {
                 var format = bitmap.RawFormat;
-                var result = Resize(bitmap, Width, Height);
-                return result.GetBytes(format);
+                using (var result = Resize(bitmap, Width, Height))
+                {
+                    return result.GetBytes(format);
+                }
             }
         }
-        public static Bitmap Resize(Bitmap BitmapData, int Width, int Height)
-        {
-            Bitmap bitmap = new Bitmap(Width, Height);
-            Graphics graphics = Graphics.FromImage(bitmap);
 
-            graphics.DrawImage(BitmapData, 0, 0, Width, Height);
-            return bitmap;
-        }
-
-        public static byte[] ResizeWidth(byte[] ImageData, int Width, bool LessSizeNoProcess, bool Constrain = false)
+        public static Bitmap ResizeWidth(Bitmap BitmapData, int Width, bool IfLessKeepSize, bool Constrain = false)
         {
-            using (Bitmap bitmap = new Bitmap(ImageData.GetStream()))
-            {
-                var format = bitmap.RawFormat;
-                var result = ResizeWidth(bitmap, Width, LessSizeNoProcess, Constrain);
-                return result.GetBytes(format);
-            }
-        }
-        public static Bitmap ResizeWidth(Bitmap BitmapData, int Width, bool LessSizeNoProcess, bool Constrain = false)
-        {
-            if (LessSizeNoProcess && BitmapData.Width < Width) return BitmapData;
+            if (IfLessKeepSize && BitmapData.Width < Width) Width = BitmapData.Width;
             double persentWidth = (double)Width / BitmapData.Width;
             int height = BitmapData.Height;
             if (Constrain) height = (int)(BitmapData.Height * persentWidth);
@@ -49,18 +43,20 @@ namespace Silmoon.Drawing
             var result = Resize(BitmapData, Width, height);
             return result;
         }
-        public static byte[] ResizeHeight(byte[] ImageData, int Height, bool LessSizeNoProcess, bool Constrain = false)
+        public static byte[] ResizeWidth(byte[] ImageData, int Width, bool IfLessKeepSize, bool Constrain = false)
         {
             using (Bitmap bitmap = new Bitmap(ImageData.GetStream()))
             {
                 var format = bitmap.RawFormat;
-                var result = ResizeHeight(bitmap, Height, LessSizeNoProcess, Constrain);
-                return result.GetBytes(format);
+                using (var result = ResizeWidth(bitmap, Width, IfLessKeepSize, Constrain))
+                {
+                    return result.GetBytes(format);
+                }
             }
         }
-        public static Bitmap ResizeHeight(Bitmap BitmapData, int Height, bool LessSizeNoProcess, bool Constrain = false)
+        public static Bitmap ResizeHeight(Bitmap BitmapData, int Height, bool IfLessKeepSize, bool Constrain = false)
         {
-            if (LessSizeNoProcess && BitmapData.Height < Height) return BitmapData;
+            if (IfLessKeepSize && BitmapData.Height < Height) Height = BitmapData.Height;
 
             double persentHeight = (double)Height / BitmapData.Height;
             int width = BitmapData.Width;
@@ -69,16 +65,18 @@ namespace Silmoon.Drawing
             var result = Resize(BitmapData, width, Height);
             return result;
         }
-
-        public static byte[] Compress(byte[] ImageData, CompositingQuality quality = CompositingQuality.Default)
+        public static byte[] ResizeHeight(byte[] ImageData, int Height, bool IfLessKeepSize, bool Constrain = false)
         {
             using (Bitmap bitmap = new Bitmap(ImageData.GetStream()))
             {
                 var format = bitmap.RawFormat;
-                var result = Compress(bitmap, quality);
-                return result.GetBytes(format);
+                using (var result = ResizeHeight(bitmap, Height, IfLessKeepSize, Constrain))
+                {
+                    return result.GetBytes(format);
+                }
             }
         }
+
         public static Bitmap Compress(Bitmap BitmapData, CompositingQuality quality = CompositingQuality.Default)
         {
             Bitmap img = new Bitmap(BitmapData.Width, BitmapData.Height);
@@ -87,9 +85,20 @@ namespace Silmoon.Drawing
             g.DrawImage(BitmapData, 0, 0, img.Width, img.Height);
             return img;
         }
+        public static byte[] Compress(byte[] ImageData, CompositingQuality quality = CompositingQuality.Default)
+        {
+            using (Bitmap bitmap = new Bitmap(ImageData.GetStream()))
+            {
+                var format = bitmap.RawFormat;
+                using (var result = Compress(bitmap, quality))
+                {
+                    return result.GetBytes(format);
+                }
+            }
+        }
 
 
-        public static Bitmap FixiPhoneOrientation(Bitmap BitmapData)
+        public static void FixiPhoneOrientation(Bitmap BitmapData)
         {
             if (BitmapData.PropertyIdList.Contains(0x0112))
             {
@@ -113,7 +122,6 @@ namespace Silmoon.Drawing
                         break;
                 }
             }
-            return BitmapData;
         }
         public static byte[] FixiPhoneOrientation(byte[] ImageData)
         {
@@ -125,8 +133,8 @@ namespace Silmoon.Drawing
                     var rotationValue = bitmap.GetPropertyItem(0x0112)?.Value[0] ?? 1;
                     if (rotationValue != 1)
                     {
-                        var result = FixiPhoneOrientation(bitmap);
-                        return result.GetBytes(format);
+                        FixiPhoneOrientation(bitmap);
+                        return bitmap.GetBytes(format);
                     }
                 }
                 return ImageData;
