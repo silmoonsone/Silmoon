@@ -189,7 +189,7 @@ namespace Silmoon.Extension
         public static Strength PasswordStrength(this string password)
         {
             //空字符串强度值为0
-            if (password == "") return Strength.Invalid;
+            if (password.IsNullOrEmpty()) return Strength.Invalid;
             //字符统计
             int iNum = 0, iLtt = 0, iSym = 0;
             foreach (char c in password)
@@ -209,11 +209,11 @@ namespace Silmoon.Extension
             if (password.Length <= 10) return Strength.Normal; //长度不大于10的密码
             return Strength.Strong; //由数字、字母、符号构成的密码
         }
-        public static string Substring(this string str, int count, string perfix = "")
+        public static string Substring(this string str, int count, string suffix = "")
         {
             if (str.Length > count)
             {
-                return str.Substring(0, count) + perfix;
+                return str.Substring(0, count) + suffix;
             }
             else { return str; }
         }
