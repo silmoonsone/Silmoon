@@ -32,6 +32,21 @@ namespace Silmoon.Extension
             }
             return stringBuilder.ToString().Remove(stringBuilder.Length - 1);
         }
+        public static NameValueCollection GetNameValueCollection(string Query)
+        {
+            NameValueCollection result = new NameValueCollection();
+            string[] qs = Query.Split('&');
+            foreach (var item in qs)
+            {
+                if (item.IsNullOrEmpty()) continue;
+                string[] aqs = item.Split('=');
+                if (aqs.Length == 2)
+                {
+                    result[aqs[0]] = aqs[1];
+                }
+            }
+            return result;
+        }
 
         public static string GetSign(this NameValueCollection NameValueCollection, string Key, string Value, string IgnoreKey = "sign")
         {
