@@ -26,6 +26,24 @@ namespace Silmoon.Web.Extensions
             }
             return collection;
         }
+        public static bool IsAjaxRequest(this HttpRequest request)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException("request");
+            }
 
+            if (!(request["X-Requested-With"] == "XMLHttpRequest"))
+            {
+                if (request.Headers != null)
+                {
+                    return request.Headers["X-Requested-With"] == "XMLHttpRequest";
+                }
+
+                return false;
+            }
+
+            return true;
+        }
     }
 }
