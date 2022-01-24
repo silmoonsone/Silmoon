@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Silmoon.MySilmoon
 {
-    public abstract class Runable : IRunable, IDisposable
+    public abstract class Runable : IRunable
     {
         private RunningState state = RunningState.Unstarted;
 
@@ -69,20 +69,7 @@ namespace Silmoon.MySilmoon
         }
         #endregion
 
-        #region IDisposable 成员
 
-        public virtual void Dispose()
-        {
-            try
-            {
-                Stop();
-                GC.Collect();
-            }
-            catch { }
-        }
-
-        #endregion
-
-        public delegate void OperateHandler(Runable Sender, RunableEventArgs e);
+        public delegate void OperateHandler(Runable sender, RunableEventArgs e);
     }
 }
