@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
-using System.Data.SqlClient;
 
 namespace Silmoon.Data
 {
-    public interface ISMSQL
+    public interface ISqlOperate
     {
         ConnectionState State { get; }
         void Open();

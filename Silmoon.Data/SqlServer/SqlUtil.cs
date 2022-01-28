@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
 using System.Configuration;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using System.Web;
+using Microsoft.Data.SqlClient;
 
 namespace Silmoon.Data.SqlServer
 {
-    public class SqlUtil : SqlCommonTemplate, IDisposable, ISMSQL
+    public class SqlUtil : SqlCommonTemplate, IDisposable, ISqlOperate
     {
-        SqlConnection con = null;
-
         string conStr;
         int selectCommandTimeout = 30;
 
@@ -29,18 +27,15 @@ namespace Silmoon.Data.SqlServer
             get { return conStr; }
             set { conStr = value; }
         }
-        public SqlConnection Connection
-        {
-            get { return con; }
-            set { con = value; }
-        }
+        public SqlConnection Connection { get; set; }
+
 
         /// <summary>
         /// 获取SQL地连接状态
         /// </summary>
         public ConnectionState State
         {
-            get { return con.State; }
+            get { return Connection.State; }
         }
 
         /// <summary>
@@ -49,7 +44,7 @@ namespace Silmoon.Data.SqlServer
         /// <param name="constr">连接字符串</param>
         public SqlUtil()
         {
-            con = new SqlConnection();
+            Connection = new SqlConnection();
         }
         /// <summary>
         /// 创建MS SQL数据源的实例
@@ -57,7 +52,7 @@ namespace Silmoon.Data.SqlServer
         /// <param name="constr">连接字符串</param>
         public SqlUtil(string constr)
         {
-            con = new SqlConnection();
+            Connection = new SqlConnection();
             conStr = constr;
         }
         /// <summary>
@@ -66,7 +61,7 @@ namespace Silmoon.Data.SqlServer
         /// <param name="constr">连接字符串</param>
         public SqlUtil(SqlConnection conn)
         {
-            con = conn;
+            Connection = conn;
         }
 
 
@@ -77,7 +72,7 @@ namespace Silmoon.Data.SqlServer
         {
             if (State != ConnectionState.Closed)
             {
-                con.Close();
+                Connection.Close();
             }
         }
         /// <summary>
@@ -87,8 +82,8 @@ namespace Silmoon.Data.SqlServer
         {
             if (State == ConnectionState.Closed)
             {
-                con.ConnectionString = conStr;
-                con.Open();
+                Connection.ConnectionString = conStr;
+                Connection.Open();
             }
         }
 
@@ -99,7 +94,7 @@ namespace Silmoon.Data.SqlServer
         public int ExecNonQuery(string sqlcommand)
         {
             int reint = 0;
-            SqlCommand myCmd = new SqlCommand(__chkSqlstr(sqlcommand), con);
+            SqlCommand myCmd = new SqlCommand(__chkSqlstr(sqlcommand), Connection);
             reint = myCmd.ExecuteNonQuery();
             myCmd.Dispose();
             return reint;
@@ -125,7 +120,7 @@ namespace Silmoon.Data.SqlServer
         /// <returns></returns>
         public object GetDataReader(string sqlcommand)
         {
-            return new SqlCommand(__chkSqlstr(sqlcommand), con).ExecuteReader();
+            return new SqlCommand(__chkSqlstr(sqlcommand), Connection).ExecuteReader();
         }
         /// <summary>
         /// 返回一个SqlCommand对象
@@ -134,7 +129,7 @@ namespace Silmoon.Data.SqlServer
         /// <returns></returns>
         public object GetCommand(string sqlcommand)
         {
-            return new SqlCommand(__chkSqlstr(sqlcommand), con);
+            return new SqlCommand(__chkSqlstr(sqlcommand), Connection);
         }
         /// <summary>
         /// 获取一个数据适配器。
@@ -143,7 +138,7 @@ namespace Silmoon.Data.SqlServer
         /// <returns></returns>
         public object GetDataAdapter(string sqlcommand)
         {
-            return new SqlDataAdapter(__chkSqlstr(sqlcommand), con);
+            return new SqlDataAdapter(__chkSqlstr(sqlcommand), Connection);
         }
         /// <summary>
         /// 获取一个内存数据表
@@ -271,16 +266,15 @@ namespace Silmoon.Data.SqlServer
         /// <returns></returns>
         public object GetConnection()
         {
-            return con;
+            return Connection;
         }
 
 
         public void Dispose()
         {
             Close();
-            con.Close();
-            con.Dispose();
-            con = null;
+            Connection.Dispose();
+            Connection = null;
         }
 
         public string __chkSqlstr(string sqlcommand)

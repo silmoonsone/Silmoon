@@ -1,9 +1,9 @@
-﻿using Silmoon.Data.QueryModel;
+﻿using Microsoft.Data.SqlClient;
+using Silmoon.Data.QueryModel;
 using Silmoon.Data.SqlServer.SqlInternal;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Text;
