@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -11,23 +12,24 @@ namespace Silmoon.Web.AspNetCore.Extensions
 {
     public static class HttpContextBaseExtension
     {
-        public static NameValueCollection MergeHttpRequestCollection(this HttpContext httpContext)
+        public static IPAddress GetClientIPAddress(this HttpContext httpContext)
         {
-            var queries = httpContext.Request.Query;
-            var forms = httpContext.Request.Form;
+            IPAddress result = null;
 
-            NameValueCollection nameValueCollection = new NameValueCollection();
+            if (!string.IsNullOrEmpty(httpContext.Request.Headers["X-Forwarded-For"]))
+                return IPAddress.Parse(httpContext.Request.Headers["X-Forwarded-For"].ToString().Split(new string[] { " ", ",", ":" }, StringSplitOptions.RemoveEmptyEntries)[0]);
 
-            foreach (var item in queries)
-            {
-                nameValueCollection.Add(item.Key, item.Value);
-            }
-            foreach (var item in forms)
-            {
-                nameValueCollection.Add(item.Key, item.Value);
-            }
+            if (!string.IsNullOrEmpty(httpContext.Request.Headers["CF-Connecting-IP"]))
+                return IPAddress.Parse(httpContext.Request.Headers["CF-Connecting-IP"].ToString().Split(new string[] { " ", ",", ":" }, StringSplitOptions.RemoveEmptyEntries)[0]);
 
-            return nameValueCollection;
+            if (!string.IsNullOrEmpty(httpContext.GetServerVariable("HTTP_X_FORWARDED_FOR")))
+                return IPAddress.Parse(httpContext.GetServerVariable("HTTP_X_FORWARDED_FOR").Split(new string[] { " ", ",", ":" }, StringSplitOptions.RemoveEmptyEntries)[0]);
+
+            if (!string.IsNullOrEmpty(httpContext.GetServerVariable("REMOTE_ADDR")))
+                return IPAddress.Parse(httpContext.GetServerVariable("REMOTE_ADDR").Split(new string[] { " ", ",", ":" }, StringSplitOptions.RemoveEmptyEntries)[0]);
+
+            return result;
         }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Silmoon.Extension;
 using Silmoon.Models;
 using System;
 using System.Collections.Generic;
@@ -11,74 +12,72 @@ namespace Silmoon.Web.AspNetCore.Extensions
     public static class ControllerBaseExtension
     {
 
-        public static JsonResult JsonStateFlag(this ControllerBase controller, bool Success, bool AllowGet = false)
+        public static ContentResult JsonStateFlag(this ControllerBase controller, bool Success)
         {
-            return JsonStateFlag(controller, Success, 0, "", null, AllowGet);
+            return JsonStateFlag(controller, Success, 0, "", null);
         }
-        public static JsonResult JsonStateFlag(this ControllerBase controller, bool Success, string Message, bool AllowGet = false)
+        public static ContentResult JsonStateFlag(this ControllerBase controller, bool Success, string Message)
         {
-            return JsonStateFlag(controller, Success, 0, Message, null, AllowGet);
+            return JsonStateFlag(controller, Success, 0, Message, null);
         }
-        public static JsonResult JsonStateFlag(this ControllerBase controller, bool Success, int Code, bool AllowGet = false)
+        public static ContentResult JsonStateFlag(this ControllerBase controller, bool Success, int Code)
         {
-            return JsonStateFlag(controller, Success, Code, "", null, AllowGet);
+            return JsonStateFlag(controller, Success, Code, "", null);
         }
-        public static JsonResult JsonStateFlag(this ControllerBase controller, bool Success, int Code, string Message, bool AllowGet = false)
+        public static ContentResult JsonStateFlag(this ControllerBase controller, bool Success, int Code, string Message)
         {
-            return JsonStateFlag(controller, Success, Code, Message, null, AllowGet);
+            return JsonStateFlag(controller, Success, Code, Message, null);
         }
-        public static JsonResult JsonStateFlag(this ControllerBase controller, bool Success, object Data, bool AllowGet = false)
+        public static ContentResult JsonStateFlag(this ControllerBase controller, bool Success, object Data)
         {
-            return JsonStateFlag(controller, Success, 0, "", Data, AllowGet);
+            return JsonStateFlag(controller, Success, 0, "", Data);
         }
-        public static JsonResult JsonStateFlag(this ControllerBase controller, bool Success, string Message, object Data, bool AllowGet = false)
+        public static ContentResult JsonStateFlag(this ControllerBase controller, bool Success, string Message, object Data)
         {
-            return JsonStateFlag(controller, Success, 0, Message, Data, AllowGet);
+            return JsonStateFlag(controller, Success, 0, Message, Data);
         }
-        public static JsonResult JsonStateFlag(this ControllerBase controller, bool Success, int Code, object Data, bool AllowGet = false)
+        public static ContentResult JsonStateFlag(this ControllerBase controller, bool Success, int Code, object Data)
         {
-            return JsonStateFlag(controller, Success, Code, "", Data, AllowGet);
+            return JsonStateFlag(controller, Success, Code, "", Data);
         }
-        public static JsonResult JsonStateFlag(this ControllerBase controller, bool Success, int Code, string Message, object Data, bool AllowGet = false)
+        public static ContentResult JsonStateFlag(this ControllerBase controller, bool Success, int Code, string Message, object Data)
         {
-            var result = new JsonResult(StateFlag.Create(Success, Code, Message, Data));
-            result.ContentType = "application/json";
-            return result;
+            var result = StateFlag.Create(Success, Code, Message, Data);
+            return new ContentResult() { Content = result.ToJsonString(), ContentType = "application/json" };
         }
 
-        public static JsonResult JsonStateFlag<T>(this ControllerBase controller, bool Success, bool AllowGet = false)
+        public static ContentResult JsonStateFlag<T>(this ControllerBase controller, bool Success)
         {
-            return JsonStateFlag<T>(controller, Success, 0, "", default, AllowGet);
+            return JsonStateFlag<T>(controller, Success, 0, "", default);
         }
-        public static JsonResult JsonStateFlag<T>(this ControllerBase controller, bool Success, string Message, bool AllowGet = false)
+        public static ContentResult JsonStateFlag<T>(this ControllerBase controller, bool Success, string Message)
         {
-            return JsonStateFlag<T>(controller, Success, 0, Message, default, AllowGet);
+            return JsonStateFlag<T>(controller, Success, 0, Message, default);
         }
-        public static JsonResult JsonStateFlag<T>(this ControllerBase controller, bool Success, int Code, bool AllowGet = false)
+        public static ContentResult JsonStateFlag<T>(this ControllerBase controller, bool Success, int Code)
         {
-            return JsonStateFlag<T>(controller, Success, Code, "", default, AllowGet);
+            return JsonStateFlag<T>(controller, Success, Code, "", default);
         }
-        public static JsonResult JsonStateFlag<T>(this ControllerBase controller, bool Success, int Code, string Message, bool AllowGet = false)
+        public static ContentResult JsonStateFlag<T>(this ControllerBase controller, bool Success, int Code, string Message)
         {
-            return JsonStateFlag<T>(controller, Success, Code, Message, default, AllowGet);
+            return JsonStateFlag<T>(controller, Success, Code, Message, default);
         }
-        public static JsonResult JsonStateFlag<T>(this ControllerBase controller, bool Success, T Data, bool AllowGet = false)
+        public static ContentResult JsonStateFlag<T>(this ControllerBase controller, bool Success, T Data)
         {
-            return JsonStateFlag<T>(controller, Success, 0, "", Data, AllowGet);
+            return JsonStateFlag<T>(controller, Success, 0, "", Data);
         }
-        public static JsonResult JsonStateFlag<T>(this ControllerBase controller, bool Success, string Message, T Data, bool AllowGet = false)
+        public static ContentResult JsonStateFlag<T>(this ControllerBase controller, bool Success, string Message, T Data)
         {
-            return JsonStateFlag<T>(controller, Success, 0, Message, Data, AllowGet);
+            return JsonStateFlag<T>(controller, Success, 0, Message, Data);
         }
-        public static JsonResult JsonStateFlag<T>(this ControllerBase controller, bool Success, int Code, T Data, bool AllowGet = false)
+        public static ContentResult JsonStateFlag<T>(this ControllerBase controller, bool Success, int Code, T Data)
         {
-            return JsonStateFlag<T>(controller, Success, Code, "", Data, AllowGet);
+            return JsonStateFlag<T>(controller, Success, Code, "", Data);
         }
-        public static JsonResult JsonStateFlag<T>(this ControllerBase controller, bool Success, int Code, string Message, T Data, bool AllowGet = false)
+        public static ContentResult JsonStateFlag<T>(this ControllerBase controller, bool Success, int Code, string Message, T Data)
         {
-            var result = new JsonResult(StateFlag<T>.Create(Success, Code, Message, Data));
-            result.ContentType = "application/json";
-            return result;
+            var result = StateFlag<T>.Create(Success, Code, Message, Data);
+            return new ContentResult() { Content = result.ToJsonString(), ContentType = "application/json" };
         }
 
     }
