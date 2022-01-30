@@ -7,6 +7,7 @@ using System.Linq;
 using System.Data.SqlTypes;
 using Silmoon.Runtime.Collections;
 using Microsoft.Data.SqlClient;
+using FieldInfo = Silmoon.Data.SqlServer.SqlInternal.FieldInfo;
 
 namespace Silmoon.Data.SqlServer
 {
@@ -109,18 +110,17 @@ namespace Silmoon.Data.SqlServer
             return (result, data);
         }
 
-        public static void AddSqlCommandParameters(SqlCommand sqlCommand, object obj, params string[] paraNames)
+        public static void AddSqlCommandParameters(SqlCommand sqlCommand, Dictionary<string, FieldInfo> fieldInfos, params string[] paraNames)
         {
-            if (obj != null)
+            if (fieldInfos != null)
             {
-                var propertyInfos = obj.GetType().GetProperties();
-                foreach (PropertyInfo item in propertyInfos)
+                foreach (var item in fieldInfos)
                 {
-                    string name = item.Name;
+                    string name = item.Value.Name;
                     if (paraNames.Contains(name))
                     {
-                        var value = item.GetValue(obj, null);
-                        Type type = item.PropertyType;
+                        var value = item.Value.Value;
+                        Type type = item.Value.Type;
 
                         if (!sqlCommand.Parameters.Contains(name))
                         {
@@ -148,6 +148,46 @@ namespace Silmoon.Data.SqlServer
                                 else
                                     sqlCommand.Parameters.AddWithValue(name, DBNull.Value);
                             }
+                        }
+                    }
+                }
+            }
+        }
+        public static void AddSqlCommandParameters(SqlCommand sqlCommand, Dictionary<string, FieldInfo> fieldInfos)
+        {
+            if (fieldInfos != null)
+            {
+                foreach (var field in fieldInfos)
+                {
+                    string name = field.Value.Name;
+                    var value = field.Value.Value;
+                    Type type = field.Value.Type;
+
+                    if (!sqlCommand.Parameters.Contains(name))
+                    {
+                        if (value != null)
+                        {
+                            if (type.IsEnum)
+                            {
+                                //////////这里要注意写入枚举数据的时候，目标字段的类型。
+
+                                ///这里存储在数据库中的枚举使用字符串（.ToString()）
+                                //sqlCommand.Parameters.AddWithValue(name, value.ToString());
+
+                                ///这里存储在数据库中的枚举使用数字
+                                sqlCommand.Parameters.AddWithValue(name, value);
+                            }
+                            else if (type.Name == "DateTime" && ((DateTime)value) == DateTime.MinValue)
+                                sqlCommand.Parameters.AddWithValue(name, SqlDateTime.MinValue);
+                            else
+                                sqlCommand.Parameters.AddWithValue(name, value);
+                        }
+                        else
+                        {
+                            if (type.Name == "Byte[]")
+                                sqlCommand.Parameters.AddWithValue(name, SqlBinary.Null);
+                            else
+                                sqlCommand.Parameters.AddWithValue(name, DBNull.Value);
                         }
                     }
                 }

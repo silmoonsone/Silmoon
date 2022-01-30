@@ -83,7 +83,6 @@ namespace Silmoon.Web.AspNetCore.Extensions
         public static NameValueCollection GetQueryStringNameValues(this HttpRequest request)
         {
             var queries = request.Query;
-            //var forms = request.Form;
 
             NameValueCollection nameValueCollection = new NameValueCollection();
 
@@ -91,10 +90,19 @@ namespace Silmoon.Web.AspNetCore.Extensions
             {
                 nameValueCollection.Add(item.Key, item.Value);
             }
-            //foreach (var item in forms)
-            //{
-            //    nameValueCollection.Add(item.Key, item.Value);
-            //}
+
+            return nameValueCollection;
+        }
+        public static NameValueCollection GetFormNameValues(this HttpRequest request)
+        {
+            var forms = request.Form;
+
+            NameValueCollection nameValueCollection = new NameValueCollection();
+
+            foreach (var item in forms)
+            {
+                nameValueCollection.Add(item.Key, item.Value);
+            }
 
             return nameValueCollection;
         }

@@ -48,7 +48,7 @@ namespace Silmoon.Extension
             return result;
         }
 
-        public static string GetSign(this NameValueCollection NameValueCollection, string Key, string Value, string IgnoreKey = "sign")
+        public static string GetSign(this NameValueCollection NameValueCollection, string KeyName, string Key, string IgnoreKey = "sign")
         {
             List<string> array = new List<string>();
             for (int i = 0; i < NameValueCollection.Count; i++)
@@ -62,7 +62,7 @@ namespace Silmoon.Extension
 
             foreach (var item in array) s += item + "&";
 
-            s += Key + "=" + Value;
+            s += KeyName + "=" + Key;
             return HashHelper.MD5(s);
         }
 
