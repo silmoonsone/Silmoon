@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,6 +14,16 @@ namespace Silmoon.Extension
             {
                 result[i] = array.GetValue(i).ToString();
             }
+            return result;
+        }
+        public static JArray ToJArray(this Array array)
+        {
+            var result = JArray.FromObject(array);
+            return result;
+        }
+        public static JArray ToJArray<T>(this List<T> list)
+        {
+            var result = JArray.FromObject(list);
             return result;
         }
     }
