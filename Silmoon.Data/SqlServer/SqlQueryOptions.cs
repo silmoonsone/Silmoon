@@ -9,6 +9,13 @@ namespace Silmoon.Data.SqlServer
 {
     public class SqlQueryOptions
     {
+        public Sort[] Sorts { get; set; }
+        public int? Offset { get; set; }
+        public int? Count { get; set; }
+        public JoinOption Join { get; set; }
+        public SelectFieldOption FieldOption { get; set; } = SelectFieldOption.All;
+        public string[] ExcludedField { get; set; }
+
         private SqlQueryOptions()
         {
 
@@ -39,7 +46,7 @@ namespace Silmoon.Data.SqlServer
             FieldOption = fieldOption;
             ExcludedField = excludedField;
         }
-        private SqlQueryOptions(int? offset, int? count, Sort[] sorts, SelectFieldOption fieldOption, string[] excludedField, JoinOption join)
+        private SqlQueryOptions(int? offset, int? count, Sort[] sorts, SelectFieldOption fieldOption, JoinOption join, string[] excludedField)
         {
             Sorts = sorts;
             Offset = offset;
@@ -48,7 +55,7 @@ namespace Silmoon.Data.SqlServer
             ExcludedField = excludedField;
             Join = join;
         }
-        private SqlQueryOptions(int? offset, int? count, Sort sort, SelectFieldOption fieldOption, string[] excludedField, JoinOption join)
+        private SqlQueryOptions(int? offset, int? count, Sort sort, SelectFieldOption fieldOption, JoinOption join, string[] excludedField)
         {
             Sorts = new Sort[] { sort };
             Offset = offset;
@@ -57,12 +64,6 @@ namespace Silmoon.Data.SqlServer
             ExcludedField = excludedField;
             Join = join;
         }
-        public Sort[] Sorts { get; set; }
-        public int? Offset { get; set; }
-        public int? Count { get; set; }
-        public JoinOption Join { get; set; }
-        public SelectFieldOption FieldOption { get; set; } = SelectFieldOption.All;
-        public string[] ExcludedField { get; set; }
         public static SqlQueryOptions Create()
         {
             return new SqlQueryOptions();
@@ -83,9 +84,9 @@ namespace Silmoon.Data.SqlServer
         {
             return new SqlQueryOptions(offset, count, sorts, fieldOption, excludedField);
         }
-        public static SqlQueryOptions Create(int? offset, int? count, Sort[] sorts, SelectFieldOption fieldOption, string[] excludedField, JoinOption join)
+        public static SqlQueryOptions Create(int? offset, int? count, Sort[] sorts, SelectFieldOption fieldOption, JoinOption join, string[] excludedField)
         {
-            return new SqlQueryOptions(offset, count, sorts, fieldOption, excludedField, join);
+            return new SqlQueryOptions(offset, count, sorts, fieldOption, join, excludedField);
         }
         public static SqlQueryOptions Create(int? offset, int? count, Sort sort)
         {
@@ -97,11 +98,11 @@ namespace Silmoon.Data.SqlServer
         }
         public static SqlQueryOptions Create(int? offset, int? count, Sort sort, SelectFieldOption fieldOption, string[] excludedField)
         {
-            return new SqlQueryOptions(offset, count, sort, fieldOption, excludedField, null);
+            return new SqlQueryOptions(offset, count, sort, fieldOption, null, excludedField);
         }
-        public static SqlQueryOptions Create(int? offset, int? count, Sort sort, SelectFieldOption fieldOption, string[] excludedField, JoinOption join)
+        public static SqlQueryOptions Create(int? offset, int? count, Sort sort, SelectFieldOption fieldOption, JoinOption join, string[] excludedField)
         {
-            return new SqlQueryOptions(offset, count, sort, fieldOption, excludedField, join);
+            return new SqlQueryOptions(offset, count, sort, fieldOption, join, excludedField);
         }
     }
 }
