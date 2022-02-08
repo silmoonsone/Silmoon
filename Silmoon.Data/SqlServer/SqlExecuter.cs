@@ -438,6 +438,14 @@ namespace Silmoon.Data.SqlServer
                 {
                     sql += $"\t[{item.Name}] VARBINARY(5120),\r\n";
                 }
+                else if (type.Name == "Int32[]")
+                {
+                    sql += $"\t[{item.Name}] nvarchar(MAX) NULL,\r\n";
+                }
+                else if (type.Name == "String[]")
+                {
+                    sql += $"\t[{item.Name}] nvarchar(MAX) NULL,\r\n";
+                }
                 else
                 {
                     throw new Exception("未知的类型处理（" + type.Name + "）");

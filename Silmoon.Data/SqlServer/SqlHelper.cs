@@ -30,6 +30,7 @@ namespace Silmoon.Data.SqlServer
             {
                 string name = item.Name;
                 if (excludedField?.Contains(name) ?? false) continue;
+
                 Type type = item.PropertyType;
                 if (reader[name] != DBNull.Value)
                 {
@@ -39,6 +40,30 @@ namespace Silmoon.Data.SqlServer
                             item.SetValue(obj, Enum.Parse(type, (string)reader[name]), null);
                         else if (reader[name] is int)
                             item.SetValue(obj, (int)reader[name], null);
+                    }
+                    else if (type.Name == "Int32[]")
+                    {
+                        var val = (string)reader[name];
+                        if (val == null) continue;
+                        var valarr = val.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                        int[] intval = new int[valarr.Length];
+                        for (int i = 0; i < intval.Length; i++)
+                        {
+                            intval[i] = Convert.ToInt32(valarr[i]);
+                        }
+                        item.SetValue(obj, intval, null);
+                    }
+                    else if (type.Name == "String[]")
+                    {
+                        var val = (string)reader[name];
+                        if (val == null) continue;
+                        var valarr = val.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                        string[] sval = new string[valarr.Length];
+                        for (int i = 0; i < sval.Length; i++)
+                        {
+                            sval[i] = valarr[i];
+                        }
+                        item.SetValue(obj, sval, null);
                     }
                     else
                         item.SetValue(obj, reader[name], null);
@@ -138,6 +163,20 @@ namespace Silmoon.Data.SqlServer
                                 }
                                 else if (type.Name == "DateTime" && ((DateTime)value) == DateTime.MinValue)
                                     sqlCommand.Parameters.AddWithValue(name, SqlDateTime.MinValue);
+                                else if (type.Name == "Int32[]")
+                                {
+                                    string svalue = "";
+                                    foreach (var item2 in (Array)value)
+                                        svalue += item2.ToString() + ",";
+                                    sqlCommand.Parameters.AddWithValue(name, svalue);
+                                }
+                                else if (type.Name == "String[]")
+                                {
+                                    string svalue = "";
+                                    foreach (var item2 in (Array)value)
+                                        svalue += item2 + ",";
+                                    sqlCommand.Parameters.AddWithValue(name, svalue);
+                                }
                                 else
                                     sqlCommand.Parameters.AddWithValue(name, value);
                             }
@@ -179,6 +218,20 @@ namespace Silmoon.Data.SqlServer
                             }
                             else if (type.Name == "DateTime" && ((DateTime)value) == DateTime.MinValue)
                                 sqlCommand.Parameters.AddWithValue(name, SqlDateTime.MinValue);
+                            else if (type.Name == "Int32[]")
+                            {
+                                string svalue = "";
+                                foreach (var item2 in (Array)value)
+                                    svalue += item2.ToString() + ",";
+                                sqlCommand.Parameters.AddWithValue(name, svalue);
+                            }
+                            else if (type.Name == "String[]")
+                            {
+                                string svalue = "";
+                                foreach (var item2 in (Array)value)
+                                    svalue += item2 + ",";
+                                sqlCommand.Parameters.AddWithValue(name, svalue);
+                            }
                             else
                                 sqlCommand.Parameters.AddWithValue(name, value);
                         }

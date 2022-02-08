@@ -104,7 +104,7 @@ namespace Silmoon.Models
             Set(state, data, message);
         }
 
-        public static StateSet<TState, TData> Create(TState state, TData data)
+        public static StateSet<TState, TData> Create(TState state, TData data = default)
         {
             return new StateSet<TState, TData>(state, data);
 
