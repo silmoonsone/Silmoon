@@ -68,10 +68,10 @@ namespace Silmoon.Data.SqlServer
         {
             return new SqlQueryOptions();
         }
-        public static SqlQueryOptions Create(int? offset, int? count)
-        {
-            return new SqlQueryOptions(offset, count);
-        }
+        //public static SqlQueryOptions Create(int? offset, int? count)
+        //{
+        //    return new SqlQueryOptions(offset, count);
+        //}
         public static SqlQueryOptions Create(int? offset, int? count, Sort[] sorts)
         {
             return new SqlQueryOptions(offset, count, sorts);

@@ -59,7 +59,7 @@ namespace Silmoon.Web.AspNetCore
         }
         public static async Task<IActionResult> MvcSessionChecking<TUser>(this ControllerBase controller, Models.Identities.Enums.IdentityRole? IsRole, bool requestRefreshUserSession = false, bool isAppApiRequest = false, string signInUrl = "~/User/Signin?url=$SigninUrl") where TUser : IDefaultUserIdentity, new()
         {
-            var User = await GetCachedUser<TUser>(controller.HttpContext);
+            var User = await GetUser<TUser>(controller.HttpContext);
 
             signInUrl = signInUrl?.Replace("$SigninUrl", HttpUtility.UrlEncode(controller.HttpContext.Request.GetRawUrl()));
             var Name = controller.HttpContext.Request.Query["Name"].FirstOrDefault();
@@ -157,7 +157,7 @@ namespace Silmoon.Web.AspNetCore
             }
         }
 
-        public static async Task<TUser> GetCachedUser<TUser>(this HttpContext httpContext) where TUser : IDefaultUserIdentity, new()
+        public static async Task<TUser> GetUser<TUser>(this HttpContext httpContext) where TUser : IDefaultUserIdentity, new()
         {
             if (await IsSignin(httpContext))
             {
@@ -199,7 +199,7 @@ namespace Silmoon.Web.AspNetCore
                 return default;
             else
             {
-                var user = await GetCachedUser<TUser>(httpContext);
+                var user = await GetUser<TUser>(httpContext);
                 if (user == null) return default;
                 return (TUser)OnRequestRefreshUserSession(Username, NameIdentifier, user);
             }

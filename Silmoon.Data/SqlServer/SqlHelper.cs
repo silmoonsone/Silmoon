@@ -13,6 +13,20 @@ namespace Silmoon.Data.SqlServer
 {
     public class SqlHelper
     {
+        public static (T[] Results, NameObjectCollection<object>[] DataCollections) MakeObjects<T>(SqlDataReader reader, string[] excludedField = null) where T : new()
+        {
+            List<T> result = new List<T>();
+            List<NameObjectCollection<object>> data = new List<NameObjectCollection<object>>();
+
+            while (reader.Read())
+            {
+                var r = MakeObject<T>(reader, excludedField, false);
+                result.Add(r.Result);
+                data.Add(r.DataCollection);
+            }
+            reader.Close();
+            return (result.ToArray(), data.ToArray());
+        }
         public static (T Result, NameObjectCollection<object> DataCollection) MakeObject<T>(SqlDataReader reader, string[] excludedField = null, bool closeReader = true) where T : new()
         {
             T obj = new T();
@@ -41,29 +55,12 @@ namespace Silmoon.Data.SqlServer
                         else if (reader[name] is int)
                             item.SetValue(obj, (int)reader[name], null);
                     }
-                    else if (type.Name == "Int32[]")
+                    else if (type.IsArray)
                     {
                         var val = (string)reader[name];
-                        if (val == null) continue;
-                        var valarr = val.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-                        int[] intval = new int[valarr.Length];
-                        for (int i = 0; i < intval.Length; i++)
-                        {
-                            intval[i] = Convert.ToInt32(valarr[i]);
-                        }
-                        item.SetValue(obj, intval, null);
-                    }
-                    else if (type.Name == "String[]")
-                    {
-                        var val = (string)reader[name];
-                        if (val == null) continue;
-                        var valarr = val.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-                        string[] sval = new string[valarr.Length];
-                        for (int i = 0; i < sval.Length; i++)
-                        {
-                            sval[i] = valarr[i];
-                        }
-                        item.SetValue(obj, sval, null);
+                        if (string.IsNullOrEmpty(val)) continue;
+                        var res = System.Text.Json.JsonSerializer.Deserialize(val, type);
+                        item.SetValue(obj, res, null);
                     }
                     else
                         item.SetValue(obj, reader[name], null);
@@ -71,20 +68,6 @@ namespace Silmoon.Data.SqlServer
             }
             if (closeReader) reader.Close();
             return (obj, data);
-        }
-        public static (T[] Results, NameObjectCollection<object>[] DataCollections) MakeObjects<T>(SqlDataReader reader, string[] excludedField = null) where T : new()
-        {
-            List<T> result = new List<T>();
-            List<NameObjectCollection<object>> data = new List<NameObjectCollection<object>>();
-
-            while (reader.Read())
-            {
-                var r = MakeObject<T>(reader, excludedField, false);
-                result.Add(r.Result);
-                data.Add(r.DataCollection);
-            }
-            reader.Close();
-            return (result.ToArray(), data.ToArray());
         }
 
         public static (T Result, NameObjectCollection<object> DataCollection) MakeObject<T>(DataRow row, string[] excludedField = null) where T : new()
@@ -163,19 +146,10 @@ namespace Silmoon.Data.SqlServer
                                 }
                                 else if (type.Name == "DateTime" && ((DateTime)value) == DateTime.MinValue)
                                     sqlCommand.Parameters.AddWithValue(name, SqlDateTime.MinValue);
-                                else if (type.Name == "Int32[]")
+                                else if (type.IsArray)
                                 {
-                                    string svalue = "";
-                                    foreach (var item2 in (Array)value)
-                                        svalue += item2.ToString() + ",";
-                                    sqlCommand.Parameters.AddWithValue(name, svalue);
-                                }
-                                else if (type.Name == "String[]")
-                                {
-                                    string svalue = "";
-                                    foreach (var item2 in (Array)value)
-                                        svalue += item2 + ",";
-                                    sqlCommand.Parameters.AddWithValue(name, svalue);
+                                    string s = System.Text.Json.JsonSerializer.Serialize(value, value.GetType());
+                                    sqlCommand.Parameters.AddWithValue(name, s);
                                 }
                                 else
                                     sqlCommand.Parameters.AddWithValue(name, value);
@@ -218,19 +192,10 @@ namespace Silmoon.Data.SqlServer
                             }
                             else if (type.Name == "DateTime" && ((DateTime)value) == DateTime.MinValue)
                                 sqlCommand.Parameters.AddWithValue(name, SqlDateTime.MinValue);
-                            else if (type.Name == "Int32[]")
+                            else if (type.IsArray)
                             {
-                                string svalue = "";
-                                foreach (var item2 in (Array)value)
-                                    svalue += item2.ToString() + ",";
-                                sqlCommand.Parameters.AddWithValue(name, svalue);
-                            }
-                            else if (type.Name == "String[]")
-                            {
-                                string svalue = "";
-                                foreach (var item2 in (Array)value)
-                                    svalue += item2 + ",";
-                                sqlCommand.Parameters.AddWithValue(name, svalue);
+                                string s = System.Text.Json.JsonSerializer.Serialize(value, value.GetType());
+                                sqlCommand.Parameters.AddWithValue(name, s);
                             }
                             else
                                 sqlCommand.Parameters.AddWithValue(name, value);
