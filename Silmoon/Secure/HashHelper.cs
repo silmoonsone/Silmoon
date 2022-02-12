@@ -38,7 +38,7 @@ namespace Silmoon.Secure
         }
         public static string RandomChars(int length, bool IncludeUpper = true, bool IncludeLower = true, bool IncludeNumbers = true)
         {
-            if (!IncludeLower && !IncludeLower && !IncludeNumbers) throw new InvalidOperationException("指定的随机选项全部是False，也就是说随机不出来任何字符");
+            if (!IncludeUpper && !IncludeLower && !IncludeNumbers) throw new InvalidOperationException("指定的随机选项全部是False，也就是说随机不出来任何字符");
             StringBuilder stringBuilder = new StringBuilder();
             lock (Random)
             {
