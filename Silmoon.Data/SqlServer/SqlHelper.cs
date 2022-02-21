@@ -48,22 +48,33 @@ namespace Silmoon.Data.SqlServer
                 Type type = item.PropertyType;
                 if (reader[name] != DBNull.Value)
                 {
-                    if (type.IsEnum)
-                    {
-                        if (reader[name] is string)
-                            item.SetValue(obj, Enum.Parse(type, (string)reader[name]), null);
-                        else if (reader[name] is int)
-                            item.SetValue(obj, (int)reader[name], null);
-                    }
-                    else if (type.IsArray)
-                    {
-                        var val = (string)reader[name];
-                        if (string.IsNullOrEmpty(val)) continue;
-                        var res = System.Text.Json.JsonSerializer.Deserialize(val, type);
-                        item.SetValue(obj, res, null);
-                    }
-                    else
-                        item.SetValue(obj, reader[name], null);
+                    //try
+                    //{
+                        if (type.IsEnum)
+                        {
+                            if (reader[name] is string)
+                                item.SetValue(obj, Enum.Parse(type, (string)reader[name]), null);
+                            else if (reader[name] is int)
+                                item.SetValue(obj, (int)reader[name], null);
+                        }
+                        else if (type.IsArray && type != typeof(byte[]))
+                        {
+                            var val = (string)reader[name];
+                            if (string.IsNullOrEmpty(val)) continue;
+                            var res = System.Text.Json.JsonSerializer.Deserialize(val, type);
+                            item.SetValue(obj, res, null);
+                        }
+                        else
+                            item.SetValue(obj, reader[name], null);
+                    //}
+                    //catch (InvalidCastException ex)
+                    //{
+                    //    throw new InvalidCastException("实体映射类型转换失败，字段名[" + item.Name + "]，实体类型为[" + item.PropertyType + "]，数据库类型为[" + reader[name].GetType() + "]。");
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    throw ex;
+                    //}
                 }
             }
             if (closeReader) reader.Close();

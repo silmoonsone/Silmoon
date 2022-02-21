@@ -6,6 +6,7 @@ using Silmoon.Extension;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -105,6 +106,24 @@ namespace Silmoon.Web.AspNetCore.Extensions
             }
 
             return nameValueCollection;
+        }
+        public static async Task<string> GetBodyString(this HttpRequest request, Encoding encoding = null)
+        {
+            if (!request.Body.CanSeek)
+            {
+                // We only do this if the stream isn't *already* seekable,
+                // as EnableBuffering will create a new stream instance
+                // each time it's called
+                request.EnableBuffering();
+            }
+
+            request.Body.Position = 0;
+            using (var reader = new StreamReader(request.Body, encoding ?? Encoding.UTF8))
+            {
+                var body = await reader.ReadToEndAsync().ConfigureAwait(false);
+                request.Body.Position = 0;
+                return body;
+            }
         }
     }
 }
