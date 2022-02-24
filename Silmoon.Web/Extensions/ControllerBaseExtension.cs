@@ -14,39 +14,19 @@ namespace Silmoon.Web.Extension
 
         public static ContentResult JsonStateFlag(this ControllerBase controller, bool Success)
         {
-            return JsonStateFlag(controller, Success, 0, "", null);
+            return JsonStateFlag(controller, Success, 0, null);
         }
         public static ContentResult JsonStateFlag(this ControllerBase controller, bool Success, string Message)
         {
-            return JsonStateFlag(controller, Success, 0, Message, null);
+            return JsonStateFlag(controller, Success, 0, Message);
         }
         public static ContentResult JsonStateFlag(this ControllerBase controller, bool Success, int Code)
         {
-            return JsonStateFlag(controller, Success, Code, "", null);
+            return JsonStateFlag(controller, Success, Code, null);
         }
         public static ContentResult JsonStateFlag(this ControllerBase controller, bool Success, int Code, string Message)
         {
-            return JsonStateFlag(controller, Success, Code, Message, null);
-        }
-        public static ContentResult JsonStateFlag(this ControllerBase controller, bool Success, object Data)
-        {
-            return JsonStateFlag(controller, Success, 0, "", Data);
-        }
-        public static ContentResult JsonStateFlag(this ControllerBase controller, bool Success, string Message, object Data)
-        {
-            return JsonStateFlag(controller, Success, 0, Message, Data);
-        }
-        public static ContentResult JsonStateFlag(this ControllerBase controller, bool Success, int Code, object Data)
-        {
-            return JsonStateFlag(controller, Success, Code, "", Data);
-        }
-        public static ContentResult JsonStateFlag(this ControllerBase controller, bool Success, int Code, string Message, object Data)
-        {
-            var result = new ContentResult();
-            result.Content = StateFlag.Create(Success, Code, Message, Data).ToJsonString();
-            result.ContentType = "application/json";
-            result.ContentEncoding = Encoding.UTF8;
-            return result;
+            return JsonStateFlag(controller, Success, Code, Message);
         }
 
         public static ContentResult JsonStateFlag<T>(this ControllerBase controller, bool Success)

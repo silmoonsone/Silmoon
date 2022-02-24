@@ -12,7 +12,6 @@ namespace Silmoon.Models
         public int StateCode { get; set; } = 0;
         public string Message { get; set; } = "";
         public bool Success { get; set; } = false;
-        public object Data { get; set; }
         public SimpleStateFlag()
         {
 
@@ -53,36 +52,14 @@ namespace Silmoon.Models
         {
             return new SimpleStateFlag(success, stateCode, message);
         }
-        public static SimpleStateFlag Create(bool success, object data)
-        {
-            return new SimpleStateFlag(success) { Data = data };
-        }
-        public static SimpleStateFlag Create(bool success, string message, object data)
-        {
-            return new SimpleStateFlag(success, message) { Data = data };
-        }
-        public static SimpleStateFlag Create(bool success, int stateCode, object data)
-        {
-            return new SimpleStateFlag(success, stateCode) { Data = data };
-        }
-        public static SimpleStateFlag Create(bool success, int stateCode, string message, object data)
-        {
-            return new SimpleStateFlag(success, stateCode, message) { Data = data };
-        }
         public static SimpleStateFlag FromStateFlag(StateFlag stateFlag)
         {
             return new SimpleStateFlag()
             {
-                Data = stateFlag.Data,
                 Message = stateFlag.Message,
                 StateCode = stateFlag.StateCode,
                 Success = stateFlag.Success
             };
-        }
-        public SimpleStateFlag AppendData(object data)
-        {
-            Data = data;
-            return this;
         }
     }
     [Obsolete]
