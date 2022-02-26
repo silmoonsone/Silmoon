@@ -14,10 +14,18 @@ namespace Silmoon.Secure
             using (var c = new MD5CryptoServiceProvider())
             {
                 byte[] data = c.ComputeHash(Encoding.UTF8.GetBytes(s));
-                string result = BitConverter.ToString(data).Replace("-", "").ToLower();
-                return result;
+                return BitConverter.ToString(data).Replace("-", "").ToLower();
             }
         }
+        public static string SHA1(string s)
+        {
+            using (var c = new SHA1CryptoServiceProvider())
+            {
+                byte[] bresult = c.ComputeHash(Encoding.UTF8.GetBytes(s));
+                return BitConverter.ToString(bresult).Replace("-", "").ToLower();
+            }
+        }
+
         public static string RandomNumbers(int length, bool firstNotZero = true)
         {
             StringBuilder stringBuilder = new StringBuilder();
