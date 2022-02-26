@@ -6,34 +6,35 @@ using System.Text;
 
 namespace Silmoon.Secure
 {
-    public class RSAHelper
+    public class SecureProvider
     {
-
-        public RSAHelper()
+        static RSACryptoServiceProvider defaultRSA = null;
+        public static RSACryptoServiceProvider GetDefaultRSA(string xmlRSA = @"C:\rsa_private.xml")
         {
-
+            if (defaultRSA == null) LoadDefaultRSAKeyFile(xmlRSA);
+            return defaultRSA;
         }
 
-        public static RSACryptoServiceProvider LoadDefaultRSAKeyFile(string rsaXmlFileName = @"C:\rsa_private.xml")
+        public static void LoadDefaultRSAKeyFile(string xmlRSA = @"C:\rsa_private.xml")
         {
-            if (File.Exists(rsaXmlFileName))
+            if (File.Exists(xmlRSA))
             {
                 RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
 
-                string xml = File.ReadAllText(rsaXmlFileName);
+                string xml = File.ReadAllText(xmlRSA);
                 try
                 {
                     rsa.FromXmlString(xml);
                 }
                 catch (Exception ex)
                 {
-                    rsa.Clear();
+                    rsa.Dispose();
                     throw ex;
                 }
-                return rsa;
+                defaultRSA = rsa;
             }
             else
-                throw new FileNotFoundException("RSA密钥XML字符串文件没有找到。", rsaXmlFileName);
+                throw new FileNotFoundException("RSA密钥XML字符串文件没有找到。", xmlRSA);
         }
         public static string GeneratorPrivateKey(int keyBytes = 1024)
         {
@@ -44,11 +45,11 @@ namespace Silmoon.Secure
             }
             return result;
         }
-        public static string GetPublicKey(string privateKeyXml)
+        public static string FromPrivateGetPublicKey(string privateXml)
         {
             using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
             {
-                rsa.FromXmlString(privateKeyXml);
+                rsa.FromXmlString(privateXml);
                 return rsa.ToXmlString(false);
             }
         }
