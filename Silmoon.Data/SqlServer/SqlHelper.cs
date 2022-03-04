@@ -50,22 +50,22 @@ namespace Silmoon.Data.SqlServer
                 {
                     //try
                     //{
-                        if (type.IsEnum)
-                        {
-                            if (reader[name] is string)
-                                item.SetValue(obj, Enum.Parse(type, (string)reader[name]), null);
-                            else if (reader[name] is int)
-                                item.SetValue(obj, (int)reader[name], null);
-                        }
-                        else if (type.IsArray && type != typeof(byte[]))
-                        {
-                            var val = (string)reader[name];
-                            if (string.IsNullOrEmpty(val)) continue;
-                            var res = System.Text.Json.JsonSerializer.Deserialize(val, type);
-                            item.SetValue(obj, res, null);
-                        }
-                        else
-                            item.SetValue(obj, reader[name], null);
+                    if (type.IsEnum)
+                    {
+                        if (reader[name] is string)
+                            item.SetValue(obj, Enum.Parse(type, (string)reader[name]), null);
+                        else if (reader[name] is int)
+                            item.SetValue(obj, (int)reader[name], null);
+                    }
+                    else if (type.IsArray && type != typeof(byte[]))
+                    {
+                        var val = (string)reader[name];
+                        if (string.IsNullOrEmpty(val)) continue;
+                        var res = System.Text.Json.JsonSerializer.Deserialize(val, type);
+                        item.SetValue(obj, res, null);
+                    }
+                    else
+                        item.SetValue(obj, reader[name], null);
                     //}
                     //catch (InvalidCastException ex)
                     //{

@@ -28,6 +28,8 @@ namespace Silmoon.Web.AspNetCore.Extensions
             if (!string.IsNullOrEmpty(httpContext.GetServerVariable("REMOTE_ADDR")))
                 return IPAddress.Parse(httpContext.GetServerVariable("REMOTE_ADDR").Split(new string[] { " ", ",", ":" }, StringSplitOptions.RemoveEmptyEntries)[0]);
 
+            if (httpContext.Connection.RemoteIpAddress is not null) return httpContext.Connection.RemoteIpAddress;
+
             return result;
         }
 
