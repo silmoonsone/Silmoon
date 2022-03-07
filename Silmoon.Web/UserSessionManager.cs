@@ -2,6 +2,7 @@ using Silmoon.Extension;
 using Silmoon.Models;
 using Silmoon.Models.Identities;
 using Silmoon.Models.Identities.Enums;
+using Silmoon.Web.Extension;
 using Silmoon.Web.Extensions;
 using System;
 using System.Security.Cryptography;
@@ -37,6 +38,7 @@ namespace Silmoon.Web
         public event EventHandler UserLogout;
         public event UserSessionHanlder OnRequestRefreshUserSession;
         public event UserTokenHanlder OnRequestUserToken;
+        public event UserVerifyPermissionHandler OnVerifyUserPermission;
 
         public string Username
         {
@@ -143,52 +145,42 @@ namespace Silmoon.Web
 
             if (!IsSignin || (!userToken.IsNullOrEmpty() && !ignoreUserToken))
             {
-                if (userToken.IsNullOrEmpty())
+                //如果没有登录，或者UserToken不是空的并且不忽略UserToken
+                if (userToken.IsNullOrEmpty() || userToken.ToLower() == "null")
                 {
-                    ///不是登录状态，并且没有提供AppUserToken的情况下。
+                    //不是登录状态，并且没有提供AppUserToken的情况下。
                     if (controller.Request.IsAjaxRequest())
                         return new JsonResult { Data = StateFlag.Create(false, -9999, "no signin."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                     else return new RedirectResult(signInUrl);
                 }
                 else
                 {
-                    ///提供了AppUserToken的情况下
-                    if (userToken.ToLower() == "null")
+                    //调用UserToken登录验证处理过程，获取用户实体。
+                    var userInfo = OnRequestUserToken(username, userToken);
+                    if (userInfo != null)
                     {
-                        ///提供的AppUserToken的字符串是null。
-                        if (controller.Request.IsAjaxRequest() || isAppApiRequest)
-                            return new JsonResult { Data = StateFlag.Create(false, -9999, "usertoken is \"null\"."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-                        else return new RedirectResult(signInUrl);
+                        //如果AppUserToken验证过程返回了用户实体。
+                        User = userInfo;
+                        if (!tokenNoSession) Signin(User);
+
+                        //使用UserToken登录后处理
+                        if (IsRole.HasValue && Role < IsRole)
+                        {
+                            if (controller.Request.IsAjaxRequest() || isAppApiRequest)
+                                return new JsonResult { Data = StateFlag.Create(false, -9999, "access denied."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                            else return new ContentResult() { Content = "access denied", ContentType = "text/plain" };
+                        }
+                        controller.ViewBag.User = User;
+                        return null;
                     }
                     else
                     {
-                        ///调用UserToken登录验证处理过程，获取用户实体。
-                        var userInfo = OnRequestUserToken(username, userToken);
-                        if (userInfo != null)
-                        {
-                            ///如果AppUserToken验证过程返回了用户实体。
-                            User = userInfo;
-                            if (!tokenNoSession) Signin(User);
-
-                            ///使用UserToken登录后处理
-                            if (IsRole.HasValue && Role < IsRole)
-                            {
-                                if (controller.Request.IsAjaxRequest() || isAppApiRequest)
-                                    return new JsonResult { Data = StateFlag.Create(false, -9999, "access denied."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-                                else return new ContentResult() { Content = "access denied", ContentType = "text/plain" };
-                            }
-                            controller.ViewBag.User = User;
-                            return null;
-                        }
+                        if (controller.Request.IsAjaxRequest() || isAppApiRequest)
+                            return new JsonResult { Data = StateFlag.Create(false, -9999, "OnRequestUserToken return null."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                         else
                         {
-                            if (controller.Request.IsAjaxRequest() || isAppApiRequest)
-                                return new JsonResult { Data = StateFlag.Create(false, -9999, "OnRequestUserToken return null."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-                            else
-                            {
-                                ///这里存在一个冲突，如果当前是登录状态，并且使用AppUserToken登录，AppUserToken登录失败，会转跳到登录页面，但是又是由于登录状态，会再次跳回当前页面，会造成死循环。
-                                return new RedirectResult(signInUrl);
-                            }
+                            //这里存在一个冲突，如果当前是登录状态，并且使用AppUserToken登录，AppUserToken登录失败，会转跳到登录页面，但是又是由于登录状态，会再次跳回当前页面，会造成死循环。
+                            return new RedirectResult(signInUrl);
                         }
                     }
                 }
@@ -222,90 +214,78 @@ namespace Silmoon.Web
                 return null;
             }
         }
-        public ActionResult ActionFilterChecking(HttpContextBase httpContext, IdentityRole? IsRole, bool requestRefreshUserSession = false, bool isAppApiRequest = false, string signInUrl = "~/User/Signin?url=$SigninUrl")
+        public ActionResult VerifySession(Controller controller, IdentityRole? IsRole, bool isJsonRequest = false, bool requestRefreshUserSession = false, string signInUrl = "~/User/Signin?url=$SigninUrl")
         {
-            signInUrl = signInUrl?.Replace("$SigninUrl", httpContext.Server.UrlEncode(httpContext.Request.RawUrl));
-            var username = httpContext.Request.QueryString["Username"];
-            var userToken = httpContext.Request.QueryString["UserToken"] ?? httpContext.Request.QueryString["AppUserToken"];
-            var tokenNoSession = httpContext.Request.QueryString["TokenNoSession"].ToBool(false, false);
-            var ignoreUserToken = httpContext.Request.QueryString["ignoreUserToken"].ToBool(false, false);
+            controller.ViewBag.UserSession = this;
+            signInUrl = signInUrl?.Replace("$SigninUrl", controller.Server.UrlEncode(controller.Request.RawUrl));
 
-            if (!IsSignin || (!userToken.IsNullOrEmpty() && !ignoreUserToken))
-            {
-                if (userToken.IsNullOrEmpty())
-                {
-                    ///不是登录状态，并且没有提供AppUserToken的情况下。
-                    if (httpContext.Request.IsAjaxRequest())
-                        return new JsonResult { Data = StateFlag.Create(false, -9999, "no signin."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-                    else return new RedirectResult(signInUrl);
-                }
-                else
-                {
-                    ///提供了AppUserToken的情况下
-                    if (userToken.ToLower() == "null")
-                    {
-                        ///提供的AppUserToken的字符串是null。
-                        if (httpContext.Request.IsAjaxRequest() || isAppApiRequest)
-                            return new JsonResult { Data = StateFlag.Create(false, -9999, "usertoken is \"null\"."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-                        else return new RedirectResult(signInUrl);
-                    }
-                    else
-                    {
-                        ///调用UserToken登录验证处理过程，获取用户实体。
-                        var userInfo = OnRequestUserToken(username, userToken);
-                        if (userInfo != null)
-                        {
-                            ///如果AppUserToken验证过程返回了用户实体。
-                            User = userInfo;
-                            if (!tokenNoSession) Signin(User);
-
-                            ///使用UserToken登录后处理
-                            if (IsRole.HasValue && Role < IsRole)
-                            {
-                                if (httpContext.Request.IsAjaxRequest() || isAppApiRequest)
-                                    return new JsonResult { Data = StateFlag.Create(false, -9999, "access denied."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-                                else return new ContentResult() { Content = "access denied", ContentType = "text/plain" };
-                            }
-                            return null;
-                        }
-                        else
-                        {
-                            if (httpContext.Request.IsAjaxRequest() || isAppApiRequest)
-                                return new JsonResult { Data = StateFlag.Create(false, -9999, "OnRequestUserToken return null."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-                            else
-                            {
-                                ///这里存在一个冲突，如果当前是登录状态，并且使用AppUserToken登录，AppUserToken登录失败，会转跳到登录页面，但是又是由于登录状态，会再次跳回当前页面，会造成死循环。
-                                return new RedirectResult(signInUrl);
-                            }
-                        }
-                    }
-                }
-            }
-            else
+            if (IsSignin)
             {
                 if (requestRefreshUserSession)
                 {
-                    var userInfo = onRequestRefreshUserSession();
-                    if (userInfo != null)
-                        User = userInfo;
-                    else
-                    {
-                        if (httpContext.Request.IsAjaxRequest() || isAppApiRequest)
-                            return new JsonResult { Data = StateFlag.Create(false, -9999, "onRequestRefreshUserSession return null."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-                        else return new RedirectResult(signInUrl);
-                    }
+                    User = onRequestRefreshUserSession();
+                    if (User == null) return isJsonRequest ? controller.JsonStateFlag(false, -9999, "onRequestRefreshUserSession return null.") : (ActionResult)new RedirectResult(signInUrl);
                 }
-
                 if (IsRole.HasValue)
                 {
                     if (Role < IsRole)
                     {
-                        if (httpContext.Request.IsAjaxRequest() || isAppApiRequest)
-                            return new JsonResult { Data = StateFlag.Create(false, -9999, "access denied."), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-                        else return new ContentResult() { Content = "access denied", ContentType = "text/plain" };
+                        if (isJsonRequest)
+                            return controller.JsonStateFlag(false, -9999, "Role permission denied.");
+                        else return new ContentResult() { Content = "主权限不足。", ContentType = "text/plain" };
                     }
                 }
+                var check = OnVerifyUserPermission?.Invoke(User);
+                if (check.HasValue && !check.Value)
+                {
+                    if (isJsonRequest)
+                        return controller.JsonStateFlag(false, -9999, "OnVerifyUserPermission check permission fail.");
+                    else return new ContentResult() { Content = "自定义权限不足。", ContentType = "text/plain" };
+                }
+                controller.ViewBag.User = User;
                 return null;
+            }
+            else
+            {
+                if (isJsonRequest)
+                    return controller.JsonStateFlag(false, -9999, "No signin.");
+                else return new RedirectResult(signInUrl);
+            }
+        }
+        public ActionResult VerifySession(HttpContextBase httpContext, IdentityRole? IsRole, bool isJsonRequest = false, bool requestRefreshUserSession = false, string signInUrl = "~/User/Signin?url=$SigninUrl")
+        {
+            signInUrl = signInUrl?.Replace("$SigninUrl", httpContext.Server.UrlEncode(httpContext.Request.RawUrl));
+
+            if (IsSignin)
+            {
+                if (requestRefreshUserSession)
+                {
+                    User = onRequestRefreshUserSession();
+                    if (User == null) return new ContentResult() { Content = StateFlag.Create(false, -9999, "onRequestRefreshUserSession return null.").ToJsonString(), ContentType = "application/json" };
+                }
+                if (IsRole.HasValue)
+                {
+                    if (Role < IsRole)
+                    {
+                        if (isJsonRequest)
+                            return new ContentResult() { Content = StateFlag.Create(false, -9999, "Role permission denied.").ToJsonString(), ContentType = "application/json" };
+                        else return new ContentResult() { Content = "主权限不足。", ContentType = "text/plain" };
+                    }
+                }
+                var check = OnVerifyUserPermission?.Invoke(User);
+                if (check.HasValue && !check.Value)
+                {
+                    if (isJsonRequest)
+                        return new ContentResult() { Content = StateFlag.Create(false, -9999, "OnVerifyUserPermission check permission fail.").ToJsonString(), ContentType = "application/json" };
+                    else return new ContentResult() { Content = "自定义权限不足。", ContentType = "text/plain" };
+                }
+                return null;
+            }
+            else
+            {
+                if (isJsonRequest)
+                    return new ContentResult() { Content = StateFlag.Create(false, -9999, "No signin.").ToJsonString(), ContentType = "application/json" };
+                else return new RedirectResult(signInUrl);
             }
         }
 
@@ -419,34 +399,6 @@ namespace Silmoon.Web
             }
         }
 
-        [Obsolete]
-        public virtual void DoLogin(TUser user)
-        {
-            DoLogin(user.Username, user.Password, user.Role, user);
-        }
-        [Obsolete]
-        public virtual void DoLogin(string username, string password, TUser user)
-        {
-            DoLogin(username, password, user.Role, user);
-        }
-        [Obsolete]
-        public virtual void DoLogin(string username, string password, IdentityRole role, TUser user = default)
-        {
-            if (string.IsNullOrEmpty(username))
-            {
-                throw new ArgumentException($"“{nameof(username)}”不能为 null 或空。", nameof(username));
-            }
-
-            if (string.IsNullOrEmpty(password))
-            {
-                throw new ArgumentException($"“{nameof(password)}”不能为 null 或空。", nameof(password));
-            }
-
-            HttpContext.Current.Session.Timeout = sessionTimeout;
-            User = user;
-            State = LoginState.Login;
-            UserLogin?.Invoke(this, EventArgs.Empty);
-        }
         public virtual void Signin(TUser user)
         {
             Signin(user.Username, user.Role, user);
@@ -508,6 +460,7 @@ namespace Silmoon.Web
         }
         public delegate TUser UserSessionHanlder(TUser User);
         public delegate TUser UserTokenHanlder(string Username, string UserToken);
+        public delegate bool UserVerifyPermissionHandler(TUser User);
     }
 
 
