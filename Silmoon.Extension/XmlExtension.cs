@@ -9,7 +9,7 @@ namespace Silmoon.Extension
 {
     public static class XmlExtension
     {
-        public static string GetXmlString(this XmlDocument xmlDocument)
+        public static string ToXmlString(this XmlDocument xmlDocument)
         {
             using (MemoryStream ms = new MemoryStream())
             {
