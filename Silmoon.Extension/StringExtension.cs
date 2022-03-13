@@ -221,5 +221,10 @@ namespace Silmoon.Extension
         {
             return Regex.Replace(input, "<.*?>", string.Empty);
         }
+        public static bool CheckStringLengthGte(this string str, int length)
+        {
+            if (str.IsNullOrEmpty()) return false;
+            else return str.Length >= length;
+        }
     }
 }

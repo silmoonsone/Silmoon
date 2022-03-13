@@ -26,5 +26,9 @@ namespace Silmoon.Extension
             var result = JArray.FromObject(list);
             return result;
         }
+        public static bool IsNullOrEmpty(this Array array)
+        {
+            return array == null || array.Length == 0;
+        }
     }
 }
