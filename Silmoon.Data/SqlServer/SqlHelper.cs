@@ -122,6 +122,13 @@ namespace Silmoon.Data.SqlServer
                         else if (row[name] is int)
                             item.SetValue(obj, (int)row[name], null);
                     }
+                    else if (type.IsArray && type != typeof(byte[]))
+                    {
+                        var val = (string)row[name];
+                        if (string.IsNullOrEmpty(val)) continue;
+                        var res = JsonSerializer.Deserialize(val, type);
+                        item.SetValue(obj, res, null);
+                    }
                     else
                         item.SetValue(obj, row[name], null);
                 }
@@ -158,7 +165,7 @@ namespace Silmoon.Data.SqlServer
                                 }
                                 else if (type.Name == "DateTime" && ((DateTime)value) == DateTime.MinValue)
                                     sqlCommand.Parameters.AddWithValue(name, SqlDateTime.MinValue);
-                                else if (type.IsArray)
+                                else if (type.IsArray && type.Name != "Byte[]")
                                 {
                                     string s = JsonSerializer.Serialize(value, value.GetType());
                                     sqlCommand.Parameters.AddWithValue(name, s);
@@ -204,7 +211,7 @@ namespace Silmoon.Data.SqlServer
                             }
                             else if (type.Name == "DateTime" && ((DateTime)value) == DateTime.MinValue)
                                 sqlCommand.Parameters.AddWithValue(name, SqlDateTime.MinValue);
-                            else if (type.IsArray)
+                            else if (type.IsArray && type.Name != "Byte[]")
                             {
                                 string s = JsonSerializer.Serialize(value, value.GetType());
                                 sqlCommand.Parameters.AddWithValue(name, s);
