@@ -8,6 +8,7 @@ using System.Data.SqlTypes;
 using Silmoon.Runtime.Collections;
 using Microsoft.Data.SqlClient;
 using FieldInfo = Silmoon.Data.SqlServer.SqlInternal.FieldInfo;
+using System.Text.Json;
 
 namespace Silmoon.Data.SqlServer
 {
@@ -61,7 +62,7 @@ namespace Silmoon.Data.SqlServer
                     {
                         var val = (string)reader[name];
                         if (string.IsNullOrEmpty(val)) continue;
-                        var res = System.Text.Json.JsonSerializer.Deserialize(val, type);
+                        var res = JsonSerializer.Deserialize(val, type);
                         item.SetValue(obj, res, null);
                     }
                     else
@@ -81,6 +82,20 @@ namespace Silmoon.Data.SqlServer
             return (obj, data);
         }
 
+        public static (T[] Results, NameObjectCollection<object>[] DataCollections) MakeObjects<T>(DataTable dt, string[] excludedField = null) where T : new()
+        {
+            T[] result = new T[dt.Rows.Count];
+            NameObjectCollection<object>[] data = new NameObjectCollection<object>[dt.Rows.Count];
+
+            for (int i = 0; i < result.Length; i++)
+            {
+                var r = MakeObject<T>(dt.Rows[i], excludedField);
+                result[i] = r.Result;
+                data[i] = r.DataCollection;
+            }
+
+            return (result, data);
+        }
         public static (T Result, NameObjectCollection<object> DataCollection) MakeObject<T>(DataRow row, string[] excludedField = null) where T : new()
         {
             T obj = new T();
@@ -114,20 +129,6 @@ namespace Silmoon.Data.SqlServer
 
             return (obj, data);
         }
-        public static (T[] Results, NameObjectCollection<object>[] DataCollections) MakeObjects<T>(DataTable dt, string[] excludedField = null) where T : new()
-        {
-            T[] result = new T[dt.Rows.Count];
-            NameObjectCollection<object>[] data = new NameObjectCollection<object>[dt.Rows.Count];
-
-            for (int i = 0; i < result.Length; i++)
-            {
-                var r = MakeObject<T>(dt.Rows[i], excludedField);
-                result[i] = r.Result;
-                data[i] = r.DataCollection;
-            }
-
-            return (result, data);
-        }
 
         public static void AddSqlCommandParameters(SqlCommand sqlCommand, Dictionary<string, FieldInfo> fieldInfos, params string[] paraNames)
         {
@@ -159,7 +160,7 @@ namespace Silmoon.Data.SqlServer
                                     sqlCommand.Parameters.AddWithValue(name, SqlDateTime.MinValue);
                                 else if (type.IsArray)
                                 {
-                                    string s = System.Text.Json.JsonSerializer.Serialize(value, value.GetType());
+                                    string s = JsonSerializer.Serialize(value, value.GetType());
                                     sqlCommand.Parameters.AddWithValue(name, s);
                                 }
                                 else
@@ -205,7 +206,7 @@ namespace Silmoon.Data.SqlServer
                                 sqlCommand.Parameters.AddWithValue(name, SqlDateTime.MinValue);
                             else if (type.IsArray)
                             {
-                                string s = System.Text.Json.JsonSerializer.Serialize(value, value.GetType());
+                                string s = JsonSerializer.Serialize(value, value.GetType());
                                 sqlCommand.Parameters.AddWithValue(name, s);
                             }
                             else
