@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
 
-namespace Silmoon.Web.AspNetCore.Extensions
+namespace Silmoon.AspNetCore.Extensions
 {
     public static class HttpRequestExtension
     {

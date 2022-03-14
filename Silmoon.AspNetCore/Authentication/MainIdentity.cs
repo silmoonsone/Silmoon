@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 
-namespace Silmoon.Web.AspNetCore.Authentication
+namespace Silmoon.AspNetCore.Authentication
 {
     public class MainIdentity : IIdentity
     {

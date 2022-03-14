@@ -8,7 +8,7 @@ using System.Collections.Specialized;
 using Silmoon.Extension;
 using Microsoft.AspNetCore.Http;
 
-namespace Silmoon.Web.AspNetCore
+namespace Silmoon.AspNetCore
 {
     public class HttpHelper
     {

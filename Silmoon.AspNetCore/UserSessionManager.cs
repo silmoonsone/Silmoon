@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Silmoon.Extension;
 using Silmoon.Models;
 using Silmoon.Models.Identities;
-using Silmoon.Web.AspNetCore.Extensions;
+using Silmoon.AspNetCore.Extensions;
 using System;
 using System.Linq;
 using System.Security.Claims;
@@ -12,7 +12,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Silmoon.Web.AspNetCore
+namespace Silmoon.AspNetCore
 {
     public static class UserSessionManager
     {

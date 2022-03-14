@@ -2,7 +2,7 @@
 using Silmoon.Secure;
 using System.Collections.Generic;
 
-namespace Silmoon.Web.AspNetCore.Extensions
+namespace Silmoon.AspNetCore.Extensions
 {
     public static class IFormCollectionExtension
     {

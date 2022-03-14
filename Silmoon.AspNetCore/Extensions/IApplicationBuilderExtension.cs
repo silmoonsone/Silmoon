@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Silmoon.Models.Identities;
-using static Silmoon.Web.AspNetCore.UserSessionManager;
+using static Silmoon.AspNetCore.UserSessionManager;
 
-namespace Silmoon.Web.AspNetCore.Extensions
+namespace Silmoon.AspNetCore.Extensions
 {
     public static class IApplicationBuilderExtension
     {

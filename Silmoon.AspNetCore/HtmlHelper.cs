@@ -5,7 +5,7 @@ using System.Dynamic;
 using System.Text;
 using System.Web;
 
-namespace Silmoon.Web.AspNetCore
+namespace Silmoon.AspNetCore
 {
     public static class HtmlHelper
     {

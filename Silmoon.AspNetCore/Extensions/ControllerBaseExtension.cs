@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Silmoon.Web.AspNetCore.Extensions
+namespace Silmoon.AspNetCore.Extensions
 {
     public static class ControllerBaseExtension
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace Silmoon.Web.AspNetCore.Authentication
+namespace Silmoon.AspNetCore.Authentication
 {
     public class RequireAuthenticationAttribute : AuthorizeAttribute
     {

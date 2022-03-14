@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Silmoon.Web.AspNetCore.Extensions
+namespace Silmoon.AspNetCore.Extensions
 {
     public static class HttpContextBaseExtension
     {

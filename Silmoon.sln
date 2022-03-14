@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Web", "Silmoon.Web\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Net", "Silmoon.Net\Silmoon.Net.csproj", "{D595A3FA-798E-44A8-9CDA-AA688AF4A3B6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Web.AspNetCore", "Silmoon.Web.AspNetCore\Silmoon.Web.AspNetCore.csproj", "{E95B8D17-0B0B-48BD-88F6-EDE4CBD7AA70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.AspNetCore", "Silmoon.AspNetCore\Silmoon.AspNetCore.csproj", "{E95B8D17-0B0B-48BD-88F6-EDE4CBD7AA70}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Data", "Silmoon.Data\Silmoon.Data.csproj", "{1492066C-2564-488A-8775-5BDC117DF17E}"
 EndProject
@@ -226,7 +226,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {18B93CD3-1A51-425B-89D1-03A0565D2E21}
 		VisualSVNWorkingCopyRoot = .
+		SolutionGuid = {18B93CD3-1A51-425B-89D1-03A0565D2E21}
 	EndGlobalSection
 EndGlobal
