@@ -61,11 +61,6 @@ namespace Silmoon.Models
         {
             return new StateFlag<T>() { Success = Success, Message = Message, Code = Code, Data = Data };
         }
-        public StateFlag<T> AppendData(T data)
-        {
-            Data = data;
-            return this;
-        }
     }
 
 }
