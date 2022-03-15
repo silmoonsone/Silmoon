@@ -446,9 +446,15 @@ namespace Silmoon.Data.SqlServer
                 {
                     sql += $"\t[{item.Name}] nvarchar(MAX) NULL,\r\n";
                 }
+                else if (type.Name == "JObject")
+                {
+                    sql += $"\t[{item.Name}] nvarchar(MAX) NULL,\r\n";
+                }
                 else
                 {
-                    throw new Exception("未知的类型处理（" + type.Name + "）");
+                    sql += $"\t[{item.Name}] nvarchar(MAX) NULL,\r\n";
+
+                    //throw new Exception("未知的类型处理（" + type.Name + "）");
                 }
             }
             sql += ")  ON [PRIMARY]\r\n";

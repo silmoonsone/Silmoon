@@ -10,10 +10,17 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Silmoon\Silmoon.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Silmoon.Extension">
+      <HintPath>..\Silmoon.Extension\bin\Release\netstandard2.0\Silmoon.Extension.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

@@ -9,11 +9,15 @@ using Silmoon.Runtime.Collections;
 using Microsoft.Data.SqlClient;
 using FieldInfo = Silmoon.Data.SqlServer.SqlInternal.FieldInfo;
 using System.Text.Json;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
+using Silmoon.Extension;
 
 namespace Silmoon.Data.SqlServer
 {
     public class SqlHelper
     {
+        static string[] regTypeClassName = new string[] { "DateTime", "String", "Boolean", "Int16", "UInt16", "Int32", "UInt32", "Int64", "UInt64", "Decimal", "Guid", "ObjectId", "Byte[]", "Int32[]", "String[]" };
         public static (T[] Results, NameObjectCollection<object>[] DataCollections) MakeObjects<T>(SqlDataReader reader, string[] excludedField = null) where T : new()
         {
             List<T> result = new List<T>();
@@ -65,17 +69,10 @@ namespace Silmoon.Data.SqlServer
                         var res = JsonSerializer.Deserialize(val, type);
                         item.SetValue(obj, res, null);
                     }
-                    else
+                    else if (regTypeClassName.Contains(type.Name))
                         item.SetValue(obj, reader[name], null);
-                    //}
-                    //catch (InvalidCastException ex)
-                    //{
-                    //    throw new InvalidCastException("实体映射类型转换失败，字段名[" + item.Name + "]，实体类型为[" + item.PropertyType + "]，数据库类型为[" + reader[name].GetType() + "]。");
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    throw ex;
-                    //}
+                    else
+                        item.SetValue(obj, JsonConvert.DeserializeObject((string)reader[name], type), null);
                 }
             }
             if (closeReader) reader.Close();
@@ -129,8 +126,10 @@ namespace Silmoon.Data.SqlServer
                         var res = JsonSerializer.Deserialize(val, type);
                         item.SetValue(obj, res, null);
                     }
-                    else
+                    else if (regTypeClassName.Contains(type.Name))
                         item.SetValue(obj, row[name], null);
+                    else
+                        item.SetValue(obj, JsonConvert.DeserializeObject((string)row[name], type), null);
                 }
             }
 
@@ -155,8 +154,6 @@ namespace Silmoon.Data.SqlServer
                             {
                                 if (type.IsEnum)
                                 {
-                                    //////////这里要注意写入枚举数据的时候，目标字段的类型。
-
                                     ///这里存储在数据库中的枚举使用字符串（.ToString()）
                                     //sqlCommand.Parameters.AddWithValue(name, value.ToString());
 
@@ -170,8 +167,10 @@ namespace Silmoon.Data.SqlServer
                                     string s = JsonSerializer.Serialize(value, value.GetType());
                                     sqlCommand.Parameters.AddWithValue(name, s);
                                 }
-                                else
+                                else if (regTypeClassName.Contains(type.Name))
                                     sqlCommand.Parameters.AddWithValue(name, value);
+                                else
+                                    sqlCommand.Parameters.AddWithValue(name, value.ToJsonString());
                             }
                             else
                             {
@@ -201,8 +200,6 @@ namespace Silmoon.Data.SqlServer
                         {
                             if (type.IsEnum)
                             {
-                                //////////这里要注意写入枚举数据的时候，目标字段的类型。
-
                                 ///这里存储在数据库中的枚举使用字符串（.ToString()）
                                 //sqlCommand.Parameters.AddWithValue(name, value.ToString());
 
@@ -216,8 +213,10 @@ namespace Silmoon.Data.SqlServer
                                 string s = JsonSerializer.Serialize(value, value.GetType());
                                 sqlCommand.Parameters.AddWithValue(name, s);
                             }
-                            else
+                            else if (regTypeClassName.Contains(type.Name))
                                 sqlCommand.Parameters.AddWithValue(name, value);
+                            else
+                                sqlCommand.Parameters.AddWithValue(name, value.ToJsonString());
                         }
                         else
                         {
