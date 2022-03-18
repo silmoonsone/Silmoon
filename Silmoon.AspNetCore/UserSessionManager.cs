@@ -27,12 +27,13 @@ namespace Silmoon.AspNetCore
         }
         public static async Task Signin<TUser>(this HttpContext httpContext, TUser User, string NameIdentifier = null) where TUser : IDefaultUserIdentity, new()
         {
-            if (User.Username.IsNullOrEmpty() && NameIdentifier.IsNullOrEmpty()) throw new ArgumentNullException(nameof(User.Username));
+            if (User is null) throw new ArgumentNullException(nameof(User));
+            if (User.Username.IsNullOrEmpty() && NameIdentifier.IsNullOrEmpty()) throw new ArgumentNullException(nameof(User.Username), "Username或者NameIdentifier必选最少一个参数。");
             NameIdentifier = NameIdentifier.IsNullOrEmpty() ? User.Username : NameIdentifier;
 
             var claimsIdentity = new ClaimsIdentity("Customer");
             claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, NameIdentifier));
-            claimsIdentity.AddClaim(new Claim(nameof(IDefaultUserIdentity.Username), User.Username));
+            claimsIdentity.AddClaim(new Claim(nameof(IDefaultUserIdentity.Username), User.Username ?? ""));
 
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
@@ -169,6 +170,11 @@ namespace Silmoon.AspNetCore
                 if (json.IsNullOrEmpty())
                 {
                     user = (TUser)OnRequestUserData?.Invoke(Name, NameIdentifier, user);
+                    if (user is null)
+                    {
+                        await Signout(httpContext);
+                        return default;
+                    }
                     SetUserCache(httpContext, user);
                 }
                 else
