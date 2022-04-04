@@ -15,7 +15,7 @@ namespace Silmoon.Net.Transfer
         public event TcpTransferEventHandler OnEvent = null;
         public event TcpTransferEventHandler OnDataReceived = null;
         public Socket socket = null;
-        public List<Socket> ClientSockets = new List<Socket>();
+        public List<Socket> ClientSockets { get; set; } = new List<Socket>();
         public int BufferSize { get; set; } = 20480;
         public bool IsClientMode { get; set; }
         public TcpState State { get; set; }
