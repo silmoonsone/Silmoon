@@ -42,7 +42,7 @@ namespace Silmoon.Extension
                 string[] aqs = item.Split('=');
                 if (aqs.Length == 2)
                 {
-                    result[aqs[0]] = aqs[1];
+                    result[aqs[0]] = HttpUtility.UrlDecode(aqs[1]);
                 }
             }
             return result;
