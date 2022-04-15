@@ -202,7 +202,7 @@ namespace Silmoon.Secure
             using (RSACryptoServiceProvider provider = new RSACryptoServiceProvider())
             {
                 provider.FromXmlString(xmlPrivateKey);
-                return provider.Decrypt(data, false);
+                return provider.Decrypt(data, true);
             }
         }
 
