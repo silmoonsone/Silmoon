@@ -18,7 +18,7 @@ namespace Silmoon.Secure
         {
             using (RijndaelManaged aesProvider = new RijndaelManaged())
             {
-                aesProvider.Key = key; //GetAesKey(key);固定32位秘钥方法
+                aesProvider.Key = key;
                 aesProvider.Mode = cipherMode;
                 aesProvider.Padding = paddingMode;
                 using (ICryptoTransform cryptoTransform = aesProvider.CreateEncryptor())
@@ -41,7 +41,7 @@ namespace Silmoon.Secure
         {
             using (RijndaelManaged aesProvider = new RijndaelManaged())
             {
-                aesProvider.Key = key; //GetAesKey(key);固定32位秘钥方法
+                aesProvider.Key = key;
                 aesProvider.Mode = cipherMode;
                 aesProvider.Padding = paddingMode;
                 using (ICryptoTransform cryptoTransform = aesProvider.CreateDecryptor())
@@ -83,7 +83,7 @@ namespace Silmoon.Secure
         }
 
 
-        public static string DsaEncrypt(string data, string KEY_64, string IV_64)
+        public static string DesEncrypt(string data, string KEY_64, string IV_64)
         {
             byte[] byKey = Encoding.ASCII.GetBytes(KEY_64);
             byte[] byIV = Encoding.ASCII.GetBytes(IV_64);
@@ -107,7 +107,7 @@ namespace Silmoon.Secure
                 }
             }
         }
-        public static string DsaDecrypt(string data, string KEY_64, string IV_64)
+        public static string DesDecrypt(string data, string KEY_64, string IV_64)
         {
             byte[] byKey = Encoding.ASCII.GetBytes(KEY_64);
             byte[] byIV = Encoding.ASCII.GetBytes(IV_64);
@@ -139,26 +139,6 @@ namespace Silmoon.Secure
 
 
 
-        public static string SignData(string data, string xmlPrivateKey, string encoding = "UTF-8")
-        {
-            RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
-            provider.FromXmlString(xmlPrivateKey);//加载私钥  
-            var dataBytes = Encoding.GetEncoding(encoding).GetBytes(data);
-            byte[] signatureBytes = provider.SignData(dataBytes, new SHA1CryptoServiceProvider());
-            return Convert.ToBase64String(signatureBytes);
-        }
-        public static bool VerifySign(string data, string xmlpublicKey, string signature, string encoding = "UTF-8")
-        {
-            RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
-            //导入公钥，准备验证签名  
-            provider.FromXmlString(xmlpublicKey);//加载公钥  
-                                                 //返回数据验证结果  
-            byte[] Data = Encoding.GetEncoding(encoding).GetBytes(data);
-            byte[] rgbSignature = Convert.FromBase64String(signature);
-
-            return provider.VerifyData(Data, new SHA1CryptoServiceProvider(), rgbSignature);
-
-        }
         public static string RsaEncrypt(string xmlpublicKey, string data, string encoding = "UTF-8")
         {
             RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
@@ -178,6 +158,26 @@ namespace Silmoon.Secure
             cipherbytes = provider.Decrypt(Convert.FromBase64String(data), false);
 
             return Encoding.GetEncoding(encoding).GetString(cipherbytes);
+        }
+        public static string RsaSignData(string data, string xmlPrivateKey, string encoding = "UTF-8")
+        {
+            RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
+            provider.FromXmlString(xmlPrivateKey);//加载私钥  
+            var dataBytes = Encoding.GetEncoding(encoding).GetBytes(data);
+            byte[] signatureBytes = provider.SignData(dataBytes, new SHA1CryptoServiceProvider());
+            return Convert.ToBase64String(signatureBytes);
+        }
+        public static bool RsaVerifySign(string data, string xmlpublicKey, string signature, string encoding = "UTF-8")
+        {
+            RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
+            //导入公钥，准备验证签名  
+            provider.FromXmlString(xmlpublicKey);//加载公钥  
+                                                 //返回数据验证结果  
+            byte[] Data = Encoding.GetEncoding(encoding).GetBytes(data);
+            byte[] rgbSignature = Convert.FromBase64String(signature);
+
+            return provider.VerifyData(Data, new SHA1CryptoServiceProvider(), rgbSignature);
+
         }
 
     }
