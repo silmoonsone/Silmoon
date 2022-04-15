@@ -9,13 +9,7 @@ namespace Silmoon.Secure
     public class SecureProvider
     {
         static RSACryptoServiceProvider defaultRSA = null;
-        public static RSACryptoServiceProvider GetDefaultRSA(string xmlRSA = @"C:\rsa_private.xml")
-        {
-            if (defaultRSA == null) LoadDefaultRSAKeyFile(xmlRSA);
-            return defaultRSA;
-        }
-
-        public static void LoadDefaultRSAKeyFile(string xmlRSA = @"C:\rsa_private.xml")
+        public static RSACryptoServiceProvider LoadDefaultRSAKeyFile(string xmlRSA = @"C:\rsa_private.xml")
         {
             if (File.Exists(xmlRSA))
             {
@@ -32,6 +26,7 @@ namespace Silmoon.Secure
                     throw ex;
                 }
                 defaultRSA = rsa;
+                return rsa;
             }
             else
                 throw new FileNotFoundException("RSA密钥XML字符串文件没有找到。", xmlRSA);
