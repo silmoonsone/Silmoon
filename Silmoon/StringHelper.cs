@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Collections;
 using System.Collections.Specialized;
+using System.Text.RegularExpressions;
 
 namespace Silmoon
 {
@@ -151,6 +152,93 @@ namespace Silmoon
                     list2.Add(item);
             }
             return (string[])list2.ToArray(typeof(string));
+        }
+        /// <summary>
+        /// 检查邮件格式是否正确
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public static bool CheckEmail(string email)
+        {
+            Regex regex = new Regex(@"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
+            return regex.IsMatch(email);
+        }
+        /// <summary>
+        /// 检查手机号码格式是否正确
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <returns></returns>
+        public static bool CheckMobilePhone(string mobile)
+        {
+            Regex regex = new Regex(@"^((1[3,5,6,8][0-9])|(14[5,7])|(17[0,1,3,5,6,7,8])|(19[1,8,9]))\d{8}$");
+            return regex.IsMatch(mobile);
+        }
+        /// <summary>
+        /// 检查电话号码格式是否正确
+        /// </summary>
+        /// <param name="phone"></param>
+        /// <returns></returns>
+        public static bool CheckPhone(string phone)
+        {
+            Regex regex = new Regex(@"^(\d{3,4}-)?\d{6,8}$");
+            return regex.IsMatch(phone);
+        }
+        /// <summary>
+        /// 检查身份证号码格式是否正确
+        /// </summary>
+        /// <param name="cardId"></param>
+        /// <returns></returns>
+        private static bool CheckCardId(string cardId)
+        {
+            if (cardId.Trim().Length != 18) return false;
+            long n = 0;
+            //数字验证
+            if (long.TryParse(cardId.Remove(17), out n) == false || n < Math.Pow(10, 16) || long.TryParse(cardId.Replace('x', '0').Replace('X', '0'), out n) == false)
+            {
+                return false;
+            }
+
+            //省份验证
+            string address = "11x22x35x44x53x12x23x36x45x54x13x31x37x46x61x14x32x41x50x62x15x33x42x51x63x21x34x43x52x64x65x71x81x82x91";
+            if (address.IndexOf(cardId.Remove(2)) == -1)
+            {
+                return false;
+            }
+
+            //生日验证
+            string birth = cardId.Substring(6, 8).Insert(6, "-").Insert(4, "-");
+            DateTime time = new DateTime();
+            if (DateTime.TryParse(birth, out time) == false)
+            {
+                return false;
+            }
+            //校验码验证
+            string[] arrVarifyCode = ("1,0,x,9,8,7,6,5,4,3,2").Split(',');
+            string[] Wi = ("7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2").Split(',');
+            char[] Ai = cardId.Remove(17).ToCharArray();
+            int sum = 0;
+            for (int i = 0; i < 17; i++)
+            {
+                sum += int.Parse(Wi[i]) * int.Parse(Ai[i].ToString());
+            }
+            int y = -1;
+            Math.DivRem(sum, 11, out y);
+            if (arrVarifyCode[y] != cardId.Substring(17, 1).ToLower())
+            {
+                return false;
+            }
+            return true;
+            //符合GB11643-1999标准
+        }
+        /// <summary>
+        /// 检查营业执照号码是否正确
+        /// </summary>
+        /// <param name="businessLicense"></param>
+        /// <returns></returns>
+        public static bool CheckBusinessLicense(string businessLicense)
+        {
+            Regex regex = new Regex(@"^[0-9A-Z]{8}-[0-9A-Z]$");
+            return regex.IsMatch(businessLicense);
         }
     }
 }
