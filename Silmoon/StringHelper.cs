@@ -188,9 +188,9 @@ namespace Silmoon
         /// </summary>
         /// <param name="cardId"></param>
         /// <returns></returns>
-        private static bool CheckCardId(string cardId)
+        public static bool CheckCardId(string cardId)
         {
-            if (cardId.Trim().Length != 18) return false;
+            if (cardId is null || cardId.Trim().Length != 18) return false;
             long n = 0;
             //数字验证
             if (long.TryParse(cardId.Remove(17), out n) == false || n < Math.Pow(10, 16) || long.TryParse(cardId.Replace('x', '0').Replace('X', '0'), out n) == false)
