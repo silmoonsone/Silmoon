@@ -160,6 +160,7 @@ namespace Silmoon
         /// <returns></returns>
         public static bool CheckEmail(string email)
         {
+            if (string.IsNullOrEmpty(email)) return false;
             Regex regex = new Regex(@"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
             return regex.IsMatch(email);
         }
@@ -170,6 +171,7 @@ namespace Silmoon
         /// <returns></returns>
         public static bool CheckMobilePhone(string mobile)
         {
+            if (string.IsNullOrEmpty(mobile)) return false;
             Regex regex = new Regex(@"^((1[3,5,6,8][0-9])|(14[5,7])|(17[0,1,3,5,6,7,8])|(19[1,8,9]))\d{8}$");
             return regex.IsMatch(mobile);
         }
@@ -180,6 +182,7 @@ namespace Silmoon
         /// <returns></returns>
         public static bool CheckPhone(string phone)
         {
+            if (string.IsNullOrEmpty(phone)) return false;
             Regex regex = new Regex(@"^(\d{3,4}-)?\d{6,8}$");
             return regex.IsMatch(phone);
         }
@@ -237,6 +240,7 @@ namespace Silmoon
         /// <returns></returns>
         public static bool CheckBusinessLicense(string businessLicense)
         {
+            if (string.IsNullOrEmpty(businessLicense)) return false;
             Regex regex = new Regex(@"^[0-9A-Z]{8}-[0-9A-Z]$");
             return regex.IsMatch(businessLicense);
         }
