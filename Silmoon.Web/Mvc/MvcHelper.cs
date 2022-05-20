@@ -14,25 +14,6 @@ namespace Silmoon.Web.Mvc
 {
     public class MvcHelper
     {
-        [Obsolete]
-        public static List<SelectListItem> MakeMvcSelectListItems(Type type, object enumObj)
-        {
-            if (type.IsEnum)
-            {
-                var names = type.GetEnumNames();
-                var values = type.GetEnumValues();
-                var result = new List<SelectListItem>();
-                for (int i = 0; i < names.Length; i++)
-                {
-                    result.Add(new SelectListItem() { Text = names[i], Value = values.GetValue(i).ToString() });
-                }
-                return result;
-            }
-            else
-            {
-                return null;
-            }
-        }
         public static string GetAjaxOptionJavascriptFunctions()
         {
             return js.ajaxOptionFunctions;

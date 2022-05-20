@@ -7,12 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Silmoon.Extension\Silmoon.Extension.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Silmoon.Models">
-      <HintPath>..\Silmoon.Models\obj\Release\netstandard2.0\Silmoon.Models.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Silmoon.Models\Silmoon.Models.csproj" />
   </ItemGroup>
 
 </Project>
