@@ -6,10 +6,10 @@ namespace Silmoon.Extension
 {
     public static class ObjectExtension
     {
+        [Obsolete]
         public static string ToStringOrNull(this object obj)
         {
-            if (obj is null) return null;
-            else return obj.ToString();
+            return obj?.ToString();
         }
     }
 }

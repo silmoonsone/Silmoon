@@ -6,10 +6,10 @@ namespace Silmoon.AspNetCore.Extensions
 {
     public static class IApplicationBuilderExtension
     {
-        public static IApplicationBuilder UseUserSession<TUser>(this IApplicationBuilder app, UserSessionHanlder<IDefaultUserIdentity> OnRecoveryUserData, UserSessionHanlder<IDefaultUserIdentity> OnRequestRefreshUserSession) where TUser : IDefaultUserIdentity
+        public static IApplicationBuilder UseUserSession<TUser>(this IApplicationBuilder app, UserSessionHanlder<IDefaultUserIdentity> OnRecoveryUserData, UserTokenHanlder<IDefaultUserIdentity> OnRequestUserToken) where TUser : IDefaultUserIdentity
         {
             OnRequestUserData += OnRecoveryUserData;
-            UserSessionManager.OnRequestRefreshUserSession += OnRequestRefreshUserSession;
+            UserSessionManager.OnRequestUserToken += OnRequestUserToken;
             return app;
         }
     }
