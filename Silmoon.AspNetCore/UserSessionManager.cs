@@ -74,7 +74,7 @@ namespace Silmoon.AspNetCore
                         await Signout(httpContext);
                         return default;
                     }
-                    SetUserCache(httpContext, user);
+                    setUserCache(httpContext, user);
                 }
                 else
                 {
@@ -89,11 +89,12 @@ namespace Silmoon.AspNetCore
         }
         public static TUser GetUser<TUser>(this HttpContext httpContext, string UserToken, bool SessionSignin, string Name = null, string NameIdentifier = null) where TUser : IDefaultUserIdentity, new()
         {
+            //if (OnRequestUserToken is null) throw new NullReferenceException("UserSessionManager.OnRequestUserToken 事件未注册");
             var result = (TUser)OnRequestUserToken?.Invoke(Name, NameIdentifier, UserToken);
-            if (SessionSignin && result is not null) SetUserCache(httpContext, result);
+            if (SessionSignin && result is not null) setUserCache(httpContext, result);
             return result;
         }
-        static void SetUserCache<TUser>(this HttpContext httpContext, TUser User) where TUser : IDefaultUserIdentity, new()
+        static void setUserCache<TUser>(this HttpContext httpContext, TUser User) where TUser : IDefaultUserIdentity, new()
         {
             var NameIdentifier = httpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
 
