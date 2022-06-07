@@ -88,5 +88,18 @@ namespace Silmoon.AspNetCore.Extensions
                 return body;
             }
         }
+        public static async Task<byte[]> GetBodyBytes(this HttpRequest request, Encoding encoding = null)
+        {
+            if (!request.Body.CanSeek)
+            {
+                // We only do this if the stream isn't *already* seekable,
+                // as EnableBuffering will create a new stream instance
+                // each time it's called
+                request.EnableBuffering();
+            }
+
+            request.Body.Position = 0;
+            return await request.Body.ToBytesAsync(request.ContentLength).ConfigureAwait(false);
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Silmoon.Extension
 {
@@ -15,6 +16,23 @@ namespace Silmoon.Extension
                 stream.Position = 0;
                 byte[] result = new byte[stream.Length];
                 stream.Read(result, 0, result.Length);
+                stream.Position = postion;
+                return result;
+            }
+            else
+            {
+                throw new NotSupportedException("流不支持读取或者搜索，无法操作");
+            }
+        }
+        public async static Task<byte[]> ToBytesAsync(this Stream stream, long? Length = null)
+        {
+            if (stream.CanSeek && stream.CanRead)
+            {
+                long postion = stream.Position;
+                stream.Position = 0;
+                if (Length is null) Length = stream.Length;
+                byte[] result = new byte[Length.Value];
+                await stream.ReadAsync(result, 0, result.Length).ConfigureAwait(false);
                 stream.Position = postion;
                 return result;
             }
