@@ -87,11 +87,15 @@ namespace Silmoon.AspNetCore
                 return default;
             }
         }
-        public static TUser GetUser<TUser>(this HttpContext httpContext, string UserToken, bool SessionSignin, string Name = null, string NameIdentifier = null) where TUser : IDefaultUserIdentity, new()
+        public static async Task<TUser> GetUser<TUser>(this HttpContext httpContext, string UserToken, bool SessionSignin, string Name = null, string NameIdentifier = null) where TUser : IDefaultUserIdentity, new()
         {
             //if (OnRequestUserToken is null) throw new NullReferenceException("UserSessionManager.OnRequestUserToken 事件未注册");
             var result = (TUser)OnRequestUserToken?.Invoke(Name, NameIdentifier, UserToken);
-            if (SessionSignin && result is not null) setUserCache(httpContext, result);
+            if (SessionSignin && result is not null)
+            {
+                await Signin(httpContext, result);
+                setUserCache(httpContext, result);
+            }
             return result;
         }
         static void setUserCache<TUser>(this HttpContext httpContext, TUser User) where TUser : IDefaultUserIdentity, new()
