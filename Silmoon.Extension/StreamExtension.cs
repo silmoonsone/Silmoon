@@ -8,38 +8,35 @@ namespace Silmoon.Extension
 {
     public static class StreamExtension
     {
-        public static byte[] ToBytes(this Stream stream)
+        public static byte[] ToBytes(this Stream stream, bool AutoSeek = true)
         {
-            if (stream.CanSeek && stream.CanRead)
-            {
-                long postion = stream.Position;
-                stream.Position = 0;
-                byte[] result = new byte[stream.Length];
-                stream.Read(result, 0, result.Length);
-                stream.Position = postion;
-                return result;
-            }
-            else
-            {
-                throw new NotSupportedException("流不支持读取或者搜索，无法操作");
-            }
+            if (AutoSeek && !stream.CanSeek) throw new NotSupportedException("流不支持读取或者搜索，无法操作");
+
+            bool seek = stream.CanSeek && AutoSeek;
+
+            long postion = 0;
+            if (seek) postion = stream.Position;
+            if (seek) stream.Position = 0;
+            byte[] result = new byte[stream.Length];
+            stream.Read(result, 0, result.Length);
+            if (seek) stream.Position = postion;
+            return result;
         }
-        public async static Task<byte[]> ToBytesAsync(this Stream stream, long? Length = null)
+        public async static Task<byte[]> ToBytesAsync(this Stream stream, long? Length = null, bool AutoSeek = true)
         {
-            if (stream.CanSeek && stream.CanRead)
-            {
-                long postion = stream.Position;
-                stream.Position = 0;
-                if (Length is null) Length = stream.Length;
-                byte[] result = new byte[Length.Value];
-                await stream.ReadAsync(result, 0, result.Length).ConfigureAwait(false);
-                stream.Position = postion;
-                return result;
-            }
-            else
-            {
-                throw new NotSupportedException("流不支持读取或者搜索，无法操作");
-            }
+            if (AutoSeek && !stream.CanSeek) throw new NotSupportedException("流不支持读取或者搜索，无法操作");
+
+            bool seek = stream.CanSeek && AutoSeek;
+
+            long postion = 0;
+            if (seek) postion = stream.Position;
+            if (seek) stream.Position = 0;
+            if (Length is null) Length = stream.Length;
+            byte[] result = new byte[Length.Value];
+            await stream.ReadAsync(result, 0, result.Length).ConfigureAwait(false);
+            if (seek) stream.Position = postion;
+            return result;
+
         }
         public static string MakeToString(this Stream stream, Encoding encoding = default)
         {
