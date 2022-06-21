@@ -189,7 +189,7 @@ namespace Silmoon.Secure
             using (RSACryptoServiceProvider provider = new RSACryptoServiceProvider())
             {
                 provider.FromXmlString(xmlpublicKey);
-                return provider.Encrypt(data, false);
+                return provider.Encrypt(data, true);
             }
         }
         public static string RsaDecrypt(string xmlPrivateKey, string data, string encoding = "UTF-8")
