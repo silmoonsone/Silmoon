@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using FieldInfo = Silmoon.Runtime.FieldInfo;
 
 namespace Silmoon.Runtime
 {
@@ -46,6 +48,19 @@ namespace Silmoon.Runtime
                 {
                     if (exclude.Contains(item.Name)) continue;
                     propertyNames.Add(item.Name, item);
+                }
+            }
+            return propertyNames;
+        }
+        public static Dictionary<string, FieldInfo> GetProperties(this ExpandoObject obj, params string[] exclude)
+        {
+            Dictionary<string, FieldInfo> propertyNames = new Dictionary<string, FieldInfo>();
+            if (obj != null)
+            {
+                foreach (var item in obj)
+                {
+                    if (exclude.Contains(item.Key)) continue;
+                    propertyNames.Add(item.Key, new FieldInfo() { Name = item.Key, Value = item.Value, Type = item.Value.GetType() });
                 }
             }
             return propertyNames;

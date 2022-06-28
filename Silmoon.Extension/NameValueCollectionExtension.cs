@@ -25,6 +25,7 @@ namespace Silmoon.Extension
         }
         public static string ToQueryString(this NameValueCollection NameValueCollection)
         {
+            if (NameValueCollection is null || NameValueCollection.Count == 0) return "";
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < NameValueCollection.Count; i++)
             {

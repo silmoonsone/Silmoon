@@ -7,11 +7,11 @@ using System.Linq;
 using System.Data.SqlTypes;
 using Silmoon.Runtime.Collections;
 using Microsoft.Data.SqlClient;
-using FieldInfo = Silmoon.Data.SqlServer.SqlInternal.FieldInfo;
 using System.Text.Json;
 using Newtonsoft.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 using Silmoon.Extension;
+using FieldInfo = Silmoon.Runtime.FieldInfo;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Silmoon.Data.SqlServer
 {

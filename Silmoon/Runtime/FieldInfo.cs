@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Silmoon.Data.SqlServer.SqlInternal
+namespace Silmoon.Runtime
 {
     public class FieldInfo
     {
@@ -11,7 +11,7 @@ namespace Silmoon.Data.SqlServer.SqlInternal
         public object Value { get; set; }
         public override string ToString()
         {
-            return $"Name={Name};Value={Value};Type={Type.Name};";
+            return $"Name={Name}; Value={Value}; Type={Type.Name};";
         }
     }
 }

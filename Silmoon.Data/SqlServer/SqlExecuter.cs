@@ -9,7 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using FieldInfo = Silmoon.Data.SqlServer.SqlInternal.FieldInfo;
+using FieldInfo = Silmoon.Runtime.FieldInfo;
 
 namespace Silmoon.Data.SqlServer
 {
@@ -141,6 +141,7 @@ namespace Silmoon.Data.SqlServer
                 return new SqlExecuteResult<T>(reader.RecordsAffected, sql, obj);
             }
         }
+        
         public SqlExecuteResults<T[]> GetObjects<T>(string tableName, object whereObject = null, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = SqlQueryOptions.Create();
