@@ -16,7 +16,13 @@ namespace Silmoon.AspNetCore
 {
     public static class UserSessionManager
     {
+        /// <summary>
+        /// 当丢失用户对象实体数据，将调用此事件获取用户实体
+        /// </summary>
         public static event UserSessionHanlder<IDefaultUserIdentity> OnRequestUserData;
+        /// <summary>
+        /// 当用户使用UserToken或者类似用途的字符串请求登录，将传递UserToken到事件，以便使用UserToken获取用户实体验证
+        /// </summary>
         public static event UserTokenHanlder<IDefaultUserIdentity> OnRequestUserToken;
 
         public static async Task<bool> IsSignin(this HttpContext httpContext)
@@ -81,6 +87,16 @@ namespace Silmoon.AspNetCore
             else
                 return default;
         }
+        /// <summary>
+        /// 使用UserToken获取用户实体数据以便验证的方法，此方法必须注册 UserSessionManager.OnRequestUserToken 事件。
+        /// </summary>
+        /// <typeparam name="TUser"></typeparam>
+        /// <param name="httpContext"></param>
+        /// <param name="UserToken"></param>
+        /// <param name="SessionSignin"></param>
+        /// <param name="Name"></param>
+        /// <param name="NameIdentifier"></param>
+        /// <returns></returns>
         public static async Task<TUser> GetUser<TUser>(this HttpContext httpContext, string UserToken, bool SessionSignin, string Name = null, string NameIdentifier = null) where TUser : IDefaultUserIdentity, new()
         {
             //if (OnRequestUserToken is null) throw new NullReferenceException("UserSessionManager.OnRequestUserToken 事件未注册");
