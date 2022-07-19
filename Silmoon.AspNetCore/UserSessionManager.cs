@@ -42,7 +42,7 @@ namespace Silmoon.AspNetCore
 
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
-            setUserCache(httpContext, User);
+            SetUserCache(httpContext, User);
 
             await httpContext.SignInAsync(claimsPrincipal);
         }
@@ -78,7 +78,7 @@ namespace Silmoon.AspNetCore
                         await Signout(httpContext);
                         return default;
                     }
-                    setUserCache(httpContext, user);
+                    SetUserCache(httpContext, user);
                 }
                 else
                     user = JsonSerializer.Deserialize<TUser>(json);
@@ -104,11 +104,11 @@ namespace Silmoon.AspNetCore
             if (SessionSignin && result is not null)
             {
                 await Signin(httpContext, result);
-                setUserCache(httpContext, result);
+                SetUserCache(httpContext, result);
             }
             return result;
         }
-        static void setUserCache<TUser>(this HttpContext httpContext, TUser User) where TUser : IDefaultUserIdentity, new()
+        public static void SetUserCache<TUser>(this HttpContext httpContext, TUser User) where TUser : IDefaultUserIdentity, new()
         {
             var NameIdentifier = httpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
 
