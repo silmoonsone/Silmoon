@@ -115,6 +115,14 @@ namespace Silmoon.AspNetCore
             string json = JsonSerializer.Serialize(User);
             httpContext.Session.SetString("SessionCache:NameIdentifier+Username=" + NameIdentifier + "+" + User.Username, json);
         }
+        public static void RefreshUser<TUser>(this HttpContext httpContext) where TUser : IDefaultUserIdentity, new()
+        {
+            var NameIdentifier = httpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
+            var Name = httpContext.User.Claims.Where(c => c.Type == nameof(IDefaultUserIdentity.Username)).FirstOrDefault()?.Value;
+            TUser user = default;
+            user = (TUser)OnRequestUserData?.Invoke(Name, NameIdentifier, user);
+            SetUserCache(httpContext, user);
+        }
 
         public delegate TUser UserSessionHanlder<TUser>(string Username, string NameIdentifier, TUser User);
         public delegate TUser UserTokenHanlder<TUser>(string Username, string NameIdentifier, string UserToken);
