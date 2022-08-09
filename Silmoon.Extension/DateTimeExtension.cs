@@ -15,5 +15,47 @@ namespace Silmoon.Extension
         {
             return dateTime.ToString("yyyy-MM-dd HH:mm:ss");
         }
+        public static string GetDescription(this DateTime dateTime)
+        {
+            var timeSpan = DateTime.Now - dateTime;
+            if (dateTime < DateTime.Now)
+            {
+                if (timeSpan.TotalDays > 1)
+                {
+                    return timeSpan.Days + "天前";
+                }
+                else if (timeSpan.TotalHours > 1)
+                {
+                    return timeSpan.Hours + "小时前";
+                }
+                else if (timeSpan.TotalMinutes > 1)
+                {
+                    return timeSpan.Minutes + "分钟前";
+                }
+                else
+                {
+                    return "刚刚";
+                }
+            }
+            else
+            {
+                if (Math.Abs(timeSpan.TotalDays) > 1)
+                {
+                    return Math.Abs(timeSpan.Days) + "天后";
+                }
+                else if (Math.Abs(timeSpan.TotalHours) > 1)
+                {
+                    return Math.Abs(timeSpan.Hours) + "小时后";
+                }
+                else if (Math.Abs(timeSpan.TotalMinutes) > 1)
+                {
+                    return Math.Abs(timeSpan.Minutes) + "分钟后";
+                }
+                else
+                {
+                    return "稍后";
+                }
+            }
+        }
     }
 }
