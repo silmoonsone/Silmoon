@@ -57,5 +57,13 @@ namespace Silmoon.Extension
                 }
             }
         }
+        public static DateTime SixCharToDate(this string yyyyMMdd)
+        {
+            if (yyyyMMdd.Length != 6)
+            {
+                throw new Exception("日期格式不正确");
+            }
+            return DateTime.ParseExact(yyyyMMdd, "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
+        }
     }
 }
