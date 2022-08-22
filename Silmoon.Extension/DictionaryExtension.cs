@@ -10,14 +10,12 @@ namespace Silmoon.Extension
     {
         public static TValue Get<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue)
         {
-            var has = dictionary.ContainsKey(key);
-            if (!has) return defaultValue;
+            if (!dictionary.ContainsKey(key)) return defaultValue;
             else return dictionary[key];
         }
         public static TValue Get<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
         {
-            var has = dictionary.ContainsKey(key);
-            if (!has) return default;
+            if (!dictionary.ContainsKey(key)) return default;
             else return dictionary[key];
         }
     }

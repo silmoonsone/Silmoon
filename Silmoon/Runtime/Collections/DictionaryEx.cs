@@ -8,21 +8,13 @@ namespace Silmoon.Runtime.Collections
     {
         public TValue Get(TKey key, TValue defaultValue)
         {
-            var has = ContainsKey(key);
-            if (!has) return defaultValue;
-            else
-            {
-                return this[key];
-            }
+            if (!ContainsKey(key)) return defaultValue;
+            else return this[key];
         }
         public TValue Get(TKey key)
         {
-            var has = ContainsKey(key);
-            if (!has) return default(TValue);
-            else
-            {
-                return this[key];
-            }
+            if (!ContainsKey(key)) return default(TValue);
+            else return this[key];
         }
     }
 }
