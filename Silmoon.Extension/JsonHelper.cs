@@ -208,6 +208,17 @@ namespace Silmoon.Extension
                 return jo;
             }
         }
+        public async static Task<T> GetObjectByPostAsync<T>(string url, UrlDataCollection values)
+        {
+            using (WebClientEx wc = new WebClientEx(WebClientTimeout))
+            {
+                wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                wc.Encoding = Encoding.UTF8;
+                var data = await wc.UploadStringTaskAsync(url, values.ToQueryString());
+                T jo = JsonConvert.DeserializeObject<T>(data);
+                return jo;
+            }
+        }
 
 
 
