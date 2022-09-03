@@ -113,7 +113,6 @@ namespace Silmoon.AspNetCore
             var NameIdentifier = httpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
 
             string json = JsonSerializer.Serialize(User);
-            Console.WriteLine(json);
             httpContext.Session.SetString("SessionCache:NameIdentifier+Username=" + NameIdentifier + "+" + User.Username, json);
         }
         public static void RefreshUser<TUser>(this HttpContext httpContext) where TUser : IDefaultUserIdentity, new()
