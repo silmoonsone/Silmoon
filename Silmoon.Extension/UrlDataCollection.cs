@@ -17,7 +17,28 @@ namespace Silmoon.Extension
         public int Count => list.Count;
         public void Add(string key, object value)
         {
-            list.Add((key, value));
+            if (value is string)
+            {
+                list.Add((key, value));
+            }
+            else if (value is IEnumerable)
+            {
+                throw new ArgumentException("Enumerable value add by AddArray method");
+            }
+            else
+            {
+                list.Add((key, value));
+            }
+        }
+        public void AddArray(string key, IEnumerable value)
+        {
+            if (value is IEnumerable items)
+            {
+                foreach (var item in items)
+                {
+                    list.Add((key, item.ToString()));
+                }
+            }
         }
         public void Remove(string key)
         {
