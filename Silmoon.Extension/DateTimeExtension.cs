@@ -7,14 +7,8 @@ namespace Silmoon.Extension
 {
     public static class DateTimeExtension
     {
-        public static long ToUnixStyleTimeStamp(this DateTime datetime)
-        {
-            return SpecialConverter.GET_UNIX_TIMESTAMP(datetime);
-        }
-        public static string ToChineseFormat(this DateTime dateTime)
-        {
-            return dateTime.ToString("yyyy-MM-dd HH:mm:ss");
-        }
+        public static long ToUnixStyleTimeStamp(this DateTime datetime) => SpecialConverter.GET_UNIX_TIMESTAMP(datetime);
+        public static string ToChineseFormat(this DateTime dateTime) => dateTime.ToString("yyyy-MM-dd HH:mm:ss");
         public static string GetDescription(this DateTime dateTime)
         {
             var timeSpan = DateTime.Now - dateTime;
@@ -59,11 +53,9 @@ namespace Silmoon.Extension
         }
         public static DateTime SixCharToDate(this string yyyyMMdd)
         {
-            if (yyyyMMdd.Length != 6)
-            {
-                throw new Exception("日期格式不正确");
-            }
-            return DateTime.ParseExact(yyyyMMdd, "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
+            return yyyyMMdd.Length != 6
+                ? throw new Exception("日期格式不正确")
+                : DateTime.ParseExact(yyyyMMdd, "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
         }
     }
 }

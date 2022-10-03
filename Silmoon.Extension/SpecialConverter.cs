@@ -55,7 +55,7 @@ namespace Silmoon.Extension
         }
         public static DateTime GET_TIME_BY_UNIX_TEMPSTAMP(long timestamp)
         {
-            return (new DateTime((timestamp * 10000000) + 621355968000000000)).ToLocalTime();
+            return new DateTime((timestamp * 10000000) + 621355968000000000).ToLocalTime();
         }
 
         public string ConvertToChinese(decimal number)
@@ -66,10 +66,6 @@ namespace Silmoon.Extension
             return result;
         }
 
-        public static object NullToDBNull<T>(T obj)
-        {
-            if (obj == null) return DBNull.Value;
-            else return obj;
-        }
+        public static object IfNullToDBNull<T>(T obj) => obj == null ? DBNull.Value : (object)obj;
     }
 }
