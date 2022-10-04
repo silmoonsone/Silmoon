@@ -57,5 +57,28 @@ namespace Silmoon.Extension
                 ? throw new Exception("日期格式不正确")
                 : DateTime.ParseExact(yyyyMMdd, "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
         }
+        public static bool InRange(this DateTime dateTime, DateTime comparisonDateTime, TimeSpan timeSpan, bool before = true, bool after = true)
+        {
+            if (before && after)
+            {
+                var r1 = dateTime - comparisonDateTime;
+                var r2 = comparisonDateTime - dateTime;
+                return (r1 <= timeSpan) && (r2 <= timeSpan);
+            }
+            else if (before)
+            {
+                var r = dateTime - comparisonDateTime;
+                return r <= timeSpan && comparisonDateTime <= dateTime;
+            }
+            else if (after)
+            {
+                var r = comparisonDateTime - dateTime;
+                return r <= timeSpan && comparisonDateTime >= dateTime;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
