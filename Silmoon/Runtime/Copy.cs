@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,12 +43,38 @@ namespace Silmoon.Runtime
 
             return t;
         }
+        public static T[] ArrayNew<T>(IEnumerable obj) where T : new()
+        {
+            List<T> list = new List<T>();
+
+            foreach (var item in obj)
+            {
+                T t = new T();
+                MemberCopy(item, t);
+                list.Add(t);
+            }
+
+            return list.ToArray();
+        }
         public static dT New<sT, dT>(sT obj) where dT : new()
         {
             dT t = new dT();
             MemberCopy(obj, t);
 
             return t;
+        }
+        public static dT[] ArrayNew<sT, dT>(IEnumerable<sT> obj) where dT : new()
+        {
+            List<dT> list = new List<dT>();
+
+            foreach (var item in obj)
+            {
+                dT t = new dT();
+                MemberCopy(obj, t);
+                list.Add(t);
+            }
+
+            return list.ToArray();
         }
 
     }
