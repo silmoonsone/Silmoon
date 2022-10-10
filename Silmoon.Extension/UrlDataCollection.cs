@@ -36,7 +36,7 @@ namespace Silmoon.Extension
             {
                 foreach (var item in items)
                 {
-                    list.Add((key, item.ToString()));
+                    list.Add((key, item?.ToString()));
                 }
             }
         }
