@@ -37,6 +37,19 @@ namespace Silmoon.Runtime
         {
             return GetPropertyNames(obj.GetType(), exclude);
         }
+        public static string[] GetPropertyNames(this ExpandoObject obj, params string[] exclude)
+        {
+            List<string> propertyNames = new List<string>();
+            if (obj != null)
+            {
+                foreach (var item in obj)
+                {
+                    if (exclude.Contains(item.Key)) continue;
+                    propertyNames.Add(item.Key);
+                }
+            }
+            return propertyNames.ToArray();
+        }
 
         public static Dictionary<string, PropertyInfo> GetProperties(this object obj, params string[] exclude)
         {

@@ -66,9 +66,10 @@ namespace Silmoon.Extension
                 var result = (T)Enum.Parse(type, value, ignoreCase);
                 return result;
             }
-            catch
+            catch (Exception ex)
             {
-                return default;
+                if (throwException) throw ex;
+                else return default;
             }
         }
 
@@ -217,14 +218,160 @@ namespace Silmoon.Extension
             }
             else { return str; }
         }
-        public static string StripHtml(this string input)
+        /// <summary>
+        /// 强制脱去HTML、script标签
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string StripHtml(this string str)
         {
-            return Regex.Replace(input, "<.*?>", string.Empty);
+            return Regex.Replace(str, "<.*?>", string.Empty);
         }
         public static bool CheckStringLengthGte(this string str, int length)
         {
             if (str.IsNullOrEmpty()) return false;
             else return str.Length >= length;
+        }
+
+
+        /// <summary>
+        /// 字符串是否是电子邮件地址
+        /// </summary>
+        /// <param name="Email"></param>
+        /// <returns></returns>
+        public static bool IsEmail(this string Email)
+        {
+            if (string.IsNullOrEmpty(Email)) return false;
+            Regex regex = new Regex(@"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
+            return regex.IsMatch(Email);
+        }
+        /// <summary>
+        /// 字符串是否是手机号码
+        /// </summary>
+        /// <param name="MobilePhone"></param>
+        /// <returns></returns>
+        public static bool IsMobilePhone(this string MobilePhone)
+        {
+            if (string.IsNullOrEmpty(MobilePhone)) return false;
+            Regex regex = new Regex(@"^((1[3,5,6,8][0-9])|(14[5,7])|(17[0,1,3,5,6,7,8])|(19[1,8,9]))\d{8}$");
+            return regex.IsMatch(MobilePhone);
+        }
+        /// <summary>
+        /// 字符串是否是固定电话号码
+        /// </summary>
+        /// <param name="Phone"></param>
+        /// <returns></returns>
+        public static bool IsPhone(this string Phone)
+        {
+            if (string.IsNullOrEmpty(Phone)) return false;
+            Regex regex = new Regex(@"^(\d{3,4}-)?\d{6,8}$");
+            return regex.IsMatch(Phone);
+        }
+        /// <summary>
+        /// 字符串是否是身份证号码
+        /// </summary>
+        /// <param name="CardId"></param>
+        /// <returns></returns>
+        public static bool IsCardId(this string CardId)
+        {
+            if (CardId is null || CardId.Trim().Length != 18) return false;
+            long n = 0;
+            //数字验证
+            if (long.TryParse(CardId.Remove(17), out n) == false || n < Math.Pow(10, 16) || long.TryParse(CardId.Replace('x', '0').Replace('X', '0'), out n) == false)
+            {
+                return false;
+            }
+
+            //省份验证
+            string address = "11x22x35x44x53x12x23x36x45x54x13x31x37x46x61x14x32x41x50x62x15x33x42x51x63x21x34x43x52x64x65x71x81x82x91";
+            if (address.IndexOf(CardId.Remove(2)) == -1)
+            {
+                return false;
+            }
+
+            //生日验证
+            string birth = CardId.Substring(6, 8).Insert(6, "-").Insert(4, "-");
+            DateTime time = new DateTime();
+            if (DateTime.TryParse(birth, out time) == false)
+            {
+                return false;
+            }
+            //校验码验证
+            string[] arrVarifyCode = ("1,0,x,9,8,7,6,5,4,3,2").Split(',');
+            string[] Wi = ("7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2").Split(',');
+            char[] Ai = CardId.Remove(17).ToCharArray();
+            int sum = 0;
+            for (int i = 0; i < 17; i++)
+            {
+                sum += int.Parse(Wi[i]) * int.Parse(Ai[i].ToString());
+            }
+            int y = -1;
+            Math.DivRem(sum, 11, out y);
+            if (arrVarifyCode[y] != CardId.Substring(17, 1).ToLower())
+            {
+                return false;
+            }
+            return true;
+            //符合GB11643-1999标准
+        }
+        /// <summary>
+        /// 字符串是否是营业执照许可号码
+        /// </summary>
+        /// <param name="BusinessLicense"></param>
+        /// <returns></returns>
+        public static bool IsBusinessLicense(this string BusinessLicense)
+        {
+            if (string.IsNullOrEmpty(BusinessLicense)) return false;
+            Regex regex = new Regex(@"^[0-9A-Z]{8}-[0-9A-Z]$");
+            return regex.IsMatch(BusinessLicense);
+        }
+        /// <summary>
+        /// 检查字符串是否是Url
+        /// </summary>
+        /// <param name="Url"></param>
+        /// <param name="RequireHttps">是否要求强制https</param>
+        /// <returns></returns>
+        public static bool IsUrl(this string Url, bool RequireHttps = false)
+        {
+            if (string.IsNullOrEmpty(Url)) return false;
+            if (RequireHttps)
+            {
+                Regex regex = new Regex(@"^https://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?$");
+                return regex.IsMatch(Url);
+            }
+            else
+            {
+                Regex regex = new Regex(@"^http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?$");
+                return regex.IsMatch(Url);
+            }
+        }
+        /// <summary>
+        /// 检查字符串是否是IPv4地址
+        /// </summary>
+        /// <param name="IP"></param>
+        /// <returns></returns>
+        public static bool IsIPv4Address(this string IP)
+        {
+            if (string.IsNullOrEmpty(IP)) return false;
+            Regex regex = new Regex(@"^(\d+)\.(\d+)\.(\d+)\.(\d+)$");
+            if (regex.IsMatch(IP))
+            {
+                if (Regex.IsMatch(IP, @"^0\.\d+\.0\.\d+$")) return false;
+                string[] arr = IP.Split('.');
+                if (int.Parse(arr[0]) < 256 && int.Parse(arr[1]) < 256 && int.Parse(arr[2]) < 256 && int.Parse(arr[3]) < 256) return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// 检查字符串是否是IPv6地址
+        /// </summary>
+        /// <param name="IP"></param>
+        /// <returns></returns>
+        public static bool IsIPv6Address(this string IP)
+        {
+            if (string.IsNullOrEmpty(IP)) return false;
+            Regex regex = new Regex(@"^([\da-fA-F]{1,4}:){7}[\da-fA-F]{1,4}$");
+            return regex.IsMatch(IP);
         }
     }
 }
