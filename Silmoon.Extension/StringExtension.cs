@@ -12,6 +12,31 @@ namespace Silmoon.Extension
         {
             return string.IsNullOrEmpty(value);
         }
+        public static byte[] HexStringToBytes(this string hexString)
+        {
+            hexString = hexString.Replace(" ", "");
+            if ((hexString.Length % 2) != 0)
+                hexString += " ";
+            byte[] returnBytes = new byte[hexString.Length / 2];
+            for (int i = 0; i < returnBytes.Length; i++)
+                returnBytes[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
+            return returnBytes;
+        }
+        public static bool IsHex(this string value)
+        {
+            bool isHex;
+            value = value.Substring(value.StartsWith("0x") ? 2 : 0);
+            foreach (var c in value)
+            {
+                isHex = ((c >= '0' && c <= '9') ||
+                         (c >= 'a' && c <= 'f') ||
+                         (c >= 'A' && c <= 'F'));
+
+                if (!isHex)
+                    return false;
+            }
+            return true;
+        }
         public static int GetByteLenght(this string value, Encoding encoding)
         {
             return encoding.GetByteCount(value);
