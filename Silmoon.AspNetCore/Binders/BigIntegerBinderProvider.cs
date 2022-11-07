@@ -87,6 +87,7 @@ namespace Silmoon.AspNetCore.Binders
 
             foreach (var item in values)
             {
+                if (string.IsNullOrEmpty(item)) continue;
                 BigInteger.TryParse(item, out BigInteger result);
                 list.Add(result);
             }

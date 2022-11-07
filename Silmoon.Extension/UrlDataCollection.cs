@@ -21,15 +21,19 @@ namespace Silmoon.Extension
             {
                 list.Add((key, value));
             }
-            else if (value is IEnumerable)
+            else if (value is IEnumerable items)
             {
-                throw new ArgumentException("Enumerable value add by AddArray method");
+                foreach (var item in items)
+                {
+                    list.Add((key, item?.ToString()));
+                }
             }
             else
             {
                 list.Add((key, value));
             }
         }
+        [Obsolete]
         public void AddArray(string key, IEnumerable value)
         {
             if (value is IEnumerable items)
