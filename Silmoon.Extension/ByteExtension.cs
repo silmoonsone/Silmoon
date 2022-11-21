@@ -18,10 +18,12 @@ namespace Silmoon.Extension
         {
             return new BinaryReader(GetStream(bytes));
         }
-        public static string ByteToHexString(this byte[] value, bool prefix = false)
+        public static string ByteToHexString(this byte[] value, bool TrimStart0 = true, bool Add0x = false)
         {
-            var strPrex = prefix ? "0x" : "";
-            return strPrex + string.Concat(value.Select(b => b.ToString("x2")).ToArray());
+            var strPrex = Add0x ? "0x" : "";
+            var hex = string.Concat(value.Select(b => b.ToString("x2")).ToArray());
+            if (TrimStart0) hex = hex.TrimStart('0');
+            return strPrex + hex;
         }
     }
 }
