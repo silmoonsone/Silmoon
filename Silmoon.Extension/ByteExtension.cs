@@ -18,7 +18,7 @@ namespace Silmoon.Extension
         {
             return new BinaryReader(GetStream(bytes));
         }
-        public static string ByteToHexString(this byte[] value, bool TrimStart0 = true, bool Add0x = false)
+        public static string ByteToHexString(this byte[] value, bool TrimStart0 = false, bool Add0x = false)
         {
             var strPrex = Add0x ? "0x" : "";
             var hex = string.Concat(value.Select(b => b.ToString("x2")).ToArray());

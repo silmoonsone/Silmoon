@@ -14,6 +14,8 @@ namespace Silmoon.Extension
         }
         public static byte[] HexStringToBytes(this string hexString)
         {
+            if (hexString is null) return null;
+            if (hexString.StartsWith("0x")) hexString = hexString.Substring(2);
             hexString = hexString.Replace(" ", "");
             if ((hexString.Length % 2) != 0)
                 hexString += " ";
@@ -37,7 +39,7 @@ namespace Silmoon.Extension
             }
             return true;
         }
-        public static int GetByteLenght(this string value, Encoding encoding)
+        public static int GetByteLength(this string value, Encoding encoding)
         {
             return encoding.GetByteCount(value);
         }
@@ -169,18 +171,17 @@ namespace Silmoon.Extension
             }
             return s;
         }
-        public static string Fill(this string value, int length, string fillStr, bool onAfter = true)
+        public static string Fill(this string str, int Length, string FillStr, bool Append = true)
         {
-            int fInChrC = length - value.Length;
-            if (fInChrC < 1) return value;
+            int clength = Length - str.Length;
+            if (clength < 1) return str;
 
-            for (int i = 0; i < fInChrC; i++)
+            for (int i = 0; i < clength; i++)
             {
-                if (onAfter)
-                    value += fillStr;
-                else value = fillStr + value;
+                if (Append) str += FillStr;
+                else str = FillStr + str;
             }
-            return value;
+            return str;
         }
         /// <summary>
         /// 保持一个可能过长字符串的长度，如果过长，则截断字符串
@@ -189,7 +190,7 @@ namespace Silmoon.Extension
         /// <param name="maxlen">最大长度</param>
         /// <param name="str">截断时，使用一个特定的字符串进行衔接</param>
         /// <returns></returns>
-        public static string KeepStringLenght(this string value, int maxlen, string str)
+        public static string KeepLessStringLength(this string value, int maxlen, string str)
         {
             if (value.Length > maxlen)
             {
@@ -199,6 +200,23 @@ namespace Silmoon.Extension
                 return result;
             }
             else return value;
+        }
+        public static string KeepStringLength(this string str, int Length, bool SubStart, char PadChar, bool Append)
+        {
+            if (str.Length > Length)
+            {
+                if (SubStart)
+                    str = str.Substring(0, Length);
+                else
+                    str = str.Substring(str.Length - Length);
+            }
+            else if (str.Length < Length)
+            {
+                if (Append)
+                    str = str.PadLeft(Length, PadChar);
+                else str = str.PadRight(Length, PadChar);
+            }
+            return str;
         }
         public enum Strength
         {
