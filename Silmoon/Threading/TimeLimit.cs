@@ -10,37 +10,26 @@ namespace Silmoon.Threading
     /// </summary>
     public class TimeLimit : IId
     {
-        int iD = 0;
-        ulong resetMilliseconds = 1000;
-        int limitTimes = 1;
         int countTimes = 0;
         DateTime startTime = DateTime.Now;
 
         /// <summary>
         /// 表示当前类型的id标记
         /// </summary>
-        public int Id
-        {
-            get { return iD; }
-            set { iD = value; }
-        }
+        public int Id { get; set; } = 0;
         /// <summary>
         /// 限制次数
         /// </summary>
-        public int LimitTimes
-        {
-            get { return limitTimes; }
-            set { limitTimes = value; }
-        }
+        public int LimitTimes { get; set; } = 1;
         /// <summary>
         /// 查询是否可以继续
         /// </summary>
         public bool CanDo()
         {
 
-            if ((DateTime.Now - startTime).TotalMilliseconds < resetMilliseconds)
+            if ((DateTime.Now - startTime).TotalMilliseconds < ResetMilliseconds)
             {
-                if (countTimes >= limitTimes)
+                if (countTimes >= LimitTimes)
                     return false;
                 else
                 {
@@ -51,16 +40,16 @@ namespace Silmoon.Threading
             startTime = DateTime.Now;
             countTimes = 0;
             return true;
-        } 
+        }
         /// <summary>
         /// 查询是否可以继续，查询一次次数加一
         /// </summary>
         public bool CanDo(bool addTimes)
         {
 
-            if ((DateTime.Now - startTime).TotalMilliseconds < resetMilliseconds)
+            if ((DateTime.Now - startTime).TotalMilliseconds < ResetMilliseconds)
             {
-                if (countTimes >= limitTimes)
+                if (countTimes >= LimitTimes)
                     return false;
                 else
                 {
@@ -77,18 +66,11 @@ namespace Silmoon.Threading
         /// 添加动作次数
         /// </summary>
         /// <param name="times">次数</param>
-        public void AddTimes(int times)
-        {
-            countTimes = countTimes + times;
-        }
+        public void AddTimes(int times) => countTimes += times;
         /// <summary>
         /// 控制的时间范围，以毫秒为单位的设置
         /// </summary>
-        public ulong ResetMilliseconds
-        {
-            get { return resetMilliseconds; }
-            set { resetMilliseconds = value; }
-        }
+        public ulong ResetMilliseconds { get; set; } = 1000;
         /// <summary>
         /// 控制的时间范围，以时间间隔为单位的设置
         /// </summary>
@@ -96,18 +78,15 @@ namespace Silmoon.Threading
         {
             set
             {
-                resetMilliseconds = (ulong)value.TotalMilliseconds;
+                ResetMilliseconds = (ulong)value.TotalMilliseconds;
             }
         }
-        
+
         /// <summary>
         /// 以一个id号开始的新实例TimeLimit
         /// </summary>
         /// <param name="id"></param>
-        public TimeLimit(int id)
-        {
-            iD = id;
-        }
+        public TimeLimit(int id) => Id = id;
         /// <summary>
         /// 新实例TimeLimit
         /// </summary>
@@ -117,7 +96,7 @@ namespace Silmoon.Threading
         }
         public TimeLimit(ulong resetMillisecounds, int limitTimes)
         {
-            ResetMilliseconds = resetMilliseconds;
+            ResetMilliseconds = resetMillisecounds;
             LimitTimes = limitTimes;
         }
         public TimeLimit(TimeSpan resetTimespan, int limitTimes)
@@ -125,9 +104,6 @@ namespace Silmoon.Threading
             ResetTimespan = resetTimespan;
             LimitTimes = limitTimes;
         }
-        public override string ToString()
-        {
-            return "TimeLimit(" + iD + ")" + resetMilliseconds + "/" + limitTimes + "(" + countTimes + ")";
-        }
+        public override string ToString() => "TimeLimit(" + Id + ")" + ResetMilliseconds + "/" + LimitTimes + "(" + countTimes + ")";
     }
 }

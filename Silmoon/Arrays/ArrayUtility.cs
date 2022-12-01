@@ -18,28 +18,19 @@ namespace Silmoon.Arrays
         /// <param name="array">可变的数组</param>
         /// <param name="id">IID的ID</param>
         /// <returns></returns>
-        public static IId FindIIDFromArray(ArrayList array, int id)
+        public static IId FindIIDFromArray(List<IId> array, int id)
         {
-            IId o = null;
             lock (array)
             {
-                foreach (object item in array)
+                foreach (IId item in array)
                 {
-                    if (item != null)
+                    if (item != null && item.Id == id)
                     {
-                        IId iID = item as IId;
-                        if (iID != null)
-                        {
-                            if (iID.Id == id)
-                            {
-                                o = iID;
-                                break;
-                            }
-                        }
+                        return item;
                     }
                 }
             }
-            return o;
+            return null;
         }
         /// <summary>
         /// 将一个数据行的所有键值关系复制到NameValueCollection中。
@@ -56,35 +47,6 @@ namespace Silmoon.Arrays
                 result[columns[i].ColumnName] = row[columns[i].ColumnName].ToString();
             }
 
-            return result;
-        }
-        /// <summary>
-        /// 分组数据，将一段数据按照指定的长度进行分割，最后不足的长度将不会冲零。
-        /// </summary>
-        /// <param name="data">需要分组的数据</param>
-        /// <param name="slen">每段数据的长度</param>
-        /// <returns></returns>
-        public static byte[][] GroupData(byte[] data, int slen)
-        {
-            int scount = data.Length / slen;
-            int remainder = 0;
-            if ((remainder = (data.Length % slen)) != 0) scount++;
-
-            byte[][] result = new byte[scount][];
-
-            for (int i = 0; i < scount; i++)
-            {
-                if (i != (scount - 1))
-                {
-                    result[i] = new byte[slen];
-                    Array.Copy(data, i * slen, result[i], 0, slen);
-                }
-                else
-                {
-                    result[i] = new byte[remainder];
-                    Array.Copy(data, i * slen, result[i], 0, remainder);
-                }
-            }
             return result;
         }
 

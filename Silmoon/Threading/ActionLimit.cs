@@ -15,43 +15,23 @@ namespace Silmoon.Threading
         int _id;
         ArrayList timesLimit = new ArrayList();
         ArrayList timeSectionLimit = new ArrayList();
-        bool blackTimeSection = true;
-        bool defaultTimesLimitPass = false;
-        bool defaultTimeSectionPass = false;
-        bool ignoreDate = true;
 
         /// <summary>
         /// 当所有的时间段限制不统一的时候使用的默认值
         /// </summary>
-        public bool DefaultTimeSectionPass
-        {
-            get { return defaultTimeSectionPass; }
-            set { defaultTimeSectionPass = value; }
-        }
+        public bool DefaultTimeSectionPass { get; set; } = false;
         /// <summary>
         /// 当所有的次数限制不统一的时候使用的默认值
         /// </summary>
-        public bool DefaultTimesLimitPass
-        {
-            get { return defaultTimesLimitPass; }
-            set { defaultTimesLimitPass = value; }
-        }
+        public bool DefaultTimesLimitPass { get; set; } = false;
         /// <summary>
         /// 在整个时间计算中，忽略日期
         /// </summary>
-        public bool IgnoreDate
-        {
-            get { return ignoreDate; }
-            set { ignoreDate = value; }
-        }
+        public bool IgnoreDate { get; set; } = true;
         /// <summary>
         /// 设置或获取是否在指定的时间内不允许策略，如果不是就是在指定的时间外不允许
         /// </summary>
-        public bool BlackTimeSection
-        {
-            get { return blackTimeSection; }
-            set { blackTimeSection = value; }
-        }
+        public bool BlackTimeSection { get; set; } = true;
 
         /// <summary>
         /// 获取所有对于时间次数设置的规则
@@ -88,26 +68,14 @@ namespace Silmoon.Threading
         /// 添加一个时间限制规则
         /// </summary>
         /// <param name="timelimit"></param>
-        public void AddTimeLimit(TimeLimit timelimit)
-        {
-            timesLimit.Add(timelimit);
-        }
+        public void AddTimeLimit(TimeLimit timelimit) => timesLimit.Add(timelimit);
         /// <summary>
         /// 添加一个时间段限制规则
         /// </summary>
         /// <param name="timesection"></param>
-        public void AddTimeSection(TimeSection timesection)
-        {
-            timeSectionLimit.Add(timesection);
-        }
+        public void AddTimeSection(TimeSection timesection) => timeSectionLimit.Add(timesection);
 
-        public bool Pass
-        {
-            get
-            {
-                return timeSectionPass() && timesLimitPass();
-            }
-        }
+        public bool Pass => timeSectionPass() && timesLimitPass();
 
         bool timesLimitPass()
         {
@@ -133,13 +101,13 @@ namespace Silmoon.Threading
         {
             int inTimeCount = 0;
             DateTime now = DateTime.Now;
-            if (ignoreDate) now = new DateTime(0001, 1, 1, now.Hour, now.Minute, now.Second, now.Millisecond);
+            if (IgnoreDate) now = new DateTime(0001, 1, 1, now.Hour, now.Minute, now.Second, now.Millisecond);
 
             foreach (TimeSection item in TimeSections)
             {
                 DateTime startTime = item.Index;
                 DateTime endTime = item.EndTime;
-                if (ignoreDate)
+                if (IgnoreDate)
                 {
                     startTime = new DateTime(0001, 1, 1, startTime.Hour, startTime.Minute, startTime.Second, startTime.Millisecond);
                     endTime = new DateTime(0001, 1, 1, endTime.Hour, endTime.Minute, endTime.Second, endTime.Millisecond);
@@ -150,9 +118,9 @@ namespace Silmoon.Threading
             }
 
             if (inTimeCount == 0)
-                return blackTimeSection;
+                return BlackTimeSection;
             else if (inTimeCount == TimeLimits.Length)
-                return !blackTimeSection;
+                return !BlackTimeSection;
             else
                 return DefaultTimeSectionPass;
 
