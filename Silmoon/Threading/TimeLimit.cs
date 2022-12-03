@@ -8,15 +8,12 @@ namespace Silmoon.Threading
     /// <summary>
     /// 控制一个动作或者行为在一定的时间内可以执行几次。
     /// </summary>
-    public class TimeLimit : IId
+    public class TimeLimit
     {
         int countTimes = 0;
         DateTime startTime = DateTime.Now;
 
-        /// <summary>
-        /// 表示当前类型的id标记
-        /// </summary>
-        public int Id { get; set; } = 0;
+        public string Name { get; set; }
         /// <summary>
         /// 限制次数
         /// </summary>
@@ -24,37 +21,17 @@ namespace Silmoon.Threading
         /// <summary>
         /// 查询是否可以继续
         /// </summary>
-        public bool CanDo()
+        /// <param name="addTimes">查询一次，行为增加一次</param>
+        /// <returns></returns>
+        public bool CanDo(bool addTimes = false)
         {
-
             if ((DateTime.Now - startTime).TotalMilliseconds < ResetMilliseconds)
             {
                 if (countTimes >= LimitTimes)
                     return false;
                 else
                 {
-                    countTimes++;
-                    return true;
-                }
-            }
-            startTime = DateTime.Now;
-            countTimes = 0;
-            return true;
-        }
-        /// <summary>
-        /// 查询是否可以继续，查询一次次数加一
-        /// </summary>
-        public bool CanDo(bool addTimes)
-        {
-
-            if ((DateTime.Now - startTime).TotalMilliseconds < ResetMilliseconds)
-            {
-                if (countTimes >= LimitTimes)
-                    return false;
-                else
-                {
-                    if (addTimes)
-                        countTimes++;
+                    if (addTimes) AddTimes(1);
                     return true;
                 }
             }
@@ -86,7 +63,7 @@ namespace Silmoon.Threading
         /// 以一个id号开始的新实例TimeLimit
         /// </summary>
         /// <param name="id"></param>
-        public TimeLimit(int id) => Id = id;
+        public TimeLimit(string name) => Name = name;
         /// <summary>
         /// 新实例TimeLimit
         /// </summary>
@@ -94,16 +71,22 @@ namespace Silmoon.Threading
         {
 
         }
-        public TimeLimit(ulong resetMillisecounds, int limitTimes)
+        public TimeLimit(ulong resetMillisecounds, int limitTimes, string name = null)
         {
             ResetMilliseconds = resetMillisecounds;
             LimitTimes = limitTimes;
+            Name = name;
         }
-        public TimeLimit(TimeSpan resetTimespan, int limitTimes)
+        public TimeLimit(TimeSpan resetTimespan, int limitTimes, string name = null)
         {
             ResetTimespan = resetTimespan;
             LimitTimes = limitTimes;
+            Name = name;
         }
-        public override string ToString() => "TimeLimit(" + Id + ")" + ResetMilliseconds + "/" + LimitTimes + "(" + countTimes + ")";
+        public override string ToString() => "TimeLimit(" + Name + "), " + LimitTimes + "/" + ResetMilliseconds + "ms (" + countTimes + ")";
+        public bool OutOfTime()
+        {
+            return startTime.AddMilliseconds(ResetMilliseconds) < DateTime.Now;
+        }
     }
 }

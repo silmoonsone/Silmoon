@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Silmoon.Threading
 {
@@ -33,11 +34,11 @@ namespace Silmoon.Threading
         {
             SecoundChange?.Invoke();
 
-            if (dateTime.ToString("yyyy MM dd HH mm") != DateTime.Now.ToString("yyyy MM dd HH mm")) MinuteChange?.Invoke();
-            if (dateTime.ToString("yyyy MM dd HH") != DateTime.Now.ToString("yyyy MM dd HH")) HourChange?.Invoke();
-            if (dateTime.ToString("yyyy MM dd") != DateTime.Now.ToString("yyyy MM dd")) DayChange?.Invoke();
-            if (dateTime.ToString("yyyy MM") != DateTime.Now.ToString("yyyy MM")) MonthChange?.Invoke();
-            if (dateTime.ToString("yyyy") != DateTime.Now.ToString("yyyy")) YearChange?.Invoke();
+            if (dateTime.ToString("yyyy MM dd HH mm") != DateTime.Now.ToString("yyyy MM dd HH mm")) Task.Run(() => MinuteChange?.Invoke());
+            if (dateTime.ToString("yyyy MM dd HH") != DateTime.Now.ToString("yyyy MM dd HH")) Task.Run(() => HourChange?.Invoke());
+            if (dateTime.ToString("yyyy MM dd") != DateTime.Now.ToString("yyyy MM dd")) Task.Run(() => DayChange?.Invoke());
+            if (dateTime.ToString("yyyy MM") != DateTime.Now.ToString("yyyy MM")) Task.Run(() => MonthChange?.Invoke());
+            if (dateTime.ToString("yyyy") != DateTime.Now.ToString("yyyy")) Task.Run(() => YearChange?.Invoke());
 
 
             dateTime = DateTime.Now;

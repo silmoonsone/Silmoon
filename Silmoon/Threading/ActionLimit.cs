@@ -10,11 +10,15 @@ namespace Silmoon.Threading
     /// <summary>
     /// 对于多个时间段，一定时间内次数限制的控制类
     /// </summary>
-    public class ActionLimit : IId
+    public class ActionLimit
     {
-        int _id;
-        ArrayList timesLimit = new ArrayList();
-        ArrayList timeSectionLimit = new ArrayList();
+        private List<TimeLimit> timesLimit { get; set; } = new List<TimeLimit>();
+        private List<TimeSection> timeSectionLimit { get; set; } = new List<TimeSection>();
+        public string Name { get; set; }
+        public ActionLimit(string name = null)
+        {
+            Name = name;
+        }
 
         /// <summary>
         /// 当所有的时间段限制不统一的时候使用的默认值
@@ -43,7 +47,7 @@ namespace Silmoon.Threading
                 TimeLimit[] ret = new TimeLimit[timesLimit.Count];
                 for (int i = 0; i < timesLimit.Count; i++)
                 {
-                    ret[i] = (TimeLimit)timesLimit[i];
+                    ret[i] = timesLimit[i];
                 }
                 return ret;
             }
@@ -58,7 +62,7 @@ namespace Silmoon.Threading
                 TimeSection[] ret = new TimeSection[timeSectionLimit.Count];
                 for (int i = 0; i < timeSectionLimit.Count; i++)
                 {
-                    ret[i] = (TimeSection)timeSectionLimit[i];
+                    ret[i] = timeSectionLimit[i];
                 }
                 return ret;
             }
@@ -125,21 +129,5 @@ namespace Silmoon.Threading
                 return DefaultTimeSectionPass;
 
         }
-
-        #region IID 成员
-
-        public int Id
-        {
-            get
-            {
-                return _id;
-            }
-            set
-            {
-                _id = value;
-            }
-        }
-
-        #endregion
     }
 }
