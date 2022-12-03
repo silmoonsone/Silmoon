@@ -57,6 +57,7 @@ namespace Silmoon.Models
         }
         public ApiResult<T> Init(string Raw, ResultState State, T Data, string Message, int Code = 0, Exception Exception = null)
         {
+            this.Raw = Raw;
             this.Code = Code;
             this.State = State;
             this.Data = Data;

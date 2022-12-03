@@ -5,9 +5,12 @@ using MongoDB.Bson.Serialization;
 using Newtonsoft.Json.Linq;
 using Silmoon.AspNetCore.Binders;
 using Silmoon.AspNetCore.Extensions;
+using Silmoon.AspNetCore.Filters;
+using Silmoon.AspNetCore.Services;
 using Silmoon.AspNetCore.Test;
 using Silmoon.AspNetCore.Test.Hubs;
 using Silmoon.AspNetCore.Test.Models;
+using Silmoon.AspNetCore.Test.Services;
 using Silmoon.Business.AspNetCore;
 using Silmoon.Business.AspNetCore.Binders;
 using Silmoon.Business.Data.MongoDB.Converts;
@@ -46,6 +49,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     o.Cookie.Name = ProjectName + "_" + "Cookie";
 });
 builder.Services.AddSingleton<Core>();
+builder.Services.AddSingleton<AppIdKeyService, AppIdKeyServiceEx>();
 
 //builder.Services.AddSwaggerGen().AddSwaggerGenNewtonsoftSupport();
 //builder.Services.AddSignalR().AddNewtonsoftJsonProtocol();
