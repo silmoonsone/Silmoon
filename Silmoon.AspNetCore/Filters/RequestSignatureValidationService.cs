@@ -42,10 +42,9 @@ namespace Silmoon.AspNetCore.Filters
                 return;
             }
 
-            if (((string)filterContext.HttpContext.Request.Headers["ApiEncrypt"]).ToBool())
+            if (((string)filterContext.HttpContext.Request.Headers["ApiEncrypt"]).ToBool() || ((string)filterContext.HttpContext.Request.Headers["EncryptionApi"]).ToBool() || ((string)filterContext.HttpContext.Request.Headers["ApiEncryption"]).ToBool())
             {
                 await base.OnActionExecutionAsync(filterContext, next);
-                return;
             }
             else
             {
@@ -53,17 +52,17 @@ namespace Silmoon.AspNetCore.Filters
                 string AppId;
                 NameValueCollection nameValueCollection;
 
-                if (filterContext.HttpContext.Request.Method == "GET")
-                {
-                    Signature = filterContext.HttpContext.Request.Query[SignFieldName];
-                    AppId = filterContext.HttpContext.Request.Query[AppIdFieldName];
-                    nameValueCollection = filterContext.HttpContext.Request.GetQueryStringNameValues();
-                }
-                else
+                if (filterContext.HttpContext.Request.Method == "POST")
                 {
                     Signature = filterContext.HttpContext.Request.Form[SignFieldName];
                     AppId = filterContext.HttpContext.Request.Form[AppIdFieldName];
                     nameValueCollection = filterContext.HttpContext.Request.GetFormNameValues();
+                }
+                else
+                {
+                    Signature = filterContext.HttpContext.Request.Query[SignFieldName];
+                    AppId = filterContext.HttpContext.Request.Query[AppIdFieldName];
+                    nameValueCollection = filterContext.HttpContext.Request.GetQueryStringNameValues();
                 }
 
                 if (Require || !Signature.IsNullOrEmpty())
