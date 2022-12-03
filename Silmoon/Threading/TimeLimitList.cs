@@ -15,25 +15,26 @@ namespace Silmoon.Threading
         {
             lock (timeLimitList)
             {
+                List<TimeLimit> pendingOfRemove = new List<TimeLimit>();
+                foreach (var item in timeLimitList)
+                {
+                    if (item.OutOfTime()) pendingOfRemove.Add(item);
+                }
+                foreach (var item in pendingOfRemove)
+                {
+                    timeLimitList.Remove(item);
+                }
+
                 var timeLimit = timeLimitList.Where(x => x.Name == name).FirstOrDefault();
                 if (timeLimit is null)
                 {
                     timeLimit = new TimeLimit(timeSpan, times, name);
-                    timeLimit.AddTimes(1);
                     timeLimitList.Add(timeLimit);
-                    return true;
+
+                    return timeLimit.CanDo(true);
                 }
                 else
                 {
-                    List<TimeLimit> pendingOfRemove = new List<TimeLimit>();
-                    foreach (var item in timeLimitList)
-                    {
-                        if (item.OutOfTime()) pendingOfRemove.Add(item);
-                    }
-                    foreach (var item in pendingOfRemove)
-                    {
-                        timeLimitList.Remove(item);
-                    }
                     return timeLimit.CanDo(true);
                 }
             }

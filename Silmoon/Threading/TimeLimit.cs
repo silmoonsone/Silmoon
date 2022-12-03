@@ -27,6 +27,7 @@ namespace Silmoon.Threading
         {
             if ((DateTime.Now - startTime).TotalMilliseconds < ResetMilliseconds)
             {
+                //在时间范围内
                 if (countTimes >= LimitTimes)
                     return false;
                 else
@@ -35,9 +36,13 @@ namespace Silmoon.Threading
                     return true;
                 }
             }
-            startTime = DateTime.Now;
-            countTimes = 0;
-            return true;
+            else
+            {
+                startTime = DateTime.Now;
+                countTimes = 0;
+                if (addTimes) AddTimes(1);
+                return true;
+            }
         }
         /// <summary>
         /// 添加动作次数
