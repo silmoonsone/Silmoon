@@ -376,6 +376,7 @@ namespace Silmoon.Extension
         /// <returns></returns>
         public static bool IsUrl(this string Url, bool RequireHttps = false)
         {
+            if (Url.IsNullOrEmpty()) return false;
             // 验证 URL 的正则表达式
             string pattern = RequireHttps ?
                 @"^https:\/\/([\da-z\.-]+)\.([a-z\.]{2,6})(:[0-9]{1,5})?([\/\w \.-]*)*\/?$" :
