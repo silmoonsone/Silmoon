@@ -376,23 +376,21 @@ namespace Silmoon.Extension
         /// <returns></returns>
         public static bool IsUrl(this string Url, bool RequireHttps = false)
         {
-            if (string.IsNullOrEmpty(Url)) return false;
-            if (RequireHttps)
-            {
-                Regex regex = new Regex(@"^https://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?$");
-                return regex.IsMatch(Url);
-            }
-            else
-            {
-                Regex regex = new Regex(@"^http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?$");
-                return regex.IsMatch(Url);
-            }
-        }
-        /// <summary>
-        /// 检查字符串是否是IPv4地址
-        /// </summary>
-        /// <param name="IP"></param>
-        /// <returns></returns>
+            // 验证 URL 的正则表达式
+            string pattern = RequireHttps ?
+                @"^https:\/\/([\da-z\.-]+)\.([a-z\.]{2,6})(:[0-9]{1,5})?([\/\w \.-]*)*\/?$" :
+                @"^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})(:[0-9]{1,5})?([\/\w \.-]*)*\/?$";
+
+            // 创建一个 Regex 对象
+            Regex regex = new Regex(pattern);
+
+            // 检查 URL 是否符合格式
+            return regex.IsMatch(Url);
+        }        /// <summary>
+                 /// 检查字符串是否是IPv4地址
+                 /// </summary>
+                 /// <param name="IP"></param>
+                 /// <returns></returns>
         public static bool IsIPv4Address(this string IP)
         {
             if (string.IsNullOrEmpty(IP)) return false;

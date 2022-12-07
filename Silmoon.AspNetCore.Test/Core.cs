@@ -1,4 +1,4 @@
-﻿using Silmoon.AspNetCore.MvcProjectTemplate.DataComponents;
+﻿using Newtonsoft.Json.Linq;
 using Silmoon.AspNetCore.Test.Models;
 using Silmoon.Business.Data.MongoDB;
 
@@ -6,14 +6,11 @@ namespace Silmoon.AspNetCore.Test
 {
     public class Core : IDisposable
     {
-        MongoConnect MongoConnect { get; set; }
         public MongoExecuter Executer { get; set; }
 
         public Core()
         {
-            MongoConnect = new MongoConnect();
-            Executer = new MongoExecuter(MongoConnect.Client, "dbname");
-
+            Executer = new MongoExecuter(new MongoConnect(Configure.ConfigJson["mongodb"].Value<string>()));
         }
         public User GetUser(string Username)
         {
@@ -23,7 +20,6 @@ namespace Silmoon.AspNetCore.Test
 
         public void Dispose()
         {
-            MongoConnect = null;
             Executer = null;
         }
     }
