@@ -9,6 +9,7 @@ using Silmoon.Models.Types;
 using System.Security.Cryptography.Xml;
 using Microsoft.Extensions.DependencyInjection;
 using Silmoon.AspNetCore.Services.Interfaces;
+using Silmoon.AspNetCore.Services;
 
 namespace Silmoon.AspNetCore.Filters
 {
@@ -35,10 +36,10 @@ namespace Silmoon.AspNetCore.Filters
 
         public async override Task OnActionExecutionAsync(ActionExecutingContext filterContext, ActionExecutionDelegate next)
         {
-            var silmoonDevAppService = filterContext.HttpContext.RequestServices.GetService<ISilmoonDevAppService>();
+            var silmoonDevAppService = filterContext.HttpContext.RequestServices.GetService<SilmoonDevAppService>();
             if (silmoonDevAppService == null)
             {
-                filterContext.Result = new ContentResult() { Content = ApiResult<string>.Create(ResultState.Fail, null, $"AppIdKeyService is not configured.").ToJsonString(), ContentType = "application/json" };
+                filterContext.Result = new ContentResult() { Content = ApiResult<string>.Create(ResultState.Fail, null, $"SilmoonDevAppService is not configured.").ToJsonString(), ContentType = "application/json" };
                 return;
             }
 
