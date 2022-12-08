@@ -6,7 +6,7 @@ namespace Silmoon.AspNetCore.Extensions
 {
     public static class IFormCollectionExtension
     {
-        public static string GetSign(this IFormCollection keyValuePairs, string Key, string Value, string IgnoreKey = "sign")
+        public static string GetSign(this IFormCollection keyValuePairs, string Key, string Value, string IgnoreKey = "signatrue")
         {
             List<string> array = new List<string>();
 

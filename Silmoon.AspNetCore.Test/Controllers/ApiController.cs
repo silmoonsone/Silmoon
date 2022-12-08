@@ -12,8 +12,8 @@ namespace Silmoon.AspNetCore.Test.Controllers
         }
         [HttpGet]
         //[ServiceFilter(typeof(FilterSampleAttribute))]
-        [RequestSignatureValidation(Require = false)]
-        //[ParameterSignture("Key", Configure.SigntrueKey, "Sign", true)]
+        [RequestSignatureValidation(Require = true)]
+        //[ParameterSignture("Key", Configure.SigntrueKey, "Signature", true)]
         public IActionResult KeyTest()
         {
             return Ok("Success");
@@ -22,7 +22,7 @@ namespace Silmoon.AspNetCore.Test.Controllers
 
         [HttpGet]
         //[ServiceFilter(typeof(FilterSampleAttribute))]
-        //[ParameterSignture("Key", Configure.SigntrueKey, "Sign", true)]
+        //[ParameterSignture("Key", Configure.SigntrueKey, "Signature", true)]
         public IActionResult KeyTest2()
         {
             return Ok("Success");

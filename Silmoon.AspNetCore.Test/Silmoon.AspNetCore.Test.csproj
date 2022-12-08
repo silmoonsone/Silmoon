@@ -31,7 +31,7 @@
 
   <ItemGroup>
     <Reference Include="Silmoon.Business.AspNetCore">
-      <HintPath>..\..\Silmoon.Business\Silmoon.Business.AspNetCore\bin\Release\net6.0\Silmoon.Business.AspNetCore.dll</HintPath>
+      <HintPath>..\..\Silmoon.Business\Silmoon.Business.AspNetCore\bin\Release\net7.0\Silmoon.Business.AspNetCore.dll</HintPath>
     </Reference>
     <Reference Include="Silmoon.Business.Data">
       <HintPath>..\..\Silmoon.Business\Silmoon.Business.Data\bin\Release\netstandard2.0\Silmoon.Business.Data.dll</HintPath>

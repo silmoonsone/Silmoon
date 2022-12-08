@@ -6,13 +6,14 @@ using Newtonsoft.Json.Linq;
 using Silmoon.AspNetCore.Binders;
 using Silmoon.AspNetCore.Extensions;
 using Silmoon.AspNetCore.Filters;
-using Silmoon.AspNetCore.Services;
+using Silmoon.AspNetCore.Services.Interfaces;
 using Silmoon.AspNetCore.Test;
 using Silmoon.AspNetCore.Test.Hubs;
 using Silmoon.AspNetCore.Test.Models;
 using Silmoon.AspNetCore.Test.Services;
 using Silmoon.Business.AspNetCore;
 using Silmoon.Business.AspNetCore.Binders;
+using Silmoon.Business.AspNetCore.Extensions;
 using Silmoon.Business.Data.MongoDB.Converts;
 using System.Numerics;
 using System.Reflection;
@@ -49,7 +50,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     o.Cookie.Name = ProjectName + "_" + "Cookie";
 });
 builder.Services.AddSingleton<Core>();
-builder.Services.AddSingleton<AppIdKeyService, AppIdKeyServiceEx>();
+builder.Services.AddSilmoonDevApp<SilmoonDevAppServiceImpl>(o => o.KeyCacheSecoundTimeout = 60);
 
 //builder.Services.AddSwaggerGen().AddSwaggerGenNewtonsoftSupport();
 //builder.Services.AddSignalR().AddNewtonsoftJsonProtocol();
@@ -91,10 +92,7 @@ app.UseUserSession<User>((Username, NameIdentifier, User) =>
     return user;
 });
 
-app.UseApiDecrypt((string appId) =>
-{
-    return (null, null);
-});
+app.UseApiDecrypt();
 app.UseSession();
 app.UseRouting();
 

@@ -6,9 +6,9 @@ using Silmoon.AspNetCore.Extensions;
 using Silmoon.Extension;
 using Silmoon.Models;
 using Silmoon.Models.Types;
-using Silmoon.AspNetCore.Services;
 using System.Security.Cryptography.Xml;
 using Microsoft.Extensions.DependencyInjection;
+using Silmoon.AspNetCore.Services.Interfaces;
 
 namespace Silmoon.AspNetCore.Filters
 {
@@ -35,14 +35,17 @@ namespace Silmoon.AspNetCore.Filters
 
         public async override Task OnActionExecutionAsync(ActionExecutingContext filterContext, ActionExecutionDelegate next)
         {
-            var appIdKeyService = filterContext.HttpContext.RequestServices.GetService<AppIdKeyService>();
-            if (appIdKeyService == null)
+            var silmoonDevAppService = filterContext.HttpContext.RequestServices.GetService<ISilmoonDevAppService>();
+            if (silmoonDevAppService == null)
             {
                 filterContext.Result = new ContentResult() { Content = ApiResult<string>.Create(ResultState.Fail, null, $"AppIdKeyService is not configured.").ToJsonString(), ContentType = "application/json" };
                 return;
             }
 
-            if (((string)filterContext.HttpContext.Request.Headers["ApiEncrypt"]).ToBool() || ((string)filterContext.HttpContext.Request.Headers["EncryptionApi"]).ToBool() || ((string)filterContext.HttpContext.Request.Headers["ApiEncryption"]).ToBool())
+            if (((string)filterContext.HttpContext.Request.Headers["ApiEncrypt"]).ToBool()
+                || ((string)filterContext.HttpContext.Request.Headers["SilmoonDevAppEncrypted"]).ToBool()
+                || ((string)filterContext.HttpContext.Request.Headers["EncryptionApi"]).ToBool()
+                || ((string)filterContext.HttpContext.Request.Headers["ApiEncryption"]).ToBool())
             {
                 await base.OnActionExecutionAsync(filterContext, next);
             }
@@ -67,7 +70,7 @@ namespace Silmoon.AspNetCore.Filters
 
                 if (Require || !Signature.IsNullOrEmpty())
                 {
-                    var keyResult = appIdKeyService.GetKey(AppId);
+                    var keyResult = await silmoonDevAppService.GetCachedKey(AppId);
                     if (keyResult.State)
                     {
                         var signature = nameValueCollection.GetSign(KeyFieldName, keyResult.Data.SignatureKey, SignFieldName);

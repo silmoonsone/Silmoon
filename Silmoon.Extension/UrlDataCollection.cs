@@ -62,7 +62,7 @@ namespace Silmoon.Extension
             return list.GetEnumerator();
         }
 
-        public string GetSign(string KeyName, string Key, string IgnoreKey = "sign")
+        public string GetSign(string KeyName, string Key, string IgnoreKey = "signature")
         {
             List<string> array = new List<string>();
             for (int i = 0; i < list.Count; i++)

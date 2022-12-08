@@ -49,7 +49,7 @@ namespace Silmoon.Extension
             return result;
         }
 
-        public static string GetSign(this NameValueCollection NameValueCollection, string KeyName, string Key, string IgnoreKey = "sign")
+        public static string GetSign(this NameValueCollection NameValueCollection, string KeyName, string Key, string IgnoreKey = "signature")
         {
             List<string> array = new List<string>();
             for (int i = 0; i < NameValueCollection.Count; i++)
