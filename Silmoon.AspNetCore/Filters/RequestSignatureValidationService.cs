@@ -19,6 +19,7 @@ namespace Silmoon.AspNetCore.Filters
         public string AppIdFieldName { get; set; }
         public string SignFieldName { get; set; }
         public bool Require { get; set; }
+        public SilmoonDevAppService SilmoonDevAppService { get; set; }
         /// <summary>
         /// 使用指定的Key验证请求的签名，如果是GET请求，将验证所有GET参数，如果是POST请求，将验证全部POST参数，
         /// </summary>
@@ -36,13 +37,6 @@ namespace Silmoon.AspNetCore.Filters
 
         public async override Task OnActionExecutionAsync(ActionExecutingContext filterContext, ActionExecutionDelegate next)
         {
-            var silmoonDevAppService = filterContext.HttpContext.RequestServices.GetService<SilmoonDevAppService>();
-            if (silmoonDevAppService == null)
-            {
-                filterContext.Result = new ContentResult() { Content = ApiResult<string>.Create(ResultState.Fail, null, $"SilmoonDevAppService is not configured.").ToJsonString(), ContentType = "application/json" };
-                return;
-            }
-
             if (((string)filterContext.HttpContext.Request.Headers["ApiEncrypt"]).ToBool()
                 || ((string)filterContext.HttpContext.Request.Headers["SilmoonDevAppEncrypted"]).ToBool()
                 || ((string)filterContext.HttpContext.Request.Headers["EncryptionApi"]).ToBool()
@@ -52,6 +46,16 @@ namespace Silmoon.AspNetCore.Filters
             }
             else
             {
+                if (SilmoonDevAppService == null)
+                {
+                    SilmoonDevAppService = filterContext.HttpContext.RequestServices.GetService<SilmoonDevAppService>();
+                    if (SilmoonDevAppService == null)
+                    {
+                        filterContext.Result = new ContentResult() { Content = ApiResult<string>.Create(ResultState.Fail, null, $"SilmoonDevAppService is not configured.").ToJsonString(), ContentType = "application/json" };
+                        return;
+                    }
+                }
+
                 string Signature;
                 string AppId;
                 NameValueCollection nameValueCollection;
@@ -71,7 +75,7 @@ namespace Silmoon.AspNetCore.Filters
 
                 if (Require || !Signature.IsNullOrEmpty())
                 {
-                    var keyResult = await silmoonDevAppService.GetCachedKey(AppId);
+                    var keyResult = await SilmoonDevAppService.GetCachedKey(AppId);
                     if (keyResult.State)
                     {
                         var signature = nameValueCollection.GetSign(KeyFieldName, keyResult.Data.SignatureKey, SignFieldName);
