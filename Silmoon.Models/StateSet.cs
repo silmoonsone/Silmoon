@@ -114,5 +114,9 @@ namespace Silmoon.Models
             return new StateSet<TState, TData>(state, data, message);
 
         }
+        public override string ToString()
+        {
+            return "State: {" + State + "}, Data:{" + Data + "},Message: {" + Message + "}";
+        }
     }
 }
