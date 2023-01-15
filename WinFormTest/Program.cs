@@ -8,8 +8,7 @@ namespace WinFormTest
         [STAThread]
         static void Main()
         {
-            test();
-
+            //test();
             bool input = true;
             while (input)
             {
