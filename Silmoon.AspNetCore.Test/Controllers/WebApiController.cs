@@ -22,15 +22,15 @@ namespace Silmoon.AspNetCore.Test.Controllers
             return View();
         }
 
-        public IActionResult CreateSession(string Username, string Password, string SigninType, string AppId, string Url, string CallbackUrl)
+        public async Task<IActionResult> CreateSession(string Username, string Password, string SigninType, string AppId, string Url, string CallbackUrl)
         {
             if (Username.IsNullOrEmpty() || Password.IsNullOrEmpty()) return this.JsonStateFlag(false, "用户名或密码为空");
             var user = Core.GetUser(Username);
             if (user is null) return this.JsonStateFlag(false, "用户名不存在或者密码错误");
-            user.Password = EncryptHelper.RsaDecrypt(user.Password);
+            //user.Password = EncryptHelper.RsaDecrypt(user.Password);
             if (Username == user.Username && Password == user.Password)
             {
-                HttpContext.Signin(user);
+                await HttpContext.Signin(user);
                 if (Url.IsNullOrEmpty()) Url = "../Account/Summary";
                 return this.JsonStateFlag(true, Data: Url);
             }
@@ -39,9 +39,9 @@ namespace Silmoon.AspNetCore.Test.Controllers
                 return this.JsonStateFlag(false, "用户名不存在或者密码错误");
             }
         }
-        public IActionResult ClearSession()
+        public async Task<IActionResult> ClearSession()
         {
-            HttpContext.Signout();
+            await HttpContext.Signout();
             return this.JsonStateFlag(true);
         }
 
