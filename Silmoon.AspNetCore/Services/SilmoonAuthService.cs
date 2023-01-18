@@ -106,10 +106,7 @@ namespace Silmoon.AspNetCore.Services
 
         void SetUserCache<TUser>(TUser User, string NameIdentifier) where TUser : class, IDefaultUserIdentity
         {
-            //var NameIdentifier = HttpContextAccessor.HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
-
-            string userJson = User.ToJsonString();
-            HttpContextAccessor.HttpContext.Session.SetString("SessionCache:NameIdentifier+Username=" + NameIdentifier + "+" + User.Username, userJson);
+            HttpContextAccessor.HttpContext.Session.SetString("SessionCache:NameIdentifier+Username=" + NameIdentifier + "+" + User.Username, User.ToJsonString());
         }
 
         public abstract IDefaultUserIdentity GetUserData(string Username, string NameIdentifier);
