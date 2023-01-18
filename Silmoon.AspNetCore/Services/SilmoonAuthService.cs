@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace Silmoon.AspNetCore.Services
 {
-    public abstract class SilmoonUserService : ISilmoonUserService
+    public abstract class SilmoonAuthService : ISilmoonAuthService
     {
         public IHttpContextAccessor HttpContextAccessor { get; set; }
-        public SilmoonUserService(IHttpContextAccessor httpContextAccessor)
+        public SilmoonAuthService(IHttpContextAccessor httpContextAccessor)
         {
             HttpContextAccessor = httpContextAccessor;
         }

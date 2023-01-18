@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Silmoon.AspNetCore.Services.Interfaces
 {
-    public interface ISilmoonUserService
+    public interface ISilmoonAuthService
     {
         Task<bool> IsSignin();
         Task SignIn<TUser>(TUser User, string NameIdentifier = null) where TUser : IDefaultUserIdentity;

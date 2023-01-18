@@ -4,7 +4,7 @@ using Silmoon.Models.Identities;
 
 namespace Silmoon.AspNetCore.Test.Services
 {
-    public class SilmoonUserServiceImpl : SilmoonUserService
+    public class SilmoonUserServiceImpl : SilmoonAuthService
     {
         public SilmoonUserServiceImpl(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {

@@ -63,7 +63,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelS
 var app = builder.Build();
 
 Core core = app.Services.GetRequiredService<Core>();
-ISilmoonUserService userService = app.Services.GetRequiredService<ISilmoonUserService>();
+ISilmoonAuthService userService = app.Services.GetRequiredService<ISilmoonAuthService>();
 ILogger logger = app.Services.GetRequiredService<ILogger<Program>>();
 
 // Configure the HTTP request pipeline.

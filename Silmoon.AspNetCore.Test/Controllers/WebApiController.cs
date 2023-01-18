@@ -16,8 +16,8 @@ namespace Silmoon.AspNetCore.Test.Controllers
     public class WebApiController : Controller
     {
         Core Core { get; set; }
-        ISilmoonUserService SilmoonUserService { get; set; }
-        public WebApiController(Core core, ISilmoonUserService silmoonUserService)
+        ISilmoonAuthService SilmoonUserService { get; set; }
+        public WebApiController(Core core, ISilmoonAuthService silmoonUserService)
         {
             Core = core;
             SilmoonUserService = silmoonUserService;

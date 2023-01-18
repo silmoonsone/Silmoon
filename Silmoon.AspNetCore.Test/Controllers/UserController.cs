@@ -6,8 +6,8 @@ namespace Silmoon.AspNetCore.Test.Controllers
 {
     public class UserController : Controller
     {
-        ISilmoonUserService SilmoonUserService { get; set; }
-        public UserController(ISilmoonUserService silmoonUserService)
+        ISilmoonAuthService SilmoonUserService { get; set; }
+        public UserController(ISilmoonAuthService silmoonUserService)
         {
             SilmoonUserService = silmoonUserService;
         }
