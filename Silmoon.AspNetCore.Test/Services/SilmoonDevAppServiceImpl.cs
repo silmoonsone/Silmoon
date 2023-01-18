@@ -1,14 +1,13 @@
 ﻿using Microsoft.Extensions.Options;
 using Silmoon.AspNetCore.Filters;
 using Silmoon.AspNetCore.Services;
-using Silmoon.AspNetCore.Services.Interfaces;
 using Silmoon.Models;
 
 namespace Silmoon.AspNetCore.Test.Services
 {
     public class SilmoonDevAppServiceImpl : SilmoonDevAppService
     {
-        public SilmoonDevAppServiceImpl(IOptions<SilmoonDevAppOptions> options) : base(options)
+        public SilmoonDevAppServiceImpl(IOptions<SilmoonDevAppServiceOptions> options) : base(options)
         {
 
         }

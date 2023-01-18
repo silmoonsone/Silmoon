@@ -1,14 +1,17 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Silmoon.Models.Identities;
-using static Silmoon.AspNetCore.UserSessionManager;
+using System;
+using Silmoon.AspNetCore;
 
 namespace Silmoon.AspNetCore.Extensions
 {
+    [Obsolete]
     public static class IApplicationBuilderExtension
     {
-        public static IApplicationBuilder UseUserSession<TUser>(this IApplicationBuilder app, UserSessionHanlder<IDefaultUserIdentity> OnRecoveryUserData, UserTokenHanlder<IDefaultUserIdentity> OnRequestUserToken) where TUser : IDefaultUserIdentity
+        [Obsolete]
+        public static IApplicationBuilder UseUserSession<TUser>(this IApplicationBuilder app, UserSessionManager.UserSessionHanlder<IDefaultUserIdentity> OnRecoveryUserData, UserSessionManager.UserTokenHanlder<IDefaultUserIdentity> OnRequestUserToken) where TUser : IDefaultUserIdentity
         {
-            OnRequestUserData += OnRecoveryUserData;
+            UserSessionManager.OnRequestUserData += OnRecoveryUserData;
             UserSessionManager.OnRequestUserToken += OnRequestUserToken;
             return app;
         }

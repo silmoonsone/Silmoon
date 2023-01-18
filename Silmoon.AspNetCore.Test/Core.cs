@@ -14,7 +14,11 @@ namespace Silmoon.AspNetCore.Test
         }
         public User GetUser(string Username)
         {
-            return default;
+            return new User()
+            {
+                Username = "silmoon",
+                Password = "pwd",
+            };
         }
 
 

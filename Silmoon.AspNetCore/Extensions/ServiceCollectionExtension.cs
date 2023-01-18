@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Silmoon.AspNetCore.Services;
 using Silmoon.AspNetCore.Services.Interfaces;
+using Silmoon.Models.Identities;
 using System;
 
 namespace Silmoon.AspNetCore.Extensions
@@ -14,11 +15,11 @@ namespace Silmoon.AspNetCore.Extensions
                 throw new ArgumentNullException(nameof(services));
             }
 
-            services.Configure<SilmoonDevAppOptions>(o => o.KeyCacheSecoundTimeout = 3600);
-            services.AddSingleton<SilmoonDevAppService, TSilmoonDevAppService>();
+            services.Configure<SilmoonDevAppServiceOptions>(o => o.KeyCacheSecoundTimeout = 3600);
+            services.AddSingleton<ISilmoonDevAppService, TSilmoonDevAppService>();
         }
 
-        public static void AddSilmoonDevApp<TSilmoonDevAppService>(this IServiceCollection services, Action<SilmoonDevAppOptions> configure) where TSilmoonDevAppService : SilmoonDevAppService
+        public static void AddSilmoonDevApp<TSilmoonDevAppService>(this IServiceCollection services, Action<SilmoonDevAppServiceOptions> configure) where TSilmoonDevAppService : SilmoonDevAppService
         {
             if (services == null)
             {
@@ -30,7 +31,18 @@ namespace Silmoon.AspNetCore.Extensions
             }
 
             services.Configure(configure);
-            services.AddSingleton<SilmoonDevAppService, TSilmoonDevAppService>();
+            services.AddSingleton<ISilmoonDevAppService, TSilmoonDevAppService>();
+        }
+
+        public static void AddSilmoonUser<TSilmoonUserService, TUser>(this IServiceCollection services) where TSilmoonUserService : class, ISilmoonUserService<TUser> where TUser : IDefaultUserIdentity
+        {
+            services.AddHttpContextAccessor();
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
+
+            services.AddSingleton<ISilmoonUserService<TUser>, TSilmoonUserService>();
         }
     }
 }

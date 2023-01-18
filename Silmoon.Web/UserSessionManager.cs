@@ -54,7 +54,7 @@ namespace Silmoon.Web
                 return User?.Role;
             }
         }
-        [Obsolete]
+        //[Obsolete]
         public LoginState State
         {
             get

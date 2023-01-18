@@ -17,10 +17,9 @@ namespace Silmoon.Windows.Net.NetworkInformation
         static extern Int32 inet_addr(string ipaddr);
 
         /// <summary>
-        /// 获取一个ip地址的mac地址
+        /// 获取一个IP地址的MAC地址
         /// </summary>
-        /// <param name="macip">目标ip地址</param>
-        /// <param name="formatstr">mac地址格式连接字符串</param>
+        /// <param name="ip">本地网的IP地址</param>
         /// <returns></returns>
         public static MacAddress GetMacAddress(IPAddress ip)
         {

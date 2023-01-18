@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Silmoon.AspNetCore.Extensions;
+using Silmoon.AspNetCore.Services.Interfaces;
+using Silmoon.AspNetCore.Test.Models;
+using Silmoon.AspNetCore.Test.Services;
 using Silmoon.Drawing;
 using Silmoon.Extension;
 using Silmoon.Runtime.Cache;
@@ -13,9 +16,11 @@ namespace Silmoon.AspNetCore.Test.Controllers
     public class WebApiController : Controller
     {
         Core Core { get; set; }
-        public WebApiController(Core core)
+        ISilmoonUserService<User> SilmoonUserService { get; set; }
+        public WebApiController(Core core, ISilmoonUserService<User> silmoonUserService)
         {
             Core = core;
+            SilmoonUserService = silmoonUserService;
         }
         public IActionResult Index()
         {
@@ -30,7 +35,7 @@ namespace Silmoon.AspNetCore.Test.Controllers
             //user.Password = EncryptHelper.RsaDecrypt(user.Password);
             if (Username == user.Username && Password == user.Password)
             {
-                await HttpContext.Signin(user);
+                await SilmoonUserService.SignIn(user);
                 if (Url.IsNullOrEmpty()) Url = "../Account/Summary";
                 return this.JsonStateFlag(true, Data: Url);
             }
@@ -41,7 +46,7 @@ namespace Silmoon.AspNetCore.Test.Controllers
         }
         public async Task<IActionResult> ClearSession()
         {
-            await HttpContext.Signout();
+            await SilmoonUserService.SignOut();
             return this.JsonStateFlag(true);
         }
 
@@ -147,6 +152,5 @@ namespace Silmoon.AspNetCore.Test.Controllers
             else
                 return new EmptyResult();
         }
-
     }
 }

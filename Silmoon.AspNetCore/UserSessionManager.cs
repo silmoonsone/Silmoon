@@ -14,22 +14,26 @@ using System.Web;
 
 namespace Silmoon.AspNetCore
 {
+    [Obsolete]
     public static class UserSessionManager
     {
         /// <summary>
         /// 当丢失用户对象实体数据，将调用此事件获取用户实体
         /// </summary>
+        [Obsolete]
         public static event UserSessionHanlder<IDefaultUserIdentity> OnRequestUserData;
         /// <summary>
         /// 当用户使用UserToken或者类似用途的字符串请求登录，将传递UserToken到事件，以便使用UserToken获取用户实体验证
         /// </summary>
+        [Obsolete]
         public static event UserTokenHanlder<IDefaultUserIdentity> OnRequestUserToken;
-
+        [Obsolete]
         public static async Task<bool> IsSignin(this HttpContext httpContext)
         {
             var result = await httpContext.AuthenticateAsync();
             return result.Succeeded;
         }
+        [Obsolete]
         public static async Task Signin<TUser>(this HttpContext httpContext, TUser User, string NameIdentifier = null) where TUser : IDefaultUserIdentity, new()
         {
             if (User is null) throw new ArgumentNullException(nameof(User));
@@ -46,6 +50,7 @@ namespace Silmoon.AspNetCore
 
             await httpContext.SignInAsync(claimsPrincipal);
         }
+        [Obsolete]
         public static async Task<bool> Signout(this HttpContext httpContext)
         {
             if (await IsSignin(httpContext))
@@ -61,6 +66,7 @@ namespace Silmoon.AspNetCore
                 return false;
             }
         }
+        [Obsolete]
         public static async Task<TUser> GetUser<TUser>(this HttpContext httpContext) where TUser : IDefaultUserIdentity, new()
         {
             if (await IsSignin(httpContext))
@@ -97,6 +103,7 @@ namespace Silmoon.AspNetCore
         /// <param name="Name"></param>
         /// <param name="NameIdentifier"></param>
         /// <returns></returns>
+        [Obsolete]
         public static async Task<TUser> GetUser<TUser>(this HttpContext httpContext, string UserToken, bool SessionSignin, string Name = null, string NameIdentifier = null) where TUser : IDefaultUserIdentity, new()
         {
             //if (OnRequestUserToken is null) throw new NullReferenceException("UserSessionManager.OnRequestUserToken 事件未注册");
@@ -108,6 +115,7 @@ namespace Silmoon.AspNetCore
             }
             return result;
         }
+        [Obsolete]
         public static void SetUserCache<TUser>(this HttpContext httpContext, TUser User) where TUser : IDefaultUserIdentity, new()
         {
             var NameIdentifier = httpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
@@ -115,6 +123,7 @@ namespace Silmoon.AspNetCore
             string json = JsonSerializer.Serialize(User);
             httpContext.Session.SetString("SessionCache:NameIdentifier+Username=" + NameIdentifier + "+" + User.Username, json);
         }
+        [Obsolete]
         public static async void RefreshUser<TUser>(this HttpContext httpContext) where TUser : IDefaultUserIdentity, new()
         {
             var NameIdentifier = httpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
@@ -125,7 +134,9 @@ namespace Silmoon.AspNetCore
             else SetUserCache(httpContext, user);
         }
 
+        [Obsolete]
         public delegate TUser UserSessionHanlder<TUser>(string Username, string NameIdentifier, TUser User);
+        [Obsolete]
         public delegate TUser UserTokenHanlder<TUser>(string Username, string NameIdentifier, string UserToken);
     }
 }

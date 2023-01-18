@@ -51,6 +51,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 });
 builder.Services.AddSingleton<Core>();
 builder.Services.AddSilmoonDevApp<SilmoonDevAppServiceImpl>(o => o.KeyCacheSecoundTimeout = 60);
+builder.Services.AddSilmoonUser<SilmoonUserServiceImpl, User>();
 
 //builder.Services.AddSwaggerGen().AddSwaggerGenNewtonsoftSupport();
 //builder.Services.AddSignalR().AddNewtonsoftJsonProtocol();
@@ -76,21 +77,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
-app.UseUserSession<User>((Username, NameIdentifier, User) =>
-{
-    Helper.Output(logger, "User \"" + Username + "\" session data is lost, using private api from passport pull user info.", LogLevel.Information);
-    var user = core.GetUser(Username);
-    if (user is null) return null;
-
-    user.Password = "#hidden#";
-    return user;
-}, (Username, NameIdentifier, UserToken) =>
-{
-    User user = default;
-    //Using UserToken Get user object and return
-    return user;
-});
 
 app.UseApiDecrypt();
 app.UseSession();
