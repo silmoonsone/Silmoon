@@ -48,7 +48,7 @@
                         @if (await SilmoonUserService.IsSignin())
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link text-dark" href="javascript:void(0);" id="userMenuLink" data-bs-toggle="dropdown">@((await SilmoonUserService.GetUser()).Username)</a>
+                                <a class="nav-link text-dark" href="javascript:void(0);" id="userMenuLink" data-bs-toggle="dropdown">@((await SilmoonUserService.GetUser<User>()).Username)</a>
                                 <div class="dropdown-menu dropdown-menu-right shadow">
                                     <a href="~/WebApi/ClearSession" class="dropdown-item" data-ajax="true" data-ajax-begin="signout_OnBegin" data-ajax-complete="signout_OnComplete">退出登录</a>
                                 </div>

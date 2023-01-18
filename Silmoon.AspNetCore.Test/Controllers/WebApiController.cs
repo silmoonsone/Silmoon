@@ -16,8 +16,8 @@ namespace Silmoon.AspNetCore.Test.Controllers
     public class WebApiController : Controller
     {
         Core Core { get; set; }
-        ISilmoonUserService<User> SilmoonUserService { get; set; }
-        public WebApiController(Core core, ISilmoonUserService<User> silmoonUserService)
+        ISilmoonUserService SilmoonUserService { get; set; }
+        public WebApiController(Core core, ISilmoonUserService silmoonUserService)
         {
             Core = core;
             SilmoonUserService = silmoonUserService;
@@ -46,8 +46,8 @@ namespace Silmoon.AspNetCore.Test.Controllers
         }
         public async Task<IActionResult> ClearSession()
         {
-            await SilmoonUserService.SignOut();
-            return this.JsonStateFlag(true);
+            var result = await SilmoonUserService.SignOut();
+            return this.JsonStateFlag(result);
         }
 
 

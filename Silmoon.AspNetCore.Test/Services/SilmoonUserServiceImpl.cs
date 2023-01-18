@@ -1,19 +1,20 @@
 ﻿using Silmoon.AspNetCore.Services;
 using Silmoon.AspNetCore.Test.Models;
+using Silmoon.Models.Identities;
 
 namespace Silmoon.AspNetCore.Test.Services
 {
-    public class SilmoonUserServiceImpl : SilmoonUserService<User>
+    public class SilmoonUserServiceImpl : SilmoonUserService
     {
         public SilmoonUserServiceImpl(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
 
         }
-        public override User GetUserData(string Username, string NameIdentifier, User User)
+        public override IDefaultUserIdentity GetUserData(string Username, string NameIdentifier, IDefaultUserIdentity User)
         {
             return new User() { Username = "silmoon", Password = "pwd" };
         }
-        public override User GetUserDataByUserToken(string Username, string NameIdentifier, string UserToken)
+        public override IDefaultUserIdentity GetUserDataByUserToken(string Username, string NameIdentifier, string UserToken)
         {
             return new User() { Username = "silmoon", Password = "pwd" };
         }

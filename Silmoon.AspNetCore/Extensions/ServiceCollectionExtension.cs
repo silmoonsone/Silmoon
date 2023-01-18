@@ -34,7 +34,7 @@ namespace Silmoon.AspNetCore.Extensions
             services.AddSingleton<ISilmoonDevAppService, TSilmoonDevAppService>();
         }
 
-        public static void AddSilmoonUser<TSilmoonUserService, TUser>(this IServiceCollection services) where TSilmoonUserService : class, ISilmoonUserService<TUser> where TUser : IDefaultUserIdentity
+        public static void AddSilmoonUser<TSilmoonUserService>(this IServiceCollection services) where TSilmoonUserService : class, ISilmoonUserService
         {
             services.AddHttpContextAccessor();
             if (services == null)
@@ -42,7 +42,7 @@ namespace Silmoon.AspNetCore.Extensions
                 throw new ArgumentNullException(nameof(services));
             }
 
-            services.AddSingleton<ISilmoonUserService<TUser>, TSilmoonUserService>();
+            services.AddSingleton<ISilmoonUserService, TSilmoonUserService>();
         }
     }
 }

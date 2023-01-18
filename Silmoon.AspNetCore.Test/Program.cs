@@ -15,6 +15,7 @@ using Silmoon.Business.AspNetCore;
 using Silmoon.Business.AspNetCore.Binders;
 using Silmoon.Business.AspNetCore.Extensions;
 using Silmoon.Business.Data.MongoDB.Converts;
+using Silmoon.Models.Identities;
 using System.Numerics;
 using System.Reflection;
 
@@ -51,7 +52,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 });
 builder.Services.AddSingleton<Core>();
 builder.Services.AddSilmoonDevApp<SilmoonDevAppServiceImpl>(o => o.KeyCacheSecoundTimeout = 60);
-builder.Services.AddSilmoonUser<SilmoonUserServiceImpl, User>();
+builder.Services.AddSilmoonUser<SilmoonUserServiceImpl>();
 
 //builder.Services.AddSwaggerGen().AddSwaggerGenNewtonsoftSupport();
 //builder.Services.AddSignalR().AddNewtonsoftJsonProtocol();
@@ -62,6 +63,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelS
 var app = builder.Build();
 
 Core core = app.Services.GetRequiredService<Core>();
+ISilmoonUserService userService = app.Services.GetRequiredService<ISilmoonUserService>();
 ILogger logger = app.Services.GetRequiredService<ILogger<Program>>();
 
 // Configure the HTTP request pipeline.

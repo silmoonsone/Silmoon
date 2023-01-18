@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 
 namespace Silmoon.AspNetCore.Services.Interfaces
 {
-    public interface ISilmoonUserService<IUser> where IUser : IDefaultUserIdentity
+    public interface ISilmoonUserService
     {
         Task<bool> IsSignin();
-        Task SignIn(IUser User, string NameIdentifier = null);
+        Task SignIn<TUser>(TUser User, string NameIdentifier = null) where TUser : IDefaultUserIdentity;
         Task<bool> SignOut();
-        Task<IUser> GetUser();
-        Task<IUser> GetUser(string UserToken, bool SessionSignin, string Name = null, string NameIdentifier = null);
-        Task ReloadUser();
+        Task<TUser> GetUser<TUser>() where TUser : IDefaultUserIdentity;
+        Task<TUser> GetUser<TUser>(string UserToken, bool SessionSignin, string Name = null, string NameIdentifier = null) where TUser : IDefaultUserIdentity;
+        Task ReloadUser<TUser>() where TUser : IDefaultUserIdentity;
     }
 }
