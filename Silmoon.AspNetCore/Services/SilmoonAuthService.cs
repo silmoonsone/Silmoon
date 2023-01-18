@@ -18,7 +18,7 @@ namespace Silmoon.AspNetCore.Services
         {
             HttpContextAccessor = httpContextAccessor;
         }
-        public async Task<bool> IsSignin()
+        public async Task<bool> IsSignIn()
         {
             var result = await HttpContextAccessor.HttpContext.AuthenticateAsync();
             return result.Succeeded;
@@ -42,7 +42,7 @@ namespace Silmoon.AspNetCore.Services
         }
         public async Task<bool> SignOut()
         {
-            if (await IsSignin())
+            if (await IsSignIn())
             {
                 var NameIdentifier = HttpContextAccessor.HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
                 var Name = HttpContextAccessor.HttpContext.User.Claims.Where(c => c.Type == nameof(IDefaultUserIdentity.Username)).FirstOrDefault()?.Value;
@@ -57,7 +57,7 @@ namespace Silmoon.AspNetCore.Services
         }
         public async Task<TUser> GetUser<TUser>() where TUser : IDefaultUserIdentity
         {
-            if (await IsSignin())
+            if (await IsSignIn())
             {
                 var NameIdentifier = HttpContextAccessor.HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
                 var Name = HttpContextAccessor.HttpContext.User.Claims.Where(c => c.Type == nameof(IDefaultUserIdentity.Username)).FirstOrDefault()?.Value;

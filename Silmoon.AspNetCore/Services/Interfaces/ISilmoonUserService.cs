@@ -6,7 +6,7 @@ namespace Silmoon.AspNetCore.Services.Interfaces
 {
     public interface ISilmoonAuthService
     {
-        Task<bool> IsSignin();
+        Task<bool> IsSignIn();
         Task SignIn<TUser>(TUser User, string NameIdentifier = null) where TUser : IDefaultUserIdentity;
         Task<bool> SignOut();
         Task<TUser> GetUser<TUser>() where TUser : IDefaultUserIdentity;

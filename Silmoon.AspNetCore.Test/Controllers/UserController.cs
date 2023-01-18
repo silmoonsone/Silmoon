@@ -17,7 +17,7 @@ namespace Silmoon.AspNetCore.Test.Controllers
         }
         public async Task<IActionResult> Signin(string Url)
         {
-            if (await SilmoonUserService.IsSignin()) return Redirect(Url ?? "~/");
+            if (await SilmoonUserService.IsSignIn()) return Redirect(Url ?? "~/");
             return View();
         }
         public IActionResult Signup()
