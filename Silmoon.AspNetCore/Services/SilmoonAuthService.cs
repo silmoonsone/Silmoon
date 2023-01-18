@@ -23,7 +23,7 @@ namespace Silmoon.AspNetCore.Services
             var result = await HttpContextAccessor.HttpContext.AuthenticateAsync();
             return result.Succeeded;
         }
-        public async Task SignIn<TUser>(TUser User, string NameIdentifier = null) where TUser : IDefaultUserIdentity
+        public async Task SignIn<TUser>(TUser User, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity
         {
             if (User is null) throw new ArgumentNullException(nameof(User));
             if (User.Username.IsNullOrEmpty() && NameIdentifier.IsNullOrEmpty()) throw new ArgumentNullException(nameof(User.Username), "Username或者NameIdentifier必选最少一个参数。");
@@ -55,7 +55,7 @@ namespace Silmoon.AspNetCore.Services
                 return false;
             }
         }
-        public async Task<TUser> GetUser<TUser>() where TUser : IDefaultUserIdentity
+        public async Task<TUser> GetUser<TUser>() where TUser : class, IDefaultUserIdentity
         {
             if (await IsSignIn())
             {
@@ -63,26 +63,27 @@ namespace Silmoon.AspNetCore.Services
                 var Name = HttpContextAccessor.HttpContext.User.Claims.Where(c => c.Type == nameof(IDefaultUserIdentity.Username)).FirstOrDefault()?.Value;
 
                 string json = HttpContextAccessor.HttpContext.Session.GetString("SessionCache:NameIdentifier+Username=" + NameIdentifier + "+" + Name);
-                TUser user = default;
                 if (json.IsNullOrEmpty())
                 {
-                    user = (TUser)GetUserData(Name, NameIdentifier, user);
+                    TUser user = (TUser)GetUserData(Name, NameIdentifier);
                     if (user is null)
                     {
                         await SignOut();
                         return default;
                     }
                     else
+                    {
                         SetUserCache(user, NameIdentifier);
+                        return user;
+                    }
                 }
                 else
-                    user = JsonConvert.DeserializeObject<TUser>(json);
-                return user;
+                    return JsonConvert.DeserializeObject<TUser>(json);
             }
             else
-                return default;
+                return null;
         }
-        public async Task<TUser> GetUser<TUser>(string UserToken, bool SessionSignin, string Name = null, string NameIdentifier = null) where TUser : IDefaultUserIdentity
+        public async Task<TUser> GetUser<TUser>(string UserToken, bool SessionSignin, string Name = null, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity
         {
             TUser result = (TUser)GetUserDataByUserToken(Name, NameIdentifier, UserToken);
             if (SessionSignin && result is not null)
@@ -92,18 +93,18 @@ namespace Silmoon.AspNetCore.Services
             }
             return result;
         }
-        public async Task ReloadUser<TUser>() where TUser : IDefaultUserIdentity
+        public async Task ReloadUser<TUser>() where TUser : class, IDefaultUserIdentity
         {
             var NameIdentifier = HttpContextAccessor.HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
             var Name = HttpContextAccessor.HttpContext.User.Claims.Where(c => c.Type == nameof(IDefaultUserIdentity.Username)).FirstOrDefault()?.Value;
             TUser user = default;
-            user = (TUser)GetUserData(Name, NameIdentifier, user);
+            user = (TUser)GetUserData(Name, NameIdentifier);
             if (user is null) await SignOut();
             else SetUserCache(user, NameIdentifier);
         }
 
 
-        void SetUserCache<TUser>(TUser User, string NameIdentifier) where TUser : IDefaultUserIdentity
+        void SetUserCache<TUser>(TUser User, string NameIdentifier) where TUser : class, IDefaultUserIdentity
         {
             //var NameIdentifier = HttpContextAccessor.HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
 
@@ -111,7 +112,7 @@ namespace Silmoon.AspNetCore.Services
             HttpContextAccessor.HttpContext.Session.SetString("SessionCache:NameIdentifier+Username=" + NameIdentifier + "+" + User.Username, userJson);
         }
 
-        public abstract IDefaultUserIdentity GetUserData(string Username, string NameIdentifier, IDefaultUserIdentity User);
+        public abstract IDefaultUserIdentity GetUserData(string Username, string NameIdentifier);
         public abstract IDefaultUserIdentity GetUserDataByUserToken(string Username, string NameIdentifier, string UserToken);
     }
 }

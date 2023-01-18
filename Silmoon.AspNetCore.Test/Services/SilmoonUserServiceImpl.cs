@@ -10,7 +10,7 @@ namespace Silmoon.AspNetCore.Test.Services
         {
 
         }
-        public override IDefaultUserIdentity GetUserData(string Username, string NameIdentifier, IDefaultUserIdentity User)
+        public override IDefaultUserIdentity GetUserData(string Username, string NameIdentifier)
         {
             return new User() { Username = "silmoon", Password = "pwd" };
         }
