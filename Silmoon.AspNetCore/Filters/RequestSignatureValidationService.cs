@@ -9,6 +9,7 @@ using Silmoon.Models.Types;
 using System.Security.Cryptography.Xml;
 using Microsoft.Extensions.DependencyInjection;
 using Silmoon.AspNetCore.Services;
+using Silmoon.AspNetCore.Services.Interfaces;
 
 namespace Silmoon.AspNetCore.Filters
 {
@@ -18,7 +19,7 @@ namespace Silmoon.AspNetCore.Filters
         public string AppIdFieldName { get; set; }
         public string SignFieldName { get; set; }
         public bool Require { get; set; }
-        public SilmoonDevAppService SilmoonDevAppService { get; set; }
+        public ISilmoonDevAppService SilmoonDevAppService { get; set; }
         /// <summary>
         /// 使用指定的Key验证请求的签名，如果是GET请求，将验证所有GET参数，如果是POST请求，将验证全部POST参数，
         /// </summary>
@@ -47,7 +48,7 @@ namespace Silmoon.AspNetCore.Filters
             {
                 if (SilmoonDevAppService == null)
                 {
-                    SilmoonDevAppService = filterContext.HttpContext.RequestServices.GetService<SilmoonDevAppService>();
+                    SilmoonDevAppService = filterContext.HttpContext.RequestServices.GetService<ISilmoonDevAppService>();
                     if (SilmoonDevAppService == null)
                     {
                         filterContext.Result = new ContentResult() { Content = ApiResult<string>.Create(ResultState.Fail, null, $"SilmoonDevAppService is not configured.").ToJsonString(), ContentType = "application/json" };
