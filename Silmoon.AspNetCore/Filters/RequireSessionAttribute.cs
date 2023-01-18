@@ -11,7 +11,7 @@ using System.Web;
 
 namespace Silmoon.AspNetCore.Filters
 {
-    public class RequireSessionAttribute : ActionFilterAttribute
+    public class RequireSessionAttribute<TUser> : ActionFilterAttribute where TUser : class, IDefaultUserIdentity
     {
         public IdentityRole Role { get; set; }
         public bool RequestRefreshUserSession { get; set; }
@@ -52,8 +52,8 @@ namespace Silmoon.AspNetCore.Filters
 
             if (!await silmoonAuthService.IsSignIn())
             {
-                IDefaultUserIdentity tokenUser = default;
-                if (!UserToken.IsNullOrEmpty()) tokenUser = await silmoonAuthService.GetUser<IDefaultUserIdentity>(UserToken, UserTokenSignin);
+                TUser tokenUser = default;
+                if (!UserToken.IsNullOrEmpty()) tokenUser = await silmoonAuthService.GetUser<TUser>(UserToken, UserTokenSignin);
                 if (tokenUser != null)
                 {
                     if (filterContext.Controller is Controller controller) controller.ViewBag._User = tokenUser;
