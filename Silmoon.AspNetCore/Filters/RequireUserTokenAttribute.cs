@@ -14,23 +14,23 @@ namespace Silmoon.AspNetCore.Filters
     {
         public IdentityRole Role { get; set; }
         public string UserTokenKey { get; set; }
-        public string UserTokenSigninKey { get; set; }
+        public string UserTokenSignInKey { get; set; }
         public bool IsRequire { get; set; } = true;
         public bool AllowSession { get; set; } = false;
 
-        public RequireUserTokenAttribute(IdentityRole Role, string UserTokenKey = "UserToken", string UserTokenSigninKey = "UserTokenSignin", bool IsRequire = true, bool AllowSession = false) : base()
+        public RequireUserTokenAttribute(IdentityRole Role, string UserTokenKey = "UserToken", string UserTokenSignInKey = "UserTokenSignIn", bool IsRequire = true, bool AllowSession = false) : base()
         {
             this.Role = Role;
             this.UserTokenKey = UserTokenKey;
-            this.UserTokenSigninKey = UserTokenSigninKey;
+            this.UserTokenSignInKey = UserTokenSignInKey;
             this.IsRequire = IsRequire;
             this.AllowSession = AllowSession;
         }
-        public RequireUserTokenAttribute(string UserTokenKey = "UserToken", string UserTokenSigninKey = "UserTokenSignin", bool IsRequire = true, bool AllowSession = false) : base()
+        public RequireUserTokenAttribute(string UserTokenKey = "UserToken", string UserTokenSignInKey = "UserTokenSignIn", bool IsRequire = true, bool AllowSession = false) : base()
         {
             Role = IdentityRole.Undefined;
             this.UserTokenKey = UserTokenKey;
-            this.UserTokenSigninKey = UserTokenSigninKey;
+            this.UserTokenSignInKey = UserTokenSignInKey;
             this.IsRequire = IsRequire;
             this.AllowSession = AllowSession;
         }
@@ -38,14 +38,14 @@ namespace Silmoon.AspNetCore.Filters
         public async override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             var UserToken = filterContext.HttpContext.Request.Query[UserTokenKey].ToStringOrNull();
-            var UserTokenSignin = filterContext.HttpContext.Request.Query[UserTokenSigninKey].ToStringOrNull().ToBool();
+            var UserTokenSignIn = filterContext.HttpContext.Request.Query[UserTokenSignInKey].ToStringOrNull().ToBool();
             if (filterContext.HttpContext.Request.Method == "POST" && UserToken.IsNullOrEmpty()) UserToken = filterContext.HttpContext.Request.Form[UserTokenKey].ToStringOrNull();
-            if (filterContext.HttpContext.Request.Method == "POST" && !UserTokenSignin) UserTokenSignin = filterContext.HttpContext.Request.Form[UserTokenSigninKey].ToStringOrNull().ToBool();
+            if (filterContext.HttpContext.Request.Method == "POST" && !UserTokenSignIn) UserTokenSignIn = filterContext.HttpContext.Request.Form[UserTokenSignInKey].ToStringOrNull().ToBool();
 
             var silmoonAuthService = filterContext.HttpContext.RequestServices.GetService<ISilmoonAuthService>();
 
             IDefaultUserIdentity tokenUser = default;
-            if (!UserToken.IsNullOrEmpty()) tokenUser = await silmoonAuthService.GetUser<IDefaultUserIdentity>(UserToken, UserTokenSignin);
+            if (!UserToken.IsNullOrEmpty()) tokenUser = await silmoonAuthService.GetUser<IDefaultUserIdentity>(UserToken, UserTokenSignIn);
             if (tokenUser != null)
             {
                 if (filterContext.Controller is Controller controller) controller.ViewBag._User = tokenUser;

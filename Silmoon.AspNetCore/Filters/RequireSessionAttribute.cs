@@ -53,7 +53,7 @@ namespace Silmoon.AspNetCore.Filters
             if (!await silmoonAuthService.IsSignIn())
             {
                 IDefaultUserIdentity tokenUser = default;
-                if (!UserToken.IsNullOrEmpty()) tokenUser = await silmoonAuthService.GetUser<DefaultUserIdentity>(UserToken, UserTokenSignin);
+                if (!UserToken.IsNullOrEmpty()) tokenUser = await silmoonAuthService.GetUser<IDefaultUserIdentity>(UserToken, UserTokenSignin);
                 if (tokenUser != null)
                 {
                     if (filterContext.Controller is Controller controller) controller.ViewBag._User = tokenUser;

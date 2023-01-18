@@ -83,10 +83,10 @@ namespace Silmoon.AspNetCore.Services
             else
                 return null;
         }
-        public async Task<TUser> GetUser<TUser>(string UserToken, bool SessionSignin, string Name = null, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity
+        public async Task<TUser> GetUser<TUser>(string UserToken, bool SessionSignIn, string Name = null, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity
         {
             TUser result = (TUser)GetUserDataByUserToken(Name, NameIdentifier, UserToken);
-            if (SessionSignin && result is not null)
+            if (SessionSignIn && result is not null)
             {
                 await SignIn(result);
                 SetUserCache(result, NameIdentifier);
