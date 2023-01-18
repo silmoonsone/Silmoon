@@ -44,52 +44,64 @@ namespace Silmoon.AspNetCore.Filters
         public async override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             var UserToken = filterContext.HttpContext.Request.Query[UserTokenKey].ToStringOrNull();
-            var UserTokenSignin = filterContext.HttpContext.Request.Query[UserTokenSigninKey].ToStringOrNull().ToBool();
+            var UserTokenSignIn = filterContext.HttpContext.Request.Query[UserTokenSigninKey].ToStringOrNull().ToBool();
             var isAjax = filterContext.HttpContext.Request.IsAjaxRequest();
             var signUrl = SignInUrl?.Replace("$SigninUrl", HttpUtility.UrlEncode(filterContext.HttpContext.Request.GetRawUrl()));
 
             var silmoonAuthService = filterContext.HttpContext.RequestServices.GetService<ISilmoonAuthService>();
 
-            if (!await silmoonAuthService.IsSignIn())
+            if (await silmoonAuthService.IsSignIn())
             {
-                TUser tokenUser = default;
-                if (!UserToken.IsNullOrEmpty()) tokenUser = await silmoonAuthService.GetUser<TUser>(UserToken, UserTokenSignin);
-                if (tokenUser != null)
-                {
-                    if (filterContext.Controller is Controller controller) controller.ViewBag._User = tokenUser;
-                }
-                else if (IsRequire)
-                {
-                    if (isAjax || IsApiRequest)
-                        filterContext.Result = new ContentResult() { Content = StateFlag.Create(Success: false, -9999, "no signin.").ToJsonString(), ContentType = "application/json" };
-                    else
-                        filterContext.Result = new RedirectResult(signUrl);
-                }
-            }
-            else
-            {
-                var user = await silmoonAuthService.GetUser<DefaultUserIdentity>();
-                if (user is not null)
-                {
-                    if (filterContext.Controller is Controller controller) controller.ViewBag._User = user;
-                    if (user.Role < Role)
-                    {
-                        if (isAjax || IsApiRequest)
-                            filterContext.Result = new ContentResult() { Content = StateFlag.Create(Success: false, -9999, "permission error.").ToJsonString(), ContentType = "application/json" };
-                        else
-                            filterContext.Result = new ContentResult() { Content = "permission error." };
-                    }
-                }
-                else
+                TUser user = await silmoonAuthService.GetUser<TUser>();
+                if (user is null)
                 {
                     await silmoonAuthService.SignOut();
                     if (IsRequire)
                     {
                         if (isAjax || IsApiRequest)
-                            filterContext.Result = new ContentResult() { Content = StateFlag.Create(Success: false, -9999, "no signin.").ToJsonString(), ContentType = "application/json" };
+                            filterContext.Result = new ContentResult() { Content = StateFlag.Create(Success: false, -9999, "No signin(SignIn, But user data is null).").ToJsonString(), ContentType = "application/json" };
                         else
                             filterContext.Result = new RedirectResult(signUrl);
                     }
+                }
+                else
+                {
+                    if (user.Role < Role)
+                    {
+                        if (isAjax || IsApiRequest)
+                            filterContext.Result = new ContentResult() { Content = StateFlag.Create(Success: false, -9999, "Permission error.").ToJsonString(), ContentType = "application/json" };
+                        else
+                            filterContext.Result = new ContentResult() { Content = "Permission error." };
+                    }
+                }
+            }
+            else
+            {
+                if (UserTokenSignIn && !UserToken.IsNullOrEmpty())
+                {
+                    TUser user = await silmoonAuthService.GetUser<TUser>(UserToken);
+                    if (user == null)
+                    {
+                        if (IsRequire)
+                        {
+                            if (isAjax || IsApiRequest)
+                                filterContext.Result = new ContentResult() { Content = StateFlag.Create(Success: false, -9999, "No signin(Error UserToken).").ToJsonString(), ContentType = "application/json" };
+                            else
+                                filterContext.Result = new RedirectResult(signUrl);
+                        }
+                    }
+                    else
+                    {
+                        if (user.Role >= Role) await silmoonAuthService.SignIn(user);
+                        else filterContext.Result = new ContentResult() { Content = "Permission error." };
+                    }
+                }
+                else
+                {
+                    if (isAjax || IsApiRequest)
+                        filterContext.Result = new ContentResult() { Content = StateFlag.Create(Success: false, -9999, "No signin.").ToJsonString(), ContentType = "application/json" };
+                    else
+                        filterContext.Result = new RedirectResult(signUrl);
                 }
             }
             base.OnActionExecuting(filterContext);

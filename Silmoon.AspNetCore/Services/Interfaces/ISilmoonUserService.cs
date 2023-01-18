@@ -10,7 +10,7 @@ namespace Silmoon.AspNetCore.Services.Interfaces
         Task SignIn<TUser>(TUser User, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity;
         Task<bool> SignOut();
         Task<TUser> GetUser<TUser>() where TUser : class, IDefaultUserIdentity;
-        Task<TUser> GetUser<TUser>(string UserToken, bool SessionSignin, string Name = null, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity;
+        Task<TUser> GetUser<TUser>(string UserToken, string Name = null, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity;
         Task ReloadUser<TUser>() where TUser : class, IDefaultUserIdentity;
     }
 }

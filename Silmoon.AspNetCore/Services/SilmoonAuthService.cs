@@ -37,7 +37,6 @@ namespace Silmoon.AspNetCore.Services
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
             await HttpContextAccessor.HttpContext.SignInAsync(claimsPrincipal);
 
-            var aaa = HttpContextAccessor.HttpContext.User.Claims;
             SetUserCache(User, NameIdentifier);
         }
         public async Task<bool> SignOut()
@@ -83,15 +82,10 @@ namespace Silmoon.AspNetCore.Services
             else
                 return null;
         }
-        public async Task<TUser> GetUser<TUser>(string UserToken, bool SessionSignIn, string Name = null, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity
+        public async Task<TUser> GetUser<TUser>(string UserToken, string Name = null, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity
         {
             TUser result = (TUser)GetUserDataByUserToken(Name, NameIdentifier, UserToken);
-            if (SessionSignIn && result is not null)
-            {
-                await SignIn(result);
-                SetUserCache(result, NameIdentifier);
-            }
-            return result;
+            return await Task.FromResult(result);
         }
         public async Task ReloadUser<TUser>() where TUser : class, IDefaultUserIdentity
         {

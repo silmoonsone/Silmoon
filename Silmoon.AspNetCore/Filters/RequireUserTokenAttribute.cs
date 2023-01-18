@@ -44,33 +44,37 @@ namespace Silmoon.AspNetCore.Filters
 
             var silmoonAuthService = filterContext.HttpContext.RequestServices.GetService<ISilmoonAuthService>();
 
-            IDefaultUserIdentity tokenUser = default;
-            if (!UserToken.IsNullOrEmpty()) tokenUser = await silmoonAuthService.GetUser<IDefaultUserIdentity>(UserToken, UserTokenSignIn);
-            if (tokenUser != null)
+            if (UserToken.IsNullOrEmpty())
             {
-                if (filterContext.Controller is Controller controller) controller.ViewBag._User = tokenUser;
+                if (AllowSession && !await silmoonAuthService.IsSignIn())
+                {
+                    filterContext.Result = new ContentResult() { Content = ApiResult.Create(ResultState.Fail, "Require signin", -9999).ToJsonString(), ContentType = "application/json" };
+                }
+                else if (IsRequire)
+                {
+                    filterContext.Result = new ContentResult() { Content = ApiResult.Create(ResultState.Fail, "Require signin(Require UserToken)", -9999).ToJsonString(), ContentType = "application/json" };
+                }
             }
             else
             {
-                if (AllowSession)
+                IDefaultUserIdentity user = await silmoonAuthService.GetUser<IDefaultUserIdentity>(UserToken);
+                if (user is not null)
                 {
-                    if (!await silmoonAuthService.IsSignIn())
-                    {
-                        filterContext.Result = new ContentResult() { Content = ApiResult.Create(ResultState.Fail, "Require signin", -9999).ToJsonString(), ContentType = "application/json" };
-                    }
-                    else
-                    {
-                        if (filterContext.Controller is Controller controller) controller.ViewBag._User = await silmoonAuthService.GetUser<IDefaultUserIdentity>();
-                    }
+                    if (UserTokenSignIn) await silmoonAuthService.SignIn(user);
                 }
                 else
                 {
-                    if (IsRequire)
+                    if (AllowSession && !await silmoonAuthService.IsSignIn())
                     {
-                        filterContext.Result = new ContentResult() { Content = ApiResult.Create(ResultState.Fail, "Require signin", -9999).ToJsonString(), ContentType = "application/json" };
+                        filterContext.Result = new ContentResult() { Content = ApiResult.Create(ResultState.Fail, "Require signin(Error UserToken)", -9999).ToJsonString(), ContentType = "application/json" };
+                    }
+                    else if (IsRequire)
+                    {
+                        filterContext.Result = new ContentResult() { Content = ApiResult.Create(ResultState.Fail, "Require signin(Error UserToken)", -9999).ToJsonString(), ContentType = "application/json" };
                     }
                 }
             }
+
             base.OnActionExecuting(filterContext);
         }
     }
