@@ -72,7 +72,8 @@ namespace Silmoon.AspNetCore.Services
                         await SignOut();
                         return default;
                     }
-                    //SetUserCache(user, NameIdentifier);
+                    else
+                        SetUserCache(user, NameIdentifier);
                 }
                 else
                     user = JsonConvert.DeserializeObject<TUser>(json);
