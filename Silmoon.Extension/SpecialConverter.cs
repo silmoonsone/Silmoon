@@ -11,26 +11,26 @@ namespace Silmoon.Extension
 
         public static long ToTimeStamp(DateTime time)
         {
-            DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+            DateTime startTime = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
             long intResult = (long)(time - startTime).TotalSeconds;
             return intResult;
         }
         public static long ToTimeStamp(DateTime time, DateTime baseUTCTime)
         {
-            DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(baseUTCTime);
+            DateTime startTime = TimeZoneInfo.ConvertTime(baseUTCTime, TimeZoneInfo.Local);
             long intResult = (long)(time - startTime).TotalSeconds;
             return intResult;
         }
 
         public static DateTime ConvertIntDateTime(long d)
         {
-            DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+            DateTime startTime = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
             DateTime time = startTime.AddSeconds(d);
             return time;
         }
         public static DateTime ConvertIntDateTime(long d, DateTime baseTime)
         {
-            DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(baseTime);
+            DateTime startTime = TimeZoneInfo.ConvertTime(baseTime, TimeZoneInfo.Local);
             DateTime time = startTime.AddSeconds(d);
             return time;
         }
