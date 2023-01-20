@@ -6,10 +6,10 @@ namespace Silmoon.AspNetCore.Test.Controllers
 {
     public class UserController : Controller
     {
-        ISilmoonAuthService SilmoonUserService { get; set; }
-        public UserController(ISilmoonAuthService silmoonUserService)
+        ISilmoonAuthService SilmoonAuthService { get; set; }
+        public UserController(ISilmoonAuthService silmoonAuthService)
         {
-            SilmoonUserService = silmoonUserService;
+            SilmoonAuthService = silmoonAuthService;
         }
         public IActionResult Index()
         {
@@ -17,7 +17,7 @@ namespace Silmoon.AspNetCore.Test.Controllers
         }
         public async Task<IActionResult> Signin(string Url)
         {
-            if (await SilmoonUserService.IsSignIn()) return Redirect(Url ?? "~/");
+            if (await SilmoonAuthService.IsSignIn()) return Redirect(Url ?? "~/");
             return View();
         }
         public IActionResult Signup()

@@ -1,6 +1,6 @@
 ﻿namespace Silmoon.AspNetCore.Services
 {
-    public class SilmoonUserServiceOption
+    public class SilmoonAuthServiceOption
     {
     }
 }

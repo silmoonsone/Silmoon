@@ -52,7 +52,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 });
 builder.Services.AddSingleton<Core>();
 builder.Services.AddSilmoonDevApp<SilmoonDevAppServiceImpl>(o => o.KeyCacheSecoundTimeout = 60);
-builder.Services.AddSilmoonUser<SilmoonUserServiceImpl>();
+builder.Services.AddSilmoonAuth<SilmoonAuthServiceImpl>();
 
 //builder.Services.AddSwaggerGen().AddSwaggerGenNewtonsoftSupport();
 //builder.Services.AddSignalR().AddNewtonsoftJsonProtocol();
