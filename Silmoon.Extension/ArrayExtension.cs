@@ -28,7 +28,11 @@ namespace Silmoon.Extension
         }
         public static bool IsNullOrEmpty(this Array array)
         {
-            return array == null || array.Length == 0;
+            return array == null || array?.Length == 0;
+        }
+        public static bool IsNullOrEmpty<T>(this List<T> array)
+        {
+            return array == null || array?.Count == 0;
         }
     }
 }
