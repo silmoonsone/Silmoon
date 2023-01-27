@@ -415,5 +415,11 @@ namespace Silmoon.Extension
             Regex regex = new Regex(@"^([\da-fA-F]{1,4}:){7}[\da-fA-F]{1,4}$");
             return regex.IsMatch(IP);
         }
+
+
+        public static string AppendQueryString(this string url, string queryString)
+        {
+            return url.Contains("?") ? $"{url}&{queryString}" : $"{url}?{queryString}";
+        }
     }
 }
