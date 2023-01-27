@@ -387,11 +387,12 @@ namespace Silmoon.Extension
 
             // 检查 URL 是否符合格式
             return regex.IsMatch(Url);
-        }        /// <summary>
-                 /// 检查字符串是否是IPv4地址
-                 /// </summary>
-                 /// <param name="IP"></param>
-                 /// <returns></returns>
+        }
+        /// <summary>
+        /// 检查字符串是否是IPv4地址
+        /// </summary>
+        /// <param name="IP"></param>
+        /// <returns></returns>
         public static bool IsIPv4Address(this string IP)
         {
             if (string.IsNullOrEmpty(IP)) return false;
