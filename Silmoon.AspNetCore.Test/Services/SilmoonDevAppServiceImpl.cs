@@ -7,7 +7,7 @@ namespace Silmoon.AspNetCore.Test.Services
 {
     public class SilmoonDevAppServiceImpl : SilmoonDevAppService
     {
-        public SilmoonDevAppServiceImpl(IOptions<SilmoonDevAppServiceOptions> options) : base(options)
+        public SilmoonDevAppServiceImpl(IOptions<SilmoonAppDevServiceOptions> options) : base(options)
         {
 
         }
