@@ -7,7 +7,7 @@ namespace Silmoon.Extension
 {
     public static class BigIntegerExtension
     {
-        public static BigInteger[] ParseArray(this string[] strArray)
+        public static BigInteger[] ToBigIntegerArray(this string[] strArray)
         {
             if (strArray is null) return null;
             List<BigInteger> bigIntegers = new List<BigInteger>();
