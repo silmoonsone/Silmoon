@@ -140,5 +140,22 @@ namespace Silmoon.Drawing
                 return ImageData;
             }
         }
+
+        public static byte[] AdjustImageSizeWithWidth(byte[] imageData, int width, CompositingQuality quality = CompositingQuality.HighSpeed)
+        {
+            using (var image = new Bitmap(imageData.GetStream()))
+            {
+                var imageFormat = image.RawFormat;
+                FixiPhoneOrientation(image);
+                using (var image2 = ResizeWidth(image, width, true, true))
+                {
+                    using (var image3 = Compress(image2, quality))
+                    {
+                        var data = image3.GetBytes(imageFormat);
+                        return data;
+                    }
+                }
+            }
+        }
     }
 }
