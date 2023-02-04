@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Numerics;
 using System.Text;
 
 namespace Silmoon.Extension
@@ -26,6 +27,16 @@ namespace Silmoon.Extension
             {
                 result *= x;
             }
+            return result;
+        }
+        public static BigInteger ToBigInteger(this decimal amount, int decimals)
+        {
+            BigInteger result = (BigInteger)(amount * 10m.Pow(decimals));
+            return result;
+        }
+        public static decimal ToDecimal(this BigInteger amount, int decimals)
+        {
+            decimal result = (decimal)amount / (decimal)Math.Pow(10, decimals);
             return result;
         }
     }
