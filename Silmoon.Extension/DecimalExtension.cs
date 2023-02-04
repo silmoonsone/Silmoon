@@ -19,5 +19,14 @@ namespace Silmoon.Extension
             zhCN.NumberFormat.CurrencyNegativePattern = 2;
             return value.ToString("C", zhCN);
         }
+        public static decimal Pow(this decimal x, int y)
+        {
+            decimal result = 1;
+            for (int i = 0; i < y; i++)
+            {
+                result *= x;
+            }
+            return result;
+        }
     }
 }
