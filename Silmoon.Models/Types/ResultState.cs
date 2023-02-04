@@ -10,11 +10,12 @@ namespace Silmoon.Models.Types
     [JsonConverter(typeof(StringEnumConverter))]
     public enum ResultState
     {
-        DataFormatError = -2,
+        Exception = -3,
+        FormatError = -2,
+        NotHttpSuccess = -1,
         Unknown = 0,
         Success = 1,
         Info = 2,
         Fail = 3,
-        Exception = 5,
     }
 }
