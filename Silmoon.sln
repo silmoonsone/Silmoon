@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Windows.Explorer.BHO", "silmoon.windows.explorer.bho\Silmoon.Windows.Explorer.BHO.csproj", "{DF03D4B1-60C9-43E7-8372-85FDBE34546B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Windows", "Silmoon.Windows\Silmoon.Windows.csproj", "{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Media.PlayerApp", "Silmoon.Media.PlayerApp\Silmoon.Media.PlayerApp.csproj", "{F032BCAC-0DBE-4B29-8F4C-97BBF5C86455}"
@@ -14,8 +12,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Windows.Server", "Silmoon.Windows.Server\Silmoon.Windows.Server.csproj", "{D9442201-99D5-4A5E-9FF5-7227BEE00F13}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetTest", "NetTest\NetTest.csproj", "{F26527AC-76AD-437D-A0AD-963B8DFA9B09}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Silmoon.Win32", "Silmoon.Win32\Silmoon.Win32.vcxproj", "{BD720951-9C4A-44D7-B737-10BDE6BF4D27}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Data.MySql", "Silmoon.Data.MySql\Silmoon.Data.MySql.csproj", "{5065F694-026F-4045-A446-DF860DA3F657}"
 EndProject
@@ -37,7 +33,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon", "Silmoon\Silmoon.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormTest", "WinFormTest\WinFormTest.csproj", "{D267F97E-6FCE-4567-8C63-3F30E9C5FCEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.AspNetCore.Test", "Silmoon.AspNetCore.Test\Silmoon.AspNetCore.Test.csproj", "{1B35921D-968B-4C55-891F-12F9D814090B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.AspNetCore.Test", "Silmoon.AspNetCore.Test\Silmoon.AspNetCore.Test.csproj", "{1B35921D-968B-4C55-891F-12F9D814090B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,16 +45,6 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DF03D4B1-60C9-43E7-8372-85FDBE34546B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DF03D4B1-60C9-43E7-8372-85FDBE34546B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DF03D4B1-60C9-43E7-8372-85FDBE34546B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{DF03D4B1-60C9-43E7-8372-85FDBE34546B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{DF03D4B1-60C9-43E7-8372-85FDBE34546B}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{DF03D4B1-60C9-43E7-8372-85FDBE34546B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DF03D4B1-60C9-43E7-8372-85FDBE34546B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DF03D4B1-60C9-43E7-8372-85FDBE34546B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{DF03D4B1-60C9-43E7-8372-85FDBE34546B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{DF03D4B1-60C9-43E7-8372-85FDBE34546B}.Release|Win32.ActiveCfg = Release|Any CPU
 		{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -109,16 +95,6 @@ Global
 		{F26527AC-76AD-437D-A0AD-963B8DFA9B09}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{F26527AC-76AD-437D-A0AD-963B8DFA9B09}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F26527AC-76AD-437D-A0AD-963B8DFA9B09}.Release|Win32.ActiveCfg = Release|Any CPU
-		{BD720951-9C4A-44D7-B737-10BDE6BF4D27}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{BD720951-9C4A-44D7-B737-10BDE6BF4D27}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{BD720951-9C4A-44D7-B737-10BDE6BF4D27}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{BD720951-9C4A-44D7-B737-10BDE6BF4D27}.Debug|Win32.ActiveCfg = Debug|Win32
-		{BD720951-9C4A-44D7-B737-10BDE6BF4D27}.Debug|Win32.Build.0 = Debug|Win32
-		{BD720951-9C4A-44D7-B737-10BDE6BF4D27}.Release|Any CPU.ActiveCfg = Release|Win32
-		{BD720951-9C4A-44D7-B737-10BDE6BF4D27}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{BD720951-9C4A-44D7-B737-10BDE6BF4D27}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{BD720951-9C4A-44D7-B737-10BDE6BF4D27}.Release|Win32.ActiveCfg = Release|Win32
-		{BD720951-9C4A-44D7-B737-10BDE6BF4D27}.Release|Win32.Build.0 = Release|Win32
 		{5065F694-026F-4045-A446-DF860DA3F657}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5065F694-026F-4045-A446-DF860DA3F657}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5065F694-026F-4045-A446-DF860DA3F657}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -254,7 +230,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {18B93CD3-1A51-425B-89D1-03A0565D2E21}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal
