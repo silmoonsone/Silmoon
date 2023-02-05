@@ -5,17 +5,17 @@ using System.Text.RegularExpressions;
 
 namespace Silmoon.Extension
 {
-    public class SpecialConverter
+    public static class SpecialConverter
     {
         public static readonly DateTime SqlMinDateTime = DateTime.Parse("1/1/1753 00:00:00");
 
-        public static long ToTimeStamp(DateTime time)
+        public static long ToTimeStamp(this DateTime time)
         {
             DateTime startTime = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
             long intResult = (long)(time - startTime).TotalSeconds;
             return intResult;
         }
-        public static long ToTimeStamp(DateTime time, DateTime baseUTCTime)
+        public static long ToTimeStamp(this DateTime time, DateTime baseUTCTime)
         {
             DateTime startTime = TimeZoneInfo.ConvertTime(baseUTCTime, TimeZoneInfo.Local);
             long intResult = (long)(time - startTime).TotalSeconds;
@@ -39,7 +39,7 @@ namespace Silmoon.Extension
         {
             return DateTime.Parse(dateTimeString).ToString("yyyy-MM-dd HH:mm:ss");
         }
-        public static string ToChnDateTimeString(DateTime dateTime)
+        public static string ToChnDateTimeString(this DateTime dateTime)
         {
             return dateTime.ToString("yyyy-MM-dd HH:mm:ss");
         }
@@ -49,7 +49,7 @@ namespace Silmoon.Extension
         /// </summary>
         /// <param name="dateTime"></param>
         /// <returns></returns>
-        public static long GET_UNIX_TIMESTAMP(DateTime dateTime)
+        public static long GET_UNIX_TIMESTAMP(this DateTime dateTime)
         {
             return (dateTime.ToUniversalTime().Ticks - 621355968000000000) / 10000000;
         }
@@ -58,7 +58,7 @@ namespace Silmoon.Extension
             return new DateTime((timestamp * 10000000) + 621355968000000000).ToLocalTime();
         }
 
-        public string ConvertToChinese(decimal number)
+        public static string ConvertToChinese(decimal number)
         {
             var format = number.ToString("#L#E#D#C#K#E#D#C#J#E#D#C#I#E#D#C#H#E#D#C#G#E#D#C#F#E#D#C#.0B0A").Replace("0B0A", "@");
             var simplify = Regex.Replace(format, @"((?<=-|^)[^1-9]*)|((?'z'0)[0A-E]*((?=[1-9])|(?'-z'(?=[F-L\.]|$))))|((?'b'[F-L])(?'z'0)[0A-L]*((?=[1-9])|(?'-z'(?=[\.]|$))))", "${b}${z}");
