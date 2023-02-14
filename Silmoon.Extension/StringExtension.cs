@@ -417,6 +417,44 @@ namespace Silmoon.Extension
             return regex.IsMatch(IP);
         }
 
+        public static bool IsValidVersionNumber(this string str)
+        {
+            if (string.IsNullOrEmpty(str))
+            {
+                return false;
+            }
+
+            var regex = new Regex(@"^\d+(\.\d+){0,3}$");
+
+            return regex.IsMatch(str);
+        }
+        public static bool IsNewerVersionThan(this string str, string str2, bool equalIsNewer = false)
+        {
+            if (!str.IsValidVersionNumber() || !str2.IsValidVersionNumber())
+            {
+                return false;
+            }
+
+            var version1Parts = str.Split('.');
+            var version2Parts = str2.Split('.');
+
+            for (int i = 0; i < Math.Max(version1Parts.Length, version2Parts.Length); i++)
+            {
+                int version1Part = i < version1Parts.Length ? int.Parse(version1Parts[i]) : 0;
+                int version2Part = i < version2Parts.Length ? int.Parse(version2Parts[i]) : 0;
+
+                if (version1Part < version2Part)
+                {
+                    return false;
+                }
+                else if (version1Part > version2Part)
+                {
+                    return true;
+                }
+            }
+            return equalIsNewer;
+        }
+
 
         public static string AppendQueryString(this string url, string queryString)
         {
