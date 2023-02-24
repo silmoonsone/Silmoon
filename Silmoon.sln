@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Media", "Silmoon.Me
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Windows.Server", "Silmoon.Windows.Server\Silmoon.Windows.Server.csproj", "{D9442201-99D5-4A5E-9FF5-7227BEE00F13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetTest", "NetTest\NetTest.csproj", "{F26527AC-76AD-437D-A0AD-963B8DFA9B09}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Data.MySql", "Silmoon.Data.MySql\Silmoon.Data.MySql.csproj", "{5065F694-026F-4045-A446-DF860DA3F657}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Extension", "Silmoon.Extension\Silmoon.Extension.csproj", "{551D2440-C3F5-40DE-A7DA-D278DF2DB027}"
@@ -85,16 +83,6 @@ Global
 		{D9442201-99D5-4A5E-9FF5-7227BEE00F13}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D9442201-99D5-4A5E-9FF5-7227BEE00F13}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D9442201-99D5-4A5E-9FF5-7227BEE00F13}.Release|Win32.ActiveCfg = Release|Any CPU
-		{F26527AC-76AD-437D-A0AD-963B8DFA9B09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F26527AC-76AD-437D-A0AD-963B8DFA9B09}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F26527AC-76AD-437D-A0AD-963B8DFA9B09}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{F26527AC-76AD-437D-A0AD-963B8DFA9B09}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{F26527AC-76AD-437D-A0AD-963B8DFA9B09}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{F26527AC-76AD-437D-A0AD-963B8DFA9B09}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F26527AC-76AD-437D-A0AD-963B8DFA9B09}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F26527AC-76AD-437D-A0AD-963B8DFA9B09}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{F26527AC-76AD-437D-A0AD-963B8DFA9B09}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{F26527AC-76AD-437D-A0AD-963B8DFA9B09}.Release|Win32.ActiveCfg = Release|Any CPU
 		{5065F694-026F-4045-A446-DF860DA3F657}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5065F694-026F-4045-A446-DF860DA3F657}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5065F694-026F-4045-A446-DF860DA3F657}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -230,7 +218,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {18B93CD3-1A51-425B-89D1-03A0565D2E21}
 		VisualSVNWorkingCopyRoot = .
+		SolutionGuid = {18B93CD3-1A51-425B-89D1-03A0565D2E21}
 	EndGlobalSection
 EndGlobal

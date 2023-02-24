@@ -65,54 +65,10 @@ namespace Silmoon.Web
             return result;
         }
 
-        public static string MakeNewQueryString(NameValueCollection collection, string additionQueryString = "")
-        {
-            collection = new NameValueCollection(collection);
-            string s = "";
-            var tp = HttpUtility.ParseQueryString(additionQueryString);
-
-            for (int i = 0; i < tp.Count; i++)
-            {
-                string key = tp.GetKey(i);
-                string value = tp[i];
-
-                collection[key] = value;
-            }
-
-            for (int i = 0; i < collection.Count; i++)
-            {
-                if (collection.GetKey(i) == null) continue;
-                string key = collection.GetKey(i);
-                string value = collection[i];
-
-                s += $"{key}={value}&";
-            }
-            if (s != "")
-            {
-                s = s.Remove(s.Length - 1);
-            }
-            //if (s[0] != '?')
-            //    s = "?" + s;
-
-            return s;
-        }
-        public static string MakeQueryString(NameValueCollection parameters)
-        {
-            string result = string.Empty;
-            for (int i = 0; i < parameters.Count; i++)
-            {
-                result += "&" + HttpUtility.UrlEncode(parameters.GetKey(i)) + "=" + HttpUtility.UrlEncode(parameters[i]);
-            }
-            return result.Substring(1, result.Length - 1);
-        }
         public static string ReturnShortURL()
         {
             return HttpContext.Current.Request.FilePath.ToString() + "?" + HttpContext.Current.Request.ServerVariables["QUERY_STRING"];
         }
-
-
-
-
 
 
         static string UrlEncodeSpaces(string str)

@@ -141,7 +141,7 @@ namespace Silmoon.Data.SqlServer
                 return new SqlExecuteResult<T>(reader.RecordsAffected, sql, obj);
             }
         }
-        
+
         public SqlExecuteResults<T[]> GetObjects<T>(string tableName, object whereObject = null, SqlQueryOptions options = null) where T : new()
         {
             if (options == null) options = SqlQueryOptions.Create();
