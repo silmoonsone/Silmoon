@@ -8,19 +8,19 @@ namespace WinFormTest
         [STAThread]
         static void Main()
         {
-            bool input = true;
-            while (input)
-            {
-                var str = Console.ReadLine();
-                switch (str)
-                {
-                    case "exit":
-                        input = false;
-                        break;
-                    default:
-                        break;
-                }
-            }
+            //bool input = true;
+            //while (input)
+            //{
+            //    var str = Console.ReadLine();
+            //    switch (str)
+            //    {
+            //        case "exit":
+            //            input = false;
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
 
 
             // To customize application configuration such as set high DPI settings or default font,
