@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace Silmoon.Extension
 {
@@ -459,6 +460,16 @@ namespace Silmoon.Extension
         public static string AppendQueryString(this string url, string queryString)
         {
             return url.Contains("?") ? $"{url}&{queryString}" : $"{url}?{queryString}";
+        }
+        public static string GetQueryString(this string url, string key)
+        {
+            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(key))
+            {
+                return null;
+            }
+            var uri = new Uri(url);
+            var query = HttpUtility.ParseQueryString(uri.Query);
+            return query[key];
         }
     }
 }
