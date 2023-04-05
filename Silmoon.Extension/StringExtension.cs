@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -461,6 +462,29 @@ namespace Silmoon.Extension
         {
             return url.Contains("?") ? $"{url}&{queryString}" : $"{url}?{queryString}";
         }
+        public static string RemoveQueryString(this string url, string key)
+        {
+            if (!url.Contains("?") || string.IsNullOrEmpty(key))
+            {
+                return url;
+            }
+
+            var baseUrl = url.Substring(0, url.IndexOf("?"));
+            var queryString = url.Substring(url.IndexOf("?") + 1);
+            var newQueryString = string.Empty;
+
+            var queryParams = HttpUtility.ParseQueryString(queryString);
+            queryParams.Remove(key);
+
+            if (queryParams.HasKeys())
+            {
+                newQueryString = string.Join("&", queryParams.AllKeys
+                    .Select(k => $"{HttpUtility.UrlEncode(k)}={HttpUtility.UrlEncode(queryParams[k])}"));
+            }
+
+            return $"{baseUrl}?{newQueryString}";
+        }
+
         public static string GetQueryString(this string url, string key)
         {
             if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(key))
