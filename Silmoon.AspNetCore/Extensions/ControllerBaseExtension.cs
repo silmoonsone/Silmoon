@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Silmoon.Extension;
 using Silmoon.Models;
+using Silmoon.Models.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,6 +61,47 @@ namespace Silmoon.AspNetCore.Extensions
         public static ContentResult JsonStateFlag<T>(this ControllerBase controller, bool Success, int Code, string Message, T Data)
         {
             var result = StateFlag<T>.Create(Success, Code, Message, Data);
+            return new ContentResult() { Content = result.ToJsonString(), ContentType = "application/json" };
+        }
+
+
+
+
+
+        public static ContentResult JsonApiResult(this ControllerBase controller, ResultState ResultState)
+        {
+            return JsonApiResult(controller, ResultState, null, 0);
+        }
+        public static ContentResult JsonApiResult(this ControllerBase controller, ResultState ResultState, int Code)
+        {
+            return JsonApiResult(controller, ResultState, null, Code);
+        }
+        public static ContentResult JsonApiResult(this ControllerBase controller, ResultState ResultState, string Message)
+        {
+            return JsonApiResult(controller, ResultState, Message, 0);
+        }
+        public static ContentResult JsonApiResult(this ControllerBase controller, ResultState ResultState, string Message = null, int Code = 0)
+        {
+            var result = ApiResult.Create(ResultState, Message, Code);
+            return new ContentResult() { Content = result.ToJsonString(), ContentType = "application/json" };
+        }
+
+
+        public static ContentResult JsonApiResult<T>(this ControllerBase controller, ResultState ResultState, int Code = 0)
+        {
+            return JsonApiResult<T>(controller, ResultState, default, null, Code);
+        }
+        public static ContentResult JsonApiResult<T>(this ControllerBase controller, ResultState ResultState, string Message, int Code = 0)
+        {
+            return JsonApiResult<T>(controller, ResultState, default, Message, Code);
+        }
+        public static ContentResult JsonApiResult<T>(this ControllerBase controller, ResultState ResultState, T Data, int Code = 0)
+        {
+            return JsonApiResult<T>(controller, ResultState, Data, null, Code);
+        }
+        public static ContentResult JsonApiResult<T>(this ControllerBase controller, ResultState ResultState, T Data, string Message, int Code = 0)
+        {
+            var result = ApiResult<T>.Create(ResultState, Data, Message, Code);
             return new ContentResult() { Content = result.ToJsonString(), ContentType = "application/json" };
         }
 

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Silmoon.AspNetCore.Enums;
 using Silmoon.Extension;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
@@ -25,7 +27,34 @@ namespace Silmoon.AspNetCore.Extensions
         public static string UserAgent(this HttpRequest httpRequest) => httpRequest.Headers["User-Agent"];
         public static bool IsIOS(this HttpRequest httpRequest) => httpRequest.UserAgent().Contains("iPhone") || httpRequest.UserAgent().Contains("iPad");
         public static bool IsAndroid(this HttpRequest httpRequest) => httpRequest.UserAgent().Contains("Android");
+        public static bool IsWeixinBrowser(this HttpRequest httpRequest) => httpRequest.Headers["User-Agent"].ToString().Contains("MicroMessenger");
+        public static ClientBrowserType GetClientBrowserType(this HttpRequest httpRequest)
+        {
+            var userAgent = httpRequest.Headers["User-Agent"].ToString();
 
+            var androidRegex = new Regex(@"android", RegexOptions.IgnoreCase);
+            var iosRegex = new Regex(@"(iPad|iPod|iPhone)", RegexOptions.IgnoreCase);
+            var weixinRegex = new Regex(@"MicroMessenger", RegexOptions.IgnoreCase);
+
+            if (androidRegex.IsMatch(userAgent))
+            {
+                if (weixinRegex.IsMatch(userAgent))
+                {
+                    return ClientBrowserType.WeixinAndroid;
+                }
+                return ClientBrowserType.Android;
+            }
+            else if (iosRegex.IsMatch(userAgent))
+            {
+                if (weixinRegex.IsMatch(userAgent))
+                {
+                    return ClientBrowserType.WeixinIOS;
+                }
+                return ClientBrowserType.IOS;
+            }
+
+            return ClientBrowserType.Unknown;
+        }
         public static JObject ReadToJson(this HttpRequest httpRequest) => JsonConvert.DeserializeObject<JObject>(httpRequest.Body.MakeToString());
         public static XmlDocument ReadToXml(this HttpRequest httpRequest)
         {
