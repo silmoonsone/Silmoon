@@ -46,14 +46,8 @@ namespace Silmoon.AspNetCore.Filters
 
             if (UserToken.IsNullOrEmpty())
             {
-                if (AllowSession && !await silmoonAuthService.IsSignIn())
-                {
-                    filterContext.Result = new ContentResult() { Content = ApiResult.Create(ResultState.Fail, "Require signin", -9999).ToJsonString(), ContentType = "application/json" };
-                }
-                else if (IsRequire)
-                {
-                    filterContext.Result = new ContentResult() { Content = ApiResult.Create(ResultState.Fail, "Require signin(Require UserToken)", -9999).ToJsonString(), ContentType = "application/json" };
-                }
+                if (!AllowSession || !await silmoonAuthService.IsSignIn())
+                    if (IsRequire) filterContext.Result = new ContentResult() { Content = ApiResult.Create(ResultState.Fail, "Require signin(Require UserToken)", -9999).ToJsonString(), ContentType = "application/json" };
             }
             else
             {
@@ -64,14 +58,8 @@ namespace Silmoon.AspNetCore.Filters
                 }
                 else
                 {
-                    if (AllowSession && !await silmoonAuthService.IsSignIn())
-                    {
-                        filterContext.Result = new ContentResult() { Content = ApiResult.Create(ResultState.Fail, "Require signin(Error UserToken)", -9999).ToJsonString(), ContentType = "application/json" };
-                    }
-                    else if (IsRequire)
-                    {
-                        filterContext.Result = new ContentResult() { Content = ApiResult.Create(ResultState.Fail, "Require signin(Error UserToken)", -9999).ToJsonString(), ContentType = "application/json" };
-                    }
+                    if (!AllowSession || !await silmoonAuthService.IsSignIn())
+                        if (IsRequire) filterContext.Result = new ContentResult() { Content = ApiResult.Create(ResultState.Fail, "Require signin(Error UserToken)", -9999).ToJsonString(), ContentType = "application/json" };
                 }
             }
 
