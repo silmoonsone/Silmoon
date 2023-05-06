@@ -64,5 +64,19 @@ namespace Silmoon.Extension
                 throw new NotSupportedException("流不支持读取或者搜索，无法操作");
             }
         }
+        public static async Task<string> ReadToEndAsync(this Stream stream)
+        {
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return await reader.ReadToEndAsync();
+            }
+        }
+        public static string ReadToEnd(this Stream stream)
+        {
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Silmoon.Extension
@@ -34,5 +35,32 @@ namespace Silmoon.Extension
         {
             return array == null || array?.Count == 0;
         }
+        public static List<DiffResult<T>> CompareWith<T>(this IEnumerable<T> mainCollection, IEnumerable<T> otherCollection, Func<T, T, bool> areEqual, Func<T, int> getHashCode)
+        {
+            var mainLookup = mainCollection.ToLookup(getHashCode);
+            var otherLookup = otherCollection.ToLookup(getHashCode);
+
+            var missingItems = mainCollection
+                .Where(item => !otherLookup[getHashCode(item)].Any(x => areEqual(x, item)))
+                .Select(item => new DiffResult<T> { Data = item, Type = DiffType.Missing });
+
+            var extraItems = otherCollection
+                .Where(item => !mainLookup[getHashCode(item)].Any(x => areEqual(x, item)))
+                .Select(item => new DiffResult<T> { Data = item, Type = DiffType.Extra });
+
+            var differences = missingItems.Concat(extraItems).ToList();
+
+            return differences;
+        }
+    }
+    public class DiffResult<T>
+    {
+        public T Data { get; set; }
+        public DiffType Type { get; set; }
+    }
+    public enum DiffType
+    {
+        Missing,
+        Extra
     }
 }

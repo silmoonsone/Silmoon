@@ -484,16 +484,22 @@ namespace Silmoon.Extension
 
             return $"{baseUrl}?{newQueryString}";
         }
-
-        public static string GetQueryString(this string url, string key)
+        public static string GetQueryStringValueFromUrl(this string url, string key)
         {
-            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(key))
-            {
-                return null;
-            }
+            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(key)) return null;
             var uri = new Uri(url);
             var query = HttpUtility.ParseQueryString(uri.Query);
             return query[key];
+        }
+        public static string GetQueryStringValueFromString(this string url, string key)
+        {
+            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(key)) return null;
+            var query = HttpUtility.ParseQueryString(url);
+            return query[key];
+        }
+        public static byte[] ToBytes(this string str, Encoding encoding)
+        {
+            return encoding.GetBytes(str);
         }
     }
 }

@@ -54,6 +54,9 @@ namespace Silmoon.Extension
             }
             return result;
         }
-
+        public static string GetString(this byte[] data, Encoding encoding)
+        {
+            return encoding.GetString(data);
+        }
     }
 }
