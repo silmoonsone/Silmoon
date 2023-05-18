@@ -82,6 +82,5 @@ namespace Silmoon.Extension
 
             return result;
         }
-
     }
 }

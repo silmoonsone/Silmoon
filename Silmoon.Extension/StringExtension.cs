@@ -14,7 +14,7 @@ namespace Silmoon.Extension
         {
             return string.IsNullOrEmpty(value);
         }
-        public static byte[] HexStringToBytes(this string hexString)
+        public static byte[] HexStringToByteArray(this string hexString)
         {
             if (hexString is null) return null;
             if (hexString.StartsWith("0x")) hexString = hexString.Substring(2);
