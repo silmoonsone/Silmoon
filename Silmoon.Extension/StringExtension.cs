@@ -164,7 +164,7 @@ namespace Silmoon.Extension
             string s1 = value.Substring(0, offset - 1);
             return null;
         }
-        public static string RepeateString(this string value, int repeateTimes)
+        public static string RepeatString(this string value, int repeateTimes)
         {
             string s = "";
             for (int i = 0; i < repeateTimes; i++)
