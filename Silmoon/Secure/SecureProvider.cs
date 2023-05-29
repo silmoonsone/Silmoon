@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -8,14 +9,15 @@ namespace Silmoon.Secure
 {
     public class SecureProvider
     {
-        static RSACryptoServiceProvider defaultRSA = null;
-        public static RSACryptoServiceProvider LoadDefaultRSAKeyFile(string xmlRSA = @"C:\rsa_private.xml")
+        private static RSACryptoServiceProvider defaultRSA { get; set; } = null;
+        public static RSACryptoServiceProvider LoadDefaultRSAKeyFile(string rsaKeyXmlFile = @"C:\rsa_private.xml")
         {
-            if (File.Exists(xmlRSA))
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && rsaKeyXmlFile == @"C:\rsa_private.xml") rsaKeyXmlFile = "/etc/rsa_private.xml";
+            if (File.Exists(rsaKeyXmlFile))
             {
                 RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
 
-                string xml = File.ReadAllText(xmlRSA);
+                string xml = File.ReadAllText(rsaKeyXmlFile);
                 try
                 {
                     rsa.FromXmlString(xml);
@@ -29,7 +31,7 @@ namespace Silmoon.Secure
                 return rsa;
             }
             else
-                throw new FileNotFoundException("RSA密钥XML字符串文件没有找到。", xmlRSA);
+                throw new FileNotFoundException("RSA密钥XML字符串文件没有找到。", rsaKeyXmlFile);
         }
         public static string GeneratorPrivateKey(int keyBytes = 1024)
         {

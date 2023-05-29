@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -214,6 +215,8 @@ namespace Silmoon.Secure
 
         public static string RsaEncrypt(string data, string rsaKeyXmlFile = @"C:\rsa_private.xml")
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && rsaKeyXmlFile == @"C:\rsa_private.xml") rsaKeyXmlFile = "/etc/rsa_private.xml";
+
             if (File.Exists(rsaKeyXmlFile))
             {
                 string rsaXml = File.ReadAllText(rsaKeyXmlFile);
@@ -226,6 +229,8 @@ namespace Silmoon.Secure
         }
         public static string RsaDecrypt(string data, string rsaKeyXmlFile = @"C:\rsa_private.xml")
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && rsaKeyXmlFile == @"C:\rsa_private.xml") rsaKeyXmlFile = "/etc/rsa_private.xml";
+
             if (File.Exists(rsaKeyXmlFile))
             {
                 string rsaXml = File.ReadAllText(rsaKeyXmlFile);

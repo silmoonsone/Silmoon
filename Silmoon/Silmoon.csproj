@@ -1,13 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageIcon>logo.png</PackageIcon>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="Types\" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Include="..\logo.png">
