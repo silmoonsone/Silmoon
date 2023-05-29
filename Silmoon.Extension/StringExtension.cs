@@ -462,6 +462,11 @@ namespace Silmoon.Extension
         {
             return url.Contains("?") ? $"{url}&{queryString}" : $"{url}?{queryString}";
         }
+        public static string AppendQueryString(this string url, string key, string value)
+        {
+            return url.Contains("?") ? $"{url}&{HttpUtility.UrlEncode(key)}={HttpUtility.UrlEncode(value)}" : $"{url}?{HttpUtility.UrlEncode(key)}={HttpUtility.UrlEncode(value)}";
+        }
+
         public static string RemoveQueryString(this string url, string key)
         {
             if (!url.Contains("?") || string.IsNullOrEmpty(key))
