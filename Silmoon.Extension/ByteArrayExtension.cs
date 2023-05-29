@@ -18,13 +18,6 @@ namespace Silmoon.Extension
         {
             return new BinaryReader(GetStream(bytes));
         }
-        public static string GetHexString(this byte[] value, bool TrimStart0 = false, bool Add0x = false)
-        {
-            var strPrex = Add0x ? "0x" : "";
-            var hex = string.Concat(value.Select(b => b.ToString("x2")).ToArray());
-            if (TrimStart0) hex = hex.TrimStart('0');
-            return strPrex + hex;
-        }
         /// <summary>
         /// 分组数据，将一段数据按照指定的长度进行分割，最后不足的长度将不会冲零。
         /// </summary>

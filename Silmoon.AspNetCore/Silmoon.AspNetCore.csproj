@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Silmoon.Models\Silmoon.Models.csproj" />
+    <ProjectReference Include="..\Silmoon.Extension\Silmoon.Extension.csproj" />
   </ItemGroup>
 
 </Project>

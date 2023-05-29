@@ -14,33 +14,6 @@ namespace Silmoon.Extension
         {
             return string.IsNullOrEmpty(value);
         }
-        public static byte[] HexStringToByteArray(this string hexString)
-        {
-            if (hexString is null) return null;
-            if (hexString.StartsWith("0x")) hexString = hexString.Substring(2);
-            hexString = hexString.Replace(" ", "");
-            if ((hexString.Length % 2) != 0)
-                hexString += " ";
-            byte[] returnBytes = new byte[hexString.Length / 2];
-            for (int i = 0; i < returnBytes.Length; i++)
-                returnBytes[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
-            return returnBytes;
-        }
-        public static bool IsHex(this string value)
-        {
-            bool isHex;
-            value = value.Substring(value.StartsWith("0x") ? 2 : 0);
-            foreach (var c in value)
-            {
-                isHex = ((c >= '0' && c <= '9') ||
-                         (c >= 'a' && c <= 'f') ||
-                         (c >= 'A' && c <= 'F'));
-
-                if (!isHex)
-                    return false;
-            }
-            return true;
-        }
         public static int GetByteLength(this string value, Encoding encoding)
         {
             return encoding.GetByteCount(value);
@@ -203,20 +176,22 @@ namespace Silmoon.Extension
             }
             else return value;
         }
-        public static string KeepStringLength(this string str, int Length, bool SubStart, char PadChar, bool Append)
+        public static string AdjustStringLength(this string str, int Length, bool SubStringFromStart, char PadChar, bool Append)
         {
             if (str.Length > Length)
             {
-                if (SubStart)
+                if (SubStringFromStart)
                     str = str.Substring(0, Length);
                 else
                     str = str.Substring(str.Length - Length);
             }
             else if (str.Length < Length)
             {
+                var padding = new string(PadChar, Length - str.Length);
                 if (Append)
-                    str = str.PadLeft(Length, PadChar);
-                else str = str.PadRight(Length, PadChar);
+                    str = str + padding;
+                else
+                    str = padding + str;
             }
             return str;
         }
