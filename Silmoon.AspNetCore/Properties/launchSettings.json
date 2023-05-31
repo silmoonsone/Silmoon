@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Silmoon.Web.Core": {
+    "Silmoon.AspNetCore": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
