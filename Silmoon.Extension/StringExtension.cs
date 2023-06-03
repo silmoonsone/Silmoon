@@ -477,7 +477,7 @@ namespace Silmoon.Extension
             var query = HttpUtility.ParseQueryString(url);
             return query[key];
         }
-        public static byte[] ToBytes(this string str, Encoding encoding)
+        public static byte[] GetBytes(this string str, Encoding encoding)
         {
             return encoding.GetBytes(str);
         }

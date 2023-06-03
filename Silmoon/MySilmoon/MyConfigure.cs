@@ -9,7 +9,7 @@ using System.Xml;
 
 namespace Silmoon.MySilmoon
 {
-    //[Obsolete]
+    [Obsolete]
     public class MyConfigure
     {
         static string LicenseEncryptedString = "";

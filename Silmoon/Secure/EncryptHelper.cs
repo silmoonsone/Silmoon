@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Silmoon.Extension;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -9,62 +10,74 @@ namespace Silmoon.Secure
 {
     public class EncryptHelper
     {
-        public static string AesEncrypt(string data, string key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
+        public static byte[] AesEncrypt(byte[] Data, byte[] Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
         {
-            if (data is null) return null;
-            if (data == "") return "";
+            if (Data is null) return null;
+            if (Data.Length == 0) return new byte[0];
 
-            var osource = Encoding.UTF8.GetBytes(data);
-            var okey = Encoding.UTF8.GetBytes(key);
-            return Convert.ToBase64String(AesEncrypt(osource, okey, cipherMode, paddingMode));
-        }
-        public static byte[] AesEncrypt(byte[] data, byte[] key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
-        {
             using (RijndaelManaged aesProvider = new RijndaelManaged())
             {
-                aesProvider.Key = key;
-                aesProvider.Mode = cipherMode;
-                aesProvider.Padding = paddingMode;
+                aesProvider.Key = Key;
+                aesProvider.Mode = CipherMode;
+                aesProvider.Padding = PaddingMode;
                 using (ICryptoTransform cryptoTransform = aesProvider.CreateEncryptor())
                 {
-                    byte[] inputBuffers = data;
-                    byte[] results = cryptoTransform.TransformFinalBlock(inputBuffers, 0, inputBuffers.Length);
+                    byte[] results = cryptoTransform.TransformFinalBlock(Data, 0, Data.Length);
                     aesProvider.Clear();
                     aesProvider.Dispose();
                     return results;
                 }
             }
         }
-        public static string AesDecrypt(string data, string key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
+        public static byte[] AesDecrypt(byte[] EncryptedData, byte[] Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
         {
-            if (data is null) return null;
-            if (data == "") return "";
+            if (EncryptedData is null) return null;
+            if (EncryptedData.Length == 0) return new byte[0];
 
-            var osource = Convert.FromBase64String(data);
-            var okey = Encoding.UTF8.GetBytes(key);
-            return Encoding.UTF8.GetString(AesDecrypt(osource, okey, cipherMode, paddingMode));
-        }
-        public static byte[] AesDecrypt(byte[] data, byte[] key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
-        {
             using (RijndaelManaged aesProvider = new RijndaelManaged())
             {
-                aesProvider.Key = key;
-                aesProvider.Mode = cipherMode;
-                aesProvider.Padding = paddingMode;
+                aesProvider.Key = Key;
+                aesProvider.Mode = CipherMode;
+                aesProvider.Padding = PaddingMode;
                 using (ICryptoTransform cryptoTransform = aesProvider.CreateDecryptor())
                 {
-                    byte[] inputBuffers = data;
-                    byte[] results = cryptoTransform.TransformFinalBlock(inputBuffers, 0, inputBuffers.Length);
+                    byte[] results = cryptoTransform.TransformFinalBlock(EncryptedData, 0, EncryptedData.Length);
                     aesProvider.Clear();
                     return results;
                 }
             }
         }
 
-        public static byte[] AesEncryptV2(byte[] data, string key)
+        public static string AesEncryptStringToBase64String(string Data, string Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
+        {
+            var data = Encoding.UTF8.GetBytes(Data);
+            var key = Encoding.UTF8.GetBytes(Key);
+            return Convert.ToBase64String(AesEncrypt(data, key, CipherMode, PaddingMode));
+        }
+        public static string AesDecryptBase64StringToString(string Based64String, string Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
+        {
+            var data = Convert.FromBase64String(Based64String);
+            var key = Encoding.UTF8.GetBytes(Key);
+            return Encoding.UTF8.GetString(AesDecrypt(data, key, CipherMode, PaddingMode));
+        }
+
+        public static string AesEncryptStringToHexString(string Data, byte[] Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
+        {
+            var data = Encoding.UTF8.GetBytes(Data);
+            return AesEncrypt(data, Key, CipherMode, PaddingMode).ByteArrayToHexString();
+        }
+        public static string AesDecryptHexStringToString(string HexString, byte[] Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
+        {
+            var data = HexString.HexStringToByteArray();
+            return Encoding.UTF8.GetString(AesDecrypt(data, Key, CipherMode, PaddingMode));
+        }
+
+
+
+        public static byte[] AesEncryptV2(byte[] Data, string Key)
         {
             byte[] iv = new byte[16];
-            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+            byte[] keyBytes = Encoding.UTF8.GetBytes(Key);
             byte[] array;
 
             using (Aes aes = Aes.Create())
@@ -74,15 +87,15 @@ namespace Silmoon.Secure
 
                 using (ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV))
                 {
-                    array = encryptor.TransformFinalBlock(data, 0, data.Length);
+                    array = encryptor.TransformFinalBlock(Data, 0, Data.Length);
                     return array;
                 }
             }
         }
-        public static byte[] AesDecryptV2(byte[] data, string key)
+        public static byte[] AesDecryptV2(byte[] Data, string Key)
         {
             byte[] iv = new byte[16];
-            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+            byte[] keyBytes = Encoding.UTF8.GetBytes(Key);
 
             using (Aes aes = Aes.Create())
             {
@@ -93,7 +106,7 @@ namespace Silmoon.Secure
 
                     using (ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV))
                     {
-                        byte[] array = decryptor.TransformFinalBlock(data, 0, data.Length);
+                        byte[] array = decryptor.TransformFinalBlock(Data, 0, Data.Length);
                         return array;
                     }
                 }
@@ -103,10 +116,10 @@ namespace Silmoon.Secure
                 }
             }
         }
-        public static string AesEncryptStringV2(string plainText, string key, bool useHex = true)
+        public static string AesEncryptStringV2(string PlainText, string Key, bool UseHexString = true)
         {
-            byte[] cipherBytes = AesEncryptV2(Encoding.UTF8.GetBytes(plainText), key);
-            if (useHex)
+            byte[] cipherBytes = AesEncryptV2(Encoding.UTF8.GetBytes(PlainText), Key);
+            if (UseHexString)
             {
                 StringBuilder stringBuilder = new StringBuilder(cipherBytes.Length * 2);
                 foreach (byte b in cipherBytes)
@@ -120,22 +133,22 @@ namespace Silmoon.Secure
                 return Convert.ToBase64String(cipherBytes);
             }
         }
-        public static string AesDecryptStringV2(string cipherText, string key, bool useHex = true)
+        public static string AesDecryptStringV2(string CipherText, string Key, bool UseHexString = true)
         {
             byte[] cipherBytes;
-            if (useHex)
+            if (UseHexString)
             {
-                cipherBytes = new byte[cipherText.Length / 2];
+                cipherBytes = new byte[CipherText.Length / 2];
                 for (int i = 0; i < cipherBytes.Length; i++)
                 {
-                    cipherBytes[i] = Convert.ToByte(cipherText.Substring(i * 2, 2), 16);
+                    cipherBytes[i] = Convert.ToByte(CipherText.Substring(i * 2, 2), 16);
                 }
             }
             else
             {
-                cipherBytes = Convert.FromBase64String(cipherText);
+                cipherBytes = Convert.FromBase64String(CipherText);
             }
-            byte[] plainBytes = AesDecryptV2(cipherBytes, key);
+            byte[] plainBytes = AesDecryptV2(cipherBytes, Key);
             if (plainBytes is null) return null;
             else
                 return Encoding.UTF8.GetString(plainBytes);
@@ -314,5 +327,9 @@ namespace Silmoon.Secure
             return provider.VerifyData(data, new SHA1CryptoServiceProvider(), signature);
         }
 
+        public static object AesEncryptStringToHexString(string s, object value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

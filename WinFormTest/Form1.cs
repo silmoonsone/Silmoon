@@ -1,6 +1,7 @@
 using Silmoon.Secure;
 using System.Text;
 using System.Text.RegularExpressions;
+using Silmoon.Extension;
 
 namespace WinFormTest
 {
@@ -13,18 +14,21 @@ namespace WinFormTest
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string s = "import tiktoken";
+            string s = "import tiktoken import tiktoken import tiktoken import tiktoken import tiktoken import tiktoken ";
 
 
 
 
-            var result = EncryptHelper.AesEncryptStringV2(s, "01234567890123450123456789012345", false);
-            var str = Convert.ToBase64String(Encoding.UTF8.GetBytes(result));
-            //str = EncryptHelper.AesDecryptStringV2(Encoding.UTF8.GetString(Convert.FromBase64String(str)), "0123456789012345");
+            var result = EncryptHelper.AesEncryptStringV2(s, "0123456789012345", false);
+            var str = EncryptHelper.AesDecryptStringV2(result, "0123456789012345", false);
 
-            var result2 = EncryptHelper.AesEncrypt(s, "01234567890123450123456789012345");
-            var str2 = Convert.ToBase64String(Encoding.UTF8.GetBytes(result2));
-            //str2 = EncryptHelper.AesDecrypt(Encoding.UTF8.GetString(Convert.FromBase64String(str)), "0123456789012345");
+            var result2 = EncryptHelper.AesEncryptStringToBase64String(s, "0123456789012345");
+            var str2 = EncryptHelper.AesDecryptBase64StringToString(result2, "0123456789012345");
+
+            var result3 = EncryptHelper.AesEncryptStringToHexString(s, "0123456789012345".GetBytes(Encoding.Default));
+            var str3 = EncryptHelper.AesDecryptHexStringToString(result3, "0123456789012345".GetBytes(Encoding.Default));
+
+            var sameResult = result == result2;
         }
     }
 }

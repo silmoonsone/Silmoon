@@ -9,7 +9,8 @@ namespace Silmoon.Secure
 {
     /// <summary>   
     /// 对称加密算法类   
-    /// </summary>   
+    /// </summary>
+    [Obsolete]
     public class CSEncrypt : IDisposable
     {
         private SymmetricAlgorithm mobjCryptoService;

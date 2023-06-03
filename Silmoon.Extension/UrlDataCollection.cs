@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Web;
 
@@ -15,6 +16,29 @@ namespace Silmoon.Extension
 
         }
         public int Count => list.Count;
+        public string this[string key]
+        {
+            get
+            {
+                string result = null;
+                foreach (var item in list)
+                {
+                    if (item.Key == key)
+                    {
+                        if (result == null) result = "";
+                        result += item.Value + ",";
+                    }
+                }
+                if (result.EndsWith(",")) result = result.Remove(result.Length - 1);
+                return result;
+            }
+            set
+            {
+                list.RemoveAll(item => item.Key == key);
+                list.Add((key, value));
+            }
+        }
+
         public void Add(string key, object value)
         {
             if (value is string)
@@ -44,25 +68,11 @@ namespace Silmoon.Extension
                 }
             }
         }
-        public void Remove(string key)
-        {
-            List<(string Key, object Value)> removeItems = new List<(string Key, object Value)>();
-            foreach (var item in list)
-            {
-                if (item.Key == key)
-                {
-                    removeItems.Add(item);
-                }
-            }
-            list.RemoveAll(removeItems.Contains);
-        }
+        public void Remove(string key) => list.RemoveAll(item => item.Key == key);
 
-        public IEnumerator GetEnumerator()
-        {
-            return list.GetEnumerator();
-        }
+        public IEnumerator GetEnumerator() => list.GetEnumerator();
 
-        public string GetSign(string KeyName, string Key, string IgnoreKey = "signature")
+        public string GetSign(string AppendKey, string AppendValue, string IgnoreKey = "signature")
         {
             List<string> array = new List<string>();
             for (int i = 0; i < list.Count; i++)
@@ -75,9 +85,54 @@ namespace Silmoon.Extension
             string s = "";
 
             foreach (var item in array) s += item + "&";
+            s = s.TrimEnd('&');
 
-            s += KeyName + "=" + Key;
+            if (!AppendKey.IsNullOrEmpty() && !AppendValue.IsNullOrEmpty())
+            {
+                s += "&" + AppendKey + "=" + AppendValue;
+            }
+            else if (!AppendKey.IsNullOrEmpty() && AppendValue.IsNullOrEmpty())
+            {
+                s += AppendKey;
+            }
+            else if (AppendValue.IsNullOrEmpty() && !AppendKey.IsNullOrEmpty())
+            {
+                s += "&" + AppendValue;
+            }
             return HashHelper.MD5(s);
+        }
+        public byte[] GetSign(string AppendKey, string AppendValue, bool IgnoreEmptyValue, bool RequireValueUrlEncode, Func<string, byte[]> SignatureFunction, params string[] IgnoreKeys)
+        {
+            List<string> array = new List<string>();
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (IgnoreKeys.Select(x => x.ToLower()).Contains(list[i].Key.ToLower())) continue;
+                if (((string)list[i].Value).IsNullOrEmpty() && IgnoreEmptyValue) continue;
+                array.Add(list[i].Key + "=" + (RequireValueUrlEncode ? HttpUtility.UrlEncode(list[i].Value.ToString()) : list[i].Value));
+            }
+            array.Sort();
+
+            string s = "";
+
+            foreach (var item in array) s += item + "&";
+            s = s.TrimEnd('&');
+
+            if (!AppendKey.IsNullOrEmpty() && !AppendValue.IsNullOrEmpty())
+            {
+                s += "&" + AppendKey + "=" + AppendValue;
+            }
+            else if (!AppendKey.IsNullOrEmpty() && AppendValue.IsNullOrEmpty())
+            {
+                s += AppendKey;
+            }
+            else if (AppendValue.IsNullOrEmpty() && !AppendKey.IsNullOrEmpty())
+            {
+                s += "&" + AppendValue;
+            }
+
+
+            var result = SignatureFunction(s);
+            return result;
         }
         public string ToQueryString()
         {
@@ -89,10 +144,10 @@ namespace Silmoon.Extension
             }
             return stringBuilder.ToString().Remove(stringBuilder.Length - 1);
         }
-        public static UrlDataCollection GetNameValueCollection(string Query)
+        public static UrlDataCollection Parse(string QueryString)
         {
             UrlDataCollection result = new UrlDataCollection();
-            string[] qs = Query.Split('&');
+            string[] qs = QueryString.Split('&');
             foreach (var item in qs)
             {
                 if (item.IsNullOrEmpty()) continue;
@@ -104,33 +159,12 @@ namespace Silmoon.Extension
             }
             return result;
         }
-        public string this[string key]
-        {
-            get
-            {
-                string result = null;
-                foreach (var item in list)
-                {
-                    if (item.Key == key)
-                    {
-                        if (result == null) result = "";
-                        result += item.Value + ",";
-                    }
-                }
-                if (result.EndsWith(",")) result = result.Remove(result.Length - 1);
-                return result;
-            }
-            set
-            {
-                for (int i = 0; i < Count; i++)
-                {
-                    if (list[i].Key == key)
-                    {
-                        list[i] = (key, value);
-                    }
-                }
-            }
-        }
         public override string ToString() => ToQueryString();
+
+        public static UrlDataCollection ParseUrl(string Url)
+        {
+            var uri = new Uri(Url);
+            return Parse(uri.Query.TrimStart('?'));
+        }
     }
 }
