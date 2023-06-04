@@ -108,6 +108,10 @@
       <Project>{551d2440-c3f5-40de-a7da-d278df2db027}</Project>
       <Name>Silmoon.Extension</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Silmoon\Silmoon.csproj">
+      <Project>{f6bb3ce1-6918-414d-b83e-d5d80f2c76df}</Project>
+      <Name>Silmoon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
