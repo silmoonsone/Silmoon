@@ -134,15 +134,34 @@ namespace Silmoon.Extension
             var result = SignatureFunction(s);
             return result;
         }
-        public string ToQueryString()
+        public string ToQueryString(bool UrlEncoded = true, bool Sort = false)
         {
-            if (list.Count == 0) return "";
-            StringBuilder stringBuilder = new StringBuilder();
-            for (int i = 0; i < list.Count; i++)
+            if (!Sort)
             {
-                stringBuilder.Append(HttpUtility.UrlEncode(list[i].Key) + "=" + HttpUtility.UrlEncode(list[i].Value?.ToString() ?? "") + "&");
+                if (list.Count == 0) return "";
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int i = 0; i < list.Count; i++)
+                {
+                    if (UrlEncoded) stringBuilder.Append(HttpUtility.UrlEncode(list[i].Key) + "=" + HttpUtility.UrlEncode(list[i].Value?.ToString() ?? "") + "&");
+                    else stringBuilder.Append(list[i].Key + "=" + list[i].Value?.ToString() ?? "" + "&");
+                }
+                return stringBuilder.ToString().Remove(stringBuilder.Length - 1);
             }
-            return stringBuilder.ToString().Remove(stringBuilder.Length - 1);
+            else
+            {
+                List<string> array = new List<string>();
+                for (int i = 0; i < list.Count; i++)
+                {
+                    if (UrlEncoded) array.Add(HttpUtility.UrlEncode(list[i].Key) + "=" + HttpUtility.UrlEncode(list[i].Value?.ToString() ?? ""));
+                    else array.Add(list[i].Key + "=" + list[i].Value?.ToString() ?? "");
+                }
+                array.Sort();
+
+                string s = "";
+
+                foreach (var item in array) s += item + "&";
+                return s.TrimEnd('&');
+            }
         }
         public static UrlDataCollection Parse(string QueryString)
         {
@@ -160,6 +179,18 @@ namespace Silmoon.Extension
             return result;
         }
         public override string ToString() => ToQueryString();
+
+        public List<KeyValuePair<string, string>> GetKeyValuePairs()
+        {
+            List<KeyValuePair<string, string>> keyValuePairs = new List<KeyValuePair<string, string>>();
+
+            foreach (var item in list)
+            {
+                keyValuePairs.Add(new KeyValuePair<string, string>(item.Key, item.Value.ToString()));
+            }
+
+            return keyValuePairs;
+        }
 
         public static UrlDataCollection ParseUrl(string Url)
         {
