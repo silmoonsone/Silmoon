@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -14,9 +15,32 @@ namespace Silmoon.Extension
         {
             return string.IsNullOrEmpty(value);
         }
-        public static int GetByteLength(this string value, Encoding encoding)
+        public static int GetLengthEncoded(this string value, Encoding encoding) => encoding.GetByteCount(value);
+        public static int GetLengthSpecial(this string s)
         {
-            return encoding.GetByteCount(value);
+            // 如果字符串为空或者为 null，直接返回长度为0
+            if (string.IsNullOrEmpty(s)) return 0;
+
+            // 创建一个 TextElementEnumerator 对象来遍历字符串中的文本元素
+            // TextElementEnumerator 可以正确处理由多个 Unicode 标量组成的复合字符
+            var enumerator = StringInfo.GetTextElementEnumerator(s);
+
+            int count = 0;  // 记录已处理的字符数
+
+            // 遍历字符串中的每一个文本元素
+            while (enumerator.MoveNext())
+            {
+                string textElement = enumerator.GetTextElement(); // 获取当前的文本元素（一个完整的字符）
+
+                // 检查当前字符是否为非西文字符
+                // 这里我们简单地假定任何非 ASCII 字符都为非西文字符
+                bool isNonWestern = textElement.Any(c => c > 127);
+
+                count += isNonWestern ? 2 : 1;  // 非西文字符占两个位置，西文字符占一个位置
+            }
+
+            // 返回计算出的长度
+            return count;
         }
 
         public static string SubstringEncoded(this string s, int length, Encoding encoding)
@@ -54,6 +78,46 @@ namespace Silmoon.Extension
             }
             return encoding.GetString(bytes, 0, i);
         }
+        public static string SubstringSpecial(this string s, int startIndex, int length)
+        {
+            // 如果字符串为空或者为 null，直接返回原始的字符串
+            if (string.IsNullOrEmpty(s)) return s;
+
+            // 创建一个 TextElementEnumerator 对象来遍历字符串中的文本元素
+            // TextElementEnumerator 可以正确处理由多个 Unicode 标量组成的复合字符
+            var enumerator = StringInfo.GetTextElementEnumerator(s);
+
+            var result = new StringBuilder();
+            int count = 0;  // 记录已处理的字符数
+
+            // 遍历字符串中的每一个文本元素
+            while (enumerator.MoveNext())
+            {
+                string textElement = enumerator.GetTextElement(); // 获取当前的文本元素（一个完整的字符）
+
+                // 检查当前字符是否为非西文字符
+                // 这里我们简单地假定任何非 ASCII 字符都为非西文字符
+                bool isNonWestern = textElement.Any(c => c > 127);
+
+                // 调整 startIndex 的计算，考虑非西文字符的长度
+                if (startIndex > 0)
+                {
+                    startIndex -= isNonWestern ? 2 : 1;
+                    continue;
+                }
+
+                // 如果已处理的字符数加上当前字符的长度大于期望的长度，则停止遍历
+                if (count + (isNonWestern ? 2 : 1) > length) break;
+
+                // 添加到结果字符串中
+                result.Append(textElement);
+                count += isNonWestern ? 2 : 1;  // 非西文字符占两个位置，西文字符占一个位置
+            }
+
+            // 返回结果字符串
+            return result.ToString();
+        }
+
         public static T ToEnum<T>(this string value, bool ignoreCase = false) where T : Enum
         {
             var type = typeof(T);

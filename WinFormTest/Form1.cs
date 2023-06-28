@@ -41,5 +41,11 @@ namespace WinFormTest
             var s3 = CompressHelper.CompressStringToHexString(s);
             var s4 = CompressHelper.DecompressHexStringToString(s3);
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            var result = textBox1.Text.SubstringSpecial(2, 4);
+            MessageBox.Show(result);
+        }
     }
 }
