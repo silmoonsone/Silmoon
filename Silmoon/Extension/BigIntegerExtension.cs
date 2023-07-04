@@ -82,5 +82,10 @@ namespace Silmoon.Extension
 
             return result;
         }
+        public static decimal ToDecimal(this BigInteger amount, int decimals)
+        {
+            decimal result = (decimal)amount / (decimal)Math.Pow(10, decimals);
+            return result;
+        }
     }
 }
