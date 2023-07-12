@@ -337,6 +337,7 @@ namespace Silmoon.Data.SqlServer
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
         }
+
         public SqlExecuteResult DeleteObject(string tableName, object whereObject)
         {
             string sql = $"DELETE [{tableName}]";
@@ -381,6 +382,51 @@ namespace Silmoon.Data.SqlServer
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
         }
 
+        public int Count(string tableName, object whereObject)
+        {
+            string sql = $"SELECT COUNT(id) FROM [{tableName}]";
+
+            var fieldInfos = getFieldInfos(whereObject, true);
+
+            makeWhereString(ref sql, ref tableName, ref fieldInfos);
+
+            var cmd = sqlAccess.GetCommand(sql);
+            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
+
+            var result = cmd.ExecuteScalar();
+            return Convert.ToInt32(result);
+        }
+        public int Count(string tableName, ExpandoObject whereObject)
+        {
+            string sql = $"SELECT COUNT(id) FROM [{tableName}]";
+
+            var fieldInfos = getFieldInfos(whereObject, true);
+
+            makeWhereString(ref sql, ref tableName, ref fieldInfos);
+
+            var cmd = sqlAccess.GetCommand(sql);
+            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
+
+            var result = cmd.ExecuteScalar();
+            return Convert.ToInt32(result);
+        }
+        public int Count(string tableName, string whereString, object whereObject = null)
+        {
+            string sql = $"SELECT COUNT(id) FROM [{tableName}]";
+
+            var fieldInfos = getFieldInfos(whereObject, true);
+
+            if (!string.IsNullOrEmpty(whereString))
+            {
+                sql += " WHERE " + whereString;
+            }
+
+            var cmd = sqlAccess.GetCommand(sql);
+            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
+
+            var result = cmd.ExecuteScalar();
+            return Convert.ToInt32(result);
+        }
 
         public SqlExecuteResult<bool> CreateTable<T>(string tableName)
         {

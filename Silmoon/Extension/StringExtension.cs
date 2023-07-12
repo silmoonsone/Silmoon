@@ -118,6 +118,28 @@ namespace Silmoon.Extension
             return result.ToString();
         }
 
+        public static string InsertSeparator(this string input, int groupSize, string separator = " ")
+        {
+            if (string.IsNullOrEmpty(input)) return input;
+
+            // 去除输入字符串中可能存在的分隔符
+            //input = input.Replace(separator, "");
+
+            string result = "";
+            for (int i = 0; i < input.Length; i += groupSize)
+            {
+                int length = Math.Min(groupSize, input.Length - i);
+                result += input.Substring(i, length);
+
+                if (i + length < input.Length)
+                {
+                    result += separator;
+                }
+            }
+
+            return result;
+        }
+
         public static T ToEnum<T>(this string value, bool ignoreCase = false) where T : Enum
         {
             var type = typeof(T);
@@ -196,10 +218,19 @@ namespace Silmoon.Extension
                     return defaultResult;
             }
         }
-        public static string HideSomeString(this string value, int offset, int count)
+        public static string HidePart(this string value, int index, int length, string replacement = "*")
         {
-            string s1 = value.Substring(0, offset - 1);
-            return null;
+            // 检查参数合法性
+            if (index < 0 || index >= value.Length || index + length > value.Length || length < 0)
+            {
+                throw new ArgumentOutOfRangeException("参数start或length的值不合法");
+            }
+
+            // 生成用于替换的字符串
+            string replaceWith = replacement != "" ? new string(replacement[0], length) : "";
+
+            // 返回替换后的字符串
+            return value.Substring(0, index) + replaceWith + value.Substring(index + length);
         }
         public static string RepeatString(this string value, int repeateTimes)
         {

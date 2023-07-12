@@ -32,6 +32,8 @@ namespace Silmoon.AspNetCore.Services
 
             var claimsIdentity = new ClaimsIdentity("Customer");
             claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, NameIdentifier));
+            claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, User.Role.ToString()));
+
             claimsIdentity.AddClaim(new Claim(nameof(IDefaultUserIdentity.Username), User.Username ?? ""));
 
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);

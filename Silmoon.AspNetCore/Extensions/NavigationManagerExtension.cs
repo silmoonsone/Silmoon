@@ -14,9 +14,14 @@ namespace Silmoon.AspNetCore.Extensions
         {
             return QueryHelpers.ParseQuery(new Uri(navigationManager.Uri).Query);
         }
-        public static StringValues GetQueryString(this NavigationManager navigationManager, string key)
+        public static StringValues GetQueryStringValue(this NavigationManager navigationManager, string key)
         {
             return QueryHelpers.ParseQuery(new Uri(navigationManager.Uri).Query).Get(key);
+        }
+        public static string GetQueryString(this NavigationManager navigationManager, string key)
+        {
+            var value = QueryHelpers.ParseQuery(new Uri(navigationManager.Uri).Query).Get(key);
+            return value.Count == 0 ? null : value.ToString();
         }
     }
 }
