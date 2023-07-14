@@ -18,12 +18,11 @@ namespace Silmoon.AspNetCore.Services
         {
             HttpContextAccessor = httpContextAccessor;
         }
-        public async Task<bool> IsSignIn()
-        {
-            var result = await HttpContextAccessor.HttpContext.AuthenticateAsync();
-            return result.Succeeded;
-        }
         public async Task SignIn<TUser>(TUser User, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity
+        {
+            await SignIn(User, true, null, NameIdentifier);
+        }
+        public async Task SignIn<TUser>(TUser User, bool AddEnumRole, string[] CustomerRoles, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity
         {
             if (User is null) throw new ArgumentNullException(nameof(User));
             if (User.Username.IsNullOrEmpty() && NameIdentifier.IsNullOrEmpty()) throw new ArgumentNullException(nameof(User.Username), "Username或者NameIdentifier必选最少一个参数。");
@@ -32,9 +31,17 @@ namespace Silmoon.AspNetCore.Services
 
             var claimsIdentity = new ClaimsIdentity("Customer");
             claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, NameIdentifier));
-            claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, User.Role.ToString()));
-
             claimsIdentity.AddClaim(new Claim(nameof(IDefaultUserIdentity.Username), User.Username ?? ""));
+
+            if (AddEnumRole) claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, User.Role.ToString()));
+
+            if (!CustomerRoles.IsNullOrEmpty())
+            {
+                foreach (var item in CustomerRoles)
+                {
+                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, item));
+                }
+            }
 
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
             await HttpContextAccessor.HttpContext.SignInAsync(claimsPrincipal);
@@ -98,7 +105,13 @@ namespace Silmoon.AspNetCore.Services
             if (user is null) await SignOut();
             else SetUserCache(user, NameIdentifier);
         }
-
+        public async Task<bool> IsSignIn()
+        {
+            var result = await HttpContextAccessor.HttpContext.AuthenticateAsync();
+            return result.Succeeded;
+        }
+        public bool IsInRole(string Role) => HttpContextAccessor.HttpContext.User.IsInRole(Role);
+        public bool IsInRole(Enum Role) => HttpContextAccessor.HttpContext.User.IsInRole(Role.ToString());
 
         void SetUserCache<TUser>(TUser User, string NameIdentifier) where TUser : class, IDefaultUserIdentity
         {
