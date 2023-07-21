@@ -7,7 +7,7 @@ namespace Silmoon.Extension
 {
     public static class DateTimeExtension
     {
-        public static long ToUnixStyleTimeStamp(this DateTime datetime) => SpecialConverter.GetUnixTimestamp(datetime);
+        public static long GetUnixTimestamp(this DateTime datetime) => SpecialConverter.GetUnixTimestamp(datetime);
         public static string ToChineseCharacter(this DateTime dateTime, bool OnlyDate = false) => dateTime.ToString(OnlyDate ? "yyyy年MM月dd日" : "yyyy年MM月dd日 HH时mm分ss秒");
         public static string ToChineseFormat(this DateTime dateTime, bool OnlyDate = false) => dateTime.ToString(OnlyDate ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm:ss");
         public static string GetDescription(this DateTime dateTime)
