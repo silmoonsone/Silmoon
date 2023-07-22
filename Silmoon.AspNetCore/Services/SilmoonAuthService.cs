@@ -110,8 +110,15 @@ namespace Silmoon.AspNetCore.Services
             var result = await HttpContextAccessor.HttpContext.AuthenticateAsync();
             return result.Succeeded;
         }
-        public bool IsInRole(string Role) => HttpContextAccessor.HttpContext.User.IsInRole(Role);
-        public bool IsInRole(Enum Role) => HttpContextAccessor.HttpContext.User.IsInRole(Role.ToString());
+        public bool IsInRole(params string[] Role)
+        {
+            foreach (var item in Role)
+            {
+                if (HttpContextAccessor.HttpContext.User.IsInRole(item)) return true;
+            }
+            return false;
+        }
+        public bool IsInRole(params Enum[] Roles) => IsInRole(Roles.ToStringArray());
 
         void SetUserCache<TUser>(TUser User, string NameIdentifier) where TUser : class, IDefaultUserIdentity
         {

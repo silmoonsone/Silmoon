@@ -21,5 +21,14 @@ namespace Silmoon.Extension
             var obj = (DisplayAttribute)field.GetCustomAttribute(typeof(DisplayAttribute));//得到特性
             return obj?.Name ?? @enum.ToString();
         }
+        public static string[] ToStringArray(this Enum[] enums)
+        {
+            string[] result = new string[enums.Length];
+            for (int i = 0; i < enums.Length; i++)
+            {
+                result[i] = enums[i].ToString();
+            }
+            return result;
+        }
     }
 }
