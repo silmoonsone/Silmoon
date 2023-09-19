@@ -25,19 +25,10 @@ namespace Silmoon.Runtime.Cache
             {
                 if (ExpireAt == null) ExpireAt = DateTime.Now.AddHours(1);
 
-                if (Items.ContainsKey(Key))
+                if (Items.TryGetValue(Key, out CacheItem<TKey, TValue> existingItem))
                 {
-                    var item = Items[Key];
-                    if (item.ExipreAt == default)
-                    {
-                        item = new CacheItem<TKey, TValue>() { Key = Key, Value = Value, ExipreAt = ExpireAt.Value };
-                        Items[Key] = item;
-                    }
-                    else
-                    {
-                        item.Value = Value;
-                        item.ExipreAt = ExpireAt.Value;
-                    }
+                    existingItem.Value = Value;
+                    existingItem.ExipreAt = ExpireAt.Value;
                 }
                 else
                 {
@@ -48,13 +39,13 @@ namespace Silmoon.Runtime.Cache
         }
         public static (bool Matched, TValue Value) Get(TKey Key, TimeSpan? AddExpireTime = null)
         {
-            Clearup();
             lock (Items)
             {
+                Clearup();
                 if (Items.ContainsKey(Key))
                 {
                     var item = Items[Key];
-                    if (AddExpireTime.HasValue) item.ExipreAt.Add(AddExpireTime.Value);
+                    if (AddExpireTime.HasValue) item.ExipreAt = item.ExipreAt.Add(AddExpireTime.Value);
                     return (true, item.Value);
                 }
                 else
@@ -65,9 +56,9 @@ namespace Silmoon.Runtime.Cache
         }
         public static (bool Matched, CacheItem<TKey, TValue> Item) GetInfo(TKey Key)
         {
-            Clearup();
             lock (Items)
             {
+                Clearup();
                 if (Items.ContainsKey(Key))
                     return (true, Items[Key]);
                 else return (false, default);
@@ -75,10 +66,12 @@ namespace Silmoon.Runtime.Cache
         }
         public static bool Remove(TKey Key)
         {
-            if (Items.ContainsKey(Key))
-                return Items.Remove(Key);
-            else { return false; }
+            lock (Items)
+            {
+                return Items.ContainsKey(Key) && Items.Remove(Key);
+            }
         }
+
         public TValue this[TKey Key]
         {
             get
@@ -92,9 +85,9 @@ namespace Silmoon.Runtime.Cache
         }
         public static IEnumerable<CacheItem<TKey, TValue>> GetValues()
         {
-            Clearup();
             lock (Items)
             {
+                Clearup();
                 foreach (var item in Items)
                 {
                     yield return item.Value;
@@ -103,10 +96,9 @@ namespace Silmoon.Runtime.Cache
         }
         static void Clearup()
         {
-            List<TKey> readyToClears = new List<TKey>();
-
             lock (Items)
             {
+                List<TKey> readyToClears = new List<TKey>();
                 foreach (var item in Items)
                 {
                     if (item.Value.Value == null)
@@ -127,7 +119,10 @@ namespace Silmoon.Runtime.Cache
         }
         public static void Clear()
         {
-            Items.Clear();
+            lock (Items)
+            {
+                Items.Clear();
+            }
         }
     }
 }
