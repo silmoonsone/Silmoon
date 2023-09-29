@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Silmoon.AspNetCore.Services.Interfaces;
 using Silmoon.Extension;
@@ -14,8 +16,10 @@ namespace Silmoon.AspNetCore.Services
     public abstract class SilmoonAuthService : ISilmoonAuthService
     {
         public IHttpContextAccessor HttpContextAccessor { get; set; }
-        public SilmoonAuthService(IHttpContextAccessor httpContextAccessor)
+        public IServiceProvider ServiceProvider { get; set; }
+        public SilmoonAuthService(IServiceProvider serviceProvider, IHttpContextAccessor httpContextAccessor)
         {
+            ServiceProvider = serviceProvider;
             HttpContextAccessor = httpContextAccessor;
         }
         public async Task SignIn<TUser>(TUser User, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity
@@ -112,9 +116,10 @@ namespace Silmoon.AspNetCore.Services
         }
         public bool IsInRole(params string[] Role)
         {
+            var claimsPrincipal = GetCurrentClaimsPrincipalAsync().Result;
             foreach (var item in Role)
             {
-                if (HttpContextAccessor.HttpContext.User.IsInRole(item)) return true;
+                if (claimsPrincipal.IsInRole(item)) return true;
             }
             return false;
         }
@@ -123,6 +128,18 @@ namespace Silmoon.AspNetCore.Services
         void SetUserCache<TUser>(TUser User, string NameIdentifier) where TUser : class, IDefaultUserIdentity
         {
             HttpContextAccessor.HttpContext.Session.SetString("SessionCache:NameIdentifier+Username=" + NameIdentifier + "+" + User.Username, User.ToJsonString());
+        }
+        async Task<ClaimsPrincipal> GetCurrentClaimsPrincipalAsync()
+        {
+            if (HttpContextAccessor.HttpContext is not null)
+            {
+                return HttpContextAccessor.HttpContext.User;
+            }
+            else
+            {
+                var authenticationStateProvider = ServiceProvider.GetService<AuthenticationStateProvider>();
+                return (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
+            }
         }
 
         public abstract IDefaultUserIdentity GetUserData(string Username, string NameIdentifier);

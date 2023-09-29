@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server;
+using Microsoft.Extensions.DependencyInjection;
 using Silmoon.AspNetCore.Services;
 using Silmoon.AspNetCore.Services.Interfaces;
 using Silmoon.Models.Identities;
@@ -36,13 +38,14 @@ namespace Silmoon.AspNetCore.Extensions
 
         public static void AddSilmoonAuth<TSilmoonAuthService>(this IServiceCollection services) where TSilmoonAuthService : class, ISilmoonAuthService
         {
-            services.AddHttpContextAccessor();
             if (services == null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
-            services.AddSingleton<ISilmoonAuthService, TSilmoonAuthService>();
+            services.AddHttpContextAccessor();
+            services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
+            services.AddScoped<ISilmoonAuthService, TSilmoonAuthService>();
         }
     }
 }

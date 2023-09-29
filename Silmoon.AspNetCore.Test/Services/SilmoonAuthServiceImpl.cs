@@ -6,7 +6,7 @@ namespace Silmoon.AspNetCore.Test.Services
 {
     public class SilmoonAuthServiceImpl : SilmoonAuthService
     {
-        public SilmoonAuthServiceImpl(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public SilmoonAuthServiceImpl(IServiceProvider serviceProvider, IHttpContextAccessor httpContextAccessor) : base(serviceProvider, httpContextAccessor)
         {
 
         }
