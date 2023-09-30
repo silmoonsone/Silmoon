@@ -5,13 +5,7 @@ VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Windows", "Silmoon.Windows\Silmoon.Windows.csproj", "{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Media.PlayerApp", "Silmoon.Media.PlayerApp\Silmoon.Media.PlayerApp.csproj", "{F032BCAC-0DBE-4B29-8F4C-97BBF5C86455}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Media", "Silmoon.Media\Silmoon.Media.csproj", "{1631B051-29B4-4D13-8AA3-325ABE41A307}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Windows.Server", "Silmoon.Windows.Server\Silmoon.Windows.Server.csproj", "{D9442201-99D5-4A5E-9FF5-7227BEE00F13}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Data.MySql", "Silmoon.Data.MySql\Silmoon.Data.MySql.csproj", "{5065F694-026F-4045-A446-DF860DA3F657}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Extension", "Silmoon.Extension\Silmoon.Extension.csproj", "{551D2440-C3F5-40DE-A7DA-D278DF2DB027}"
 EndProject
@@ -41,22 +35,10 @@ Global
 		{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F032BCAC-0DBE-4B29-8F4C-97BBF5C86455}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F032BCAC-0DBE-4B29-8F4C-97BBF5C86455}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F032BCAC-0DBE-4B29-8F4C-97BBF5C86455}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F032BCAC-0DBE-4B29-8F4C-97BBF5C86455}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1631B051-29B4-4D13-8AA3-325ABE41A307}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1631B051-29B4-4D13-8AA3-325ABE41A307}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1631B051-29B4-4D13-8AA3-325ABE41A307}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1631B051-29B4-4D13-8AA3-325ABE41A307}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D9442201-99D5-4A5E-9FF5-7227BEE00F13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D9442201-99D5-4A5E-9FF5-7227BEE00F13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9442201-99D5-4A5E-9FF5-7227BEE00F13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9442201-99D5-4A5E-9FF5-7227BEE00F13}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5065F694-026F-4045-A446-DF860DA3F657}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5065F694-026F-4045-A446-DF860DA3F657}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5065F694-026F-4045-A446-DF860DA3F657}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5065F694-026F-4045-A446-DF860DA3F657}.Release|Any CPU.Build.0 = Release|Any CPU
 		{551D2440-C3F5-40DE-A7DA-D278DF2DB027}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{551D2440-C3F5-40DE-A7DA-D278DF2DB027}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{551D2440-C3F5-40DE-A7DA-D278DF2DB027}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -98,7 +80,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {18B93CD3-1A51-425B-89D1-03A0565D2E21}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal
