@@ -130,6 +130,7 @@
       <DependentUpon>SmTrackBar.cs</DependentUpon>
     </Compile>
     <Compile Include="Security\ACL.cs" />
+    <Compile Include="Server\IISManager.cs" />
     <Compile Include="Service\Service.SystemService.cs" />
     <Compile Include="Service\ServiceControl.cs" />
     <Compile Include="SmSystem.cs" />
