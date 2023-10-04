@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Silmoon.Models;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -302,28 +303,44 @@ namespace Silmoon.Extension
         /// </summary>
         /// <param name="password">密码字符串</param>
         /// <returns></returns>
-        public static Strength PasswordStrength(this string password)
+        public static StateSet<Strength> PasswordStrength(this string password)
         {
-            //空字符串强度值为0
-            if (password.IsNullOrEmpty()) return Strength.Invalid;
-            //字符统计
-            int iNum = 0, iLtt = 0, iSym = 0;
+            // 空字符串强度值为0
+            if (string.IsNullOrEmpty(password)) return StateSet<Strength>.Create(Strength.Invalid, "密码不能为空");
+
+            // 字符统计
+            int iNum = 0, iLttLower = 0, iLttUpper = 0, iSym = 0;
             foreach (char c in password)
             {
-                if (c >= '0' && c <= '9') iNum++;
-                else if (c >= 'a' && c <= 'z') iLtt++;
-                else if (c >= 'A' && c <= 'Z') iLtt++;
+                if (char.IsDigit(c)) iNum++;
+                else if (char.IsLower(c)) iLttLower++;
+                else if (char.IsUpper(c)) iLttUpper++;
                 else iSym++;
             }
-            if (iLtt == 0 && iSym == 0) return Strength.Weak; //纯数字密码
-            if (iNum == 0 && iLtt == 0) return Strength.Weak; //纯符号密码
-            if (iNum == 0 && iSym == 0) return Strength.Weak; //纯字母密码
-            if (password.Length <= 6) return Strength.Weak; //长度不大于6的密码
-            if (iLtt == 0) return Strength.Normal; //数字和符号构成的密码
-            if (iSym == 0) return Strength.Normal; //数字和字母构成的密码
-            if (iNum == 0) return Strength.Normal; //字母和符号构成的密码
-            if (password.Length <= 10) return Strength.Normal; //长度不大于10的密码
-            return Strength.Strong; //由数字、字母、符号构成的密码
+
+            // 判断密码种类的数量
+            int typesCount = (iNum > 0 ? 1 : 0) + ((iLttLower > 0 || iLttUpper > 0) ? 1 : 0) + (iSym > 0 ? 1 : 0);
+
+            if (typesCount == 1) // 只有一种类型的字符
+            {
+                if (iNum > 0) return StateSet<Strength>.Create(Strength.Weak, "纯数字密码");
+                if (iSym > 0) return StateSet<Strength>.Create(Strength.Weak, "纯符号密码");
+                return StateSet<Strength>.Create(Strength.Weak, "纯字母密码");
+            }
+
+            if (password.Length <= 6) return StateSet<Strength>.Create(Strength.Weak, "长度不大于6的密码");
+
+            if (typesCount == 2) // 有两种类型的字符
+            {
+                if (iLttLower > 0 && iLttUpper > 0) return StateSet<Strength>.Create(Strength.Normal, "大小写字母混合密码");
+                if (iNum > 0 && iSym > 0) return StateSet<Strength>.Create(Strength.Normal, "数字和符号构成的密码");
+                if (iNum > 0 && (iLttLower > 0 || iLttUpper > 0)) return StateSet<Strength>.Create(Strength.Normal, "数字和字母构成的密码");
+                return StateSet<Strength>.Create(Strength.Normal, "字母和符号构成的密码");
+            }
+
+            if (password.Length <= 10) return StateSet<Strength>.Create(Strength.Normal, "长度不大于10的密码");
+
+            return StateSet<Strength>.Create(Strength.Strong); //由数字、字母、符号构成的密码
         }
         public static string Substring(this string str, int count, string suffix = "")
         {

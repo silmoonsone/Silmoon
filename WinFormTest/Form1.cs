@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Silmoon.Extension;
 using Silmoon.Compress;
+using Silmoon.Runtime;
 
 namespace WinFormTest
 {
@@ -46,6 +47,26 @@ namespace WinFormTest
         {
             var result = textBox1.Text.SubstringSpecial(2, 4);
             MessageBox.Show(result);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            List<User> users = new List<User>
+            {
+                new User() { Username = "a" },
+                new User() { Username = "b" },
+                new User() { Username = "c" }
+            };
+
+            var result = Copy.ArrayNew<User, UserEx>(users.ToArray());
+        }
+        class User
+        {
+            public string Username { get; set; }
+        }
+        class UserEx : User
+        {
+            public string Password { get; set; }
         }
     }
 }

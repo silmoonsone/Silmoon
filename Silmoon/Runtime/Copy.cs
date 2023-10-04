@@ -70,7 +70,7 @@ namespace Silmoon.Runtime
             foreach (var item in obj)
             {
                 dT t = new dT();
-                MemberCopy(obj, t);
+                MemberCopy(item, t);
                 list.Add(t);
             }
 
