@@ -1,11 +1,13 @@
 ﻿using Microsoft.Data.SqlClient;
 using Silmoon.Data.QueryModel;
 using Silmoon.Data.SqlServer.SqlInternal;
+using Silmoon.Extension;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Dynamic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -233,28 +235,41 @@ namespace Silmoon.Data.SqlServer
             }
         }
 
+
         public SqlExecuteResult SetObject<T>(string tableName, T obj, object whereObject, params string[] updateObjectFieldNames)
         {
-            return SetObject(tableName, (object)obj, whereObject, updateObjectFieldNames);
+            return SetObjectInternal(tableName, obj, null, whereObject, updateObjectFieldNames);
         }
         public SqlExecuteResult SetObject<T>(string tableName, T obj, ExpandoObject whereObject, params string[] updateObjectFieldNames)
         {
-            return SetObject(tableName, (object)obj, whereObject, updateObjectFieldNames);
+            return SetObjectInternal(tableName, obj, null, whereObject, updateObjectFieldNames);
         }
         public SqlExecuteResult SetObject<T>(string tableName, T obj, string whereString, object whereObject = null, params string[] updateObjectFieldNames)
         {
-            return SetObject(tableName, (object)obj, whereString, whereObject, updateObjectFieldNames);
+            return SetObjectInternal(tableName, obj, whereString, whereObject, updateObjectFieldNames);
         }
-        public SqlExecuteResult SetObject(string tableName, object obj, object whereObject, params string[] updateObjectFieldNames)
+
+        public SqlExecuteResult SetObject<T>(string tableName, T obj, object whereObject, params Expression<Func<T, object>>[] updateExpressions)
+        {
+            return SetObjectInternal(tableName, obj, null, whereObject, updateExpressions);
+        }
+        public SqlExecuteResult SetObject<T>(string tableName, T obj, ExpandoObject whereObject, params Expression<Func<T, object>>[] updateExpressions)
+        {
+            return SetObjectInternal(tableName, obj, null, whereObject, updateExpressions);
+        }
+        public SqlExecuteResult SetObject<T>(string tableName, T obj, string whereString, object whereObject = null, params Expression<Func<T, object>>[] updateExpressions)
+        {
+            return SetObjectInternal(tableName, obj, whereString, whereObject, updateExpressions);
+        }
+
+
+        SqlExecuteResult SetObjectInternal(string tableName, object obj, string whereString, object whereObject, params string[] updateObjectFieldNames)
         {
             string sql = $"UPDATE [{tableName}] SET ";
             string[] setNames = updateObjectFieldNames;
             Dictionary<string, FieldInfo> setFieldInfos = getFieldInfos(obj, false);
 
-            if (setNames == null || setNames.Length == 0)
-            {
-                setNames = getPropertyNames(setFieldInfos, false);
-            }
+            if (setNames.IsNullOrEmpty()) setNames = getPropertyNames(setFieldInfos, false);
 
             foreach (var item in setNames)
             {
@@ -263,79 +278,55 @@ namespace Silmoon.Data.SqlServer
             sql = sql.Substring(0, sql.Length - 2);
 
 
-            var fieldInfos = getFieldInfos(whereObject, true);
+            Dictionary<string, FieldInfo> fieldInfos;
+            if (whereObject is ExpandoObject expandoObject) fieldInfos = getFieldInfos(expandoObject, true);
+            else fieldInfos = getFieldInfos(whereObject, true);
 
-            makeWhereString(ref sql, ref tableName, ref fieldInfos);
+            if (whereString.IsNullOrEmpty())
+                makeWhereString(ref sql, ref tableName, ref fieldInfos);
+            else sql += " WHERE " + whereString;
 
             var cmd = sqlAccess.GetCommand(sql);
 
             SqlHelper.AddSqlCommandParameters(cmd, getFieldInfos(obj, false), setNames);
             SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
 
-            int i = cmd.ExecuteNonQuery();
-            return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
+            int returnLine = cmd.ExecuteNonQuery();
+            return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = returnLine };
         }
-        public SqlExecuteResult SetObject(string tableName, object obj, ExpandoObject whereObject, params string[] updateObjectFieldNames)
+        SqlExecuteResult SetObjectInternal<T>(string tableName, T obj, string whereString, object whereObject, params Expression<Func<T, object>>[] updateExpressions)
         {
             string sql = $"UPDATE [{tableName}] SET ";
-            string[] setNames = updateObjectFieldNames;
-            Dictionary<string, FieldInfo> setFieldInfos = getFieldInfos(obj, false);
 
-            if (setNames == null || setNames.Length == 0)
+            var updateFieldNames = updateExpressions.Select(expr =>
             {
-                setNames = getPropertyNames(setFieldInfos, false);
-            }
+                var memberExpression = expr.Body as MemberExpression;
+                if (memberExpression == null && expr.Body is UnaryExpression unaryExpression) memberExpression = unaryExpression.Operand as MemberExpression;
+                if (memberExpression == null) throw new ArgumentException("无效的表达式。只支持属性表达式。");
+                return memberExpression.Member.Name;
+            }).ToArray();
 
-            foreach (var item in setNames)
+            foreach (var item in updateFieldNames)
             {
                 sql += $"[{item}] = @{item}, ";
             }
             sql = sql.Substring(0, sql.Length - 2);
 
+            Dictionary<string, FieldInfo> fieldInfos;
+            if (whereObject is ExpandoObject) fieldInfos = getFieldInfos(whereObject as ExpandoObject, true);
+            else fieldInfos = getFieldInfos(whereObject, true);
 
-            var fieldInfos = getFieldInfos(whereObject, true);
-
-            makeWhereString(ref sql, ref tableName, ref fieldInfos);
-
-            var cmd = sqlAccess.GetCommand(sql);
-
-            SqlHelper.AddSqlCommandParameters(cmd, getFieldInfos(obj, false), setNames);
-            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
-
-            int i = cmd.ExecuteNonQuery();
-            return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
-        }
-        public SqlExecuteResult SetObject(string tableName, object obj, string whereString, object whereObject = null, params string[] updateObjectFieldNames)
-        {
-            string sql = $"UPDATE [{tableName}] SET ";
-            string[] setNames = updateObjectFieldNames;
-            Dictionary<string, FieldInfo> setFieldInfos = getFieldInfos(obj, false);
-
-            if (setNames == null || setNames.Length == 0)
-            {
-                setNames = getPropertyNames(setFieldInfos, false);
-            }
-
-            foreach (var item in setNames)
-            {
-                sql += $"[{item}] = @{item}, ";
-            }
-            sql = sql.Substring(0, sql.Length - 2);
-
-            var fieldInfos = getFieldInfos(whereObject, true);
-
-            if (!string.IsNullOrEmpty(whereString))
-            {
-                sql += " WHERE " + whereString;
-            }
+            if (whereString.IsNullOrEmpty())
+                makeWhereString(ref sql, ref tableName, ref fieldInfos);
+            else sql += " WHERE " + whereString;
 
             var cmd = sqlAccess.GetCommand(sql);
 
-            SqlHelper.AddSqlCommandParameters(cmd, getFieldInfos(obj, false), setNames);
+            SqlHelper.AddSqlCommandParameters(cmd, getFieldInfos(obj, false), updateFieldNames);
             SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
 
-            int i = cmd.ExecuteNonQuery();
-            return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
+            int returnLine = cmd.ExecuteNonQuery();
+            return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = returnLine };
         }
 
         public SqlExecuteResult DeleteObject(string tableName, object whereObject)
