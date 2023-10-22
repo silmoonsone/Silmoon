@@ -8,6 +8,19 @@ namespace Silmoon.Extension
 {
     public static class EnumExtension
     {
+        public static T AddFlag<T>(this T value, T flag) where T : Enum
+        {
+            var valueType = Convert.ToUInt64(value);
+            var flagType = Convert.ToUInt64(flag);
+            return (T)Enum.ToObject(typeof(T), valueType | flagType);
+        }
+
+        public static T RemoveFlag<T>(this T value, T flag) where T : Enum
+        {
+            var valueType = Convert.ToUInt64(value);
+            var flagType = Convert.ToUInt64(flag);
+            return (T)Enum.ToObject(typeof(T), valueType & ~flagType);
+        }
         public static T Parse<T>(string value) where T : Enum
         {
             var type = typeof(T);
