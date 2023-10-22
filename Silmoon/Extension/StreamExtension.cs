@@ -78,5 +78,27 @@ namespace Silmoon.Extension
                 return reader.ReadToEnd();
             }
         }
+        public static byte[] WhileReadAllToByteArray(this Stream stream, int totalSize)
+        {
+            byte[] buffer = new byte[totalSize];
+            int readed = 0, readRound;
+            while ((readRound = stream.Read(buffer, readed, totalSize)) != 0)
+            {
+                readed += readRound;
+                totalSize -= readRound;
+            }
+            return buffer;
+        }
+        public static byte[] WhileReadToEndToByteArray(this Stream stream, int bufferSize = 1024 * 512)
+        {
+            List<byte> result = new List<byte>();
+            byte[] buffer = new byte[bufferSize];
+            int readRound;
+            while ((readRound = stream.Read(buffer, 0, bufferSize)) != 0)
+            {
+                result.AddRange(new ArraySegment<byte>(buffer, 0, readRound));
+            }
+            return result.ToArray();
+        }
     }
 }
