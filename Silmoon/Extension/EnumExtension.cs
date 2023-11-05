@@ -12,7 +12,16 @@ namespace Silmoon.Extension
         public static T RemoveFlag<T>(this T value, T flag) where T : Enum => (T)Enum.ToObject(typeof(T), Convert.ToUInt64(value) & ~Convert.ToUInt64(flag));
         public static T Parse<T>(string value) where T : Enum => (T)Enum.Parse(typeof(T), value);
 
-
+        public static bool HasFlags<T>(this T value, params T[] flags) where T : struct, Enum
+        {
+            ulong valueAsULong = Convert.ToUInt64(value);
+            foreach (T flag in flags)
+            {
+                ulong flagAsULong = Convert.ToUInt64(flag);
+                if ((valueAsULong & flagAsULong) != flagAsULong) return false;
+            }
+            return true;
+        }
 
         public static T[] GetFlagEnumArray<T>(this T value, bool IncludeZeroEnum = false) where T : Enum
         {
