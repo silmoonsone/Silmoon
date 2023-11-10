@@ -11,11 +11,11 @@ namespace Silmoon.AspNetCore.Services
 {
     public abstract class SilmoonDevAppService : ISilmoonDevAppService
     {
-        public SilmoonAppDevServiceOptions Options { get; set; }
+        public SilmoonDevAppServiceOptions Options { get; set; }
 
-        public SilmoonDevAppService(IOptions<SilmoonAppDevServiceOptions> options)
+        public SilmoonDevAppService(IOptions<SilmoonDevAppServiceOptions> options)
         {
-            Options = options.Value is null ? new SilmoonAppDevServiceOptions() : options.Value;
+            Options = options.Value is null ? new SilmoonDevAppServiceOptions() : options.Value;
         }
 
         public async Task<StateSet<bool, (string SignatureKey, string EncryptKey)>> GetCachedKey(string AppId)

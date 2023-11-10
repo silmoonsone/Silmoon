@@ -14,17 +14,17 @@ namespace Silmoon.AspNetCore.Extensions
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            services.Configure<SilmoonAppDevServiceOptions>(o => o.KeyCacheSecoundTimeout = 3600);
-            services.AddTransient<ISilmoonDevAppService, TSilmoonDevAppService>();
+            services.Configure<SilmoonDevAppServiceOptions>(o => o.KeyCacheSecoundTimeout = 3600);
+            services.AddSingleton<ISilmoonDevAppService, TSilmoonDevAppService>();
         }
 
-        public static void AddSilmoonDevApp<TSilmoonDevAppService>(this IServiceCollection services, Action<SilmoonAppDevServiceOptions> configure) where TSilmoonDevAppService : SilmoonDevAppService
+        public static void AddSilmoonDevApp<TSilmoonDevAppService>(this IServiceCollection services, Action<SilmoonDevAppServiceOptions> configure) where TSilmoonDevAppService : SilmoonDevAppService
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
             if (configure == null) throw new ArgumentNullException(nameof(configure));
 
             services.Configure(configure);
-            services.AddTransient<ISilmoonDevAppService, TSilmoonDevAppService>();
+            services.AddSingleton<ISilmoonDevAppService, TSilmoonDevAppService>();
         }
 
         public static void AddSilmoonAuth<TSilmoonAuthService>(this IServiceCollection services) where TSilmoonAuthService : class, ISilmoonAuthService
