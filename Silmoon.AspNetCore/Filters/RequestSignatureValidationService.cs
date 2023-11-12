@@ -13,6 +13,9 @@ using Silmoon.AspNetCore.Services.Interfaces;
 
 namespace Silmoon.AspNetCore.Filters
 {
+    /// <summary>
+    /// 一个根据凭证进行验证签名的过滤器，如果是GET请求，将验证所有GET参数，如果是POST请求，将验证全部POST参数。
+    /// </summary>
     public class RequestSignatureValidationAttribute : ActionFilterAttribute
     {
         public string KeyFieldName { get; set; }
@@ -42,14 +45,15 @@ namespace Silmoon.AspNetCore.Filters
                 || ((string)filterContext.HttpContext.Request.Headers["EncryptionApi"]).ToBool()
                 || ((string)filterContext.HttpContext.Request.Headers["ApiEncryption"]).ToBool())
             {
+                //如果是加密的请求，将不进行签名验证
                 await base.OnActionExecutionAsync(filterContext, next);
             }
             else
             {
-                if (SilmoonDevAppService == null)
+                if (SilmoonDevAppService is null)
                 {
                     SilmoonDevAppService = filterContext.HttpContext.RequestServices.GetService<ISilmoonDevAppService>();
-                    if (SilmoonDevAppService == null)
+                    if (SilmoonDevAppService is null)
                     {
                         filterContext.Result = new ContentResult() { Content = ApiResult<string>.Create(ResultState.Fail, null, $"SilmoonDevAppService is not configured.").ToJsonString(), ContentType = "application/json" };
                         return;
@@ -79,19 +83,14 @@ namespace Silmoon.AspNetCore.Filters
                     if (keyResult.State)
                     {
                         var signature = nameValueCollection.GetSign(KeyFieldName, keyResult.Data.SignatureKey, SignFieldName);
+
                         if (Signature != signature)
-                        {
                             filterContext.Result = new ContentResult() { Content = ApiResult<string>.Create(ResultState.Fail, null, $"Sign error (Request AppId is {{{AppId}}}, request signature is {{{Signature}(error)}} ).").ToJsonString(), ContentType = "application/json" };
-                        }
                         else
-                        {
                             await base.OnActionExecutionAsync(filterContext, next);
-                        }
                     }
                     else
-                    {
                         filterContext.Result = new ContentResult() { Content = ApiResult<string>.Create(ResultState.Fail, null, $"GetKey(string AppId) fail, Message: {{{keyResult.Message}}}").ToJsonString(), ContentType = "application/json" };
-                    }
                 }
                 else await base.OnActionExecutionAsync(filterContext, next);
             }
