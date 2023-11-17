@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Silmoon.Arrays
 {
+    [Obsolete("Please try the new implementation DictionarySortV2.")]
     public class DictionarySort : System.Collections.IComparer
     {
         public int Compare(object left, object right)
