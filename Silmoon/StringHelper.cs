@@ -4,6 +4,7 @@ using System.Text;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
+using Silmoon.Extension;
 
 namespace Silmoon
 {
@@ -98,18 +99,15 @@ namespace Silmoon
         public static NameValueCollection AnalyzeNameValue(string[] array, string nameValueSeparator = ":", string perNameChar = "")
         {
             NameValueCollection result = new NameValueCollection();
-            if (array == null || array.Length == 0) return result;
+            if (array.IsNullOrEmpty()) return result;
             foreach (string s1 in array)
             {
-                //if (perNameChar != "")
-                //    if (s1.Length > perNameChar.Length)
-                //        if (s1.Substring(0, perNameChar.Length) != perNameChar)
-
-                if (perNameChar != "" && s1.Length > perNameChar.Length && s1.Substring(0, perNameChar.Length) != perNameChar)
-                    continue;
-                string[] sArr = s1.Split(new string[] { nameValueSeparator }, 2, StringSplitOptions.None);
-                if (sArr.Length == 2)
-                    result.Add(sArr[0], sArr[1]);
+                if (s1.StartsWith(perNameChar))
+                {
+                    string[] sArr = s1.Split(new string[] { nameValueSeparator }, 2, StringSplitOptions.None);
+                    if (sArr.Length == 2) result.Add(sArr[0], sArr[1]);
+                    else result.Add(sArr[0], null);
+                }
             }
 
             return result;
