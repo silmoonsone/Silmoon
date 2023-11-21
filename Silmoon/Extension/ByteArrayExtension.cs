@@ -46,9 +46,14 @@ namespace Silmoon.Extension
             }
             return result;
         }
-        public static string GetString(this byte[] data, Encoding encoding)
+        public static string GetString(this byte[] data, Encoding encoding = null)
         {
+            if (encoding == null) encoding = Encoding.UTF8;
             return encoding.GetString(data);
+        }
+        public static string GetBase64String(this byte[] data)
+        {
+            return Convert.ToBase64String(data);
         }
     }
 }

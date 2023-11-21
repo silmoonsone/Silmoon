@@ -50,26 +50,26 @@ namespace Silmoon.Secure
 
         public static string AesEncryptStringToBase64String(string Data, string Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
         {
-            var data = Encoding.UTF8.GetBytes(Data);
-            var key = Encoding.UTF8.GetBytes(Key);
+            var data = Data.GetBytes();
+            var key = Key.GetBytes();
             return Convert.ToBase64String(AesEncrypt(data, key, CipherMode, PaddingMode));
         }
         public static string AesDecryptBase64StringToString(string Based64String, string Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
         {
             var data = Convert.FromBase64String(Based64String);
-            var key = Encoding.UTF8.GetBytes(Key);
+            var key = Key.GetBytes();
             return Encoding.UTF8.GetString(AesDecrypt(data, key, CipherMode, PaddingMode));
         }
 
         public static string AesEncryptStringToHexString(string Data, byte[] Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
         {
-            var data = Encoding.UTF8.GetBytes(Data);
+            var data = Data.GetBytes();
             return AesEncrypt(data, Key, CipherMode, PaddingMode).ByteArrayToHexString();
         }
         public static string AesDecryptHexStringToString(string HexString, byte[] Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
         {
             var data = HexString.HexStringToByteArray();
-            return Encoding.UTF8.GetString(AesDecrypt(data, Key, CipherMode, PaddingMode));
+            return AesDecrypt(data, Key, CipherMode, PaddingMode).GetString();
         }
 
 
@@ -77,7 +77,7 @@ namespace Silmoon.Secure
         public static byte[] AesEncryptV2(byte[] Data, string Key)
         {
             byte[] iv = new byte[16];
-            byte[] keyBytes = Encoding.UTF8.GetBytes(Key);
+            byte[] keyBytes = Key.GetBytes();
             byte[] array;
 
             using (Aes aes = Aes.Create())
@@ -95,7 +95,7 @@ namespace Silmoon.Secure
         public static byte[] AesDecryptV2(byte[] Data, string Key)
         {
             byte[] iv = new byte[16];
-            byte[] keyBytes = Encoding.UTF8.GetBytes(Key);
+            byte[] keyBytes = Key.GetBytes();
 
             using (Aes aes = Aes.Create())
             {
@@ -118,7 +118,7 @@ namespace Silmoon.Secure
         }
         public static string AesEncryptStringV2(string PlainText, string Key, bool UseHexString = true)
         {
-            byte[] cipherBytes = AesEncryptV2(Encoding.UTF8.GetBytes(PlainText), Key);
+            byte[] cipherBytes = AesEncryptV2(PlainText.GetBytes(), Key);
             if (UseHexString)
             {
                 StringBuilder stringBuilder = new StringBuilder(cipherBytes.Length * 2);
@@ -129,9 +129,7 @@ namespace Silmoon.Secure
                 return stringBuilder.ToString();
             }
             else
-            {
                 return Convert.ToBase64String(cipherBytes);
-            }
         }
         public static string AesDecryptStringV2(string CipherText, string Key, bool UseHexString = true)
         {
@@ -149,9 +147,10 @@ namespace Silmoon.Secure
                 cipherBytes = Convert.FromBase64String(CipherText);
             }
             byte[] plainBytes = AesDecryptV2(cipherBytes, Key);
-            if (plainBytes is null) return null;
+            if (plainBytes is null)
+                return null;
             else
-                return Encoding.UTF8.GetString(plainBytes);
+                return plainBytes.GetString(Encoding.UTF8);
         }
 
 
@@ -161,9 +160,9 @@ namespace Silmoon.Secure
             if (data is null) return null;
             if (data == "") return "";
 
-            byte[] odata = Encoding.UTF8.GetBytes(data);
-            byte[] byKey = Encoding.ASCII.GetBytes(KEY_64);
-            byte[] byIV = Encoding.ASCII.GetBytes(IV_64);
+            byte[] odata = data.GetBytes();
+            byte[] byKey = KEY_64.GetBytes();
+            byte[] byIV = IV_64.GetBytes();
 
             return Convert.ToBase64String(DesEncrypt(odata, byKey, byIV));
         }
@@ -193,8 +192,8 @@ namespace Silmoon.Secure
             if (data == "") return "";
 
             byte[] odata = Convert.FromBase64String(data);
-            byte[] byKey = Encoding.ASCII.GetBytes(KEY_64);
-            byte[] byIV = Encoding.ASCII.GetBytes(IV_64);
+            byte[] byKey = KEY_64.GetBytes();
+            byte[] byIV = IV_64.GetBytes();
 
             return Encoding.UTF8.GetString(DesDecrypt(odata, byKey, byIV));
         }
@@ -226,110 +225,72 @@ namespace Silmoon.Secure
 
 
 
-        public static string RsaEncrypt(string data, string rsaKeyXmlFile = @"C:\rsa_private.xml")
+        public static string RsaEncrypt(string str, string rsaKeyXmlFile = @"C:\rsa_private.xml")
         {
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && rsaKeyXmlFile == @"C:\rsa_private.xml") rsaKeyXmlFile = "/etc/rsa_private.xml";
 
             if (File.Exists(rsaKeyXmlFile))
             {
                 string rsaXml = File.ReadAllText(rsaKeyXmlFile);
-                return RsaEncrypt(rsaXml, data, "UTF-8");
+                return RsaEncrypt(rsaXml, str, "UTF-8");
             }
             else
             {
                 throw new FileNotFoundException("RSA密钥XML字符串文件没有找到。", rsaKeyXmlFile);
             }
         }
-        public static string RsaDecrypt(string data, string rsaKeyXmlFile = @"C:\rsa_private.xml")
+        public static string RsaDecrypt(string base64EncryptedString, string rsaKeyXmlFile = @"C:\rsa_private.xml")
         {
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && rsaKeyXmlFile == @"C:\rsa_private.xml") rsaKeyXmlFile = "/etc/rsa_private.xml";
 
             if (File.Exists(rsaKeyXmlFile))
             {
                 string rsaXml = File.ReadAllText(rsaKeyXmlFile);
-                return RsaDecrypt(rsaXml, data, "UTF-8");
+                return RsaDecrypt(rsaXml, base64EncryptedString, "UTF-8");
             }
             else
             {
                 throw new FileNotFoundException("RSA密钥XML字符串文件没有找到。", rsaKeyXmlFile);
             }
         }
-        public static string RsaEncrypt(string data, RSACryptoServiceProvider rsa)
+
+        public static string RsaEncrypt(string xmlPublicKey, string str, string encoding = "UTF-8") => Convert.ToBase64String(RsaEncrypt(xmlPublicKey, str.GetBytes(Encoding.GetEncoding(encoding))));
+        public static byte[] RsaEncrypt(string xmlPublicKey, byte[] data)
         {
-            if (data is null) return null;
-            if (data == "") return "";
-
-            byte[] bytes = Encoding.UTF8.GetBytes(data);
-
-            bytes = rsa.Encrypt(bytes, true);
-            return Convert.ToBase64String(bytes);
-        }
-        public static string RsaDecrypt(string data, RSACryptoServiceProvider rsa)
-        {
-            if (data is null) return null;
-            if (data == "") return "";
-
-            byte[] bytes = Convert.FromBase64String(data);
-
-            bytes = rsa.Decrypt(bytes, true);
-            return Encoding.UTF8.GetString(bytes);
-        }
-
-
-        public static string RsaEncrypt(string xmlpublicKey, string data, string encoding = "UTF-8")
-        {
-            var encode = Encoding.GetEncoding(encoding);
-            return Convert.ToBase64String(RsaEncrypt(xmlpublicKey, encode.GetBytes(data)));
-        }
-        public static byte[] RsaEncrypt(string xmlpublicKey, byte[] data)
-        {
-            using (RSACryptoServiceProvider provider = new RSACryptoServiceProvider())
+            using (RSA rsa = RSA.Create())
             {
-                provider.FromXmlString(xmlpublicKey);
-                return provider.Encrypt(data, true);
+                rsa.FromXmlString(xmlPublicKey);
+                return rsa.Encrypt(data, RSAEncryptionPadding.OaepSHA1);
             }
         }
-        public static string RsaDecrypt(string xmlPrivateKey, string data, string encoding = "UTF-8")
-        {
-            var encode = Encoding.GetEncoding(encoding);
-            return encode.GetString(RsaDecrypt(xmlPrivateKey, Convert.FromBase64String(data)));
-        }
+        public static string RsaDecrypt(string xmlPrivateKey, string base64EncryptedString, string encoding = "UTF-8") => RsaDecrypt(xmlPrivateKey, Convert.FromBase64String(base64EncryptedString)).GetString(Encoding.GetEncoding(encoding));
         public static byte[] RsaDecrypt(string xmlPrivateKey, byte[] data)
         {
-            using (RSACryptoServiceProvider provider = new RSACryptoServiceProvider())
+            using (RSA rsa = RSA.Create())
             {
-                provider.FromXmlString(xmlPrivateKey);
-                return provider.Decrypt(data, true);
+                rsa.FromXmlString(xmlPrivateKey);
+                return rsa.Decrypt(data, RSAEncryptionPadding.OaepSHA1);
             }
         }
 
 
-        public static string RsaSignData(string data, string xmlPrivateKey, string encoding = "UTF-8")
+        public static byte[] RsaSignData(byte[] data, string xmlPrivateKey, HashAlgorithmName hashAlgorithmName)
         {
-            var encode = Encoding.GetEncoding(encoding);
-            return Convert.ToBase64String(RsaSignData(encode.GetBytes(data), xmlPrivateKey));
+            using (RSA rsa = RSA.Create())
+            {
+                rsa.FromXmlString(xmlPrivateKey);
+                return rsa.SignData(data, hashAlgorithmName, RSASignaturePadding.Pkcs1);
+            }
         }
-        public static byte[] RsaSignData(byte[] data, string xmlPrivateKey)
+        public static bool RsaVerifySign(byte[] data, string xmlPublicKey, byte[] signature, HashAlgorithmName hashAlgorithmName)
         {
-            RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
-            provider.FromXmlString(xmlPrivateKey);
-            return provider.SignData(data, new SHA1CryptoServiceProvider());
-        }
-        public static bool RsaVerifySign(string data, string xmlpublicKey, string signature)
-        {
-            return RsaVerifySign(Encoding.UTF8.GetBytes(data), xmlpublicKey, Convert.FromBase64String(signature));
-        }
-        public static bool RsaVerifySign(byte[] data, string xmlpublicKey, byte[] signature)
-        {
-            RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
-            provider.FromXmlString(xmlpublicKey);
-
-            return provider.VerifyData(data, new SHA1CryptoServiceProvider(), signature);
+            using (RSA rsa = RSA.Create())
+            {
+                rsa.FromXmlString(xmlPublicKey);
+                return rsa.VerifyData(data, signature, hashAlgorithmName, RSASignaturePadding.Pkcs1);
+            }
         }
 
-        public static object AesEncryptStringToHexString(string s, object value)
-        {
-            throw new NotImplementedException();
-        }
+        public static object AesEncryptStringToHexString(string s, object value) => throw new NotImplementedException();
     }
 }

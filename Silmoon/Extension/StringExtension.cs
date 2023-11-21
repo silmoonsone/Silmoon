@@ -589,8 +589,15 @@ namespace Silmoon.Extension
             var query = HttpUtility.ParseQueryString(url);
             return query[key];
         }
-        public static byte[] GetBytes(this string str, Encoding encoding)
+        /// <summary>
+        /// Default encoding is UTF8
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
+        public static byte[] GetBytes(this string str, Encoding encoding = null)
         {
+            if (encoding == null) encoding = Encoding.UTF8;
             return encoding.GetBytes(str);
         }
     }

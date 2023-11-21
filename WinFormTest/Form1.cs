@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using Silmoon.Extension;
 using Silmoon.Compress;
 using Silmoon.Runtime;
+using Silmoon.Core;
 
 namespace WinFormTest
 {
@@ -67,6 +68,12 @@ namespace WinFormTest
         class UserEx : User
         {
             public string Password { get; set; }
+        }
+
+        private void ctlKeyFileEncryptoBtn_Click(object sender, EventArgs e)
+        {
+            textBox1.Text = textBox1.Text.KeyFileEncryptToSmkmUri("diiFG0eCmgB523qiNRUOa3Lk4TYN93g6");
+            textBox1.Text = textBox1.Text.TryKeyFileDecryptSmkmUri();
         }
     }
 }
