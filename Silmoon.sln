@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormTest", "WinFormTest\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.AspNetCore.Test", "Silmoon.AspNetCore.Test\Silmoon.AspNetCore.Test.csproj", "{1B35921D-968B-4C55-891F-12F9D814090B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Core", "Silmoon.Core\Silmoon.Core.csproj", "{69DEE3AD-AB43-4EC0-B9AA-FFB9A274AED5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,12 +71,16 @@ Global
 		{1B35921D-968B-4C55-891F-12F9D814090B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B35921D-968B-4C55-891F-12F9D814090B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B35921D-968B-4C55-891F-12F9D814090B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69DEE3AD-AB43-4EC0-B9AA-FFB9A274AED5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69DEE3AD-AB43-4EC0-B9AA-FFB9A274AED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69DEE3AD-AB43-4EC0-B9AA-FFB9A274AED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69DEE3AD-AB43-4EC0-B9AA-FFB9A274AED5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {18B93CD3-1A51-425B-89D1-03A0565D2E21}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal
