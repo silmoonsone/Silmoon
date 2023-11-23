@@ -22,7 +22,7 @@ namespace Silmoon.AspNetCore.Extensions
             foreach (var item in array) s += item + "&";
 
             s += Key + "=" + Value;
-            return HashHelper.MD5(s);
+            return HashHelper.GetMD5Hash(s);
         }
     }
 }

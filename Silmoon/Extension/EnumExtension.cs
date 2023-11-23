@@ -36,7 +36,7 @@ namespace Silmoon.Extension
         }
         public static T[] GetFlagEnumArray<T>(this T value, bool IncludeZeroEnum = false) where T : Enum
         {
-            if (!typeof(T).IsDefined(typeof(FlagsAttribute), false)) throw new ArgumentException("The generic type parameter must be a flagged enum.");
+            if (!typeof(T).IsDefined(typeof(FlagsAttribute), false)) throw new ArgumentException("The generic type parameter must be a [Flags] enum.");
 
             List<T> flagEnums = new List<T>();
 
@@ -50,7 +50,7 @@ namespace Silmoon.Extension
 
             return flagEnums.ToArray();
         }
-        public static string[] ToFlagStringArray<T>(this T value, bool IncludeZeroEnum = false) where T : Enum => GetFlagEnumArray(value, IncludeZeroEnum).Select(e => e.ToString()).ToArray();
-        public static string[] ToStringArray<T>(this T[] enums) where T : Enum => enums.Select(e => e.ToString()).ToArray();
+        public static string[] GetFlagStringArray<T>(this T value, bool IncludeZeroEnum = false) where T : Enum => GetFlagEnumArray(value, IncludeZeroEnum).Select(e => e.ToString()).ToArray();
+        public static string[] GetStringArray<T>(this T[] enums) where T : Enum => enums.Select(e => e.ToString()).ToArray();
     }
 }

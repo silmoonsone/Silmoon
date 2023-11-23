@@ -1,3 +1,4 @@
+using Silmoon.Extension;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -9,19 +10,30 @@ namespace Silmoon.Secure
     {
         private static Random Random { get; set; } = new Random();
 
-        public static string MD5(this string s)
+        public static string GetMD5Hash(this string s) => s.GetMD5Hash(Encoding.UTF8);
+        public static string GetMD5Hash(this string s, Encoding encoding)
         {
             using (var c = new MD5CryptoServiceProvider())
             {
-                byte[] data = c.ComputeHash(Encoding.UTF8.GetBytes(s));
+                byte[] data = c.ComputeHash(s.GetBytes(encoding));
                 return BitConverter.ToString(data).Replace("-", "").ToLower();
             }
         }
-        public static string SHA1(string s)
+        public static string GetSHA1Hash(this string s) => s.GetSHA1Hash(Encoding.UTF8);
+        public static string GetSHA1Hash(this string s, Encoding encoding)
         {
             using (var c = new SHA1CryptoServiceProvider())
             {
-                byte[] bresult = c.ComputeHash(Encoding.UTF8.GetBytes(s));
+                byte[] bresult = c.ComputeHash(s.GetBytes(encoding));
+                return BitConverter.ToString(bresult).Replace("-", "").ToLower();
+            }
+        }
+        public static string GetSHA256Hash(this string s) => s.GetSHA256Hash(Encoding.UTF8);
+        public static string GetSHA256Hash(this string s, Encoding encoding)
+        {
+            using (var c = new SHA256CryptoServiceProvider())
+            {
+                byte[] bresult = c.ComputeHash(s.GetBytes(encoding));
                 return BitConverter.ToString(bresult).Replace("-", "").ToLower();
             }
         }

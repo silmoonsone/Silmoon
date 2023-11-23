@@ -64,7 +64,7 @@ namespace Silmoon.Extension
             foreach (var item in array) s += item + "&";
 
             s += KeyName + "=" + Key;
-            return HashHelper.MD5(s);
+            return HashHelper.GetMD5Hash(s);
         }
 
     }

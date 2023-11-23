@@ -22,10 +22,10 @@ namespace Silmoon.AspNetCore.Services
             ServiceProvider = serviceProvider;
             HttpContextAccessor = httpContextAccessor;
         }
-        public async Task SignIn<TUser>(TUser User, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity
-        {
-            await SignIn(User, true, null, NameIdentifier);
-        }
+        public async Task SignIn<TUser>(TUser User, bool AddEnumRole) where TUser : class, IDefaultUserIdentity => await SignIn(User, AddEnumRole, (string[])null, null);
+        public async Task SignIn<TUser>(TUser User, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity => await SignIn(User, true, (string[])null, NameIdentifier);
+        public async Task SignIn<TUser>(TUser User, bool AddEnumRole, Enum CustomerRoles, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity => await SignIn(User, AddEnumRole, CustomerRoles.GetFlagStringArray(), NameIdentifier);
+        public async Task SignIn<TUser>(TUser User, bool AddEnumRole, Enum[] CustomerRoles, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity => await SignIn(User, AddEnumRole, CustomerRoles.GetStringArray(), NameIdentifier);
         public async Task SignIn<TUser>(TUser User, bool AddEnumRole, string[] CustomerRoles, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity
         {
             if (User is null) throw new ArgumentNullException(nameof(User));
@@ -123,7 +123,7 @@ namespace Silmoon.AspNetCore.Services
             }
             return false;
         }
-        public bool IsInRole(params Enum[] Roles) => IsInRole(Roles.ToStringArray());
+        public bool IsInRole(params Enum[] Roles) => IsInRole(Roles.GetStringArray());
 
         void SetUserCache<TUser>(TUser User, string NameIdentifier) where TUser : class, IDefaultUserIdentity
         {

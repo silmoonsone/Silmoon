@@ -99,7 +99,7 @@ namespace Silmoon.Extension
             {
                 s += "&" + AppendValue;
             }
-            return HashHelper.MD5(s);
+            return HashHelper.GetMD5Hash(s);
         }
         public byte[] GetSign(string AppendKey, string AppendValue, bool IgnoreEmptyValue, bool RequireValueUrlEncode, Func<string, byte[]> SignatureFunction, params string[] IgnoreKeys)
         {
