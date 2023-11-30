@@ -40,16 +40,11 @@ namespace Silmoon.Models
     {
         public T Data { get; set; }
 
-        public StateFlag()
-        {
-
-        }
-
         public static StateFlag<T> Create(bool Success, T Data)
         {
             return new StateFlag<T>() { Success = Success, Data = Data };
         }
-        public static StateFlag<T> Create(bool Success, string Message, T Data)
+        public static StateFlag<T> Create(bool Success, T Data, string Message)
         {
             return new StateFlag<T>() { Success = Success, Message = Message, Data = Data };
         }
@@ -57,7 +52,7 @@ namespace Silmoon.Models
         {
             return new StateFlag<T>() { Success = Success, Code = Code, Data = Data };
         }
-        public static StateFlag<T> Create(bool Success, int Code, string Message, T Data)
+        public static StateFlag<T> Create(bool Success, int Code, T Data, string Message)
         {
             return new StateFlag<T>() { Success = Success, Message = Message, Code = Code, Data = Data };
         }

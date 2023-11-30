@@ -64,7 +64,7 @@ namespace Silmoon.Web.Extension
         public static ContentResult JsonStateFlag<T>(this ControllerBase controller, bool Success, int Code, string Message, T Data)
         {
             var result = new ContentResult();
-            result.Content = StateFlag<T>.Create(Success, Code, Message, Data).ToJsonString();
+            result.Content = StateFlag<T>.Create(Success, Code, Data, Message).ToJsonString();
             result.ContentType = "application/json";
             result.ContentEncoding = Encoding.UTF8;
             return result;

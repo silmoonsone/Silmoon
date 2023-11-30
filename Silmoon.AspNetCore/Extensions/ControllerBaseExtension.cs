@@ -60,7 +60,7 @@ namespace Silmoon.AspNetCore.Extensions
         }
         public static ContentResult JsonStateFlag<T>(this ControllerBase controller, bool Success, int Code, string Message, T Data)
         {
-            var result = StateFlag<T>.Create(Success, Code, Message, Data);
+            var result = StateFlag<T>.Create(Success, Code, Data, Message);
             return new ContentResult() { Content = result.ToJsonString(), ContentType = "application/json" };
         }
 

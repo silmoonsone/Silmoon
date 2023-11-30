@@ -46,10 +46,5 @@ namespace Silmoon.Extension
             }
             return result;
         }
-        public static string GetEncryptedJsonString(this JToken obj, string KeyName, string EncrypeKey)
-        {
-            var str = obj.ToJsonString();
-            return str;
-        }
     }
 }

@@ -16,6 +16,6 @@ namespace Silmoon.Models.Identities.Enums
         [Display(Name = "管理员")]
         Admin = 16,
         [Display(Name = "超管")]
-        Creater = 32,
+        Creator = 32,
     }
 }
