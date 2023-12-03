@@ -6,12 +6,17 @@ namespace Silmoon.AspNetCore.Extensions
 {
     public static class ExtensionHelper
     {
+        public static IActionResult GetStateFlagResult(this bool Success, string Message = null)
+        {
+            StateFlag stateFlag = StateFlag.Create(Success, 0, Message);
+            return new ContentResult() { Content = stateFlag.ToJsonString(), ContentType = "application/json" };
+        }
         public static IActionResult GetStateFlagResult<T>(this bool Success, T Data = default, string Message = null)
         {
             StateFlag<T> stateFlag = StateFlag<T>.Create(Success, 0, Data, Message);
             return new ContentResult() { Content = stateFlag.ToJsonString(), ContentType = "application/json" };
         }
-        public static IActionResult GetStateFlagResult(this bool Success, int Code = 0, string Message = null)
+        public static IActionResult GetStateFlagResult(this bool Success, int Code, string Message = null)
         {
             StateFlag stateFlag = StateFlag.Create(Success, Code, Message);
             return new ContentResult() { Content = stateFlag.ToJsonString(), ContentType = "application/json" };
