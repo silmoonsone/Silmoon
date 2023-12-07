@@ -13,7 +13,7 @@ using Silmoon.Secure;
 
 namespace Silmoon.Core
 {
-    public static class CoreEncryptHelper
+    public static class CoreEncryptStringExtension
     {
         public static string DefaultKeyFilePath
         {
