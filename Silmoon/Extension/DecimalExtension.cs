@@ -11,14 +11,14 @@ namespace Silmoon.Extension
     {
         static readonly CultureInfo enUS = new CultureInfo("en-US");
         static readonly CultureInfo zhCN = new CultureInfo("zh-CN");
-        public static string ToUSD(this decimal value)
+        public static string ToUSD(this decimal value, int currencyDecimalDigits = 2)
         {
-            enUS.NumberFormat.CurrencyNegativePattern = 2;
+            enUS.NumberFormat.CurrencyDecimalDigits = currencyDecimalDigits;
             return value.ToString("C", enUS);
         }
-        public static string ToRMB(this decimal value)
+        public static string ToRMB(this decimal value, int currencyDecimalDigits = 2)
         {
-            zhCN.NumberFormat.CurrencyNegativePattern = 2;
+            zhCN.NumberFormat.CurrencyDecimalDigits = currencyDecimalDigits;
             return value.ToString("C", zhCN);
         }
         public static decimal Pow(this decimal x, int y)
