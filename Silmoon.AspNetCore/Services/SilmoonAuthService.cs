@@ -124,6 +124,21 @@ namespace Silmoon.AspNetCore.Services
             return false;
         }
         public bool IsInRole(params Enum[] Roles) => IsInRole(Roles.GetStringArray());
+        public async Task<bool> IsInRoleAsync(params string[] Role)
+        {
+            var claimsPrincipal = await GetCurrentClaimsPrincipalAsync();
+            foreach (var item in Role)
+            {
+                if (claimsPrincipal.IsInRole(item)) return true;
+            }
+            return false;
+        }
+        public async Task<bool> IsInRoleAsync(params Enum[] Roles) => await IsInRoleAsync(Roles.GetStringArray());
+        public async Task<string[]> GetRoles()
+        {
+            var claimsPrincipal = await GetCurrentClaimsPrincipalAsync();
+            return claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+        }
 
         void SetUserCache<TUser>(TUser User, string NameIdentifier) where TUser : class, IDefaultUserIdentity
         {
