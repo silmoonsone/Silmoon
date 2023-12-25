@@ -24,7 +24,7 @@ namespace Silmoon.Models
         /// <param name="state">状态</param>
         /// <param name="message">信息</param>
         /// <returns></returns>
-        public StateSet<TState> Set(TState state, string message = "")
+        public StateSet<TState> Set(TState state, string message = null)
         {
             State = state;
             Message = message;
@@ -47,7 +47,7 @@ namespace Silmoon.Models
         /// </summary>
         /// <param name="state"></param>
         /// <param name="message"></param>
-        public StateSet(TState state, string message = "")
+        public StateSet(TState state, string message = null)
         {
             Set(state, message);
         }
@@ -80,14 +80,14 @@ namespace Silmoon.Models
         /// <param name="userState"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public StateSet<TState, TData> Set(TState state, TData data, string message = "")
+        public StateSet<TState, TData> Set(TState state, TData data, string message = null)
         {
             State = state;
             Message = message;
             Data = data;
             return this;
         }
-        public new StateSet<TState, TData> Set(TState state, string message = "")
+        public new StateSet<TState, TData> Set(TState state, string message = null)
         {
             State = state;
             Message = message;
@@ -99,7 +99,7 @@ namespace Silmoon.Models
         {
             Set(state, data, null);
         }
-        public StateSet(TState state, TData data, string message = "")
+        public StateSet(TState state, TData data, string message = null)
         {
             Set(state, data, message);
         }

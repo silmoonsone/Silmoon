@@ -26,7 +26,7 @@ namespace Silmoon.Core.Authorization
                 Name = Environment.MachineName,
             };
 
-            var fileContent = JsonSerializer.Serialize(keyFile, JsonContext.Default.KeyFile);
+            var fileContent = JsonSerializer.Serialize(keyFile, KeyFileJsonContext.Default.KeyFile);
             return fileContent;
         }
         public static StateSet<bool, KeyFile> DecodeEncryptedKeyString(string encryptedKeyString, string password)
@@ -34,7 +34,7 @@ namespace Silmoon.Core.Authorization
             if (encryptedKeyString.IsNullOrEmpty()) return StateSet<bool, KeyFile>.Create(false, null, "Invalid key file.");
             if (encryptedKeyString.IsNullOrEmpty()) return StateSet<bool, KeyFile>.Create(false, null, "Password error or invalid key string.");
 
-            var key = JsonSerializer.Deserialize<KeyFile>(encryptedKeyString, JsonContext.Default.KeyFile);
+            var key = JsonSerializer.Deserialize<KeyFile>(encryptedKeyString, KeyFileJsonContext.Default.KeyFile);
             using RSA rsa = RSA.Create();
             rsa.ImportFromEncryptedPem(key.PrivateKey, password.AsSpan());
             key.PrivateKey = rsa.ExportRSAPrivateKeyPem();
