@@ -505,7 +505,12 @@ namespace Silmoon.Extension
             Regex regex = new Regex(@"^([\da-fA-F]{1,4}:){7}[\da-fA-F]{1,4}$");
             return regex.IsMatch(IP);
         }
-
+        /// <summary>
+        /// 检查字符串是否是IP地址，使用了IPv4和IPv6的检查
+        /// </summary>
+        /// <param name="IP"></param>
+        /// <returns></returns>
+        public static bool IsIPAddress(this string IP) => IP.IsIPv4Address() || IP.IsIPv6Address();
         public static bool IsValidVersionNumber(this string str)
         {
             if (string.IsNullOrEmpty(str))
