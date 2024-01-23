@@ -138,7 +138,7 @@ namespace Silmoon.Extension
         {
             if (!Sort)
             {
-                if (list.Count == 0) return "";
+                if (list.Count == 0) return default;
                 StringBuilder stringBuilder = new StringBuilder();
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -149,13 +149,26 @@ namespace Silmoon.Extension
             }
             else
             {
-                List<string> array = new List<string>();
+                List<string> keyList = new List<string>();
                 for (int i = 0; i < list.Count; i++)
                 {
-                    if (UrlEncoded) array.Add(HttpUtility.UrlEncode(list[i].Key) + "=" + HttpUtility.UrlEncode(list[i].Value?.ToString() ?? ""));
-                    else array.Add(list[i].Key + "=" + list[i].Value?.ToString() ?? "");
+                    if (UrlEncoded) keyList.Add(HttpUtility.UrlEncode(list[i].Key));
+                    else keyList.Add(list[i].Key);
                 }
-                array.Sort();
+                keyList.Sort();
+
+                List<string> array = new List<string>();
+                foreach (var item in keyList)
+                {
+                    foreach (var item2 in list)
+                    {
+                        if (item2.Key == item)
+                        {
+                            if (UrlEncoded) array.Add(HttpUtility.UrlEncode(item2.Key) + "=" + HttpUtility.UrlEncode(item2.Value?.ToString() ?? ""));
+                            else array.Add(item2.Key + "=" + item2.Value?.ToString() ?? "");
+                        }
+                    }
+                }
 
                 string s = "";
 

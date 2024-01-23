@@ -1,3 +1,5 @@
+using Silmoon.Extension;
+
 namespace WinFormTest
 {
     internal static class Program
@@ -8,6 +10,10 @@ namespace WinFormTest
         [STAThread]
         static void Main()
         {
+            UrlDataCollection urlDataCollection = new UrlDataCollection();
+            urlDataCollection.Add("from_name", "1");
+            urlDataCollection.Add("from", "1");
+            var str = urlDataCollection.ToQueryString(true, true);
             //bool input = true;
             //while (input)
             //{
