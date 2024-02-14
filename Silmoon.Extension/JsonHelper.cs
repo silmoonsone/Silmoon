@@ -16,7 +16,7 @@ namespace Silmoon.Extension
 {
     public static class JsonHelper
     {
-        public static DictionaryEx<string, Dictionary<string, string>> JsonHelperRequestHeaders = new DictionaryEx<string, Dictionary<string, string>>();
+        public static DictionaryEx<string, Dictionary<string, string>> JsonHelperRequestHeaders { get; set; } = new DictionaryEx<string, Dictionary<string, string>>();
         public static void RegisterHostHeader(string Host, string HeaderName, string HeaderValue)
         {
             var hostHeaders = JsonHelperRequestHeaders.Get(Host);
