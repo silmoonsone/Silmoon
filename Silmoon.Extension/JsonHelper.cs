@@ -14,6 +14,7 @@ using System.Xml;
 
 namespace Silmoon.Extension
 {
+    [Obsolete("Use JsonHelperV2 instead")]
     public static class JsonHelper
     {
         public static DictionaryEx<string, Dictionary<string, string>> JsonHelperRequestHeaders { get; set; } = new DictionaryEx<string, Dictionary<string, string>>();
@@ -244,18 +245,8 @@ namespace Silmoon.Extension
 
 
 
-        public static JObject LoadJsonFromFile(string path)
-        {
-            string s = File.ReadAllText(path);
-            JObject jo = (JObject)JsonConvert.DeserializeObject(s);
-            return jo;
-        }
-        public static T LoadJsonFromFile<T>(string path)
-        {
-            string s = File.ReadAllText(path);
-            T jo = JsonConvert.DeserializeObject<T>(s);
-            return jo;
-        }
+        public static JObject LoadJsonFromFile(string path) => JsonHelperV2.LoadJsonFromFile<JObject>(path);
+        public static T LoadJsonFromFile<T>(string path) => JsonHelperV2.LoadJsonFromFile<T>(path);
 
 
     }
