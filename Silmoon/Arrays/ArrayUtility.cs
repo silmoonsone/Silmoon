@@ -29,6 +29,5 @@ namespace Silmoon.Arrays
 
             return result;
         }
-
     }
 }
