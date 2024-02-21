@@ -19,9 +19,9 @@ namespace Silmoon.AspNetCore.Test
         static JObject GetJsonConfig()
         {
 #if DEBUG
-            var json = JsonHelper.LoadJsonFromFile(@"config.debug.json");
+            var json = JsonHelperV2.LoadJsonFromFile(@"config.debug.json");
 #else
-            var json = JsonHelper.LoadJsonFromFile(@"config.json");
+            var json = JsonHelperV2.LoadJsonFromFile(@"config.json");
 #endif
             return json;
         }

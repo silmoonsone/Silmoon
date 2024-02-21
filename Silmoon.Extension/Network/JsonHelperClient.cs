@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Silmoon.Extension.Network
 {
+    [Obsolete]
     public class JsonHelperClient : WebClient
     {
         public int Timeout { get; set; } = 60000;
