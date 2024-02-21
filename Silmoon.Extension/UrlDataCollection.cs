@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -10,7 +11,7 @@ namespace Silmoon.Extension
 {
     public class UrlDataCollection : IEnumerable
     {
-        List<(string Key, object Value)> list = new List<(string, object)>();
+        readonly List<(string Key, object Value)> list = new List<(string, object)>();
         public UrlDataCollection()
         {
 
@@ -209,6 +210,15 @@ namespace Silmoon.Extension
         {
             var uri = new Uri(Url);
             return Parse(uri.Query.TrimStart('?'));
+        }
+        public static UrlDataCollection FromNameValueCollection(NameValueCollection nameValueCollection)
+        {
+            UrlDataCollection result = new UrlDataCollection();
+            foreach (var key in nameValueCollection.AllKeys)
+            {
+                result.Add(key, nameValueCollection[key]);
+            }
+            return result;
         }
     }
 }

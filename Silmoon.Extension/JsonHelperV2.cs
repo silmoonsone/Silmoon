@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using Silmoon.Extension.Network;
 using Silmoon.Models;
 using Silmoon.Runtime.Collections;
@@ -39,7 +40,7 @@ namespace Silmoon.Extension
 
         public static TimeSpan RequestTimeout { get; set; } = TimeSpan.FromSeconds(30);
 
-        static HttpRequestMessage getBaseRequest(string url, HttpMethod httpMethod)
+        static HttpRequestMessage CreateRequest(string url, HttpMethod httpMethod)
         {
             HttpRequestMessage request = new HttpRequestMessage(httpMethod, url);
             request.Headers.Add("User-Agent", "Silmoon.Extension_JsonHelper/1.0");
@@ -56,11 +57,15 @@ namespace Silmoon.Extension
             return request;
         }
 
+
+
+
+        public async static Task<StateSet<bool, JObject>> GetJsonAsync(string url) => await GetObjectAsync<JObject>(url);
         public async static Task<StateSet<bool, T>> GetObjectAsync<T>(string url)
         {
             using (HttpClientEx client = new HttpClientEx(RequestTimeout))
             {
-                var request = getBaseRequest(url, HttpMethod.Get);
+                var request = CreateRequest(url, HttpMethod.Get);
                 var response = await client.SendAsync(request);
                 if (response.IsSuccessStatusCode)
                 {
@@ -79,7 +84,7 @@ namespace Silmoon.Extension
         {
             using (HttpClientEx client = new HttpClientEx(RequestTimeout))
             {
-                var request = getBaseRequest(url, HttpMethod.Post);
+                var request = CreateRequest(url, HttpMethod.Post);
                 request.Content = new StringContent(jsonData.ToJsonString(), Encoding.UTF8, "application/json"); // 传递 JSON 数据
                 var response = await client.SendAsync(request);
                 if (response.IsSuccessStatusCode)
@@ -95,11 +100,12 @@ namespace Silmoon.Extension
             }
         }
 
+        public async static Task<StateSet<bool, T>> PostFormDataAsync<T>(string url, NameValueCollection nameValueCollection) => await PostFormDataAsync<T>(url, UrlDataCollection.FromNameValueCollection(nameValueCollection));
         public async static Task<StateSet<bool, T>> PostFormDataAsync<T>(string url, UrlDataCollection urlDataCollection)
         {
             using (HttpClientEx client = new HttpClientEx(RequestTimeout))
             {
-                var request = getBaseRequest(url, HttpMethod.Post);
+                var request = CreateRequest(url, HttpMethod.Post);
                 request.Content = new FormUrlEncodedContent(urlDataCollection.GetKeyValuePairs());
                 var response = await client.SendAsync(request);
                 if (response.IsSuccessStatusCode)
@@ -115,12 +121,22 @@ namespace Silmoon.Extension
             }
         }
 
+        public async static Task<StateSet<bool, T>> PostMultipartFormDataAsync<T>(string url, NameValueCollection nameValueCollection) => await PostMultipartFormDataAsync<T>(url, UrlDataCollection.FromNameValueCollection(nameValueCollection));
         public async static Task<StateSet<bool, T>> PostMultipartFormDataAsync<T>(string url, UrlDataCollection urlDataCollection)
         {
             using (HttpClientEx client = new HttpClientEx(RequestTimeout))
             {
-                var request = getBaseRequest(url, HttpMethod.Post);
-                request.Content = new FormUrlEncodedContent(urlDataCollection.GetKeyValuePairs());
+                var request = CreateRequest(url, HttpMethod.Post);
+
+                // 创建MultipartFormDataContent
+                var multiPartContent = new MultipartFormDataContent();
+                foreach (var pair in urlDataCollection.GetKeyValuePairs())
+                {
+                    multiPartContent.Add(new StringContent(pair.Value), pair.Key);
+                }
+
+                request.Content = multiPartContent;
+
                 var response = await client.SendAsync(request);
                 if (response.IsSuccessStatusCode)
                 {
