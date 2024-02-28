@@ -75,5 +75,10 @@ namespace WinFormTest
             textBox1.Text = textBox1.Text.KeyFileEncryptToSmkmUri("diiFG0eCmgB523qiNRUOa3Lk4TYN93g6");
             textBox1.Text = textBox1.Text.TryKeyFileDecryptSmkmUri();
         }
+
+        private async void button5_Click(object sender, EventArgs e)
+        {
+            var result = await JsonHelperV2.GetJsonAsync("https://api.trongrid.io/v1/blocks/47355207/events?limit=200");
+        }
     }
 }

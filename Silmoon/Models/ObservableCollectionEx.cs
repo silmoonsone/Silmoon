@@ -10,6 +10,28 @@ namespace Silmoon.Models
     {
         private bool _suppressNotification = false;
 
+        public ObservableCollectionEx()
+        {
+
+        }
+        public ObservableCollectionEx(IEnumerable<T> collection)
+        {
+            _suppressNotification = true;
+            foreach (var item in collection)
+            {
+                Add(item);
+            }
+            _suppressNotification = false;
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+        public ObservableCollectionEx(List<T> list)
+        {
+            _suppressNotification = true;
+            list.ForEach(Add);
+            _suppressNotification = false;
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
             if (!_suppressNotification) base.OnCollectionChanged(e);
