@@ -141,6 +141,46 @@ namespace Silmoon.Extension
             return result;
         }
 
+        public static string EndSubstring(this string s, int endIndex, bool strictMode = false)
+        {
+            if (string.IsNullOrEmpty(s)) return s;
+            if (endIndex <= 0) return "";
+            if (strictMode && endIndex > s.Length)
+                throw new ArgumentOutOfRangeException(nameof(endIndex), "endIndex cannot be larger than length of string.");
+            if (endIndex > s.Length) return s;
+
+            return s.Substring(s.Length - endIndex);
+        }
+        public static string EndSubstring(this string s, int endIndex, int length, bool strictMode = false)
+        {
+            if (string.IsNullOrEmpty(s)) return s;
+            if (length <= 0 || endIndex <= 0) return "";
+            if (strictMode && (endIndex > s.Length || length > endIndex))
+                throw new ArgumentOutOfRangeException(endIndex > s.Length ? nameof(endIndex) : nameof(length), "Parameter cannot be larger than length of string or endIndex.");
+
+            if (endIndex > s.Length) endIndex = s.Length;
+            if (length > endIndex) return ""; // 当 strictMode 为 false 时的行为
+
+            return s.Substring(s.Length - endIndex, length);
+        }
+        public static string SubstringSafe(this string s, int startIndex, int length, bool strictMode = false)
+        {
+            if (string.IsNullOrEmpty(s)) return s;
+            if (startIndex < 0) startIndex = 0; // 调整 startIndex 至最小值 0
+            if (length < 0) length = s.Length - startIndex; // 如果 length 为 -1，取到字符串末尾
+            if (strictMode)
+            {
+                if (startIndex > s.Length) throw new ArgumentOutOfRangeException(nameof(startIndex), "startIndex cannot be larger than length of string.");
+                if (startIndex + length > s.Length) throw new ArgumentOutOfRangeException(nameof(length), "Length goes beyond the end of the string.");
+                return s.Substring(startIndex, length);
+            }
+            if (startIndex >= s.Length) return ""; // 如果 startIndex 超出字符串长度，返回空字符串
+            if (startIndex + length > s.Length) length = s.Length - startIndex; // 调整 length 以不超过字符串末尾
+
+            return s.Substring(startIndex, length);
+        }
+        public static string SubstringSafe(this string s, int startIndex, bool strictMode = false) => SubstringSafe(s, startIndex, -1, strictMode);
+
         public static T ToEnum<T>(this string value, bool ignoreCase = false) where T : Enum
         {
             var type = typeof(T);
