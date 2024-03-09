@@ -22,10 +22,10 @@ namespace Silmoon.Runtime
             }
             return to;
         }
-        public static object MemberCopy<sT, dT>(sT source, dT dest)
+        public static Td MemberCopy<Ts, Td>(Ts source, Td dest)
         {
-            if (source == null || dest == null) return null;
-            Type tto = typeof(dT);
+            if (source == null || dest == null) return default;
+            Type tto = typeof(Td);
 
             var p = source.GetType().GetProperties();
             foreach (var item in p)
@@ -36,46 +36,87 @@ namespace Silmoon.Runtime
             }
             return dest;
         }
-        public static T New<T>(object obj) where T : new()
-        {
-            T t = new T();
-            MemberCopy(obj, t);
 
-            return t;
+        public static T New<T>(object obj) where T : new() => MemberCopy(obj, new T());
+        public static T New<T>(object obj, Func<T> createFunc) where T : new() => MemberCopy(obj, createFunc());
+        public static Td New<Ts, Td>(Ts obj) where Td : new() => MemberCopy(obj, new Td());
+        public static Td New<Ts, Td>(Ts obj, Func<Td> createFunc) where Td : new() => MemberCopy(obj, createFunc());
+
+        public static List<T> EnumerableNew<T>(IEnumerable obj) where T : new()
+        {
+            List<T> list = new List<T>();
+            foreach (var item in obj)
+            {
+                list.Add(MemberCopy(item, new T()));
+            }
+            return list;
         }
-        public static T[] ArrayNew<T>(IEnumerable obj) where T : new()
+        public static List<T> EnumerableNew<T>(IEnumerable obj, Func<T> createFunc)
         {
             List<T> list = new List<T>();
 
             foreach (var item in obj)
             {
-                T t = new T();
-                MemberCopy(item, t);
-                list.Add(t);
+                list.Add(MemberCopy(item, createFunc()));
             }
-
-            return list.ToArray();
+            return list;
         }
-        public static dT New<sT, dT>(sT obj) where dT : new()
-        {
-            dT t = new dT();
-            MemberCopy(obj, t);
 
-            return t;
-        }
-        public static dT[] ArrayNew<sT, dT>(IEnumerable<sT> obj) where dT : new()
+        public static Td[] EnumerableNew<Ts, Td>(IEnumerable<Ts> obj) where Td : new()
         {
-            List<dT> list = new List<dT>();
-
-            foreach (var item in obj)
+            Td[] list = new Td[obj.Count()];
+            for (int i = 0; i < obj.Count(); i++)
             {
-                dT t = new dT();
-                MemberCopy(item, t);
-                list.Add(t);
+                list[i] = MemberCopy(obj.ElementAt(i), new Td());
             }
-
-            return list.ToArray();
+            return list;
+        }
+        public static Td[] EnumerableNew<Ts, Td>(IEnumerable<Ts> obj, Func<Td> createFunc) where Td : new()
+        {
+            Td[] list = new Td[obj.Count()];
+            for (int i = 0; i < obj.Count(); i++)
+            {
+                list[i] = MemberCopy(obj.ElementAt(i), createFunc());
+            }
+            return list;
         }
 
+
+        public static Td[] ArrayNew<Td>(Array array) where Td : new()
+        {
+            Td[] list = new Td[array.Length];
+            for (int i = 0; i < array.Length; i++)
+            {
+                list[i] = MemberCopy(array.GetValue(i), new Td());
+            }
+            return list;
+        }
+        public static Td[] ArrayNew<Td>(Array array, Func<Td> createFunc) where Td : new()
+        {
+            Td[] list = new Td[array.Length];
+            for (int i = 0; i < array.Length; i++)
+            {
+                list[i] = MemberCopy(array.GetValue(i), createFunc());
+            }
+            return list;
+        }
+        public static Td[] ArrayNew<Ts, Td>(Ts[] array) where Td : new()
+        {
+            Td[] list = new Td[array.Length];
+            for (int i = 0; i < array.Length; i++)
+            {
+                list[i] = MemberCopy(array[i], new Td());
+            }
+            return list;
+        }
+        public static Td[] ArrayNew<Ts, Td>(Ts[] array, Func<Td> createFunc) where Td : new()
+        {
+            Td[] list = new Td[array.Length];
+            for (int i = 0; i < array.Length; i++)
+            {
+                list[i] = MemberCopy(array[i], createFunc());
+            }
+            return list;
+        }
     }
 }

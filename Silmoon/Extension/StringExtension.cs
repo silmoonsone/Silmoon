@@ -425,7 +425,7 @@ namespace Silmoon.Extension
         public static bool IsMobilePhone(this string MobilePhone)
         {
             if (string.IsNullOrEmpty(MobilePhone)) return false;
-            Regex regex = new Regex(@"^((1[3,5,6,8][0-9])|(14[5,7])|(17[0,1,3,5,6,7,8])|(19[1,8,9]))\d{8}$");
+            Regex regex = new Regex(@"^((1[3,5,6,8][0-9])|(14[5,7])|(17[0,1,2,3,5,6,7,8])|(19[1,8,9]))\d{8}$");
             return regex.IsMatch(MobilePhone);
         }
         /// <summary>
