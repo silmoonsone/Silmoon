@@ -34,5 +34,12 @@ namespace Silmoon.Extension
             }
             return result;
         }
+        public static void ForEachEx<T>(this IEnumerable<T> source, Action<T> action)
+        {
+            foreach (var item in source)
+            {
+                action(item);
+            }
+        }
     }
 }

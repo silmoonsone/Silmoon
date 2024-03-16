@@ -9,6 +9,10 @@ namespace Silmoon.Models
     {
         public string Name { get; set; }
         public string Value { get; set; }
+        public NameValue()
+        {
+
+        }
         public NameValue(string name, string value)
         {
             Name = name;
