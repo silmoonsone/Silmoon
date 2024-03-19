@@ -7,6 +7,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackageId>Silmoon.Core</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>SILMOON</Authors>
+    <Company>SILMOON LLC</Company>
+    <Description>Silmoon SDK</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/silmoonsone/Silmoon</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/silmoonsone/Silmoon</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>silmoon</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Silmoon\Silmoon.csproj" />
   </ItemGroup>
 
