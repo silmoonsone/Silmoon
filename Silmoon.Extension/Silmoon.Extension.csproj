@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -19,7 +19,7 @@
 
   <PropertyGroup>
     <PackageId>Silmoon.Extension</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Authors>SILMOON</Authors>
     <Company>SILMOON LLC</Company>
     <Description>Silmoon SDK</Description>
@@ -28,6 +28,7 @@
     <RepositoryUrl>https://github.com/silmoonsone/Silmoon</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>silmoon</PackageTags>
+    <PackageIcon>logo.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
