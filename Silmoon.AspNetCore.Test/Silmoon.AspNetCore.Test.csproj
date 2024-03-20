@@ -24,18 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Silmoon.AspNetCore.Extension\Silmoon.AspNetCore.Extension.csproj" />
     <ProjectReference Include="..\Silmoon.AspNetCore\Silmoon.AspNetCore.csproj" />
     <ProjectReference Include="..\Silmoon.Drawing\Silmoon.Drawing.csproj" />
     <ProjectReference Include="..\Silmoon.Net\Silmoon.Net.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Silmoon.Business.AspNetCore">
-      <HintPath>..\..\Silmoon.Business\Silmoon.Business.AspNetCore\bin\Release\net8.0\Silmoon.Business.AspNetCore.dll</HintPath>
-    </Reference>
-    <Reference Include="Silmoon.Business.Data">
-      <HintPath>..\..\Silmoon.Business\Silmoon.Business.Data\bin\Release\netstandard2.0\Silmoon.Business.Data.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>

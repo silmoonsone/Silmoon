@@ -23,7 +23,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormTest", "WinFormTest\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.AspNetCore.Test", "Silmoon.AspNetCore.Test\Silmoon.AspNetCore.Test.csproj", "{1B35921D-968B-4C55-891F-12F9D814090B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Core", "Silmoon.Core\Silmoon.Core.csproj", "{69DEE3AD-AB43-4EC0-B9AA-FFB9A274AED5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Core", "Silmoon.Core\Silmoon.Core.csproj", "{69DEE3AD-AB43-4EC0-B9AA-FFB9A274AED5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Data.MongoDB", "Silmoon.Data.MongoDB\Silmoon.Data.MongoDB.csproj", "{BE136316-834E-4AAE-855C-E5C6F6A3AA0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.AspNetCore.Extension", "Silmoon.AspNetCore.Extension\Silmoon.AspNetCore.Extension.csproj", "{C2DA2E76-ADA5-4622-A48B-F2629044661F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,12 +79,20 @@ Global
 		{69DEE3AD-AB43-4EC0-B9AA-FFB9A274AED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69DEE3AD-AB43-4EC0-B9AA-FFB9A274AED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69DEE3AD-AB43-4EC0-B9AA-FFB9A274AED5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE136316-834E-4AAE-855C-E5C6F6A3AA0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE136316-834E-4AAE-855C-E5C6F6A3AA0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE136316-834E-4AAE-855C-E5C6F6A3AA0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE136316-834E-4AAE-855C-E5C6F6A3AA0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2DA2E76-ADA5-4622-A48B-F2629044661F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2DA2E76-ADA5-4622-A48B-F2629044661F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2DA2E76-ADA5-4622-A48B-F2629044661F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2DA2E76-ADA5-4622-A48B-F2629044661F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {18B93CD3-1A51-425B-89D1-03A0565D2E21}
 		VisualSVNWorkingCopyRoot = .
+		SolutionGuid = {18B93CD3-1A51-425B-89D1-03A0565D2E21}
 	EndGlobalSection
 EndGlobal

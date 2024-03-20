@@ -2,6 +2,7 @@
 using Silmoon.Models.Identities;
 using System;
 using Silmoon.AspNetCore;
+using Silmoon.AspNetCore.Middlewares;
 
 namespace Silmoon.AspNetCore.Extensions
 {
@@ -15,5 +16,16 @@ namespace Silmoon.AspNetCore.Extensions
             UserSessionManager.OnRequestUserToken += OnRequestUserToken;
             return app;
         }
+        /// <summary>
+        /// 使用基于 SilmoonDevApp 请求的API解密中间件，需要 ISilmoonDevAppService 服务
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="AppIdRenameTo"></param>
+        /// <param name="KeyCacheSecound"></param>
+        public static void UseApiDecrypt(this IApplicationBuilder app, string AppIdRenameTo = "AppId", int KeyCacheSecound = 3600)
+        {
+            app.UseMiddleware<ApiDecryptMiddleware>(AppIdRenameTo, KeyCacheSecound);
+        }
+
     }
 }
