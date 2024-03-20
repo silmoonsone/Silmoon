@@ -6,10 +6,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System;
 
-namespace Silmoon.AspNetCore.Extension.CoreHelpers
+namespace Silmoon.Data.MongoDB
 {
-    [Obsolete("Use Silmoon.Data.MongoDB.MongoExecute instead")]
-    public abstract class MongoDBCore
+    public abstract class MongoExecute
     {
         public abstract MongoExecuter Executer { get; set; }
         #region common data functions
@@ -28,7 +27,7 @@ namespace Silmoon.AspNetCore.Extension.CoreHelpers
                 case "mouse": return "Mice";
                     // ... add other irregular plurals as needed
             }
-            singular = char.ToLowerInvariant(singular[0]) + singular[1..];
+            singular = char.ToLowerInvariant(singular[0]) + singular.Substring(1);
 
             // Regular plurals
             if (Regex.IsMatch(singular, "[sxz]$") || Regex.IsMatch(singular, "[^aeioudgkprt]h$"))
@@ -105,16 +104,16 @@ namespace Silmoon.AspNetCore.Extension.CoreHelpers
             return result.FirstOrDefault();
         }
 
-        public virtual UpdateResult Set<T>(T obj, Expression<Func<T, bool>>? whereFunc = null, params Expression<Func<T, object>>[] updateFields) where T : IIdObject
+        public virtual UpdateResult Set<T>(T obj, Expression<Func<T, bool>> whereFunc = null, params Expression<Func<T, object>>[] updateFields) where T : IIdObject
         {
-            if (whereFunc is not null)
+            if (whereFunc != null)
                 return Executer.SetObject(MakeTableName<T>(), obj, whereFunc, false, updateFields);
             else
                 return Executer.SetObject(MakeTableName<T>(), obj, Builders<T>.Filter.Empty, false, updateFields);
         }
-        public virtual UpdateResult Sets<T>(T obj, Expression<Func<T, bool>>? whereFunc = null, params Expression<Func<T, object>>[] updateFields) where T : IIdObject
+        public virtual UpdateResult Sets<T>(T obj, Expression<Func<T, bool>> whereFunc = null, params Expression<Func<T, object>>[] updateFields) where T : IIdObject
         {
-            if (whereFunc is not null)
+            if (whereFunc != null)
                 return Executer.SetObjects(MakeTableName<T>(), obj, whereFunc, false, updateFields);
             else
                 return Executer.SetObjects(MakeTableName<T>(), obj, Builders<T>.Filter.Empty, false, updateFields);
@@ -122,7 +121,7 @@ namespace Silmoon.AspNetCore.Extension.CoreHelpers
 
         public virtual DeleteResult Delete<T>(Expression<Func<T, bool>> whereFunc) where T : IIdObject
         {
-            if (whereFunc is not null)
+            if (whereFunc != null)
                 return Executer.DeleteObject(MakeTableName<T>(), whereFunc);
             else
                 return Executer.DeleteObject(MakeTableName<T>(), Builders<T>.Filter.Empty);
@@ -130,7 +129,7 @@ namespace Silmoon.AspNetCore.Extension.CoreHelpers
 
         public virtual DeleteResult Deletes<T>(Expression<Func<T, bool>> whereFunc) where T : IIdObject
         {
-            if (whereFunc is not null)
+            if (whereFunc != null)
                 return Executer.DeleteObjects(MakeTableName<T>(), whereFunc);
             else
                 return Executer.DeleteObjects(MakeTableName<T>(), Builders<T>.Filter.Empty);
