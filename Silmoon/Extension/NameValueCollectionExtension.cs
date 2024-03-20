@@ -66,6 +66,14 @@ namespace Silmoon.Extension
             s += KeyName + "=" + Key;
             return HashHelper.GetMD5Hash(s);
         }
-
+        public static UrlDataCollection ToUrlDataCollection(this NameValueCollection nameValueCollection)
+        {
+            UrlDataCollection result = new UrlDataCollection();
+            for (int i = 0; i < nameValueCollection.Count; i++)
+            {
+                result.Add(nameValueCollection.GetKey(i), nameValueCollection[i]);
+            }
+            return result;
+        }
     }
 }

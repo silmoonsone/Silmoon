@@ -1,4 +1,4 @@
-using Silmoon.Extension;
+using Silmoon;
 
 namespace WinFormTest
 {
