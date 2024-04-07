@@ -35,6 +35,8 @@
             button4 = new Button();
             ctlKeyFileEncryptoBtn = new Button();
             button5 = new Button();
+            ctlDownloadButton = new Button();
+            label1 = new Label();
             SuspendLayout();
             // 
             // button1
@@ -105,11 +107,32 @@
             button5.UseVisualStyleBackColor = true;
             button5.Click += button5_Click;
             // 
+            // ctlDownloadButton
+            // 
+            ctlDownloadButton.Location = new Point(574, 319);
+            ctlDownloadButton.Name = "ctlDownloadButton";
+            ctlDownloadButton.Size = new Size(97, 23);
+            ctlDownloadButton.TabIndex = 7;
+            ctlDownloadButton.Text = "Download";
+            ctlDownloadButton.UseVisualStyleBackColor = true;
+            ctlDownloadButton.Click += ctlDownloadButton_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(12, 441);
+            label1.Name = "label1";
+            label1.Size = new Size(43, 17);
+            label1.TabIndex = 8;
+            label1.Text = "label1";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(800, 466);
+            Controls.Add(label1);
+            Controls.Add(ctlDownloadButton);
             Controls.Add(button5);
             Controls.Add(ctlKeyFileEncryptoBtn);
             Controls.Add(button4);
@@ -132,5 +155,7 @@
         private Button button4;
         private Button ctlKeyFileEncryptoBtn;
         private Button button5;
+        private Button ctlDownloadButton;
+        private Label label1;
     }
 }

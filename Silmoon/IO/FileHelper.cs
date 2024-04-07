@@ -10,52 +10,57 @@ namespace Silmoon.IO
     public class FileHelper
     {
         /// <summary>
-        /// 创建目录，可深度创建多级目录
+        /// 创建指定路径及其所有父级目录。
         /// </summary>
-        /// <param name="DirectoryPath"></param>
-        public static void CreateDirectory(string DirectoryPath)
+        /// <param name="directoryPath">需要创建目录的完整路径。</param>
+        public static void CreateDirectory(string directoryPath)
         {
-            string[] dirs = DirectoryPath.Split(Path.DirectorySeparatorChar);
-            string dir = default;
+            string[] directoryParts = directoryPath.Split(Path.DirectorySeparatorChar);
+            string accumulatedPath = string.Empty;
 
-            foreach (var item in dirs)
+            foreach (var part in directoryParts)
             {
-                dir += item + Path.DirectorySeparatorChar;
-                if (!Directory.Exists(dir))
+                accumulatedPath += part + Path.DirectorySeparatorChar;
+                if (!Directory.Exists(accumulatedPath))
                 {
-                    Directory.CreateDirectory(dir);
+                    Directory.CreateDirectory(accumulatedPath);
                 }
             }
         }
-        public static void ClearEmptyDirectory(string DirectoryPath, string KeepPath)
+
+        /// <summary>
+        /// 清理指定目录下的所有空目录，直到达到指定的保留目录。
+        /// </summary>
+        /// <param name="targetDirectoryPath">目标目录路径，该目录及其子目录将被检查并清理空目录。</param>
+        /// <param name="reserveDirectoryPath">保留目录路径，该路径及其父路径不会被清理。</param>
+        public static void ClearEmptyDirectory(string targetDirectoryPath, string reserveDirectoryPath)
         {
-            KeepPath += Path.DirectorySeparatorChar;
-            KeepPath = Path.GetDirectoryName(KeepPath);
-            KeepPath += Path.DirectorySeparatorChar;
+            reserveDirectoryPath += Path.DirectorySeparatorChar;
+            reserveDirectoryPath = Path.GetDirectoryName(reserveDirectoryPath) + Path.DirectorySeparatorChar;
 
-            string[] dirs = DirectoryPath.Split(Path.DirectorySeparatorChar);
-            string dir = default;
-            List<string> dirs2 = new List<string>();
+            string[] pathParts = targetDirectoryPath.Split(Path.DirectorySeparatorChar);
+            string cumulativePath = string.Empty;
+            List<string> directoriesToEvaluate = new List<string>();
 
-            foreach (var item in dirs)
+            foreach (var part in pathParts)
             {
-                dir += item + Path.DirectorySeparatorChar;
-                dirs2.Add(dir);
+                cumulativePath += part + Path.DirectorySeparatorChar;
+                directoriesToEvaluate.Add(cumulativePath);
             }
 
-            dirs2.Reverse();
+            directoriesToEvaluate.Reverse();
 
-            foreach (var item in dirs2)
+            foreach (var directory in directoriesToEvaluate)
             {
-                if (item == KeepPath) break;
-                if (Directory.Exists(item))
+                if (directory == reserveDirectoryPath) break;
+                if (Directory.Exists(directory))
                 {
-                    var files = Directory.GetFiles(item);
-                    dirs = Directory.GetDirectories(item);
+                    var files = Directory.GetFiles(directory);
+                    var subdirectories = Directory.GetDirectories(directory);
 
-                    if (files.Length == 0 && dirs.Length == 0)
+                    if (files.Length == 0 && subdirectories.Length == 0)
                     {
-                        Directory.Delete(item);
+                        Directory.Delete(directory);
                     }
                 }
             }

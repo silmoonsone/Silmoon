@@ -80,5 +80,14 @@ namespace WinFormTest
         {
             var result = await JsonHelperV2.GetJsonAsync("https://api.trongrid.io/v1/blocks/47355207/events?limit=200");
         }
+
+        private async void ctlDownloadButton_Click(object sender, EventArgs e)
+        {
+            using HttpClientEx client = new HttpClientEx();
+            client.DownloadStarted += (sender, e) => MessageBox.Show("Download started.");
+            client.DownloadProgressChanged += (sender, e) => label1.Text = $"Download progress: {e.BytesReceived}/{e.TotalBytesToReceive}";
+            client.DownloadCompleted += (sender, e) => MessageBox.Show("Download completed.");
+            await client.DownloadFileAsync("https://huobao-bin.oss-cn-qingdao.aliyuncs.com/bin/mongodb/mongod.exe", "D:\\test\\bin.bin");
+        }
     }
 }
