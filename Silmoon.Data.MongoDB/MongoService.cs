@@ -8,10 +8,9 @@ using System;
 
 namespace Silmoon.Data.MongoDB
 {
-    public abstract class MongoExecute
+    public abstract class MongoService : IMongoService
     {
         public abstract MongoExecuter Executer { get; set; }
-        #region common data functions
         public static string MakeTableName<T>()
         {
             string singular = typeof(T).Name;
@@ -134,6 +133,5 @@ namespace Silmoon.Data.MongoDB
             else
                 return Executer.DeleteObjects(MakeTableName<T>(), Builders<T>.Filter.Empty);
         }
-        #endregion
     }
 }
