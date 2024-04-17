@@ -9,8 +9,8 @@ namespace Silmoon.AspNetCore.Services.Interfaces
     {
         Task SignIn<TUser>(TUser User, bool AddEnumRole) where TUser : class, IDefaultUserIdentity;
         Task SignIn<TUser>(TUser User, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity;
-        Task SignIn<TUser>(TUser User, bool AddEnumRole, Enum CustomerRoles, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity;
-        Task SignIn<TUser>(TUser User, bool AddEnumRole, Enum[] CustomerRoles, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity;
+        Task SignIn<TUser, TTCustomerRoles>(TUser User, bool AddEnumRole, TTCustomerRoles CustomerRoles, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity where TTCustomerRoles : Enum;
+        Task SignIn<TUser, TTCustomerRoles>(TUser User, bool AddEnumRole, TTCustomerRoles[] CustomerRoles, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity where TTCustomerRoles : Enum;
         Task SignIn<TUser>(TUser User, bool AddEnumRole, string[] CustomerRoles, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity;
         Task<bool> SignOut();
         Task<TUser> GetUser<TUser>() where TUser : class, IDefaultUserIdentity;

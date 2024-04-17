@@ -24,8 +24,8 @@ namespace Silmoon.AspNetCore.Services
         }
         public async Task SignIn<TUser>(TUser User, bool AddEnumRole) where TUser : class, IDefaultUserIdentity => await SignIn(User, AddEnumRole, (string[])null, null);
         public async Task SignIn<TUser>(TUser User, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity => await SignIn(User, true, (string[])null, NameIdentifier);
-        public async Task SignIn<TUser>(TUser User, bool AddEnumRole, Enum CustomerRoles, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity => await SignIn(User, AddEnumRole, CustomerRoles.GetFlagStringArray(), NameIdentifier);
-        public async Task SignIn<TUser>(TUser User, bool AddEnumRole, Enum[] CustomerRoles, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity => await SignIn(User, AddEnumRole, CustomerRoles.GetStringArray(), NameIdentifier);
+        public async Task SignIn<TUser, TTCustomerRoles>(TUser User, bool AddEnumRole, TTCustomerRoles CustomerRoles, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity where TTCustomerRoles : Enum => await SignIn(User, AddEnumRole, CustomerRoles.GetFlagStringArray(), NameIdentifier);
+        public async Task SignIn<TUser, TTCustomerRoles>(TUser User, bool AddEnumRole, TTCustomerRoles[] CustomerRoles, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity where TTCustomerRoles : Enum => await SignIn(User, AddEnumRole, CustomerRoles.GetStringArray(), NameIdentifier);
         public async Task SignIn<TUser>(TUser User, bool AddEnumRole, string[] CustomerRoles, string NameIdentifier = null) where TUser : class, IDefaultUserIdentity
         {
             if (User is null) throw new ArgumentNullException(nameof(User));
