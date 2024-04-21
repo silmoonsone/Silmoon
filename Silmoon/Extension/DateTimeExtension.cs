@@ -81,5 +81,15 @@ namespace Silmoon.Extension
                 return false;
             }
         }
+        public static byte[] GetBytes(this DateTime dateTime)
+        {
+            //convert datetime to byte array
+            return BitConverter.GetBytes(dateTime.ToBinary());
+        }
+        public static DateTime ToDateTime(this byte[] bytes)
+        {
+            //convert byte array to datetime
+            return DateTime.FromBinary(BitConverter.ToInt64(bytes, 0));
+        }
     }
 }

@@ -8,15 +8,8 @@ namespace Silmoon.Extension
 {
     public static class ByteArrayExtension
     {
-        public static MemoryStream GetStream(this byte[] bytes)
-        {
-            var stream = new MemoryStream(bytes);
-            return stream;
-        }
-        public static BinaryReader GetBinaryReader(this byte[] bytes)
-        {
-            return new BinaryReader(GetStream(bytes));
-        }
+        public static MemoryStream GetStream(this byte[] bytes) => new MemoryStream(bytes);
+        public static BinaryReader GetBinaryReader(this byte[] bytes) => new BinaryReader(GetStream(bytes));
         /// <summary>
         /// 分组数据，将一段数据按照指定的长度进行分割，最后不足的长度将不会冲零。
         /// </summary>
@@ -48,12 +41,10 @@ namespace Silmoon.Extension
         }
         public static string GetString(this byte[] data, Encoding encoding = null)
         {
+            if (data is null) return null;
             if (encoding == null) encoding = Encoding.UTF8;
             return encoding.GetString(data);
         }
-        public static string GetBase64String(this byte[] data)
-        {
-            return Convert.ToBase64String(data);
-        }
+        public static string GetBase64String(this byte[] data) => data is null ? null : Convert.ToBase64String(data);
     }
 }

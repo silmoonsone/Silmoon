@@ -19,12 +19,12 @@ public class HttpClientEx : HttpClient
         Timeout = timeout;
     }
 
-    public async Task DownloadFileAsync(string requestUri, string outputPath)
+    public async Task DownloadFileAsync(string url, string outputPath)
     {
         // 触发下载开始事件
         DownloadStarted?.Invoke(this, EventArgs.Empty);
 
-        using (var response = await GetAsync(requestUri, HttpCompletionOption.ResponseHeadersRead))
+        using (var response = await GetAsync(url, HttpCompletionOption.ResponseHeadersRead))
         {
             response.EnsureSuccessStatusCode();
 
