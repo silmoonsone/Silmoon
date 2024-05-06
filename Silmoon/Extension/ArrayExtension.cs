@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
@@ -34,8 +35,7 @@ namespace Silmoon.Extension
             }
             return result;
         }
-        public static bool IsNullOrEmpty(this Array array) => array == null || array?.Length == 0;
-        public static bool IsNullOrEmpty<T>(this List<T> array) => array == null || array?.Count == 0;
+        public static bool IsNullOrEmpty<T>(this ICollection<T> array) => array == null || array?.Count == 0;
         public static List<DiffResult<T>> CompareDiffWith<T>(this IEnumerable<T> sourceCollection, IEnumerable<T> destinationCollection, Func<T, T, bool> areEqual)
         {
             var missingItems = sourceCollection
