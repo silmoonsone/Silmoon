@@ -19,6 +19,9 @@ DataProtection/
 # Mono auto generated files
 mono_crash.*
 
+# libman package folder
+**/wwwroot/lib/
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

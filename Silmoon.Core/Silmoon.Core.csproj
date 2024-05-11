@@ -21,7 +21,7 @@
     <Description>Silmoon SDK</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/silmoonsone/Silmoon</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/silmoonsone/Silmoon</RepositoryUrl>
+    <RepositoryUrl>https://github.com/silmoonsone/Silmoon.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>silmoon</PackageTags>
     <PackageIcon>logo.png</PackageIcon>
