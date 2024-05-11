@@ -64,7 +64,7 @@ namespace Silmoon.Core
             keyFilePath ??= DefaultKeyFilePath;
 
             var uri = new Uri(encryptedUriString);
-            if (uri.Scheme == "smkm" && uri.Host == "keyfile-rsa-password-encrypted.string.silmoon")
+            if (uri.Scheme == "smkm" && uri.Host == "com.silmoon.smkm.encrypted")
             {
                 var keyPassword = HttpUtility.ParseQueryString(uri.Query)["KeyPassword"];
                 var cipherPasswordEncrypted = HttpUtility.ParseQueryString(uri.Query)["CipherPasswordEncrypted"];
@@ -101,7 +101,7 @@ namespace Silmoon.Core
             keyFilePath ??= DefaultKeyFilePath;
 
             var cipher = value.KeyFileEncrypt(keyPassword, keyFilePath);
-            var uri = new Uri($"smkm://keyfile-rsa-password-encrypted.string.silmoon/?KeyPassword={HttpUtility.UrlEncode(keyPassword)}&CipherPasswordEncrypted={HttpUtility.UrlEncode(cipher.Password)}&CipherData=" + HttpUtility.UrlEncode(cipher.CipherData));
+            var uri = new Uri($"smkm://com.silmoon.smkm.encrypted/?KeyPassword={HttpUtility.UrlEncode(keyPassword)}&CipherPasswordEncrypted={HttpUtility.UrlEncode(cipher.Password)}&CipherData=" + HttpUtility.UrlEncode(cipher.CipherData));
             return uri.ToString();
         }
     }

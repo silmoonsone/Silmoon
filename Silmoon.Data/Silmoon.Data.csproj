@@ -24,7 +24,7 @@
 
   <PropertyGroup>
     <PackageId>Silmoon.Data</PackageId>
-    <Version>1.2.0</Version>
+    <Version>1.2.3</Version>
     <Authors>SILMOON</Authors>
     <Company>SILMOON LLC</Company>
     <Description>Silmoon SDK</Description>
@@ -34,6 +34,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>silmoon</PackageTags>
     <PackageIcon>logo.png</PackageIcon>
+    <PackageOutputPath>..\packages_out</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
