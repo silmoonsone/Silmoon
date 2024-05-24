@@ -38,9 +38,9 @@ namespace Silmoon.Runtime
         }
 
         public static T New<T>(object obj) where T : new() => MemberCopy(obj, new T());
-        public static T New<T>(object obj, Func<T> createFunc) where T : new() => MemberCopy(obj, createFunc());
+        public static T New<T>(object obj, Func<object, T> createFunc) where T : new() => MemberCopy(obj, createFunc(obj));
         public static Td New<Ts, Td>(Ts obj) where Td : new() => MemberCopy(obj, new Td());
-        public static Td New<Ts, Td>(Ts obj, Func<Td> createFunc) where Td : new() => MemberCopy(obj, createFunc());
+        public static Td New<Ts, Td>(Ts obj, Func<Ts, Td> createFunc) where Td : new() => MemberCopy(obj, createFunc(obj));
 
         public static List<T> EnumerableNew<T>(IEnumerable obj) where T : new()
         {
@@ -51,13 +51,13 @@ namespace Silmoon.Runtime
             }
             return list;
         }
-        public static List<T> EnumerableNew<T>(IEnumerable obj, Func<T> createFunc)
+        public static List<T> EnumerableNew<T>(IEnumerable obj, Func<object, T> createFunc)
         {
             List<T> list = new List<T>();
 
             foreach (var item in obj)
             {
-                list.Add(MemberCopy(item, createFunc()));
+                list.Add(MemberCopy(item, createFunc(item)));
             }
             return list;
         }
@@ -71,12 +71,12 @@ namespace Silmoon.Runtime
             }
             return list;
         }
-        public static Td[] EnumerableNew<Ts, Td>(IEnumerable<Ts> obj, Func<Td> createFunc) where Td : new()
+        public static Td[] EnumerableNew<Ts, Td>(IEnumerable<Ts> obj, Func<Ts, Td> createFunc) where Td : new()
         {
             Td[] list = new Td[obj.Count()];
             for (int i = 0; i < obj.Count(); i++)
             {
-                list[i] = MemberCopy(obj.ElementAt(i), createFunc());
+                list[i] = MemberCopy(obj.ElementAt(i), createFunc(obj.ElementAt(i)));
             }
             return list;
         }
@@ -91,12 +91,12 @@ namespace Silmoon.Runtime
             }
             return list;
         }
-        public static Td[] ArrayNew<Td>(Array array, Func<Td> createFunc) where Td : new()
+        public static Td[] ArrayNew<Td>(Array array, Func<object, Td> createFunc) where Td : new()
         {
             Td[] list = new Td[array.Length];
             for (int i = 0; i < array.Length; i++)
             {
-                list[i] = MemberCopy(array.GetValue(i), createFunc());
+                list[i] = MemberCopy(array.GetValue(i), createFunc(array.GetValue(i)));
             }
             return list;
         }
@@ -109,12 +109,12 @@ namespace Silmoon.Runtime
             }
             return list;
         }
-        public static Td[] ArrayNew<Ts, Td>(Ts[] array, Func<Td> createFunc) where Td : new()
+        public static Td[] ArrayNew<Ts, Td>(Ts[] array, Func<Ts, Td> createFunc) where Td : new()
         {
             Td[] list = new Td[array.Length];
             for (int i = 0; i < array.Length; i++)
             {
-                list[i] = MemberCopy(array[i], createFunc());
+                list[i] = MemberCopy(array[i], createFunc(array[i]));
             }
             return list;
         }
