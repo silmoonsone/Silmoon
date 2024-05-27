@@ -18,7 +18,10 @@ public class HttpClientEx : HttpClient
     {
         Timeout = timeout;
     }
-
+    public HttpClientEx(TimeSpan timeout, HttpMessageHandler handler) : base(handler)
+    {
+        Timeout = timeout;
+    }
     public async Task DownloadFileAsync(string url, string outputPath)
     {
         // 触发下载开始事件

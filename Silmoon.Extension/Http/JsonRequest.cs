@@ -16,14 +16,25 @@ namespace Silmoon.Extension.Http
     public class JsonRequest
     {
         public static DictionaryEx<string, Dictionary<string, string[]>> DefaultRequestHostHeaders { get; set; } = new DictionaryEx<string, Dictionary<string, string[]>>();
-        static Func<HttpClientEx> RequestHttpClient;
-        public static void OnRequestCreateHttpClient(Func<HttpClientEx> requestHttpClientAction) => RequestHttpClient = requestHttpClientAction;
+        static Func<HttpClientEx> InvokeCreateHttpClient;
+        public static void OnRequestCreateHttpClient(Func<HttpClientEx> requestHttpClientAction) => InvokeCreateHttpClient = requestHttpClientAction;
 
         public static HttpClient CreateHttpClient(JsonRequestSetting jsonRequestSetting)
         {
             if (jsonRequestSetting is null) jsonRequestSetting = JsonRequestSetting.Default;
-            var httpClient = RequestHttpClient?.Invoke();
-            if (httpClient is null) httpClient = new HttpClientEx(jsonRequestSetting.RequestTimeout);
+            var httpClient = InvokeCreateHttpClient?.Invoke();
+            if (httpClient is null)
+            {
+                if (jsonRequestSetting.IgnoreCertificateValidation)
+                {
+                    httpClient = new HttpClientEx(jsonRequestSetting.RequestTimeout, new HttpClientHandler
+                    {
+                        ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+                    });
+                }
+                else
+                    httpClient = new HttpClientEx(jsonRequestSetting.RequestTimeout);
+            }
             return httpClient;
         }
 
@@ -49,6 +60,11 @@ namespace Silmoon.Extension.Http
             {
                 try
                 {
+                    if (jsonRequestSetting.RequestMessageClone)
+                    {
+                        var requestMessageString = httpRequestMessage.ToJsonString();
+                        httpRequestMessage = JsonConvert.DeserializeObject<HttpRequestMessage>(requestMessageString);
+                    }
                     using (var response = await client.SendAsync(httpRequestMessage))
                     {
                         JsonRequestResult<T> result = new JsonRequestResult<T>(response.StatusCode, await response.Content.ReadAsStringAsync());
