@@ -10,10 +10,7 @@ namespace Silmoon.Models
     {
         private bool _suppressNotification = false;
 
-        public ObservableCollectionEx()
-        {
 
-        }
         public ObservableCollectionEx(IEnumerable<T> collection)
         {
             _suppressNotification = true;

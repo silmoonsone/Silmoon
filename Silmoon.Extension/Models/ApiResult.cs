@@ -37,7 +37,7 @@ namespace Silmoon.Models
             var r = new ApiResult().Init(ResultState, Message, Code, Exception);
             return r;
         }
-        public virtual ApiResult AddException(Exception Exception)
+        public virtual ApiResult SetException(Exception Exception)
         {
             this.Exception = Exception;
             return this;
@@ -74,7 +74,7 @@ namespace Silmoon.Models
             var r = new ApiResult<T>().Init(ResultState, Data, Message, Code, Exception);
             return r;
         }
-        public override ApiResult AddException(Exception Exception)
+        public override ApiResult SetException(Exception Exception)
         {
             this.Exception = Exception;
             return this;
