@@ -25,9 +25,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.AspNetCore.Test", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Core", "Silmoon.Core\Silmoon.Core.csproj", "{69DEE3AD-AB43-4EC0-B9AA-FFB9A274AED5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Data.MongoDB", "Silmoon.Data.MongoDB\Silmoon.Data.MongoDB.csproj", "{BE136316-834E-4AAE-855C-E5C6F6A3AA0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Data.MongoDB", "Silmoon.Data.MongoDB\Silmoon.Data.MongoDB.csproj", "{BE136316-834E-4AAE-855C-E5C6F6A3AA0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.AspNetCore.Extension", "Silmoon.AspNetCore.Extension\Silmoon.AspNetCore.Extension.csproj", "{C2DA2E76-ADA5-4622-A48B-F2629044661F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.AspNetCore.Extension", "Silmoon.AspNetCore.Extension\Silmoon.AspNetCore.Extension.csproj", "{C2DA2E76-ADA5-4622-A48B-F2629044661F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{8D597025-4CD1-4958-B2A9-1FA50B7F9834}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		logo.png = logo.png
+		README.md = README.md
+		sn.snk = sn.snk
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,7 +102,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {18B93CD3-1A51-425B-89D1-03A0565D2E21}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal

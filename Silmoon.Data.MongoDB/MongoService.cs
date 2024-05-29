@@ -117,6 +117,20 @@ namespace Silmoon.Data.MongoDB
             else
                 return Executer.SetObjects(MakeTableName<T>(), obj, Builders<T>.Filter.Empty, false, updateFields);
         }
+        public virtual UpdateResult Set<T>(T obj, bool isUpsert = false, Expression<Func<T, bool>> whereFunc = null, params Expression<Func<T, object>>[] updateFields) where T : IIdObject
+        {
+            if (whereFunc != null)
+                return Executer.SetObject(MakeTableName<T>(), obj, whereFunc, isUpsert, updateFields);
+            else
+                return Executer.SetObject(MakeTableName<T>(), obj, Builders<T>.Filter.Empty, isUpsert, updateFields);
+        }
+        public virtual UpdateResult Sets<T>(T obj, bool isUpsert = false, Expression<Func<T, bool>> whereFunc = null, params Expression<Func<T, object>>[] updateFields) where T : IIdObject
+        {
+            if (whereFunc != null)
+                return Executer.SetObjects(MakeTableName<T>(), obj, whereFunc, isUpsert, updateFields);
+            else
+                return Executer.SetObjects(MakeTableName<T>(), obj, Builders<T>.Filter.Empty, isUpsert, updateFields);
+        }
 
         public virtual DeleteResult Delete<T>(Expression<Func<T, bool>> whereFunc) where T : IIdObject
         {
