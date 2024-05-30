@@ -1,30 +1,42 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using MongoDB.Driver;
+using Newtonsoft.Json.Linq;
+using Silmoon.AspNetCore.Extension.CoreHelpers;
 using Silmoon.AspNetCore.Test.Models;
+using Silmoon.Data.MongoDB;
 using Silmoon.Data.MongoDB.MongoDB;
+using Silmoon.Extension;
+using Silmoon.Models;
+using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 
-namespace Silmoon.AspNetCore.Test
+namespace Silmoon.AspNetCore.Test;
+
+public class Core : MongoService, IDisposable
 {
-    public class Core : IDisposable
+    public override MongoExecuter Executer { get; set; }
+
+    public Core()
     {
-        public MongoExecuter Executer { get; set; }
+        Executer = new MongoExecuter(new MongoConnect(Configure.ConfigJson["mongodb"].Value<string>()));
 
-        public Core()
-        {
-            Executer = new MongoExecuter(new MongoConnect(Configure.ConfigJson["mongodb"].Value<string>()));
-        }
-        public User GetUser(string Username)
-        {
-            return new User()
-            {
-                Username = "silmoon",
-                Password = "pwd",
-            };
-        }
-
-
-        public void Dispose()
-        {
-            Executer = null;
-        }
     }
+    public User GetUser(string Username)
+    {
+        if (Username.IsNullOrEmpty()) return null;
+        return new User()
+        {
+            Username = Username,
+            Password = "123",
+        };
+    }
+    public StateSet<bool> NewUser(User user)
+    {
+        return true.ToStateSet(user.Username);
+    }
+
+    public void Dispose()
+    {
+        Executer = null;
+    }
+
 }

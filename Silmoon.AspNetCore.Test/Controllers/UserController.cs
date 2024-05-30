@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Silmoon.AspNetCore.Services.Interfaces;
-using Silmoon.AspNetCore.Test.Models;
 
 namespace Silmoon.AspNetCore.Test.Controllers
 {
@@ -15,12 +14,12 @@ namespace Silmoon.AspNetCore.Test.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> Signin(string Url)
+        public async Task<IActionResult> SignIn(string Url)
         {
             if (await SilmoonAuthService.IsSignIn()) return Redirect(Url ?? "~/");
             return View();
         }
-        public IActionResult Signup()
+        public IActionResult SignUp()
         {
             return View();
         }

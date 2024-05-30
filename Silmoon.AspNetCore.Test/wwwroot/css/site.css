@@ -17,10 +17,6 @@ html {
     min-height: 100%;
 }
 
-body {
-    margin-bottom: 60px;
-}
-
 /*============bootstrap4-5===============*/
 
 label {
@@ -49,11 +45,60 @@ a {
     font-weight: bold;
 }
 
-.text_cut {
+.text-break-tail {
     word-break: break-all;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
+}
+
+.clickable {
+    transition: background-color 0.3s ease-in-out;
+}
+
+    .clickable:hover {
+        background-color: #eee;
+    }
+
+    .clickable:active {
+        background-color: #ddd;
+    }
+
+
+.clickable-outline {
+    transition: border 0.3s ease-in-out;
+}
+
+    .clickable-outline:hover {
+        border: 1px solid #aaa; /* 修改为你所需的悬停时的边框颜色 */
+    }
+
+    .clickable-outline:active {
+        border: 1px solid #888; /* 修改为你所需的点击时的边框颜色 */
+    }
+
+.jsclickable {
+    transition: background-color 0.2s ease-in-out;
+}
+
+.jsclickable-hover {
+    background-color: #eee;
+}
+
+.jsclickable-active {
+    background-color: #ddd;
+}
+
+.jsclickable-outline {
+    transition: border 0.2s ease-in-out;
+}
+
+.jsclickable-outline-hover {
+    border: 1px solid #aaa; /* 修改为你所需的悬停时的边框颜色 */
+}
+
+.jsclickable-outline-active {
+    border: 1px solid #888; /* 修改为你所需的点击时的边框颜色 */
 }

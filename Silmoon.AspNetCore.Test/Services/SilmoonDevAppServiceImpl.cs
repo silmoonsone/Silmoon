@@ -1,20 +1,22 @@
 ﻿using Microsoft.Extensions.Options;
-using Silmoon.AspNetCore.Filters;
 using Silmoon.AspNetCore.Services;
 using Silmoon.Models;
+using System.Runtime.CompilerServices;
 
 namespace Silmoon.AspNetCore.Test.Services
 {
     public class SilmoonDevAppServiceImpl : SilmoonDevAppService
     {
-        public SilmoonDevAppServiceImpl(IOptions<SilmoonDevAppServiceOptions> options) : base(options)
-        {
+        public Core Core { get; set; }
 
+        public SilmoonDevAppServiceImpl(Core core, IOptions<SilmoonDevAppServiceOptions> options) : base(options)
+        {
+            Core = core;
         }
 
-        public override async Task<StateSet<bool, (string SignatureKey, string EncryptKey)>> GetKey(string AppId)
+        public override Task<StateSet<bool, (string SignatureKey, string EncryptKey)>> GetKey(string AppId)
         {
-            return await Task.FromResult(StateSet<bool, (string SignatureKey, string EncryptKey)>.Create(true, ("123", ""), "ok"));
+            return Task.FromResult(StateSet<bool, (string, string)>.Create(false, (default, default), "No such AppId"));
         }
     }
 }

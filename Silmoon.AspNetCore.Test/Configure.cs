@@ -1,29 +1,20 @@
 ﻿using Newtonsoft.Json.Linq;
 using Silmoon.Extension;
 
-namespace Silmoon.AspNetCore.Test
-{
-    public class Configure
-    {
-        public const string SigntrueKey = "yDHm6Vo1ktl5LDNQ";
+namespace Silmoon.AspNetCore.Test;
 
-        private static JObject configJson;
-        public static JObject ConfigJson
-        {
-            get
-            {
-                if (configJson == null) configJson = GetJsonConfig();
-                return configJson;
-            }
-        }
-        static JObject GetJsonConfig()
-        {
-#if DEBUG
-            var json = JsonHelperV2.LoadJsonFromFile(@"config.debug.json");
-#else
-            var json = JsonHelperV2.LoadJsonFromFile(@"config.json");
-#endif
-            return json;
-        }
+public class Configure
+{
+    public static string ProjectName { get; set; }
+
+    private static JObject configJson;
+    public static JObject ConfigJson => configJson ??= GetJsonConfig();
+    static JObject GetJsonConfig()
+    {
+        var json = JsonHelperV2.LoadJsonFromFile(@"config.json");
+        return json;
     }
+
+    //public static string greCaptchaServerKey => ConfigJson["section"]["key"].Value<string>();
+
 }

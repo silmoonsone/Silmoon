@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Silmoon.AspNetCore.Extensions;
-using Silmoon.AspNetCore.Services.Interfaces;
 using Silmoon.AspNetCore.Test.Models;
-using Silmoon.AspNetCore.Test.Services;
+using Silmoon.AspNetCore.Services.Interfaces;
 using Silmoon.Drawing;
 using Silmoon.Extension;
 using Silmoon.Runtime.Cache;
@@ -27,29 +27,48 @@ namespace Silmoon.AspNetCore.Test.Controllers
             return View();
         }
 
-        public async Task<IActionResult> CreateSession(string Username, string Password, string SigninType, string AppId, string Url, string CallbackUrl)
+        public IActionResult CreateUser(string Username, string Password, string Repassword)
         {
-            if (Username.IsNullOrEmpty() || Password.IsNullOrEmpty()) return this.JsonStateFlag(false, "用户名或密码为空");
+            if (Username.IsNullOrEmpty() || Password.IsNullOrEmpty()) return (false, "用户名或密码为空").GetStateFlagResult();
+            if (Password != Repassword) return (false, "两次密码不一致").GetStateFlagResult();
+            var existUser = Core.GetUser(Username);
+            if (existUser is null) return (false, "用户名已存在").GetStateFlagResult();
+            User user = new User()
+            {
+                Username = Username,
+                Password = EncryptHelper.RsaEncrypt(Password),
+            };
+            return this.JsonStateFlag(true, user);
+        }
+        public async Task<IActionResult> CreateSession(string Username, string Password, string Url)
+        {
+            if (Username.IsNullOrEmpty() || Password.IsNullOrEmpty()) return (false, "用户名或密码为空").GetStateFlagResult();
             var user = Core.GetUser(Username);
-            if (user is null) return this.JsonStateFlag(false, "用户名不存在或者密码错误");
+            if (user is null) return (false, "用户名不存在或者密码错误").GetStateFlagResult();
             //user.Password = EncryptHelper.RsaDecrypt(user.Password);
             if (Username == user.Username && Password == user.Password)
             {
                 await SilmoonAuthService.SignIn(user);
-                if (Url.IsNullOrEmpty()) Url = "../Account/Summary";
-                return this.JsonStateFlag(true, Data: Url);
+                if (Url.IsNullOrEmpty()) Url = "../dashboard";
+                return true.GetStateFlagResult<string>(Url);
             }
             else
             {
-                return this.JsonStateFlag(false, "用户名不存在或者密码错误");
+                return (false, "用户名不存在或者密码错误").GetStateFlagResult();
             }
         }
         public async Task<IActionResult> ClearSession()
         {
             var result = await SilmoonAuthService.SignOut();
-            return this.JsonStateFlag(result);
+            return result.GetStateFlagResult();
         }
 
+        [Authorize]
+        public IActionResult DashboardApi()
+        {
+            var result = User.Identity.IsAuthenticated;
+            return this.JsonStateFlag(true, $"You IsAuthenticated is {result}.", Data: result);
+        }
 
         public IActionResult UploadTempImage(string UserId, string fileName)
         {
@@ -100,7 +119,7 @@ namespace Silmoon.AspNetCore.Test.Controllers
         {
             var files = ObjectCache<string, NameObjectCollection<byte[]>>.Get(UserId + ":temp_images");
             if (files.Matched)
-                return File(files.Value.Get(fileName) ?? new byte[0], "image/jpeg");
+                return File(files.Value.Get(fileName) ?? Array.Empty<byte>(), "image/jpeg");
             else
                 return new EmptyResult();
         }
@@ -148,9 +167,10 @@ namespace Silmoon.AspNetCore.Test.Controllers
             new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider().TryGetContentType(fileName, out var contentType);
 
             if (files.Matched)
-                return File(files.Value.Get(fileName) ?? new byte[0], contentType);
+                return File(files.Value.Get(fileName) ?? Array.Empty<byte>(), contentType);
             else
                 return new EmptyResult();
         }
+
     }
 }
