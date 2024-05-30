@@ -1,7 +1,9 @@
 ﻿using MongoDB.Driver;
 using Newtonsoft.Json.Linq;
 using Silmoon.AspNetCore.Extension.CoreHelpers;
+using Silmoon.AspNetCore.Services.Interfaces;
 using Silmoon.AspNetCore.Test.Models;
+using Silmoon.AspNetCore.Test.Services;
 using Silmoon.Data.MongoDB;
 using Silmoon.Data.MongoDB.MongoDB;
 using Silmoon.Extension;
@@ -14,11 +16,12 @@ namespace Silmoon.AspNetCore.Test;
 public class Core : MongoService, IDisposable
 {
     public override MongoExecuter Executer { get; set; }
+    public ISilmoonConfigureService SilmoonConfigureService { get; set; }
 
-    public Core()
+    public Core(ISilmoonConfigureService silmoonConfigureService)
     {
-        Executer = new MongoExecuter(new MongoConnect(Configure.ConfigJson["mongodb"].Value<string>()));
-
+        SilmoonConfigureService = silmoonConfigureService;
+        Executer = new MongoExecuter(((SilmoonConfigureServiceImpl)SilmoonConfigureService).MongoDBConnectionString);
     }
     public User GetUser(string Username)
     {

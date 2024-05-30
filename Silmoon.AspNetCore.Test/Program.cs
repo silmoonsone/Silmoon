@@ -12,10 +12,13 @@ using Silmoon.AspNetCore.Test;
 using Silmoon.AspNetCore.Test.Components;
 using Silmoon.AspNetCore.Test.Hubs;
 using Silmoon.AspNetCore.Test.Models;
+using Silmoon.AspNetCore.Test.RazorPages;
 using Silmoon.AspNetCore.Test.Services;
 using System.ComponentModel;
 using System.Numerics;
 using System.Reflection;
+
+string ProjectName = Assembly.GetExecutingAssembly().GetName().Name;
 
 Helper.RegisterStartClassSupport();
 
@@ -30,12 +33,12 @@ builder.Services.AddMvc(config =>
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "DataProtection"));
-builder.Services.AddSession(o => { o.Cookie.Name = Configure.ProjectName + "_" + "Session"; });
+builder.Services.AddSession(o => { o.Cookie.Name = ProjectName + "_" + "Session"; });
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
 {
     o.LoginPath = new PathString("/signin");
     o.AccessDeniedPath = new PathString("/access_denied");
-    o.Cookie.Name = Configure.ProjectName + "_" + "Cookie";
+    o.Cookie.Name = ProjectName + "_" + "Cookie";
 });
 
 
@@ -45,6 +48,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 // ** required NuGet package for Swashbuckle.AspNetCore.Newtonsoft
 //builder.Services.AddSwaggerGen().AddSwaggerGenNewtonsoftSupport();
 
+// ** SignalR service mode for ChatServiceHub, require AddSignalR()
+//builder.Services.AddSingleton<ChatService>();
+
 // ** SignalR support
 //builder.Services.AddSignalR();
 
@@ -52,10 +58,12 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 //builder.Services.AddSignalR().AddNewtonsoftJsonProtocol();
 
 // ** To add Blazor service
-//builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
+builder.Services.AddSilmoonConfigure<SilmoonConfigureServiceImpl>();
 builder.Services.AddSingleton<Core>();
 builder.Services.AddSilmoonAuth<SilmoonAuthServiceImpl>();
+
 //builder.Services.AddSilmoonDevApp<SilmoonDevAppServiceImpl>();
 
 // ## custom a IHostedService for MainHostService
@@ -106,8 +114,11 @@ app.MapControllerRoute(
 // ** To add a SignalR Hub
 //app.MapHub<ChatHub>("/hubs/ChatHub");
 
+// ** Use service mode for SignalR Hub
+//app.MapHub<ChatServiceHub>("/hubs/ChatServiceHub");
+
 // ** To enable Blazor server components
-//app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 app.UseAntiforgery();
 

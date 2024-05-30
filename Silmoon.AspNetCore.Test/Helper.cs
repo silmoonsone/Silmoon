@@ -42,8 +42,6 @@ public class Helper
             settings.Converters.Add(new ObjectIdJsonConverter());
             return settings;
         });
-
-        Configure.ProjectName = Assembly.GetExecutingAssembly().GetName().Name;
     }
     public static void Output(ILogger logger, string s, LogLevel logLevel = LogLevel.Information)
     {

@@ -21,6 +21,8 @@ mono_crash.*
 
 # libman package folder
 **/wwwroot/lib/
+config-local.*.json
+config-local.json
 
 # Build results
 [Dd]ebug/
