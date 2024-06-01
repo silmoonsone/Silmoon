@@ -60,7 +60,7 @@ namespace Silmoon.Extension.Http
             {
                 try
                 {
-                    if (jsonRequestSetting.RequestMessageClone)
+                    if (jsonRequestSetting?.RequestMessageClone ?? false)
                     {
                         var requestMessageString = httpRequestMessage.ToJsonString();
                         httpRequestMessage = JsonConvert.DeserializeObject<HttpRequestMessage>(requestMessageString);
