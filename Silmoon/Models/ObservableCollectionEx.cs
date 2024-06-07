@@ -37,12 +37,12 @@ namespace Silmoon.Models
             if (!_suppressNotification) base.OnCollectionChanged(e);
         }
 
-        public void SuppressNotification(Func<bool> action)
+        public void SuppressNotification(Func<bool> action, NotifyCollectionChangedAction notifyCollectionChangedAction = NotifyCollectionChangedAction.Reset)
         {
             _suppressNotification = true;
             var result = action.Invoke();
             _suppressNotification = false;
-            if (result) OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            if (result) OnCollectionChanged(new NotifyCollectionChangedEventArgs(notifyCollectionChangedAction));
         }
         public void Notify(NotifyCollectionChangedAction notifyCollectionChangedAction)
         {
