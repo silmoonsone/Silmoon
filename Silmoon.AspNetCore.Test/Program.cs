@@ -60,7 +60,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 // ** To add Blazor service
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
-builder.Services.AddSilmoonConfigure<SilmoonConfigureServiceImpl>();
+builder.Services.AddSilmoonConfigure<SilmoonConfigureServiceImpl>(o =>
+{
+#if DEBUG
+    o.DebugConfig();
+#else
+    o.ReleaseConfig();
+#endif
+});
 builder.Services.AddSingleton<Core>();
 builder.Services.AddSilmoonAuth<SilmoonAuthServiceImpl>();
 

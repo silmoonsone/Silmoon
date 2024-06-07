@@ -12,7 +12,7 @@ namespace Silmoon.AspNetCore.Extensions
     {
         public static void AddSilmoonDevApp<TSilmoonDevAppService>(this IServiceCollection services) where TSilmoonDevAppService : SilmoonDevAppService
         {
-            if (services == null) throw new ArgumentNullException(nameof(services));
+            ArgumentNullException.ThrowIfNull(services);
 
             services.Configure<SilmoonDevAppServiceOptions>(o => o.KeyCacheSecoundTimeout = 3600);
             services.AddSingleton<ISilmoonDevAppService, TSilmoonDevAppService>();
@@ -20,8 +20,8 @@ namespace Silmoon.AspNetCore.Extensions
 
         public static void AddSilmoonDevApp<TSilmoonDevAppService>(this IServiceCollection services, Action<SilmoonDevAppServiceOptions> options) where TSilmoonDevAppService : SilmoonDevAppService
         {
-            if (services == null) throw new ArgumentNullException(nameof(services));
-            if (options == null) throw new ArgumentNullException(nameof(options));
+            ArgumentNullException.ThrowIfNull(services);
+            ArgumentNullException.ThrowIfNull(options);
 
             services.Configure(options);
             services.AddSingleton<ISilmoonDevAppService, TSilmoonDevAppService>();
@@ -29,7 +29,7 @@ namespace Silmoon.AspNetCore.Extensions
 
         public static void AddSilmoonAuth<TSilmoonAuthService>(this IServiceCollection services) where TSilmoonAuthService : class, ISilmoonAuthService
         {
-            if (services == null) throw new ArgumentNullException(nameof(services));
+            ArgumentNullException.ThrowIfNull(services);
 
             services.AddHttpContextAccessor();
             services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
@@ -38,17 +38,30 @@ namespace Silmoon.AspNetCore.Extensions
 
         public static void AddSilmoonConfigure<TSilmoonConfigureService>(this IServiceCollection services) where TSilmoonConfigureService : class, ISilmoonConfigureService
         {
-            if (services == null) throw new ArgumentNullException(nameof(services));
+            ArgumentNullException.ThrowIfNull(services);
 
             services.AddSingleton<ISilmoonConfigureService, TSilmoonConfigureService>();
         }
         public static void AddSilmoonConfigure<TSilmoonConfigureService>(this IServiceCollection services, Action<SilmoonConfigureServiceOption> option) where TSilmoonConfigureService : class, ISilmoonConfigureService
         {
-            if (services == null) throw new ArgumentNullException(nameof(services));
-            if (option == null) throw new ArgumentNullException(nameof(option));
+            ArgumentNullException.ThrowIfNull(services);
+            ArgumentNullException.ThrowIfNull(option);
 
             services.Configure(option);
             services.AddSingleton<ISilmoonConfigureService, TSilmoonConfigureService>();
+        }
+        public static void AddSilmoonConfigure(this IServiceCollection services)
+        {
+            ArgumentNullException.ThrowIfNull(services);
+            services.AddSingleton<ISilmoonConfigureService, SilmoonConfigureService>();
+        }
+        public static void AddSilmoonConfigure(this IServiceCollection services, Action<SilmoonConfigureServiceOption> option)
+        {
+            ArgumentNullException.ThrowIfNull(services);
+            ArgumentNullException.ThrowIfNull(option);
+
+            services.Configure(option);
+            services.AddSingleton<ISilmoonConfigureService, SilmoonConfigureService>();
         }
     }
 }

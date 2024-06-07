@@ -25,7 +25,7 @@
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <PackageId>Silmoon.AspNetCore</PackageId>
-    <Version>1.2.3.3</Version>
+    <Version>1.2.3.4</Version>
     <Authors>SILMOON</Authors>
     <Company>SILMOON LLC</Company>
     <Description>Silmoon SDK</Description>

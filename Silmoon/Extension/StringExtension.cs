@@ -12,10 +12,7 @@ namespace Silmoon.Extension
 {
     public static class StringExtension
     {
-        public static bool IsNullOrEmpty(this string value)
-        {
-            return string.IsNullOrEmpty(value);
-        }
+        public static bool IsNullOrEmpty(this string value) => string.IsNullOrEmpty(value);
         public static int GetLengthEncoded(this string value, Encoding encoding) => encoding.GetByteCount(value);
         public static int GetLengthSpecial(this string s)
         {
@@ -208,11 +205,7 @@ namespace Silmoon.Extension
             var data = Convert.ToBase64String(encoding.GetBytes(value));
             return data;
         }
-        public static string TrimWithoutNull(this string value)
-        {
-            if (value == null) return null;
-            else return value.Trim();
-        }
+        public static string TrimWithoutNull(this string value) => value?.Trim();
         public static bool ToBool(this string value, bool defaultResult = false, bool stringNullOrEmptyResult = false)
         {
             if (string.IsNullOrEmpty(value)) return stringNullOrEmptyResult;
@@ -382,28 +375,14 @@ namespace Silmoon.Extension
 
             return StateSet<Strength>.Create(Strength.Strong); //由数字、字母、符号构成的密码
         }
-        public static string Substring(this string str, int count, string suffix = "")
-        {
-            if (str.Length > count)
-            {
-                return str.Substring(0, count) + suffix;
-            }
-            else { return str; }
-        }
+        public static string Substring(this string str, int count, string suffix = "") => str.Length > count ? str.Substring(0, count) + suffix : str;
         /// <summary>
         /// 强制脱去HTML、script标签
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static string StripHtml(this string str)
-        {
-            return Regex.Replace(str, "<.*?>", string.Empty);
-        }
-        public static bool CheckStringLengthGte(this string str, int length)
-        {
-            if (str.IsNullOrEmpty()) return false;
-            else return str.Length >= length;
-        }
+        public static string StripHtml(this string str) => Regex.Replace(str, "<.*?>", string.Empty);
+        public static bool CheckStringLengthGte(this string str, int length) => str?.Length >= length;
 
 
         /// <summary>
@@ -642,7 +621,7 @@ namespace Silmoon.Extension
         /// <returns></returns>
         public static byte[] GetBytes(this string str, Encoding encoding = null)
         {
-            if (encoding == null) encoding = Encoding.UTF8;
+            if (encoding is null) encoding = Encoding.UTF8;
             return encoding.GetBytes(str);
         }
     }
