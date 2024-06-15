@@ -77,7 +77,7 @@ namespace Silmoon.Compress
         public static string DecompressHexStringToString(string HexStringCompressedText)
         {
             var bytes = HexStringCompressedText.HexStringToByteArray();
-            using (var inputStream = new MemoryStream(bytes))
+            using (var inputStream = new MemoryStream(bytes.Data))
             {
                 using (var gZipStream = new GZipStream(inputStream, CompressionMode.Decompress))
                 {

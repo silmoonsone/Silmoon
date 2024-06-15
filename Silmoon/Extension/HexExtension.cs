@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Silmoon.Models;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -20,17 +21,17 @@ namespace Silmoon.Extension
                          (c >= 'a' && c <= 'f') ||
                          (c >= 'A' && c <= 'F'));
 
-                if (!isHex)
-                    return false;
+                if (!isHex) return false;
             }
             return true;
         }
 
-        public static byte[] HexStringToByteArray(this string hex)
+        public static StateSet<bool, byte[]> HexStringToByteArray(this string hex)
         {
-            if (hex == null) return null;
-            if (hex.StartsWith("0x")) hex = hex.Substring(2);
+            if (hex is null) return false.ToStateSet<byte[]>(null, "hex string value is null");
+            if (!IsHexString(hex)) return false.ToStateSet<byte[]>(null, "hex string value not is HexString.");
 
+            if (hex.StartsWith("0x")) hex = hex.Substring(2);
             int numberChars = hex.Length;
             byte[] bytes = new byte[numberChars / 2];
 
@@ -43,9 +44,9 @@ namespace Silmoon.Extension
             {
                 bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
             }
-            return bytes;
+            return true.ToStateSet(bytes);
         }
-        public static string ByteArrayToHexString(this byte[] value, bool TrimZeroPerfix = false, bool Add0xPrefix = false)
+        public static string ByteArrayToHexString(this byte[] value, bool TrimPerfixZero = false, bool Add0xPrefix = false)
         {
             if (value == null) return null;
 
@@ -56,7 +57,7 @@ namespace Silmoon.Extension
             }
 
             var hexStr = sb.ToString();
-            if (TrimZeroPerfix) hexStr = hexStr.TrimStart('0');
+            if (TrimPerfixZero) hexStr = hexStr.TrimStart('0');
 
             if (Add0xPrefix) return "0x" + hexStr;
             else return hexStr;

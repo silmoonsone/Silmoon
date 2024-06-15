@@ -69,7 +69,7 @@ namespace Silmoon.Secure
         public static string AesDecryptHexStringToString(string HexString, byte[] Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
         {
             var data = HexString.HexStringToByteArray();
-            return AesDecrypt(data, Key, CipherMode, PaddingMode).GetString();
+            return AesDecrypt(data.Data, Key, CipherMode, PaddingMode).GetString();
         }
 
 
