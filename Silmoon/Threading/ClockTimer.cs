@@ -7,7 +7,7 @@ namespace Silmoon.Threading
 {
     public class ClockTimer
     {
-        public event Action SecoundChange;
+        public event Action SecondChange;
         public event Action MinuteChange;
         public event Action HourChange;
         public event Action DayChange;
@@ -32,7 +32,7 @@ namespace Silmoon.Threading
 
         private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            SecoundChange?.Invoke();
+            SecondChange?.Invoke();
 
             if (dateTime.ToString("yyyy MM dd HH mm") != DateTime.Now.ToString("yyyy MM dd HH mm")) Task.Run(() => MinuteChange?.Invoke());
             if (dateTime.ToString("yyyy MM dd HH") != DateTime.Now.ToString("yyyy MM dd HH")) Task.Run(() => HourChange?.Invoke());
