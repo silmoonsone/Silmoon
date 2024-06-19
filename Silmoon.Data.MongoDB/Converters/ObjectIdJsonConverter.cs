@@ -29,6 +29,7 @@ namespace Silmoon.Data.MongoDB.Converters
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
+            if (reader.Value is null) return null;
             if (reader.TokenType != JsonToken.String)
             {
                 throw new Exception($"Unexpected token parsing ObjectId. Expected String, got {reader.TokenType}");
