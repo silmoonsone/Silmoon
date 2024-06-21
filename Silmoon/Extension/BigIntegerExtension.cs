@@ -87,5 +87,15 @@ namespace Silmoon.Extension
             decimal result = (decimal)amount / (decimal)Math.Pow(10, decimals);
             return result;
         }
+        public static string BigIntegerToHexString(this BigInteger value, bool TrimZeroPrefix, bool Add0xPrefix = false)
+        {
+            if (value == 0) return Add0xPrefix ? "0x0" : "0";
+
+            var hexStr = value.ToString("x");
+            if (TrimZeroPrefix) hexStr = hexStr.TrimStart('0');
+
+            if (Add0xPrefix) return "0x" + hexStr;
+            else return hexStr;
+        }
     }
 }

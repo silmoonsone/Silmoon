@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Silmoon.Models.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -46,5 +47,23 @@ namespace Silmoon.Extension
             return encoding.GetString(data);
         }
         public static string GetBase64String(this byte[] data) => data is null ? null : Convert.ToBase64String(data);
+        public static string ToHexString(this byte[] value, bool TrimPerfixZero, bool Add0xPrefix = false)
+        {
+            if (value == null) return null;
+
+            StringBuilder sb = new StringBuilder(value.Length * 2);
+            foreach (byte b in value)
+            {
+                sb.Append(b.ToString("x2"));
+            }
+
+            var hexStr = sb.ToString();
+            if (TrimPerfixZero) hexStr = hexStr.TrimStart('0');
+
+            if (Add0xPrefix) return "0x" + hexStr;
+            else return hexStr;
+
+        }
+        public static string ToHexString(this byte[] value) => ToHexString(value, false, false);
     }
 }

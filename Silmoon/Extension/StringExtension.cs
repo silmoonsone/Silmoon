@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -623,6 +624,48 @@ namespace Silmoon.Extension
         {
             if (encoding is null) encoding = Encoding.UTF8;
             return encoding.GetBytes(str);
+        }
+
+        public static bool IsHexString(this string value)
+        {
+            bool isHex;
+            value = value.Substring(value.StartsWith("0x") ? 2 : 0);
+            foreach (var c in value)
+            {
+                isHex = ((c >= '0' && c <= '9') ||
+                         (c >= 'a' && c <= 'f') ||
+                         (c >= 'A' && c <= 'F'));
+
+                if (!isHex) return false;
+            }
+            return true;
+        }
+        public static StateSet<bool, byte[]> HexStringToByteArray(this string hex)
+        {
+            if (hex is null) return false.ToStateSet<byte[]>(null, "hex string value is null");
+            if (!IsHexString(hex)) return false.ToStateSet<byte[]>(null, "hex string value not is HexString.");
+
+            if (hex.StartsWith("0x")) hex = hex.Substring(2);
+            int numberChars = hex.Length;
+            byte[] bytes = new byte[numberChars / 2];
+
+            if (numberChars % 2 != 0)
+            {
+                hex = "0" + hex;
+                numberChars = hex.Length;
+            }
+            for (int i = 0; i < numberChars; i += 2)
+            {
+                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+            }
+            return true.ToStateSet(bytes);
+        }
+        public static BigInteger HexStringToBigInteger(this string value)
+        {
+            if (string.IsNullOrEmpty(value)) throw new ArgumentNullException(nameof(value));
+            if (value.StartsWith("0x")) value = value.Substring(2);
+
+            return BigInteger.Parse(value, NumberStyles.HexNumber);
         }
     }
 }
