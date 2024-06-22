@@ -91,5 +91,19 @@ namespace Silmoon.Extension
             //convert byte array to datetime
             return DateTime.FromBinary(BitConverter.ToInt64(bytes, 0));
         }
+        /// <summary>
+        /// 将某个时区的本地时间转换为当前时区的本地时间
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <param name="TimeZoneOffsetHours">原时区本地时间的时区小时数</param>
+        /// <param name="RequireDateTimeKind">转换为UTC时间还是本地时区时间</param>
+        /// <returns>当前时区的时间</returns>
+        public static DateTime LocalToCurrentLocal(DateTime dateTime, int TimeZoneOffsetHours, DateTimeKind RequireDateTimeKind = DateTimeKind.Local)
+        {
+            var result = DateTime.SpecifyKind(dateTime.AddHours(TimeZoneOffsetHours * -1), DateTimeKind.Utc);
+            if (RequireDateTimeKind == DateTimeKind.Local)
+                return result.ToLocalTime();
+            else return result;
+        }
     }
 }
