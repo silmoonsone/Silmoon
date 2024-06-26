@@ -36,13 +36,11 @@ namespace Silmoon.Data.MongoDB.MongoDB
 
         public void AddObject<T>(string collectionName, T obj)
         {
-            if (obj != null)
-                GetCollection<T>(collectionName).InsertOne(obj);
+            if (obj != null) GetCollection<T>(collectionName).InsertOne(obj);
         }
         public void AddObjects<T>(string collectionName, T[] obj)
         {
-            if (!obj.IsNullOrEmpty())
-                GetCollection<T>(collectionName).InsertMany(obj);
+            if (!obj.IsNullOrEmpty()) GetCollection<T>(collectionName).InsertMany(obj);
         }
 
 

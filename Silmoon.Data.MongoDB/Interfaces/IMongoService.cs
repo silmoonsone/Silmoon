@@ -24,6 +24,8 @@ namespace Silmoon.Data.MongoDB
 
         UpdateResult Set<T>(T obj, Expression<Func<T, bool>> whereFunc = null, params Expression<Func<T, object>>[] updateFields) where T : IIdObject;
         UpdateResult Sets<T>(T obj, Expression<Func<T, bool>> whereFunc = null, params Expression<Func<T, object>>[] updateFields) where T : IIdObject;
+        UpdateResult Set<T>(T obj, bool isUpsert = false, Expression<Func<T, bool>> whereFunc = null, params Expression<Func<T, object>>[] updateFields) where T : IIdObject;
+        UpdateResult Sets<T>(T obj, bool isUpsert = false, Expression<Func<T, bool>> whereFunc = null, params Expression<Func<T, object>>[] updateFields) where T : IIdObject;
 
         DeleteResult Delete<T>(Expression<Func<T, bool>> whereFunc) where T : IIdObject;
         DeleteResult Deletes<T>(Expression<Func<T, bool>> whereFunc) where T : IIdObject;
