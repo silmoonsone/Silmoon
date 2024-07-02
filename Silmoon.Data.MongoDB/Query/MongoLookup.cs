@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Silmoon.Data.MongoDB.MongoDB.Query
+namespace Silmoon.Data.MongoDB.Query
 {
     public class MongoLookup
     {

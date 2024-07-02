@@ -4,9 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Silmoon.AspNetCore.Extensions;
 using Silmoon.AspNetCore.Services.Interfaces;
 using Silmoon.Extension;
+using Silmoon.Extension.Models.Identities;
+using Silmoon.Extension.Models.Identities.Enums;
 using Silmoon.Models;
-using Silmoon.Models.Identities;
-using Silmoon.Models.Identities.Enums;
 using System.Web;
 
 namespace Silmoon.AspNetCore.Filters

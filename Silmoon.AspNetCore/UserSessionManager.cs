@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Silmoon.Extension;
 using Silmoon.Models;
-using Silmoon.Models.Identities;
 using Silmoon.AspNetCore.Extensions;
 using System;
 using System.Linq;
@@ -11,6 +10,7 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
+using Silmoon.Extension.Models.Identities;
 
 namespace Silmoon.AspNetCore
 {

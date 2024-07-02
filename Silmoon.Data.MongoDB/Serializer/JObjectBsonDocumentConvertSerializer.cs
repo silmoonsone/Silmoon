@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 
-namespace Silmoon.Data.MongoDB.MongoDB.Serializer
+namespace Silmoon.Data.MongoDB.Serializer
 {
     public class JObjectBsonDocumentConvertSerializer : SerializerBase<JObject>
     {

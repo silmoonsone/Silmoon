@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Silmoon.Models.Types
+namespace Silmoon.Extension.Models.Types
 {
     [JsonConverter(typeof(StringEnumConverter))]
     public enum ResultState

@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Silmoon.AspNetCore.Services.Interfaces;
 using Silmoon.Extension;
-using Silmoon.Models.Identities;
+using Silmoon.Extension.Models.Identities;
 using System;
 using System.Linq;
 using System.Security.Claims;

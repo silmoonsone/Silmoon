@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Silmoon.Models.Identities.Enums
+namespace Silmoon.Extension.Models.Identities.Enums
 {
     public enum IdentityRole
     {

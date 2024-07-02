@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Silmoon.Data.MongoDB.MongoDB.Models
+namespace Silmoon.Data.MongoDB.Models
 {
     public interface IIdObject
     {

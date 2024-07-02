@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Silmoon.Data.MongoDB.MongoDB.Serializer
+namespace Silmoon.Data.MongoDB.Serializer
 {
     public class DateTimeExSerializer : DateTimeSerializer
     {

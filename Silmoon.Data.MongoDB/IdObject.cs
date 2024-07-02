@@ -1,14 +1,14 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Silmoon.Data.MongoDB.Converters;
-using Silmoon.Data.MongoDB.MongoDB.Models;
+using Silmoon.Data.MongoDB.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
-namespace Silmoon.Data.MongoDB.MongoDB
+namespace Silmoon.Data.MongoDB
 {
     [Serializable]
     public class IdObject : IIdObject, ICreatedAt

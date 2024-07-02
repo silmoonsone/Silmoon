@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Silmoon.Extension;
+using Silmoon.Extension.Models;
+using Silmoon.Extension.Models.Types;
 using Silmoon.Models;
-using Silmoon.Models.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;

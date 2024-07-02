@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using Silmoon.Models.Types;
-using Silmoon.Models;
 using Silmoon.Secure;
 using System;
 using System.Collections.Generic;
@@ -9,6 +7,8 @@ using System.Collections.Specialized;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Silmoon.Extension.Models.Types;
+using Silmoon.Extension.Models;
 
 namespace Silmoon.Extension.Http
 {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Silmoon.Models.Identities;
 using System;
 using Silmoon.AspNetCore;
 using Silmoon.AspNetCore.Middlewares;
+using Silmoon.Extension.Models.Identities;
 
 namespace Silmoon.AspNetCore.Extensions
 {

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Silmoon.Data.MongoDB.MongoDB
+namespace Silmoon.Data.MongoDB
 {
     public class MongoConnect
     {

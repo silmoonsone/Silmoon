@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
-namespace Silmoon.SystemAppliaction
+namespace Silmoon
 {
     public sealed class ExecProc
     {
@@ -23,7 +23,7 @@ namespace Silmoon.SystemAppliaction
             p.StartInfo.FileName = fileName;
             string tmpfm = fileName.Replace("/", "\\");
             int lc = tmpfm.LastIndexOf("\\");
-            string name = tmpfm.Substring((tmpfm.Length - lc), tmpfm.Length);
+            string name = tmpfm.Substring(tmpfm.Length - lc, tmpfm.Length);
         }
     }
 }

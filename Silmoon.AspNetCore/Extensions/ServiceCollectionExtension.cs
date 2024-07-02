@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components.Server;
 using Microsoft.Extensions.DependencyInjection;
 using Silmoon.AspNetCore.Services;
 using Silmoon.AspNetCore.Services.Interfaces;
-using Silmoon.Models.Identities;
 using System;
 
 namespace Silmoon.AspNetCore.Extensions

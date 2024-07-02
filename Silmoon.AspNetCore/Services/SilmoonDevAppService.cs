@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Silmoon.AspNetCore.Services.Interfaces;
 using Silmoon.Models;
-using Silmoon.Models.Types;
 using Silmoon.Runtime.Cache;
 using System;
 using System.Security.Cryptography.Xml;

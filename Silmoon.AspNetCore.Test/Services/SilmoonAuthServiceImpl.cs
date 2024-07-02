@@ -1,5 +1,5 @@
 ﻿using Silmoon.AspNetCore.Services;
-using Silmoon.Models.Identities;
+using Silmoon.Extension.Models.Identities;
 
 namespace Silmoon.AspNetCore.Test.Services
 {

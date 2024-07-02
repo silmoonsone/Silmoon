@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Silmoon.Data.MongoDB.MongoDB.Models
+namespace Silmoon.Data.MongoDB.Models
 {
     public interface ICreatedAt
     {

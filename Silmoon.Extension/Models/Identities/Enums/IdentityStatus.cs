@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Silmoon.Models.Identities.Enums
+namespace Silmoon.Extension.Models.Identities.Enums
 {
     public enum IdentityStatus
     {

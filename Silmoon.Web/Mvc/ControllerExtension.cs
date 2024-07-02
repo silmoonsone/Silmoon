@@ -1,5 +1,5 @@
-﻿using Silmoon.Models.Identities;
-using Silmoon.Models.Identities.Enums;
+﻿using Silmoon.Extension.Models.Identities;
+using Silmoon.Extension.Models.Identities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

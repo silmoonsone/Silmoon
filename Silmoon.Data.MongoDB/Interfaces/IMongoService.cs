@@ -1,11 +1,10 @@
 ﻿using MongoDB.Driver;
-using Silmoon.Data.MongoDB.MongoDB.Models;
-using Silmoon.Data.MongoDB.MongoDB;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using Silmoon.Data.MongoDB.Models;
 
-namespace Silmoon.Data.MongoDB
+namespace Silmoon.Data.MongoDB.Interfaces
 {
     public interface IMongoService
     {

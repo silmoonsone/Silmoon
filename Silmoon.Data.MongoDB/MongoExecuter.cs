@@ -3,8 +3,8 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Silmoon.Data.MongoDB.Extensions;
-using Silmoon.Data.MongoDB.MongoDB.Models;
-using Silmoon.Data.MongoDB.MongoDB.Query;
+using Silmoon.Data.MongoDB.Models;
+using Silmoon.Data.MongoDB.Query;
 using Silmoon.Data.QueryModel;
 using Silmoon.Extension;
 using Silmoon.Runtime;
@@ -17,7 +17,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 
-namespace Silmoon.Data.MongoDB.MongoDB
+namespace Silmoon.Data.MongoDB
 {
     public class MongoExecuter
     {
@@ -394,7 +394,7 @@ namespace Silmoon.Data.MongoDB.MongoDB
 
         public UpdateDefinition<T> MakeUpdate<T>(T obj, params string[] updateObjectFieldNames)
         {
-            var paras = ObjectRef.GetProperties(obj);
+            var paras = obj.GetProperties();
 
             var updateBuilder = Builders<T>.Update;
 
@@ -445,7 +445,7 @@ namespace Silmoon.Data.MongoDB.MongoDB
         }
         public FilterDefinition<T> MakeAeqFilter<T>(object findByObject)
         {
-            var paras = ObjectRef.GetProperties(findByObject);
+            var paras = findByObject.GetProperties();
             var fb = Builders<T>.Filter;
             var filter = fb.Empty;
             foreach (var item in paras)
@@ -457,7 +457,7 @@ namespace Silmoon.Data.MongoDB.MongoDB
         [Obsolete]
         public FilterDefinition<T> MakeAeqFilter<T>(ExpandoObject findByObject)
         {
-            var paras = ObjectRef.GetProperties(findByObject);
+            var paras = findByObject.GetProperties();
             var fb = Builders<T>.Filter;
             var filter = fb.Empty;
             foreach (var item in paras)

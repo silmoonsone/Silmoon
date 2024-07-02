@@ -4,7 +4,11 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 DataProtection/
+.idea/
 .DS_Store
+*.localcode.*
+config-local.*.json
+config-local.json
 
 # User-specific files
 *.rsuser
@@ -21,8 +25,6 @@ mono_crash.*
 
 # libman package folder
 **/wwwroot/lib/
-config-local.*.json
-config-local.json
 
 # Build results
 [Dd]ebug/

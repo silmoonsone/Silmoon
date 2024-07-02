@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Silmoon.Data.MongoDB.MongoDB.Models
+namespace Silmoon.Data.MongoDB.Models
 {
     public class MongoResultException : Exception
     {

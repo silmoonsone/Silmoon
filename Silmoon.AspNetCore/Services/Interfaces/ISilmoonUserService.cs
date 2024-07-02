@@ -1,4 +1,4 @@
-﻿using Silmoon.Models.Identities;
+﻿using Silmoon.Extension.Models.Identities;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

@@ -5,9 +5,9 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Silmoon.Extension;
-using Silmoon.Models.Types;
+using Silmoon.Extension.Models.Types;
 
-namespace Silmoon.Models
+namespace Silmoon.Extension.Models
 {
     public class ApiResult
     {

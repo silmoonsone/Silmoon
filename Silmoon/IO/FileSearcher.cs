@@ -4,7 +4,7 @@ using System.Text;
 using System.IO;
 using System.Collections;
 
-namespace Silmoon.IO.SmFile
+namespace Silmoon.IO
 {
     /// <summary>
     /// Ä¿Â¼ÎÄ¼þËÑË÷Æ÷
