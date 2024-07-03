@@ -531,55 +531,85 @@ namespace Silmoon.Extension
         /// <param name="IP"></param>
         /// <returns></returns>
         public static bool IsIPAddress(this string IP) => IP.IsIPv4Address() || IP.IsIPv6Address();
-        public static bool IsValidVersionNumber(this string str)
+
+
+
+        // 正则表达式匹配 SemVer 和四位版本号
+        private static readonly Regex SemVerRegex = new Regex(@"^\d+\.\d+\.\d+(\.\d+)?$|^\d+\.\d+\.\d+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$", RegexOptions.Compiled);
+        public static bool IsValidVersion(this string version) => !string.IsNullOrWhiteSpace(version) && SemVerRegex.IsMatch(version);
+        public static bool IsNewerVersionThan(this string version1, string version2, bool equalIsNewer = false)
         {
-            if (string.IsNullOrEmpty(str))
-            {
-                return false;
-            }
+            if (!version1.IsValidVersion()) throw new ArgumentException($"The version number '{version1}' is not valid.", nameof(version1));
+            if (!version2.IsValidVersion()) throw new ArgumentException($"The version number '{version2}' is not valid.", nameof(version2));
 
-            var regex = new Regex(@"^\d+(\.\d+){0,3}$");
-
-            return regex.IsMatch(str);
-        }
-        public static bool IsNewerVersionThan(this string str, string str2, bool equalIsNewer = false)
-        {
-            if (!str.IsValidVersionNumber() || !str2.IsValidVersionNumber())
-            {
-                return false;
-            }
-
-            var version1Parts = str.Split('.');
-            var version2Parts = str2.Split('.');
+            var version1Parts = version1.Split(new[] { '-', '+' }, 2)[0].Split('.');
+            var version2Parts = version2.Split(new[] { '-', '+' }, 2)[0].Split('.');
 
             for (int i = 0; i < Math.Max(version1Parts.Length, version2Parts.Length); i++)
             {
                 int version1Part = i < version1Parts.Length ? int.Parse(version1Parts[i]) : 0;
                 int version2Part = i < version2Parts.Length ? int.Parse(version2Parts[i]) : 0;
 
-                if (version1Part < version2Part)
-                {
-                    return false;
-                }
-                else if (version1Part > version2Part)
-                {
-                    return true;
-                }
+                if (version1Part < version2Part) return false;
+                else if (version1Part > version2Part) return true;
             }
+
+            var version1PreRelease = GetPreReleaseTag(version1);
+            var version2PreRelease = GetPreReleaseTag(version2);
+
+            int preReleaseComparison = ComparePreRelease(version1PreRelease, version2PreRelease);
+            if (preReleaseComparison < 0) return false;
+            else if (preReleaseComparison > 0) return true;
+
             return equalIsNewer;
+        }
+        static string GetPreReleaseTag(string version)
+        {
+            var parts = version.Split('-');
+            if (parts.Length > 1)
+            {
+                var preReleasePart = parts[1];
+                return preReleasePart.Split('+')[0];
+            }
+            return string.Empty;
+        }
+        static int ComparePreRelease(string pre1, string pre2)
+        {
+            if (string.IsNullOrEmpty(pre1) && !string.IsNullOrEmpty(pre2)) return 1;
+            if (!string.IsNullOrEmpty(pre1) && string.IsNullOrEmpty(pre2)) return -1;
+            if (string.IsNullOrEmpty(pre1) && string.IsNullOrEmpty(pre2)) return 0;
+
+            var pre1Parts = pre1.Split('.');
+            var pre2Parts = pre2.Split('.');
+
+            for (int i = 0; i < Math.Max(pre1Parts.Length, pre2Parts.Length); i++)
+            {
+                var part1 = i < pre1Parts.Length ? pre1Parts[i] : string.Empty;
+                var part2 = i < pre2Parts.Length ? pre2Parts[i] : string.Empty;
+
+                int result;
+                if (int.TryParse(part1, out var int1) && int.TryParse(part2, out var int2))
+                    result = int1.CompareTo(int2);
+                else
+                    result = string.Compare(part1, part2, StringComparison.Ordinal);
+
+                if (result != 0) return result;
+            }
+            return 0;
         }
 
 
-        public static string AppendQueryString(this string url, string queryString)
+
+        public static string AppendUriQueryString(this string url, string queryString)
         {
             return url.Contains("?") ? $"{url}&{queryString}" : $"{url}?{queryString}";
         }
-        public static string AppendQueryString(this string url, string key, string value)
+        public static string AppendUriQueryString(this string url, string key, string value)
         {
             return url.Contains("?") ? $"{url}&{HttpUtility.UrlEncode(key)}={HttpUtility.UrlEncode(value)}" : $"{url}?{HttpUtility.UrlEncode(key)}={HttpUtility.UrlEncode(value)}";
         }
 
-        public static string RemoveQueryString(this string url, string key)
+        public static string RemoveUriQueryString(this string url, string key)
         {
             if (!url.Contains("?") || string.IsNullOrEmpty(key))
             {
@@ -601,14 +631,14 @@ namespace Silmoon.Extension
 
             return $"{baseUrl}?{newQueryString}";
         }
-        public static string GetQueryStringValueFromUrl(this string url, string key)
+        public static string GetUriQueryStringValueFromUrl(this string url, string key)
         {
             if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(key)) return null;
             var uri = new Uri(url);
             var query = HttpUtility.ParseQueryString(uri.Query);
             return query[key];
         }
-        public static string GetQueryStringValueFromString(this string url, string key)
+        public static string GetUriQueryStringValueFromString(this string url, string key)
         {
             if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(key)) return null;
             var query = HttpUtility.ParseQueryString(url);

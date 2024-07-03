@@ -7,7 +7,7 @@ using System.Text;
 namespace Silmoon.Data.MongoDB.Converters
 {
     /// <summary>
-    /// ObjectId转换器，原本不用此转换器，可以直接将BsonObjectId转换成字符串，但是在反序列化时，字符串没有反序列化称BsonObjectId的实现，所以需要此转换器
+    /// ObjectId转换器，原本不用此转换器，可以直接将Bson的ObjectId类型转换成字符串，但是在反序列化时，字符串没有反序列化称Bson的ObjectId类型的实现，所以需要此转换器。
     /// </summary>
     /// <remarks>
     /// <code>
