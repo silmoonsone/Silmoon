@@ -19,7 +19,7 @@
 
   <PropertyGroup>
     <PackageId>Silmoon.Extension</PackageId>
-    <Version>1.4.0</Version>
+    <Version>1.4.1</Version>
     <Authors>SILMOON</Authors>
     <Company>SILMOON LLC</Company>
     <Description>Silmoon SDK</Description>
