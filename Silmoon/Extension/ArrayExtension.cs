@@ -36,28 +36,28 @@ namespace Silmoon.Extension
             return result;
         }
         public static bool IsNullOrEmpty<T>(this ICollection<T> array) => array == null || array?.Count == 0;
-        public static List<DiffResult<T>> CompareDiffWith<T>(this IEnumerable<T> sourceCollection, IEnumerable<T> destinationCollection, Func<T, T, bool> areEqual)
+        public static List<DiffResult<T>> CompareDiffWith<T>(this IEnumerable<T> sourceCollection, IEnumerable<T> destinationCollection, Func<T, T, bool> isEqualComparison)
         {
             var missingItems = sourceCollection
-                .Where(mainItem => !destinationCollection.Any(otherItem => areEqual(mainItem, otherItem)))
+                .Where(mainItem => !destinationCollection.Any(otherItem => isEqualComparison(mainItem, otherItem)))
                 .Select(item => new DiffResult<T> { Data = item, Type = DiffType.Missing });
 
             var extraItems = destinationCollection
-                .Where(otherItem => !sourceCollection.Any(mainItem => areEqual(mainItem, otherItem)))
+                .Where(otherItem => !sourceCollection.Any(mainItem => isEqualComparison(mainItem, otherItem)))
                 .Select(item => new DiffResult<T> { Data = item, Type = DiffType.Extra });
 
             var differences = missingItems.Concat(extraItems).ToList();
 
             return differences;
         }
-        public static List<DiffResult<TSourceT, TDestinationT>> CompareWith<TSourceT, TDestinationT>(this IEnumerable<TSourceT> sourceCollection, IEnumerable<TDestinationT> destinationCollection, Func<TSourceT, TDestinationT, bool> areEqual)
+        public static List<DiffResult<TSourceT, TDestinationT>> CompareWith<TSourceT, TDestinationT>(this IEnumerable<TSourceT> sourceCollection, IEnumerable<TDestinationT> destinationCollection, Func<TSourceT, TDestinationT, bool> isEqualComparison)
         {
             var missingItems = sourceCollection
-                .Where(sourceItem => !destinationCollection.Any(destItem => areEqual(sourceItem, destItem)))
+                .Where(sourceItem => !destinationCollection.Any(destItem => isEqualComparison(sourceItem, destItem)))
                 .Select(item => new DiffResult<TSourceT, TDestinationT> { SourceData = item, Type = DiffType.Missing });
 
             var extraItems = destinationCollection
-                .Where(destItem => !sourceCollection.Any(sourceItem => areEqual(sourceItem, destItem)))
+                .Where(destItem => !sourceCollection.Any(sourceItem => isEqualComparison(sourceItem, destItem)))
                 .Select(item => new DiffResult<TSourceT, TDestinationT> { DestinationData = item, Type = DiffType.Extra });
 
             var differences = missingItems.Concat(extraItems).ToList();

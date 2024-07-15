@@ -7,6 +7,7 @@ using Silmoon.Data.MongoDB.Converters;
 using Silmoon.Data.MongoDB.Serializer;
 using Silmoon.Extension;
 using Silmoon.Extension.Http;
+using System.Collections.ObjectModel;
 
 namespace WinFormTest;
 internal static class Program
@@ -15,27 +16,30 @@ internal static class Program
     ///  The main entry point for the application.
     /// </summary>
     [STAThread]
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
         //Args.ParseArgs(args);
 
         // To customize application configuration such as set high DPI settings or default font,
         // see https://aka.ms/applicationconfiguration.
+
+        //if (ForeachExTest()) return;
+        //if (JsonTest()) return;
+        //if (await Test()) return;
+
         ApplicationConfiguration.Initialize();
         Application.Run(new Form1());
-
-        //JsonTest();
-
-        //Test().Wait();
+        await Task.CompletedTask;
     }
-    static async Task Test()
+    static async Task<bool> Test()
     {
         JObject json = new JObject();
         json["name"] = "silmoon";
         var result = await JsonRequest.PostAsync<JObject, JObject>("https://localhost:7005/api/TestApi/PostJsonTest", json, null);
         Console.WriteLine(result.ToFormattedJsonString());
+        return true;
     }
-    static void JsonTest()
+    static bool JsonTest()
     {
         JsonConvert.DefaultSettings = new Func<JsonSerializerSettings>(() =>
         {
@@ -56,5 +60,19 @@ internal static class Program
         var obj = new { name = "silmoon", _id = objId };
         JObject jobj = JObject.FromObject(obj);
         var objectId = jobj["_id"].ToObject<ObjectId?>();
+
+        return true;
+    }
+    static bool ForeachExTest()
+    {
+        int[] intArray = [1, 2, 3, 4, 5];
+        intArray.ForEachEx(Console.WriteLine);
+        List<int> listArray = [1, 2, 3, 4, 5];
+        listArray.ForEachEx(Console.WriteLine);
+
+        ObservableCollection<int> collection = [1, 2, 3, 4, 5];
+        collection.ForEachEx(Console.WriteLine);
+
+        return true;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -35,6 +36,20 @@ namespace Silmoon.Extension
             return result;
         }
         public static void ForEachEx<T>(this IEnumerable<T> source, Action<T> action)
+        {
+            foreach (var item in source)
+            {
+                action(item);
+            }
+        }
+        public static void ForEachEx<T>(this IEnumerable source, Action<T> action)
+        {
+            foreach (var item in source)
+            {
+                action((T)item);
+            }
+        }
+        public static void ForEachEx(this IEnumerable source, Action<object> action)
         {
             foreach (var item in source)
             {
