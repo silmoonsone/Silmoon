@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Web", "Silmoon.Web\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Net", "Silmoon.Net\Silmoon.Net.csproj", "{D595A3FA-798E-44A8-9CDA-AA688AF4A3B6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.AspNetCore", "Silmoon.AspNetCore\Silmoon.AspNetCore.csproj", "{E95B8D17-0B0B-48BD-88F6-EDE4CBD7AA70}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Data", "Silmoon.Data\Silmoon.Data.csproj", "{1492066C-2564-488A-8775-5BDC117DF17E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Drawing", "Silmoon.Drawing\Silmoon.Drawing.csproj", "{A4766B9C-0C2F-4341-8029-65AA4EAF08DE}"
@@ -21,13 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon", "Silmoon\Silmoon.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormTest", "WinFormTest\WinFormTest.csproj", "{D267F97E-6FCE-4567-8C63-3F30E9C5FCEB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.AspNetCore.Test", "Silmoon.AspNetCore.Test\Silmoon.AspNetCore.Test.csproj", "{1B35921D-968B-4C55-891F-12F9D814090B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Core", "Silmoon.Core\Silmoon.Core.csproj", "{69DEE3AD-AB43-4EC0-B9AA-FFB9A274AED5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Data.MongoDB", "Silmoon.Data.MongoDB\Silmoon.Data.MongoDB.csproj", "{BE136316-834E-4AAE-855C-E5C6F6A3AA0C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.AspNetCore.Extension", "Silmoon.AspNetCore.Extension\Silmoon.AspNetCore.Extension.csproj", "{C2DA2E76-ADA5-4622-A48B-F2629044661F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{8D597025-4CD1-4958-B2A9-1FA50B7F9834}"
 	ProjectSection(SolutionItems) = preProject
@@ -61,10 +55,6 @@ Global
 		{D595A3FA-798E-44A8-9CDA-AA688AF4A3B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D595A3FA-798E-44A8-9CDA-AA688AF4A3B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D595A3FA-798E-44A8-9CDA-AA688AF4A3B6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E95B8D17-0B0B-48BD-88F6-EDE4CBD7AA70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E95B8D17-0B0B-48BD-88F6-EDE4CBD7AA70}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E95B8D17-0B0B-48BD-88F6-EDE4CBD7AA70}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E95B8D17-0B0B-48BD-88F6-EDE4CBD7AA70}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1492066C-2564-488A-8775-5BDC117DF17E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1492066C-2564-488A-8775-5BDC117DF17E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1492066C-2564-488A-8775-5BDC117DF17E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -81,10 +71,6 @@ Global
 		{D267F97E-6FCE-4567-8C63-3F30E9C5FCEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D267F97E-6FCE-4567-8C63-3F30E9C5FCEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D267F97E-6FCE-4567-8C63-3F30E9C5FCEB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1B35921D-968B-4C55-891F-12F9D814090B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1B35921D-968B-4C55-891F-12F9D814090B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1B35921D-968B-4C55-891F-12F9D814090B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1B35921D-968B-4C55-891F-12F9D814090B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{69DEE3AD-AB43-4EC0-B9AA-FFB9A274AED5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{69DEE3AD-AB43-4EC0-B9AA-FFB9A274AED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69DEE3AD-AB43-4EC0-B9AA-FFB9A274AED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -93,16 +79,12 @@ Global
 		{BE136316-834E-4AAE-855C-E5C6F6A3AA0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE136316-834E-4AAE-855C-E5C6F6A3AA0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE136316-834E-4AAE-855C-E5C6F6A3AA0C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C2DA2E76-ADA5-4622-A48B-F2629044661F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C2DA2E76-ADA5-4622-A48B-F2629044661F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C2DA2E76-ADA5-4622-A48B-F2629044661F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C2DA2E76-ADA5-4622-A48B-F2629044661F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {18B93CD3-1A51-425B-89D1-03A0565D2E21}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal

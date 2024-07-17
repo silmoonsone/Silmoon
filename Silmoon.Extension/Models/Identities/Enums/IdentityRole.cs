@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Silmoon.Extension.Models.Identities.Enums
 {
+    [Flags]
     public enum IdentityRole
     {
         [Display(Name = "未定义")]

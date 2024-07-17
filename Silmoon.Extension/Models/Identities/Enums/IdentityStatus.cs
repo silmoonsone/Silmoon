@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Silmoon.Extension.Models.Identities.Enums
 {
+    [Flags]
     public enum IdentityStatus
     {
         Locked = -1,
