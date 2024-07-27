@@ -8,8 +8,8 @@ namespace Silmoon.Data.MongoDB
 {
     public class MongoConnect
     {
-        public MongoClient Client { get; set; }
-        public MongoUrl MongoUrl { get; set; }
+        public MongoClient Client { get; private set; }
+        public MongoUrl MongoUrl { get; private set; }
         string url { get; set; }
 
         [Obsolete]
@@ -18,13 +18,13 @@ namespace Silmoon.Data.MongoDB
             if (mongoClient is null) Connect();
             else Client = mongoClient;
         }
-        public MongoConnect(string Url, bool DelayConnect = false)
+        public MongoConnect(string url, bool delayConnect = false)
         {
-            url = Url;
-            if (!DelayConnect) Connect();
+            this.url = url;
+            if (!delayConnect) Connect();
         }
         //void Connect() => Client = new MongoClient(MongoUrl ??= new MongoUrl(Configure.ConfigJson["mongodb"].Value<string>()));
-        void Connect()
+        private void Connect()
         {
             if (MongoUrl is null) MongoUrl = new MongoUrl(url);
             Client = new MongoClient(MongoUrl);

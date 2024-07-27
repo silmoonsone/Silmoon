@@ -27,7 +27,11 @@ namespace Silmoon.Models
         }
         public override int GetHashCode()
         {
-            return Name.GetHashCode() + Value.GetHashCode();
+            int hash = 17;
+            hash = hash * 31 + (Name != null ? Name.GetHashCode() : 0);
+            hash = hash * 31 + Value.GetHashCode();
+            return hash;
         }
+        public override string ToString() => $"{Name}: {Value}";
     }
 }

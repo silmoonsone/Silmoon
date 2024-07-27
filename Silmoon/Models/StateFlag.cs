@@ -18,44 +18,20 @@ namespace Silmoon.Models
 
         }
 
-        public static StateFlag Create(bool Success)
-        {
-            return new StateFlag() { Success = Success };
-        }
-        public static StateFlag Create(bool Success, string Message)
-        {
-            return new StateFlag() { Success = Success, Message = Message };
-        }
-        public static StateFlag Create(bool Success, int Code)
-        {
-            return new StateFlag() { Success = Success, Code = Code };
-        }
-        public static StateFlag Create(bool Success, int Code, string Message)
-        {
-            return new StateFlag() { Success = Success, Message = Message, Code = Code };
-        }
+        public static StateFlag Create(bool Success) => new StateFlag() { Success = Success };
+        public static StateFlag Create(bool Success, string Message) => new StateFlag() { Success = Success, Message = Message };
+        public static StateFlag Create(bool Success, int Code) => new StateFlag() { Success = Success, Code = Code };
+        public static StateFlag Create(bool Success, int Code, string Message) => new StateFlag() { Success = Success, Message = Message, Code = Code };
     }
 
     public class StateFlag<T> : StateFlag
     {
         public T Data { get; set; }
 
-        public static StateFlag<T> Create(bool Success, T Data)
-        {
-            return new StateFlag<T>() { Success = Success, Data = Data };
-        }
-        public static StateFlag<T> Create(bool Success, T Data, string Message)
-        {
-            return new StateFlag<T>() { Success = Success, Message = Message, Data = Data };
-        }
-        public static StateFlag<T> Create(bool Success, int Code, T Data)
-        {
-            return new StateFlag<T>() { Success = Success, Code = Code, Data = Data };
-        }
-        public static StateFlag<T> Create(bool Success, int Code, T Data, string Message)
-        {
-            return new StateFlag<T>() { Success = Success, Message = Message, Code = Code, Data = Data };
-        }
+        public static StateFlag<T> Create(bool Success, T Data) => new StateFlag<T>() { Success = Success, Data = Data };
+        public static StateFlag<T> Create(bool Success, T Data, string Message) => new StateFlag<T>() { Success = Success, Message = Message, Data = Data };
+        public static StateFlag<T> Create(bool Success, int Code, T Data) => new StateFlag<T>() { Success = Success, Code = Code, Data = Data };
+        public static StateFlag<T> Create(bool Success, int Code, T Data, string Message) => new StateFlag<T>() { Success = Success, Message = Message, Code = Code, Data = Data };
     }
 
 }

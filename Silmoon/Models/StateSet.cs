@@ -14,10 +14,12 @@ namespace Silmoon.Models
         /// 状态
         /// </summary>
         public TState State { get; set; }
+
         /// <summary>
         /// 信息
         /// </summary>
         public string Message { get; set; }
+
         /// <summary>
         /// 设置一个状态和信息
         /// </summary>
@@ -30,38 +32,25 @@ namespace Silmoon.Models
             Message = message;
             return this;
         }
+
         /// <summary>
         /// 构建实例
         /// </summary>
-        public StateSet() { }
-        /// <summary>
-        /// 构建实例，并且指定状态
-        /// </summary>
-        /// <param name="state"></param>
-        public StateSet(TState state)
+        public StateSet()
         {
-            Set(state, null);
-        }
-        /// <summary>
-        /// 构建实例，并且指定状态和信息
-        /// </summary>
-        /// <param name="state"></param>
-        /// <param name="message"></param>
-        public StateSet(TState state, string message = null)
-        {
-            Set(state, message);
         }
 
-        public static StateSet<TState> Create(TState state)
-        {
-            return new StateSet<TState>(state);
-        }
-        public static StateSet<TState> Create(TState state, string message)
-        {
-            return new StateSet<TState>(state, message);
+        public StateSet(TState state) => Set(state);
 
-        }
+        public StateSet(TState state, string message = null) => Set(state, message);
+
+        public static StateSet<TState> Create(TState state) => new StateSet<TState>(state);
+
+        public static StateSet<TState> Create(TState state, string message) => new StateSet<TState>(state, message);
+
+        public override string ToString() => "State: {" + State + "}, Message: {" + Message + "}";
     }
+
     /// <summary>
     /// 表示一个带有具体信息的数据和状态
     /// </summary>
@@ -69,17 +58,8 @@ namespace Silmoon.Models
     /// <typeparam name="TData">包含数据的类型</typeparam>
     public class StateSet<TState, TData> : StateSet<TState>
     {
-        /// <summary>
-        /// 包含的数据
-        /// </summary>
         public TData Data { get; set; }
-        /// <summary>
-        /// 构建实例，指定信息、状态和数据
-        /// </summary>
-        /// <param name="state"></param>
-        /// <param name="userState"></param>
-        /// <param name="message"></param>
-        /// <returns></returns>
+
         public StateSet<TState, TData> Set(TState state, TData data, string message = null)
         {
             State = state;
@@ -87,36 +67,27 @@ namespace Silmoon.Models
             Data = data;
             return this;
         }
+
         public new StateSet<TState, TData> Set(TState state, string message = null)
         {
             State = state;
             Message = message;
-            Data = default(TData);
+            Data = default;
             return this;
         }
-        public StateSet() { }
-        public StateSet(TState state, TData data)
+
+        public StateSet()
         {
-            Set(state, data, null);
-        }
-        public StateSet(TState state, TData data, string message = null)
-        {
-            Set(state, data, message);
         }
 
-        public static StateSet<TState, TData> Create(TState state, TData data = default)
-        {
-            return new StateSet<TState, TData>(state, data);
+        public StateSet(TState state, TData data) => Set(state, data);
 
-        }
-        public static StateSet<TState, TData> Create(TState state, TData data, string message)
-        {
-            return new StateSet<TState, TData>(state, data, message);
+        public StateSet(TState state, TData data, string message = null) => Set(state, data, message);
 
-        }
-        public override string ToString()
-        {
-            return "State: {" + State + "}, Data:{" + Data + "},Message: {" + Message + "}";
-        }
+        public static StateSet<TState, TData> Create(TState state, TData data = default) => new StateSet<TState, TData>(state, data);
+
+        public static StateSet<TState, TData> Create(TState state, TData data, string message) => new StateSet<TState, TData>(state, data, message);
+
+        public override string ToString() => "State: {" + State + "}, Data:{" + Data + "}, Message: {" + Message + "}";
     }
 }
