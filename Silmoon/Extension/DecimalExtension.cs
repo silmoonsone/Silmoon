@@ -23,12 +23,14 @@ namespace Silmoon.Extension
         }
         public static decimal Pow(this decimal x, int y)
         {
-            decimal result = 1;
-            for (int i = 0; i < y; i++)
-            {
-                result *= x;
-            }
-            return result;
+            //decimal result = 1;
+            //for (int i = 0; i < y; i++)
+            //{
+            //    result *= x;
+            //}
+            //return result;
+
+            return MathHelperExtension.Pow(x, y);
         }
         public static BigInteger ToBigInteger(this decimal amount, int decimals)
         {

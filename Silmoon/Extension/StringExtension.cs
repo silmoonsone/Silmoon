@@ -42,6 +42,17 @@ namespace Silmoon.Extension
             return count;
         }
 
+        public static bool IsNumber(this string value)
+        {
+            if (string.IsNullOrEmpty(value)) return false;
+            return value.All(char.IsDigit);
+        }
+        public static bool IsDecimal(this string value)
+        {
+            decimal result;
+            return decimal.TryParse(value, out result);
+        }
+
         public static string SubstringEncoded(this string s, int length, Encoding encoding)
         {
             if (s.IsNullOrEmpty()) return s;
