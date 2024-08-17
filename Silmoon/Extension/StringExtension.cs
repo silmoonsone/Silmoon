@@ -708,5 +708,25 @@ namespace Silmoon.Extension
 
             return BigInteger.Parse(value, NumberStyles.HexNumber);
         }
+
+
+        public static string Base64UrlToBase64(this string base64Url)
+        {
+            // 将 Base64URL 格式的字符串转换为标准 Base64
+            string base64 = base64Url.Replace('-', '+').Replace('_', '/');
+            // 补充 `=` 使长度是4的倍数
+            switch (base64.Length % 4)
+            {
+                case 2: base64 += "=="; break;
+                case 3: base64 += "="; break;
+            }
+            return base64;
+        }
+        public static string Base64ToBase64Url(this string base64)
+        {
+            // 将标准 Base64 格式的字符串转换为 Base64URL
+            return base64.Replace('+', '-').Replace('/', '_').TrimEnd('=');
+        }
+
     }
 }

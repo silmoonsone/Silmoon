@@ -41,7 +41,7 @@ namespace Silmoon.Runtime.Cache
         {
             lock (Items)
             {
-                Clearup();
+                Cleanup();
                 if (Items.ContainsKey(Key))
                 {
                     var item = Items[Key];
@@ -58,7 +58,7 @@ namespace Silmoon.Runtime.Cache
         {
             lock (Items)
             {
-                Clearup();
+                Cleanup();
                 if (Items.ContainsKey(Key))
                     return (true, Items[Key]);
                 else return (false, default);
@@ -87,14 +87,14 @@ namespace Silmoon.Runtime.Cache
         {
             lock (Items)
             {
-                Clearup();
+                Cleanup();
                 foreach (var item in Items)
                 {
                     yield return item.Value;
                 }
             }
         }
-        static void Clearup()
+        static void Cleanup()
         {
             lock (Items)
             {
