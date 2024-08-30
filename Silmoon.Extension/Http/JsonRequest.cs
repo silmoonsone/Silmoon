@@ -138,12 +138,21 @@ namespace Silmoon.Extension.Http
                 return await ExecuteAsync<T>(request, jsonRequestSetting);
             }
         }
+        public static async Task<JsonRequestResult<ResponseT>> SendAsyncWithBody<ResponseT>(string url, HttpMethod httpMethod, object obj, UrlDataCollection queryStringUrlDataCollection, JsonRequestSetting jsonRequestSetting = null)
+        {
+            if (queryStringUrlDataCollection != null) url = queryStringUrlDataCollection.AppendToUrl(url);
+            using (var request = CreateRequest(url, httpMethod, jsonRequestSetting))
+            {
+                request.Content = new StringContent(obj.ToJsonString(jsonRequestSetting.JsonSerializerSettings), Encoding.UTF8, "application/json");
+                return await ExecuteAsync<ResponseT>(request, jsonRequestSetting);
+            }
+        }
         public static async Task<JsonRequestResult<ResponseT>> SendAsyncWithBody<ResponseT, SendT>(string url, HttpMethod httpMethod, SendT obj, UrlDataCollection queryStringUrlDataCollection, JsonRequestSetting jsonRequestSetting = null)
         {
             if (queryStringUrlDataCollection != null) url = queryStringUrlDataCollection.AppendToUrl(url);
             using (var request = CreateRequest(url, httpMethod, jsonRequestSetting))
             {
-                request.Content = new StringContent(obj.ToJsonString(), Encoding.UTF8, "application/json");
+                request.Content = new StringContent(obj.ToJsonString(jsonRequestSetting.JsonSerializerSettings), Encoding.UTF8, "application/json");
                 return await ExecuteAsync<ResponseT>(request, jsonRequestSetting);
             }
         }
