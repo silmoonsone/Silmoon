@@ -1,11 +1,10 @@
-﻿using MongoDB.Bson;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 
-namespace Silmoon.Data.MongoDB.Converters
+namespace Silmoon.Extension.Converters
 {
     public class BigIntegerJsonConverter : JsonConverter
     {
@@ -26,7 +25,7 @@ namespace Silmoon.Data.MongoDB.Converters
 
         public override bool CanConvert(Type objectType)
         {
-            return typeof(ObjectId).IsAssignableFrom(objectType);
+            return typeof(BigInteger).IsAssignableFrom(objectType);
         }
     }
 }
