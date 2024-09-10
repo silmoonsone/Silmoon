@@ -11,30 +11,35 @@ namespace Silmoon.Secure
         private static Random Random { get; set; } = new Random();
 
         public static string GetMD5Hash(this string s) => s.GetMD5Hash(Encoding.UTF8);
-        public static string GetMD5Hash(this string s, Encoding encoding)
+        public static string GetMD5Hash(this string s, Encoding encoding) => s.GetBytes(encoding).GetMD5Hash().ToHexString();
+        public static byte[] GetMD5Hash(this byte[] data)
         {
             using (var c = new MD5CryptoServiceProvider())
             {
-                byte[] data = c.ComputeHash(s.GetBytes(encoding));
-                return BitConverter.ToString(data).Replace("-", "").ToLower();
+                byte[] result = c.ComputeHash(data);
+                return result;
             }
         }
+
         public static string GetSHA1Hash(this string s) => s.GetSHA1Hash(Encoding.UTF8);
-        public static string GetSHA1Hash(this string s, Encoding encoding)
+        public static string GetSHA1Hash(this string s, Encoding encoding) => s.GetBytes(encoding).GetSHA1Hash().ToHexString();
+        public static byte[] GetSHA1Hash(this byte[] data)
         {
             using (var c = new SHA1CryptoServiceProvider())
             {
-                byte[] bresult = c.ComputeHash(s.GetBytes(encoding));
-                return BitConverter.ToString(bresult).Replace("-", "").ToLower();
+                byte[] result = c.ComputeHash(data);
+                return result;
             }
         }
+
         public static string GetSHA256Hash(this string s) => s.GetSHA256Hash(Encoding.UTF8);
-        public static string GetSHA256Hash(this string s, Encoding encoding)
+        public static string GetSHA256Hash(this string s, Encoding encoding) => s.GetBytes(encoding).GetSHA256Hash().ToHexString();
+        public static byte[] GetSHA256Hash(this byte[] data)
         {
             using (var c = new SHA256CryptoServiceProvider())
             {
-                byte[] bresult = c.ComputeHash(s.GetBytes(encoding));
-                return BitConverter.ToString(bresult).Replace("-", "").ToLower();
+                byte[] result = c.ComputeHash(data);
+                return result;
             }
         }
 

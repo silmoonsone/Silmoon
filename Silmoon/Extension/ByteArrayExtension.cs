@@ -54,6 +54,7 @@ namespace Silmoon.Extension
             StringBuilder sb = new StringBuilder(value.Length * 2);
             foreach (byte b in value)
             {
+                //if (TrimPerfixZero && sb.Length == 0 && b == 0) continue;
                 sb.Append(b.ToString("x2"));
             }
 
@@ -62,7 +63,6 @@ namespace Silmoon.Extension
 
             if (Add0xPrefix) return "0x" + hexStr;
             else return hexStr;
-
         }
         public static string ToHexString(this byte[] value) => ToHexString(value, false, false);
     }
