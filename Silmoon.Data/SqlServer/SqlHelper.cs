@@ -5,13 +5,13 @@ using System.Reflection;
 using System.Text;
 using System.Linq;
 using System.Data.SqlTypes;
-using Silmoon.Runtime.Collections;
 using Microsoft.Data.SqlClient;
 using System.Text.Json;
 using Newtonsoft.Json;
 using Silmoon.Extension;
-using FieldInfo = Silmoon.Runtime.FieldInfo;
+using Silmoon.Runtime;
 using JsonSerializer = System.Text.Json.JsonSerializer;
+using Silmoon.Collections;
 
 namespace Silmoon.Data.SqlServer
 {
@@ -136,7 +136,7 @@ namespace Silmoon.Data.SqlServer
             return (obj, data);
         }
 
-        public static void AddSqlCommandParameters(SqlCommand sqlCommand, Dictionary<string, FieldInfo> fieldInfos, params string[] paraNames)
+        public static void AddSqlCommandParameters(SqlCommand sqlCommand, Dictionary<string, SimplePropertyInfo> fieldInfos, params string[] paraNames)
         {
             if (fieldInfos != null)
             {
@@ -184,7 +184,7 @@ namespace Silmoon.Data.SqlServer
                 }
             }
         }
-        public static void AddSqlCommandParameters(SqlCommand sqlCommand, Dictionary<string, FieldInfo> fieldInfos)
+        public static void AddSqlCommandParameters(SqlCommand sqlCommand, Dictionary<string, SimplePropertyInfo> fieldInfos)
         {
             if (fieldInfos != null)
             {

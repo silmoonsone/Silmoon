@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Silmoon.Extension.Network;
-using Silmoon.Runtime.Collections;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -17,7 +16,7 @@ namespace Silmoon.Extension
     [Obsolete("Use JsonHelperV2 instead")]
     public static class JsonHelper
     {
-        public static DictionaryEx<string, Dictionary<string, string>> JsonHelperRequestHeaders { get; set; } = new DictionaryEx<string, Dictionary<string, string>>();
+        public static Dictionary<string, Dictionary<string, string>> JsonHelperRequestHeaders { get; set; } = new Dictionary<string, Dictionary<string, string>>();
         public static void RegisterHostHeader(string Host, string HeaderName, string HeaderValue)
         {
             var hostHeaders = JsonHelperRequestHeaders.Get(Host);

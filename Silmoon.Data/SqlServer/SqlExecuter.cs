@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using FieldInfo = Silmoon.Runtime.FieldInfo;
+using Silmoon.Runtime;
 
 namespace Silmoon.Data.SqlServer
 {
@@ -267,7 +267,7 @@ namespace Silmoon.Data.SqlServer
         {
             string sql = $"UPDATE [{tableName}] SET ";
             string[] setNames = updateObjectFieldNames;
-            Dictionary<string, FieldInfo> setFieldInfos = getFieldInfos(obj, false);
+            Dictionary<string, SimplePropertyInfo> setFieldInfos = getFieldInfos(obj, false);
 
             if (setNames.IsNullOrEmpty()) setNames = getPropertyNames(setFieldInfos, false);
 
@@ -278,7 +278,7 @@ namespace Silmoon.Data.SqlServer
             sql = sql.Substring(0, sql.Length - 2);
 
 
-            Dictionary<string, FieldInfo> fieldInfos;
+            Dictionary<string, SimplePropertyInfo> fieldInfos;
             if (whereObject is ExpandoObject expandoObject) fieldInfos = getFieldInfos(expandoObject, true);
             else fieldInfos = getFieldInfos(whereObject, true);
 
@@ -312,7 +312,7 @@ namespace Silmoon.Data.SqlServer
             }
             sql = sql.Substring(0, sql.Length - 2);
 
-            Dictionary<string, FieldInfo> fieldInfos;
+            Dictionary<string, SimplePropertyInfo> fieldInfos;
             if (whereObject is ExpandoObject) fieldInfos = getFieldInfos(whereObject as ExpandoObject, true);
             else fieldInfos = getFieldInfos(whereObject, true);
 
@@ -523,7 +523,7 @@ namespace Silmoon.Data.SqlServer
 
 
 
-        private string makeSelectFieldString(Dictionary<string, FieldInfo> fieldInfos, string tableName, ref SqlQueryOptions options)
+        private string makeSelectFieldString(Dictionary<string, SimplePropertyInfo> fieldInfos, string tableName, ref SqlQueryOptions options)
         {
             if (options.FieldOption == SelectFieldOption.All)
             {
@@ -551,7 +551,7 @@ namespace Silmoon.Data.SqlServer
             sql = sql.Substring(0, sql.Length - 5);
             sql += ")";
         }
-        private void makeWhereString(ref string sql, ref string tableName, ref Dictionary<string, FieldInfo> fieldInfos, bool addWhereStr = true)
+        private void makeWhereString(ref string sql, ref string tableName, ref Dictionary<string, SimplePropertyInfo> fieldInfos, bool addWhereStr = true)
         {
             if (fieldInfos.Count != 0)
             {
@@ -592,7 +592,7 @@ namespace Silmoon.Data.SqlServer
         }
 
 
-        private string[] getPropertyNames(Dictionary<string, FieldInfo> props, bool includeId = false)
+        private string[] getPropertyNames(Dictionary<string, SimplePropertyInfo> props, bool includeId = false)
         {
             List<string> propertyNames = new List<string>();
             foreach (var item in props)
@@ -603,9 +603,9 @@ namespace Silmoon.Data.SqlServer
             return propertyNames.ToArray();
         }
 
-        private Dictionary<string, FieldInfo> getFieldInfos(object obj, bool includeId = false)
+        private Dictionary<string, SimplePropertyInfo> getFieldInfos(object obj, bool includeId = false)
         {
-            Dictionary<string, FieldInfo> propertyNames = new Dictionary<string, FieldInfo>();
+            Dictionary<string, SimplePropertyInfo> propertyNames = new Dictionary<string, SimplePropertyInfo>();
             if (obj != null)
             {
                 var propertyInfos = obj.GetType().GetProperties();
@@ -617,15 +617,15 @@ namespace Silmoon.Data.SqlServer
             }
             return propertyNames;
         }
-        private Dictionary<string, FieldInfo> getFieldInfos(ExpandoObject obj, bool includeId = false)
+        private Dictionary<string, SimplePropertyInfo> getFieldInfos(ExpandoObject obj, bool includeId = false)
         {
-            Dictionary<string, FieldInfo> propertyNames = new Dictionary<string, FieldInfo>();
+            Dictionary<string, SimplePropertyInfo> propertyNames = new Dictionary<string, SimplePropertyInfo>();
             if (obj != null)
             {
                 foreach (var item in obj)
                 {
                     if (item.Key == "id" && !includeId) continue;
-                    propertyNames.Add(item.Key, new FieldInfo() { Name = item.Key, Value = item.Value, Type = item.Value.GetType() });
+                    propertyNames.Add(item.Key, new SimplePropertyInfo() { Name = item.Key, Value = item.Value, Type = item.Value.GetType() });
                 }
             }
             return propertyNames;

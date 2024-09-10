@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using Silmoon.Extension.Network;
 using Silmoon.Models;
-using Silmoon.Runtime.Collections;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -18,7 +17,7 @@ namespace Silmoon.Extension
 {
     public static class JsonHelperV2
     {
-        public static DictionaryEx<string, Dictionary<string, string>> JsonHelperV2RequestHeaders { get; set; } = new DictionaryEx<string, Dictionary<string, string>>();
+        public static Dictionary<string, Dictionary<string, string>> JsonHelperV2RequestHeaders { get; set; } = new Dictionary<string, Dictionary<string, string>>();
         public static void RegisterHostHeader(string Host, string HeaderName, string HeaderValue)
         {
             var hostHeaders = JsonHelperV2RequestHeaders.Get(Host);

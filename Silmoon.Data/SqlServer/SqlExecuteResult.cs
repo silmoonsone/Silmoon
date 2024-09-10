@@ -1,4 +1,4 @@
-﻿using Silmoon.Runtime.Collections;
+﻿using Silmoon.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;

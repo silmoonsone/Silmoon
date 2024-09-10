@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using FieldInfo = Silmoon.Runtime.FieldInfo;
 
 namespace Silmoon.Runtime
 {
@@ -65,15 +63,15 @@ namespace Silmoon.Runtime
             }
             return propertyNames;
         }
-        public static Dictionary<string, FieldInfo> GetProperties(this ExpandoObject obj, params string[] exclude)
+        public static Dictionary<string, SimplePropertyInfo> GetProperties(this ExpandoObject obj, params string[] exclude)
         {
-            Dictionary<string, FieldInfo> propertyNames = new Dictionary<string, FieldInfo>();
+            Dictionary<string, SimplePropertyInfo> propertyNames = new Dictionary<string, SimplePropertyInfo>();
             if (obj != null)
             {
                 foreach (var item in obj)
                 {
                     if (exclude.Contains(item.Key)) continue;
-                    propertyNames.Add(item.Key, new FieldInfo() { Name = item.Key, Value = item.Value, Type = item.Value.GetType() });
+                    propertyNames.Add(item.Key, new SimplePropertyInfo() { Name = item.Key, Value = item.Value, Type = item.Value.GetType() });
                 }
             }
             return propertyNames;

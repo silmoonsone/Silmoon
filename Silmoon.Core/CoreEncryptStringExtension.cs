@@ -37,6 +37,7 @@ namespace Silmoon.Core
                 }
             }
         }
+        public static string TryKeyFileDecrypt(this CipherPair cipherPair, string keyPassword, string keyFilePath = null) => cipherPair.CipherData.TryKeyFileDecrypt(keyPassword, cipherPair.Password, keyFilePath);
         public static string TryKeyFileDecrypt(this string encryptedBase64String, string keyPassword, string cipherPasswordEncrypted, string keyFilePath = null)
         {
             keyFilePath ??= DefaultKeyFilePath;

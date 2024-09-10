@@ -17,7 +17,7 @@ namespace Silmoon.Extension
         /// <param name="ValidateExpireSecounds"></param>
         public static void SetVerifyCodeCache(string Identity, string VerifyCode, int ValidateExpireSecounds = 300)
         {
-            ObjectCache<string, string>.Set("__verifying_Identity_" + Identity, VerifyCode, TimeSpan.FromSeconds(ValidateExpireSecounds));
+            GlobalCaching<string, string>.Set("__verifying_Identity_" + Identity, VerifyCode, TimeSpan.FromSeconds(ValidateExpireSecounds));
         }
         /// <summary>
         /// 获取验证码缓存
@@ -26,7 +26,7 @@ namespace Silmoon.Extension
         /// <returns></returns>
         public static StateSet<bool, string> GetCachedVerifyCode(string Identity)
         {
-            var (Matched, Value) = ObjectCache<string, string>.Get("__verifying_Identity_" + Identity);
+            var (Matched, Value) = GlobalCaching<string, string>.Get("__verifying_Identity_" + Identity);
             if (Matched)
                 return StateSet<bool, string>.Create(true, Value);
             else
@@ -51,7 +51,7 @@ namespace Silmoon.Extension
         /// <returns></returns>
         public static bool ClearVerifyCodeCache(string Identity)
         {
-            return ObjectCache<string, string>.Remove("__verifying_Identity_" + Identity);
+            return GlobalCaching<string, string>.Remove("__verifying_Identity_" + Identity);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Silmoon.Extension
             if (result)
             {
                 if (cacheFinishStatusSecounds > 0)
-                    ObjectCache<string, bool>.Set("__validated_Identity_" + Identity, true, TimeSpan.FromSeconds(cacheFinishStatusSecounds));
+                    GlobalCaching<string, bool>.Set("__validated_Identity_" + Identity, true, TimeSpan.FromSeconds(cacheFinishStatusSecounds));
                 ClearVerifyCodeCache(Identity);
             }
             else if (IfErrorClear)
@@ -82,7 +82,7 @@ namespace Silmoon.Extension
         /// <returns></returns>
         public static bool IsValidated(string Identity)
         {
-            var (Matched, Value) = ObjectCache<string, bool>.Get("__validated_Identity_" + Identity);
+            var (Matched, Value) = GlobalCaching<string, bool>.Get("__validated_Identity_" + Identity);
             return Matched && Value;
         }
         /// <summary>
@@ -92,7 +92,7 @@ namespace Silmoon.Extension
         /// <returns></returns>
         public static bool ClearValidationStatus(string Identity)
         {
-            return ObjectCache<string, bool>.Remove("__validated_Identity_" + Identity);
+            return GlobalCaching<string, bool>.Remove("__validated_Identity_" + Identity);
         }
     }
 }

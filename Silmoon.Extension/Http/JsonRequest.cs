@@ -9,13 +9,12 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Silmoon.Extension.Network;
 using Silmoon.Models;
-using Silmoon.Runtime.Collections;
 
 namespace Silmoon.Extension.Http
 {
     public class JsonRequest
     {
-        public static DictionaryEx<string, Dictionary<string, string[]>> DefaultRequestHostHeaders { get; set; } = new DictionaryEx<string, Dictionary<string, string[]>>();
+        public static Dictionary<string, Dictionary<string, string[]>> DefaultRequestHostHeaders { get; set; } = new Dictionary<string, Dictionary<string, string[]>>();
         static Func<HttpClientEx> InvokeCreateHttpClient;
         public static void OnRequestCreateHttpClient(Func<HttpClientEx> requestHttpClientAction) => InvokeCreateHttpClient = requestHttpClientAction;
 
