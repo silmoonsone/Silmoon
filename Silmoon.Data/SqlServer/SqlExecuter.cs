@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Silmoon.Runtime;
+using Silmoon.Data.SqlServer.Extensions;
 
 namespace Silmoon.Data.SqlServer
 {
@@ -44,17 +45,11 @@ namespace Silmoon.Data.SqlServer
             sql = sql.Substring(0, sql.Length - 2);
             sql += ")";
             var cmd = sqlAccess.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
+            cmd.AddParameters(fieldInfos);
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
         }
-        public void AddObjects<T>(string tableName, T[] obj)
-        {
-            foreach (var item in obj)
-            {
-                AddObject(tableName, item);
-            }
-        }
+        public void AddObjects<T>(string tableName, T[] obj) => obj.ForEachEx(x => AddObject(tableName, x));
 
         public SqlExecuteResult<T> GetObject<T>(string tableName, object whereObject, SqlQueryOptions options = null) where T : new()
         {
@@ -76,11 +71,11 @@ namespace Silmoon.Data.SqlServer
 
 
             var cmd = sqlAccess.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
+            cmd.AddParameters(fieldInfos);
             using (var reader = cmd.ExecuteReader())
             {
                 if (!reader.Read()) return new SqlExecuteResult<T>(reader.RecordsAffected, sql, default);
-                var obj = SqlHelper.MakeObject(reader, new T(), options.ExcludedField);
+                var obj = reader.DeserializeObject(new T(), options.ExcludedField);
                 return new SqlExecuteResult<T>(reader.RecordsAffected, sql, obj);
             }
         }
@@ -104,11 +99,11 @@ namespace Silmoon.Data.SqlServer
 
 
             var cmd = sqlAccess.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
+            cmd.AddParameters(fieldInfos);
             using (var reader = cmd.ExecuteReader())
             {
                 if (!reader.Read()) return new SqlExecuteResult<T>(reader.RecordsAffected, sql, default);
-                var obj = SqlHelper.MakeObject(reader, new T(), options.ExcludedField);
+                var obj = reader.DeserializeObject(new T(), options.ExcludedField);
                 return new SqlExecuteResult<T>(reader.RecordsAffected, sql, obj);
             }
         }
@@ -134,12 +129,12 @@ namespace Silmoon.Data.SqlServer
             makeOffset(ref sql, ref options);
 
             var cmd = sqlAccess.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
+            cmd.AddParameters(fieldInfos);
 
             using (var reader = cmd.ExecuteReader())
             {
                 if (!reader.Read()) return new SqlExecuteResult<T>(reader.RecordsAffected, sql, default);
-                var obj = SqlHelper.MakeObject(reader, new T(), options.ExcludedField);
+                var obj = reader.DeserializeObject(new T(), options.ExcludedField);
                 return new SqlExecuteResult<T>(reader.RecordsAffected, sql, obj);
             }
         }
@@ -163,13 +158,13 @@ namespace Silmoon.Data.SqlServer
             makeOffset(ref sql, ref options);
 
             var cmd = sqlAccess.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
+            cmd.AddParameters(fieldInfos);
 
 
             using (var reader = cmd.ExecuteReader())
             {
                 //if (!reader.Read()) return default;
-                var obj = SqlHelper.MakeObjects<T>(reader, options.ExcludedField);
+                var obj = reader.DeserializeObjects<T>(options.ExcludedField);
                 return new SqlExecuteResults<T[]>(reader.RecordsAffected, sql, obj);
             }
         }
@@ -192,13 +187,13 @@ namespace Silmoon.Data.SqlServer
             makeOffset(ref sql, ref options);
 
             var cmd = sqlAccess.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
+            cmd.AddParameters(fieldInfos);
 
 
             using (var reader = cmd.ExecuteReader())
             {
                 //if (!reader.Read()) return default;
-                var obj = SqlHelper.MakeObjects<T>(reader, options.ExcludedField);
+                var obj = reader.DeserializeObjects<T>(options.ExcludedField);
                 return new SqlExecuteResults<T[]>(reader.RecordsAffected, sql, obj);
             }
         }
@@ -225,42 +220,24 @@ namespace Silmoon.Data.SqlServer
             makeOffset(ref sql, ref options);
 
             var cmd = sqlAccess.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
+            cmd.AddParameters(fieldInfos);
 
             using (var reader = cmd.ExecuteReader())
             {
                 //if (!reader.Read()) return default;
-                var obj = SqlHelper.MakeObjects<T>(reader, options.ExcludedField);
+                var obj = reader.DeserializeObjects<T>(options.ExcludedField);
                 return new SqlExecuteResults<T[]>(reader.RecordsAffected, sql, obj);
             }
         }
 
 
-        public SqlExecuteResult SetObject<T>(string tableName, T obj, object whereObject, params string[] updateObjectFieldNames)
-        {
-            return SetObjectInternal(tableName, obj, null, whereObject, updateObjectFieldNames);
-        }
-        public SqlExecuteResult SetObject<T>(string tableName, T obj, ExpandoObject whereObject, params string[] updateObjectFieldNames)
-        {
-            return SetObjectInternal(tableName, obj, null, whereObject, updateObjectFieldNames);
-        }
-        public SqlExecuteResult SetObject<T>(string tableName, T obj, string whereString, object whereObject = null, params string[] updateObjectFieldNames)
-        {
-            return SetObjectInternal(tableName, obj, whereString, whereObject, updateObjectFieldNames);
-        }
+        public SqlExecuteResult SetObject<T>(string tableName, T obj, object whereObject, params string[] updateObjectFieldNames) => SetObjectInternal(tableName, obj, null, whereObject, updateObjectFieldNames);
+        public SqlExecuteResult SetObject<T>(string tableName, T obj, ExpandoObject whereObject, params string[] updateObjectFieldNames) => SetObjectInternal(tableName, obj, null, whereObject, updateObjectFieldNames);
+        public SqlExecuteResult SetObject<T>(string tableName, T obj, string whereString, object whereObject = null, params string[] updateObjectFieldNames) => SetObjectInternal(tableName, obj, whereString, whereObject, updateObjectFieldNames);
 
-        public SqlExecuteResult SetObject<T>(string tableName, T obj, object whereObject, params Expression<Func<T, object>>[] updateExpressions)
-        {
-            return SetObjectInternal(tableName, obj, null, whereObject, updateExpressions);
-        }
-        public SqlExecuteResult SetObject<T>(string tableName, T obj, ExpandoObject whereObject, params Expression<Func<T, object>>[] updateExpressions)
-        {
-            return SetObjectInternal(tableName, obj, null, whereObject, updateExpressions);
-        }
-        public SqlExecuteResult SetObject<T>(string tableName, T obj, string whereString, object whereObject = null, params Expression<Func<T, object>>[] updateExpressions)
-        {
-            return SetObjectInternal(tableName, obj, whereString, whereObject, updateExpressions);
-        }
+        public SqlExecuteResult SetObject<T>(string tableName, T obj, object whereObject, params Expression<Func<T, object>>[] updateExpressions) => SetObjectInternal(tableName, obj, null, whereObject, updateExpressions);
+        public SqlExecuteResult SetObject<T>(string tableName, T obj, ExpandoObject whereObject, params Expression<Func<T, object>>[] updateExpressions) => SetObjectInternal(tableName, obj, null, whereObject, updateExpressions);
+        public SqlExecuteResult SetObject<T>(string tableName, T obj, string whereString, object whereObject = null, params Expression<Func<T, object>>[] updateExpressions) => SetObjectInternal(tableName, obj, whereString, whereObject, updateExpressions);
 
 
         SqlExecuteResult SetObjectInternal(string tableName, object obj, string whereString, object whereObject, params string[] updateObjectFieldNames)
@@ -288,8 +265,8 @@ namespace Silmoon.Data.SqlServer
 
             var cmd = sqlAccess.GetCommand(sql);
 
-            SqlHelper.AddSqlCommandParameters(cmd, getFieldInfos(obj, false), setNames);
-            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
+            cmd.AddParameters(getFieldInfos(obj, false), setNames);
+            cmd.AddParameters(fieldInfos);
 
             int returnLine = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = returnLine };
@@ -322,8 +299,8 @@ namespace Silmoon.Data.SqlServer
 
             var cmd = sqlAccess.GetCommand(sql);
 
-            SqlHelper.AddSqlCommandParameters(cmd, getFieldInfos(obj, false), updateFieldNames);
-            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
+            cmd.AddParameters(getFieldInfos(obj, false), updateFieldNames);
+            cmd.AddParameters(fieldInfos);
 
             int returnLine = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = returnLine };
@@ -338,7 +315,7 @@ namespace Silmoon.Data.SqlServer
             makeWhereString(ref sql, ref tableName, ref fieldInfos);
 
             var cmd = sqlAccess.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
+            cmd.AddParameters(fieldInfos);
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
         }
@@ -351,7 +328,7 @@ namespace Silmoon.Data.SqlServer
             makeWhereString(ref sql, ref tableName, ref fieldInfos);
 
             var cmd = sqlAccess.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
+            cmd.AddParameters(fieldInfos);
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
         }
@@ -367,7 +344,7 @@ namespace Silmoon.Data.SqlServer
             }
 
             var cmd = sqlAccess.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
+            cmd.AddParameters(fieldInfos);
 
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
@@ -382,7 +359,7 @@ namespace Silmoon.Data.SqlServer
             makeWhereString(ref sql, ref tableName, ref fieldInfos);
 
             var cmd = sqlAccess.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
+            cmd.AddParameters(fieldInfos);
 
             var result = cmd.ExecuteScalar();
             return Convert.ToInt32(result);
@@ -396,7 +373,7 @@ namespace Silmoon.Data.SqlServer
             makeWhereString(ref sql, ref tableName, ref fieldInfos);
 
             var cmd = sqlAccess.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
+            cmd.AddParameters(fieldInfos);
 
             var result = cmd.ExecuteScalar();
             return Convert.ToInt32(result);
@@ -407,13 +384,10 @@ namespace Silmoon.Data.SqlServer
 
             var fieldInfos = getFieldInfos(whereObject, true);
 
-            if (!string.IsNullOrEmpty(whereString))
-            {
-                sql += " WHERE " + whereString;
-            }
+            if (!string.IsNullOrEmpty(whereString)) sql += " WHERE " + whereString;
 
             var cmd = sqlAccess.GetCommand(sql);
-            SqlHelper.AddSqlCommandParameters(cmd, fieldInfos);
+            cmd.AddParameters(fieldInfos);
 
             var result = cmd.ExecuteScalar();
             return Convert.ToInt32(result);
