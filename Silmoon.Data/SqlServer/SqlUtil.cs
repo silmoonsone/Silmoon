@@ -12,7 +12,7 @@ namespace Silmoon.Data.SqlServer
     public class SqlUtil : SqlCommonTemplate, IDisposable, ISqlOperate
     {
         string conStr;
-        int selectCommandTimeout = 30;
+        int selectCommandTimeout { get; set; } = 30;
 
         /// <summary>
         /// 在使用数据适配器的时候，执行SELECT查询的超时时间。
@@ -27,7 +27,7 @@ namespace Silmoon.Data.SqlServer
             get { return conStr; }
             set { conStr = value; }
         }
-        public SqlConnection Connection { get; set; }
+        public SqlConnection Connection { get; }
 
 
         /// <summary>
@@ -45,242 +45,192 @@ namespace Silmoon.Data.SqlServer
         public SqlUtil()
         {
             Connection = new SqlConnection();
+            Connection.Open();
         }
         /// <summary>
         /// 创建MS SQL数据源的实例
         /// </summary>
-        /// <param name="constr">连接字符串</param>
-        public SqlUtil(string constr)
+        /// <param name="connectionString">连接字符串</param>
+        public SqlUtil(string connectionString)
         {
             Connection = new SqlConnection();
-            conStr = constr;
+            conStr = connectionString;
         }
         /// <summary>
         /// 创建MS SQL数据源的实例
         /// </summary>
-        /// <param name="constr">连接字符串</param>
-        public SqlUtil(SqlConnection conn)
+        /// <param name="connection">SqlConnection连接实例</param>
+        public SqlUtil(SqlConnection connection)
         {
-            Connection = conn;
+            Connection = connection;
         }
 
 
-        /// <summary>
-        /// 关闭数据库连接并且释放连接对象。
-        /// </summary>
-        public void Close()
-        {
-            if (State != ConnectionState.Closed)
-            {
-                Connection.Close();
-            }
-        }
-        /// <summary>
-        /// 使用默认连接并且打开一个数据库
-        /// </summary>
-        public void Open()
-        {
-            if (State == ConnectionState.Closed)
-            {
-                Connection.ConnectionString = conStr;
-                Connection.Open();
-            }
-        }
 
         /// <summary>
-        /// 执行一个没有返回或不需要返回的SQL，并且返回相应行数
+        /// 执行一个没有返回或不需要返回的SQL，并且返回响应行数
         /// </summary>
+        /// <param name="sqlCommandText"></param>
         /// <returns></returns>
-        public int ExecNonQuery(string sqlcommand)
+        public int ExecuteNonQuery(string sqlCommandText)
         {
-            int reint = 0;
-            SqlCommand myCmd = new SqlCommand(__chkSqlstr(sqlcommand), Connection);
-            reint = myCmd.ExecuteNonQuery();
-            myCmd.Dispose();
-            return reint;
+            using (SqlCommand myCmd = new SqlCommand(__chkSqlstr(sqlCommandText), Connection))
+            {
+                return myCmd.ExecuteNonQuery();
+            }
         }
         /// <summary>
         /// 返回数据结果行数
         /// </summary>
-        /// <param name="sqlcommand">查询语句</param>
+        /// <param name="sqlCommandText">查询语句</param>
         /// <returns></returns>
-        public int GetRecordCount(string sqlcommand)
+        public int GetRecordCount(string sqlCommandText)
         {
-            using (DataTable dt = GetDataTable(sqlcommand))
+            using (SqlDataReader sqlDataReader = GetDataReader(sqlCommandText))
             {
-                int i = dt.Rows.Count;
-                return i;
+                int result = 0;
+                while (sqlDataReader.Read())
+                    result++;
+                return result;
             }
         }
 
         /// <summary>
         /// 返回一个SqlDataReader对象
         /// </summary>
-        /// <param name="sqlcommand">SQL命令</param>
+        /// <param name="sqlCommandText">SQL命令</param>
         /// <returns></returns>
-        public object GetDataReader(string sqlcommand)
-        {
-            return new SqlCommand(__chkSqlstr(sqlcommand), Connection).ExecuteReader();
-        }
+        public SqlDataReader GetDataReader(string sqlCommandText) => new SqlCommand(__chkSqlstr(sqlCommandText), Connection).ExecuteReader();
         /// <summary>
         /// 返回一个SqlCommand对象
         /// </summary>
-        /// <param name="sqlcommand">SQL命令</param>
+        /// <param name="sqlCommandText">SQL命令</param>
         /// <returns></returns>
-        public object GetCommand(string sqlcommand)
-        {
-            return new SqlCommand(__chkSqlstr(sqlcommand), Connection);
-        }
+        public SqlCommand GetCommand(string sqlCommandText) => new SqlCommand(__chkSqlstr(sqlCommandText), Connection);
         /// <summary>
         /// 获取一个数据适配器。
         /// </summary>
-        /// <param name="sqlcommand">SQL语句</param>
+        /// <param name="sqlCommandText">SQL语句</param>
         /// <returns></returns>
-        public object GetDataAdapter(string sqlcommand)
+        public SqlDataAdapter GetDataAdapter(string sqlCommandText)
         {
-            return new SqlDataAdapter(__chkSqlstr(sqlcommand), Connection);
+            var result = new SqlDataAdapter(__chkSqlstr(sqlCommandText), Connection);
+            result.SelectCommand.CommandTimeout = selectCommandTimeout;
+            return result;
         }
         /// <summary>
         /// 获取一个内存数据表
         /// </summary>
-        /// <param name="sqlcommand">SQL命令</param>
+        /// <param name="sqlCommandText">SQL命令</param>
         /// <returns></returns>
-        public DataTable GetDataTable(string sqlcommand)
+        public DataTable GetDataTable(string sqlCommandText)
         {
-            DataTable dt = new DataTable();
-            SqlDataAdapter da = (SqlDataAdapter)GetDataAdapter(sqlcommand);
-            da.SelectCommand.CommandTimeout = selectCommandTimeout;
-            da.Fill(dt);
-            da.Dispose();
-            return dt;
+            using (SqlDataAdapter dataAdapter = GetDataAdapter(sqlCommandText))
+            {
+                DataTable result = new DataTable();
+                dataAdapter.Fill(result);
+                return result;
+            }
         }
 
         /// <summary>
         /// 返回一个从数据库里面查询出来的字段值
         /// </summary>
-        /// <param name="tablename">表</param>
-        /// <param name="resulefield">字段</param>
-        /// <param name="fieldname">条件字段</param>
-        /// <param name="fieldvalue">条件值</param>
+        /// <param name="tableName">表</param>
+        /// <param name="resultField">字段</param>
+        /// <param name="fieldName">条件字段</param>
+        /// <param name="fieldValue">条件值</param>
         /// <returns></returns>
-        public object GetFieldObjectForSingleQuery(string tablename, string resulefield, string fieldname, string fieldvalue)
+        public object GetFieldObjectForSingleQuery(string tableName, string resultField, string fieldName, string fieldValue)
         {
-            object reobj;
-            SqlDataReader dr = (SqlDataReader)GetDataReader("select " + resulefield + " from [" + tablename + "] where " + fieldname + " = " + fieldvalue);
-            if (dr.Read())
-            { reobj = dr[0]; }
-            else
+            using (SqlDataReader sqlDataReader = GetDataReader("select " + resultField + " from [" + tableName + "] where " + fieldName + " = " + fieldValue))
             {
-                Close();
-                reobj = null;
+                if (sqlDataReader.Read())
+                    return sqlDataReader[0];
+                else return null;
             }
-            dr.Close();
-            dr.Dispose();
-            return reobj;
         }
         /// <summary>
         /// 返回一个从数据库里面查询出来的字段值
         /// </summary>
-        /// <param name="sqlcommand">SQL查询命令</param>
+        /// <param name="sqlCommandText">SQL查询命令</param>
         /// <param name="isUseReader">是否使用DataReader进行工作</param>
         /// <returns></returns>
-        public object GetFieldObjectForSingleQuery(string sqlcommand, bool isUseReader)
+        public object GetFieldObjectForSingleQuery(string sqlCommandText, bool isUseReader)
         {
-            if (isUseReader) return GetFieldObjectForSingleQuery(sqlcommand);
+            if (isUseReader) return GetFieldObjectForSingleQuery(sqlCommandText);
             else
             {
-                DataTable dt = GetDataTable(sqlcommand);
-                object returnObj = null;
-                if (dt.Rows.Count != 0)
-                    returnObj = dt.Rows[0][0];
-                dt.Clear();
-                dt.Dispose();
-                return returnObj;
+                using (DataTable dataTable = GetDataTable(sqlCommandText))
+                {
+                    if (dataTable.Rows.Count != 0)
+                        return dataTable.Rows[0][0];
+                    else return null;
+                }
             }
         }
         /// <summary>
         /// 返回一个从数据库里面查询出来的字段值
         /// </summary>
-        /// <param name="sqlcommand">SQL命令，仅需指定一个返回字段</param>
+        /// <param name="sqlCommandText">SQL命令，仅需指定一个返回字段</param>
         /// <returns></returns>
-        public object GetFieldObjectForSingleQuery(string sqlcommand)
+        public object GetFieldObjectForSingleQuery(string sqlCommandText)
         {
-            object reobj;
-            SqlDataReader dr = (SqlDataReader)GetDataReader(sqlcommand);
-            if (dr.Read())
-            { reobj = dr[0]; }
-            else
-            { reobj = null; }
-            dr.Close();
-            dr.Dispose();
-            return reobj;
+            using (SqlDataReader sqlDataReader = GetDataReader(sqlCommandText))
+            {
+                if (sqlDataReader.Read()) return sqlDataReader[0];
+                else return null;
+            }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="tablename"></param>
-        /// <param name="updatefield"></param>
-        /// <param name="updatevalue"></param>
-        /// <param name="fieldname"></param>
-        /// <param name="fieldvalue"></param>
-        public int UpdateFieldForSingleQuery(string tablename, string updatefield, string updatevalue, string fieldname, string fieldvalue)
+        /// <param name="tableName"></param>
+        /// <param name="updateField"></param>
+        /// <param name="updateValue"></param>
+        /// <param name="fieldName"></param>
+        /// <param name="fieldValue"></param>
+        public int UpdateFieldForSingleQuery(string tableName, string updateField, string updateValue, string fieldName, string fieldValue)
         {
-            return ExecNonQuery("Update [" + tablename + "] set " + updatefield + " = " + updatevalue + " where " + fieldname + " = " + fieldvalue);
+            return ExecuteNonQuery("Update [" + tableName + "] set " + updateField + " = " + updateValue + " where " + fieldName + " = " + fieldValue);
         }
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="sqlcommand"></param>
+        /// <param name="sqlCommandText"></param>
         /// <returns></returns>
-        public bool ExistRecord(string sqlcommand)
+        public bool ExistRecord(string sqlCommandText)
         {
-            bool rebool = false;
-            SqlDataReader dr = (SqlDataReader)GetDataReader(sqlcommand);
-            if (dr.Read())
-            { rebool = true; }
-            else { rebool = false; }
-            dr.Close();
-            return rebool;
+            using (SqlDataReader sqlDataReader = GetDataReader(sqlCommandText))
+            {
+                if (sqlDataReader.Read()) return true;
+                else return false;
+            }
         }
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="sqlcommand"></param>
-        /// <param name="fieldname"></param>
+        /// <param name="sqlCommandText"></param>
+        /// <param name="fieldName"></param>
         /// <returns></returns>
-        public string ExistRecord(string sqlcommand, string fieldname)
+        public string ExistRecord(string sqlCommandText, string fieldName)
         {
-            string restring = "";
-            SqlDataReader dr = (SqlDataReader)GetDataReader(sqlcommand);
-            if (dr.Read())
-            { restring = dr[fieldname].ToString(); }
-            else { restring = null; }
-            dr.Close();
-            return restring;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public object GetConnection()
-        {
-            return Connection;
+            using (SqlDataReader sqlDataReader = GetDataReader(sqlCommandText))
+            {
+                if (sqlDataReader.Read())
+                    return sqlDataReader[fieldName].ToString();
+                else return null;
+            }
         }
 
 
-        public void Dispose()
-        {
-            Close();
-            Connection.Dispose();
-            Connection = null;
-        }
+        public void Dispose() => Connection.Dispose();
 
-        public string __chkSqlstr(string sqlcommand)
+        public string __chkSqlstr(string sqlCommandText)
         {
-            //HttpContext.Current.Response.Write(sqlcommand);
-            return sqlcommand;
+            //HttpContext.Current.Response.Write(sqlCommandText);
+            return sqlCommandText;
         }
     }
 }

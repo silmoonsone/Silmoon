@@ -12,44 +12,48 @@ namespace Silmoon.Extension
         public static string ToChineseFormat(this DateTime dateTime, bool OnlyDate = false) => dateTime.ToString(OnlyDate ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm:ss");
         public static string GetDescription(this DateTime dateTime)
         {
-            var timeSpan = DateTime.Now - dateTime;
-            if (dateTime < DateTime.Now)
+            var now = DateTime.Now;
+            var timeSpan = now - dateTime;
+
+            // 判断是过去的时间还是未来的时间
+            bool isPast = timeSpan.TotalMilliseconds > 0;
+
+            timeSpan = isPast ? timeSpan : dateTime - now;
+
+            if (timeSpan.TotalDays >= 365)
             {
-                if (timeSpan.TotalDays > 1)
-                {
-                    return timeSpan.Days + "天前";
-                }
-                else if (timeSpan.TotalHours > 1)
-                {
-                    return timeSpan.Hours + "小时前";
-                }
-                else if (timeSpan.TotalMinutes > 1)
-                {
-                    return timeSpan.Minutes + "分钟前";
-                }
-                else
-                {
-                    return "刚刚";
-                }
+                var years = (int)(timeSpan.TotalDays / 365);
+                return isPast ? $"{years}年前" : $"{years}年后";
+            }
+            else if (timeSpan.TotalDays >= 30)
+            {
+                var months = (int)(timeSpan.TotalDays / 30);
+                return isPast ? $"{months}个月前" : $"{months}个月后";
+            }
+            else if (timeSpan.TotalDays >= 7)
+            {
+                var weeks = (int)(timeSpan.TotalDays / 7);
+                return isPast ? $"{weeks}周前" : $"{weeks}周后";
+            }
+            else if (timeSpan.TotalDays >= 1)
+            {
+                return isPast ? $"{timeSpan.Days}天前" : $"{timeSpan.Days}天后";
+            }
+            else if (timeSpan.TotalHours >= 1)
+            {
+                return isPast ? $"{timeSpan.Hours}小时前" : $"{timeSpan.Hours}小时后";
+            }
+            else if (timeSpan.TotalMinutes >= 1)
+            {
+                return isPast ? $"{timeSpan.Minutes}分钟前" : $"{timeSpan.Minutes}分钟后";
+            }
+            else if (timeSpan.TotalSeconds > 3)
+            {
+                return isPast ? $"{timeSpan.Seconds}秒前" : $"{timeSpan.Seconds}秒后";
             }
             else
             {
-                if (Math.Abs(timeSpan.TotalDays) > 1)
-                {
-                    return Math.Abs(timeSpan.Days) + "天后";
-                }
-                else if (Math.Abs(timeSpan.TotalHours) > 1)
-                {
-                    return Math.Abs(timeSpan.Hours) + "小时后";
-                }
-                else if (Math.Abs(timeSpan.TotalMinutes) > 1)
-                {
-                    return Math.Abs(timeSpan.Minutes) + "分钟后";
-                }
-                else
-                {
-                    return "稍后";
-                }
+                return isPast ? "刚刚" : "马上";
             }
         }
         public static DateTime SixCharToDate(this string yyyyMMdd)

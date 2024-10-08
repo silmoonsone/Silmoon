@@ -26,7 +26,7 @@ namespace Silmoon.Data.SqlUtility
         /// </summary>
         public void Refresh()
         {
-            _mssql.ExecNonQuery("RECONFIGURE WITH OVERRIDE");
+            _mssql.ExecuteNonQuery("RECONFIGURE WITH OVERRIDE");
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Silmoon.Data.SqlUtility
         public int CreateDatabase(string database)
         {
             if (IsExistDatabase(database)) throw new MSSQLException(null, "数据库已存在");
-            return _mssql.ExecNonQuery("CREATE DATABASE " + database);
+            return _mssql.ExecuteNonQuery("CREATE DATABASE " + database);
         }
         /// <summary>
         /// 删除一个数据库
@@ -48,7 +48,7 @@ namespace Silmoon.Data.SqlUtility
         {
             if (database.ToLower() == "master") throw new MSSQLException(null, "系统数据库无法删除");
             if (!IsExistDatabase(database)) throw new MSSQLException(null, "指定了一个不存在的数据库");
-            return _mssql.ExecNonQuery("DROP DATABASE " + database);
+            return _mssql.ExecuteNonQuery("DROP DATABASE " + database);
         }
         /// <summary>
         /// 添加一个用户并且制定所允许的数据库
@@ -60,9 +60,9 @@ namespace Silmoon.Data.SqlUtility
             if (!IsExistDatabase(database)) throw new MSSQLException(null, "指定了一个不存在的数据库");
             if (!IsExistUser(username)) throw new MSSQLException(null, "指定了一个不存在的数据库");
 
-            int result = _mssql.ExecNonQuery("USE [" + database + "];CREATE USER [" + username + "] FOR LOGIN [" + username + "]");
-            _mssql.ExecNonQuery("USE [" + database + "];EXEC sp_addrolemember N'db_owner', N'" + username + "'");
-            _mssql.ExecNonQuery("USE [Master]");
+            int result = _mssql.ExecuteNonQuery("USE [" + database + "];CREATE USER [" + username + "] FOR LOGIN [" + username + "]");
+            _mssql.ExecuteNonQuery("USE [" + database + "];EXEC sp_addrolemember N'db_owner', N'" + username + "'");
+            _mssql.ExecuteNonQuery("USE [Master]");
             Refresh();
             return result;
         }
@@ -76,7 +76,7 @@ namespace Silmoon.Data.SqlUtility
         {
             if (username == "") throw new MSSQLException(null, "不允许空的用户名!");
             if (IsExistUser(username)) throw new MSSQLException(null, "用户名已经存在!");
-            int result = _mssql.ExecNonQuery("CREATE LOGIN [" + username + "] WITH PASSWORD=N'" + password + "', DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF");
+            int result = _mssql.ExecuteNonQuery("CREATE LOGIN [" + username + "] WITH PASSWORD=N'" + password + "', DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF");
             Refresh();
             return result;
         }
@@ -88,7 +88,7 @@ namespace Silmoon.Data.SqlUtility
         public int RemoveUser(string username)
         {
             if (username.ToLower() == "sa") throw new MSSQLException(null, "禁止删除sa用户！");
-            int result = _mssql.ExecNonQuery("DROP LOGIN [" + username + "]");
+            int result = _mssql.ExecuteNonQuery("DROP LOGIN [" + username + "]");
             Refresh();
             return result;
         }
@@ -102,8 +102,8 @@ namespace Silmoon.Data.SqlUtility
         {
             if (!IsExistDatabase(database)) throw new MSSQLException(null, "指定了一个不存在的数据库");
             string brforeDatabase = _mssql.GetFieldObjectForSingleQuery("select db_name()").ToString();
-            int result = _mssql.ExecNonQuery("USE " + database + ";drop user [" + username + "]");
-            _mssql.ExecNonQuery("USE " + brforeDatabase);
+            int result = _mssql.ExecuteNonQuery("USE " + database + ";drop user [" + username + "]");
+            _mssql.ExecuteNonQuery("USE " + brforeDatabase);
             Refresh();
             return result;
         }
@@ -145,7 +145,7 @@ namespace Silmoon.Data.SqlUtility
         /// <returns></returns>
         public int SetPassword(string username, string password)
         {
-            int i = _mssql.ExecNonQuery("USE [master];ALTER LOGIN ["+username+"] WITH PASSWORD=N'"+password+"'");
+            int i = _mssql.ExecuteNonQuery("USE [master];ALTER LOGIN ["+username+"] WITH PASSWORD=N'"+password+"'");
             return i;
         }
         /// <summary>
