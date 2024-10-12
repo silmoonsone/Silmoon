@@ -11,8 +11,8 @@ namespace Silmoon.Compress
 {
     public static class CompressHelper
     {
-        public static byte[] Compress(this byte[] data) => data.Compress();
-        public static byte[] Decompress(this byte[] compressedData) => compressedData.Decompress();
+        public static byte[] Compress(byte[] data) => data.Compress();
+        public static byte[] Decompress(byte[] compressedData) => compressedData.Decompress();
 
         public static string CompressStringToBase64String(string text)
         {
