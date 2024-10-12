@@ -5,6 +5,7 @@ using System.Threading;
 
 namespace Silmoon.MySilmoon
 {
+    [Obsolete("Use General hosting service instead")]
     public interface IServerApplication : IRunable
     {
         event OutputTextMessageHandler OnOutputLine;

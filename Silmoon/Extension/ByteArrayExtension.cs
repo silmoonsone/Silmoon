@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 
@@ -65,5 +66,28 @@ namespace Silmoon.Extension
             else return hexStr;
         }
         public static string ToHexString(this byte[] value) => ToHexString(value, false, false);
+        public static byte[] Compress(this byte[] data)
+        {
+            using (var outputStream = new MemoryStream())
+            {
+                using (var gZipStream = new GZipStream(outputStream, CompressionMode.Compress))
+                {
+                    gZipStream.Write(data, 0, data.Length);
+                }
+                return outputStream.ToArray();
+            }
+        }
+        public static byte[] Decompress(this byte[] compressedData)
+        {
+            using (var compressedStream = new MemoryStream(compressedData))
+            using (var decompressedStream = new MemoryStream())
+            {
+                using (var gZipStream = new GZipStream(compressedStream, CompressionMode.Decompress))
+                {
+                    gZipStream.CopyTo(decompressedStream);
+                }
+                return decompressedStream.ToArray();
+            }
+        }
     }
 }

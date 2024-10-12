@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Silmoon.MySilmoon
 {
+    [Obsolete("Use General hosting service instead")]
     public abstract class Runable : IRunable
     {
         private RunningState state = RunningState.Unstarted;

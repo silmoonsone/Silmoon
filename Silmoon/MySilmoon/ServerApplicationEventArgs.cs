@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Silmoon.MySilmoon
 {
+    [Obsolete("Use General hosting service instead")]
     public class ServerApplicationEventArgs
     {
         public int Flag { get; set; }

@@ -11,33 +11,12 @@ namespace Silmoon.Compress
 {
     public static class CompressHelper
     {
-        public static byte[] Compress(byte[] Data)
-        {
-            using (var outputStream = new MemoryStream())
-            {
-                using (var gZipStream = new GZipStream(outputStream, CompressionMode.Compress))
-                {
-                    gZipStream.Write(Data, 0, Data.Length);
-                }
-                return outputStream.ToArray();
-            }
-        }
-        public static byte[] Decompress(byte[] compressedData)
-        {
-            using (var compressedStream = new MemoryStream(compressedData))
-            using (var decompressedStream = new MemoryStream())
-            {
-                using (var gZipStream = new GZipStream(compressedStream, CompressionMode.Decompress))
-                {
-                    gZipStream.CopyTo(decompressedStream);
-                }
-                return decompressedStream.ToArray();
-            }
-        }
+        public static byte[] Compress(this byte[] data) => data.Compress();
+        public static byte[] Decompress(this byte[] compressedData) => compressedData.Decompress();
 
-        public static string CompressStringToBase64String(string Text)
+        public static string CompressStringToBase64String(string text)
         {
-            var bytes = Encoding.UTF8.GetBytes(Text);
+            var bytes = Encoding.UTF8.GetBytes(text);
             using (var outputStream = new MemoryStream())
             {
                 using (var gZipStream = new GZipStream(outputStream, CompressionMode.Compress))
@@ -47,9 +26,9 @@ namespace Silmoon.Compress
                 return Convert.ToBase64String(outputStream.ToArray());
             }
         }
-        public static string DecompressBase64StringToString(string Base64CompressedText)
+        public static string DecompressBase64StringToString(string base64CompressedText)
         {
-            var bytes = Convert.FromBase64String(Base64CompressedText);
+            var bytes = Convert.FromBase64String(base64CompressedText);
             using (var inputStream = new MemoryStream(bytes))
             {
                 using (var gZipStream = new GZipStream(inputStream, CompressionMode.Decompress))
@@ -62,9 +41,9 @@ namespace Silmoon.Compress
             }
         }
 
-        public static string CompressStringToHexString(string Text)
+        public static string CompressStringToHexString(string text)
         {
-            var bytes = Encoding.UTF8.GetBytes(Text);
+            var bytes = Encoding.UTF8.GetBytes(text);
             using (var outputStream = new MemoryStream())
             {
                 using (var gZipStream = new GZipStream(outputStream, CompressionMode.Compress))
@@ -74,9 +53,9 @@ namespace Silmoon.Compress
                 return outputStream.ToArray().ToHexString();
             }
         }
-        public static string DecompressHexStringToString(string HexStringCompressedText)
+        public static string DecompressHexStringToString(string hexStringCompressedText)
         {
-            var bytes = HexStringCompressedText.HexStringToByteArray();
+            var bytes = hexStringCompressedText.HexStringToByteArray();
             using (var inputStream = new MemoryStream(bytes.Data))
             {
                 using (var gZipStream = new GZipStream(inputStream, CompressionMode.Decompress))

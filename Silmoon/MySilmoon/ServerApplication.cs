@@ -11,7 +11,7 @@ namespace Silmoon.MySilmoon
     /// <summary>
     /// 对银月产品公共库公共属性进行重用
     /// </summary>
-    [Obsolete]
+    [Obsolete("Use General hosting service instead")]
     public class ServerApplication : Runable, IServerApplication
     {
         private bool _initProduceInfo = false;

@@ -5,6 +5,7 @@ using static Silmoon.MySilmoon.Runable;
 
 namespace Silmoon.MySilmoon
 {
+    [Obsolete("Use General hosting service instead")]
     public interface IRunable
     {
         event OperateHandler OnStart;

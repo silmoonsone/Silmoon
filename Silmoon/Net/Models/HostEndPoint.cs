@@ -46,15 +46,15 @@ namespace Silmoon.Net.Models
             }
             return results.ToArray();
         }
-        public static HostEndPoint Parse(string str)
+        public static HostEndPoint Parse(string endPointString)
         {
-            if (str.IsNullOrEmpty()) throw new ArgumentException("str is null or empty");
+            if (endPointString.IsNullOrEmpty()) throw new ArgumentException("str is null or empty");
 
             //str include ip6 addresss
-            if (str.Contains("]:"))
+            if (endPointString.Contains("]:"))
             {
                 //ip6
-                string[] parts = str.Split(new string[] { "]:" }, StringSplitOptions.RemoveEmptyEntries);
+                string[] parts = endPointString.Split(new string[] { "]:" }, StringSplitOptions.RemoveEmptyEntries);
                 if (parts.Length != 2) throw new FormatException("Invalid HostEndPoint format");
                 int port = int.Parse(parts[1]);
                 if (port < 0 || port > 65535)
@@ -64,7 +64,7 @@ namespace Silmoon.Net.Models
             else
             {
                 //ip4
-                string[] parts = str.Split(':');
+                string[] parts = endPointString.Split(':');
                 if (parts.Length != 2) throw new FormatException("Invalid HostEndPoint format");
                 int port = int.Parse(parts[1]);
                 if (port < 0 || port > 65535)
