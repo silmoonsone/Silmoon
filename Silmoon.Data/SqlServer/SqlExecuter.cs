@@ -51,7 +51,7 @@ namespace Silmoon.Data.SqlServer
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
         }
-        public void AddObjects<T>(string tableName, T[] obj) => obj.ForEachEx(x => AddObject(tableName, x));
+        public void AddObjects<T>(string tableName, T[] obj) => obj.Each(x => AddObject(tableName, x));
 
         public SqlExecuteResult<T> GetObject<T>(string tableName, object whereObject, SqlQueryOptions options = null) where T : new()
         {

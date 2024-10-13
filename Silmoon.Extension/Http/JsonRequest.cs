@@ -44,13 +44,13 @@ namespace Silmoon.Extension.Http
             HttpRequestMessage request = new HttpRequestMessage(httpMethod, url);
             request.Headers.Add("User-Agent", "Silmoon.Extension_JsonHelper/1.0");
 
-            DefaultRequestHostHeaders.ForEachEx(x =>
+            DefaultRequestHostHeaders.Each(x =>
             {
                 if (x.Key == "*" || uri.Host.ToLower() == x.Key.ToLower())
-                    x.Value.ForEachEx(y => y.Value.ForEachEx(z => request.Headers.Add(y.Key, z)));
+                    x.Value.Each(y => y.Value.Each(z => request.Headers.Add(y.Key, z)));
             });
 
-            jsonRequestSetting.RequestHeaders.ForEachEx(x => x.Value.ForEachEx(y => request.Headers.Add(x.Key, y)));
+            jsonRequestSetting.RequestHeaders.Each(x => x.Value.Each(y => request.Headers.Add(x.Key, y)));
             return request;
         }
         static async Task<JsonRequestResult<T>> ExecuteAsync<T>(HttpRequestMessage httpRequestMessage, JsonRequestSetting jsonRequestSetting = null)
@@ -108,7 +108,7 @@ namespace Silmoon.Extension.Http
         public static Task<JsonRequestResult<T>> PostMultipartFormDataData<T>(string url, UrlDataCollection postUrlDataCollection, UrlDataCollection queryStringUrlDataCollection, JsonRequestSetting jsonRequestSetting = null)
         {
             var multipartFormDataContent = new MultipartFormDataContent();
-            postUrlDataCollection.GetKeyValuePairs().ForEachEx(x => multipartFormDataContent.Add(new StringContent(x.Value), x.Key));
+            postUrlDataCollection.GetKeyValuePairs().Each(x => multipartFormDataContent.Add(new StringContent(x.Value), x.Key));
             return PostMultipartFormDataData<T>(url, multipartFormDataContent, queryStringUrlDataCollection, jsonRequestSetting);
         }
 

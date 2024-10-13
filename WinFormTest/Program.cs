@@ -66,12 +66,12 @@ internal static class Program
     static bool ForeachExTest()
     {
         int[] intArray = [1, 2, 3, 4, 5];
-        intArray.ForEachEx(Console.WriteLine);
+        intArray.Each(Console.WriteLine);
         List<int> listArray = [1, 2, 3, 4, 5];
-        listArray.ForEachEx(Console.WriteLine);
+        listArray.Each(Console.WriteLine);
 
         ObservableCollection<int> collection = [1, 2, 3, 4, 5];
-        collection.ForEachEx(Console.WriteLine);
+        collection.Each(Console.WriteLine);
 
         return true;
     }

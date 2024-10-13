@@ -35,26 +35,113 @@ namespace Silmoon.Extension
             }
             return result;
         }
-        public static void ForEachEx<T>(this IEnumerable<T> source, Action<T> action)
+
+        public static void Each<T>(this IEnumerable<T> source, Action<T> action)
         {
+            if (source is null) return;
             foreach (var item in source)
             {
                 action(item);
             }
         }
-        public static void ForEachEx<T>(this IEnumerable source, Action<T> action)
+        public static void Each<T>(this IEnumerable source, Action<T> action)
         {
+            if (source is null) return;
             foreach (var item in source)
             {
                 action((T)item);
             }
         }
-        public static void ForEachEx(this IEnumerable source, Action<object> action)
+        public static void Each(this IEnumerable source, Action<object> action)
         {
+            if (source is null) return;
             foreach (var item in source)
             {
                 action(item);
             }
         }
+
+        public static void Each<T>(this IEnumerable<T> source, Action<T, int> action)
+        {
+            if (source is null) return;
+            int index = 0;
+            foreach (var item in source)
+            {
+                action(item, ++index);
+            }
+        }
+        public static void Each<T>(this IEnumerable source, Action<T, int> action)
+        {
+            if (source is null) return;
+            int index = 0;
+            foreach (var item in source)
+            {
+                action((T)item, ++index);
+            }
+        }
+        public static void Each(this IEnumerable source, Action<object, int> action)
+        {
+            if (source is null) return;
+            int index = 0;
+            foreach (var item in source)
+            {
+                action(item, ++index);
+            }
+        }
+
+
+        public static void Each<T>(this IEnumerable<T> source, Func<T, bool> action)
+        {
+            if (source is null) return;
+            foreach (var item in source)
+            {
+                if (!action(item)) break;
+            }
+        }
+        public static void Each<T>(this IEnumerable source, Func<T, bool> action)
+        {
+            if (source is null) return;
+            foreach (var item in source)
+            {
+                if (!action((T)item)) break;
+            }
+        }
+        public static void Each(this IEnumerable source, Func<object, bool> action)
+        {
+            if (source is null) return;
+            foreach (var item in source)
+            {
+                if (!action(item)) break;
+            }
+        }
+
+        public static void Each<T>(this IEnumerable<T> source, Func<T, int, bool> action)
+        {
+            if (source is null) return;
+            int index = 0;
+            foreach (var item in source)
+            {
+                if (!action(item, ++index)) break;
+            }
+        }
+        public static void Each<T>(this IEnumerable source, Func<T, int, bool> action)
+        {
+            if (source is null) return;
+            int index = 0;
+            foreach (var item in source)
+            {
+                if (!action((T)item, ++index)) break;
+            }
+        }
+        public static void Each(this IEnumerable source, Func<object, int, bool> action)
+        {
+            if (source is null) return;
+            int index = 0;
+            foreach (var item in source)
+            {
+                if (!action(item, ++index)) break;
+            }
+        }
+
     }
 }
