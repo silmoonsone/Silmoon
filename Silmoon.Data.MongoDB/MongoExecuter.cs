@@ -470,7 +470,7 @@ namespace Silmoon.Data.MongoDB
         {
             return Database.GetCollection<T>(collectionName);
         }
-        public IMongoQueryable<T> GetQueryable<T>(string collectionName)
+        public IQueryable<T> GetQueryable<T>(string collectionName)
         {
             return GetCollection<T>(collectionName).AsQueryable();
         }
