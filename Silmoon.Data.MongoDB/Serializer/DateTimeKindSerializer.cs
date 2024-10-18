@@ -6,10 +6,10 @@ using System.Text;
 
 namespace Silmoon.Data.MongoDB.Serializer
 {
-    public class DateTimeSerializer : SerializerBase<DateTime>
+    public class DateTimeKindSerializer : SerializerBase<DateTime>
     {
         public DateTimeKind DateTimeKind { get; set; } = DateTimeKind.Unspecified;
-        public DateTimeSerializer(DateTimeKind dateTimeKind = DateTimeKind.Local)
+        public DateTimeKindSerializer(DateTimeKind dateTimeKind = DateTimeKind.Local)
         {
             DateTimeKind = dateTimeKind;
         }
