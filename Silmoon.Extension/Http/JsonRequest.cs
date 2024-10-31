@@ -142,7 +142,7 @@ namespace Silmoon.Extension.Http
             if (queryStringUrlDataCollection != null) url = queryStringUrlDataCollection.AppendToUrl(url);
             using (var request = CreateRequest(url, httpMethod, jsonRequestSetting))
             {
-                request.Content = new StringContent(obj.ToJsonString(jsonRequestSetting.JsonSerializerSettings), Encoding.UTF8, "application/json");
+                request.Content = new StringContent(obj.ToJsonString(jsonRequestSetting?.JsonSerializerSettings), Encoding.UTF8, "application/json");
                 return await ExecuteAsync<ResponseT>(request, jsonRequestSetting);
             }
         }
@@ -151,7 +151,7 @@ namespace Silmoon.Extension.Http
             if (queryStringUrlDataCollection != null) url = queryStringUrlDataCollection.AppendToUrl(url);
             using (var request = CreateRequest(url, httpMethod, jsonRequestSetting))
             {
-                request.Content = new StringContent(obj.ToJsonString(jsonRequestSetting.JsonSerializerSettings), Encoding.UTF8, "application/json");
+                request.Content = new StringContent(obj.ToJsonString(jsonRequestSetting?.JsonSerializerSettings), Encoding.UTF8, "application/json");
                 return await ExecuteAsync<ResponseT>(request, jsonRequestSetting);
             }
         }

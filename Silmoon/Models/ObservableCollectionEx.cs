@@ -44,6 +44,17 @@ namespace Silmoon.Models
             _suppressNotification = false;
             if (result) OnCollectionChanged(new NotifyCollectionChangedEventArgs(notifyCollectionChangedAction));
         }
+        public void AddRange(IEnumerable<T> collection, NotifyCollectionChangedAction notifyCollectionChangedAction = NotifyCollectionChangedAction.Add)
+        {
+            SuppressNotification(() =>
+            {
+                foreach (var item in collection)
+                {
+                    Add(item);
+                }
+                return true;
+            }, notifyCollectionChangedAction);
+        }
         public void Notify(NotifyCollectionChangedAction notifyCollectionChangedAction)
         {
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(notifyCollectionChangedAction));
