@@ -1,5 +1,4 @@
 ﻿using Microsoft.Data.SqlClient;
-using Silmoon.Data.SqlServer.SqlInternal;
 using System;
 using System.Collections.Generic;
 using System.Data;

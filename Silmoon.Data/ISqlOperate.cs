@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
@@ -24,6 +24,5 @@ namespace Silmoon.Data
         int UpdateFieldForSingleQuery(string tablename, string updatefield, string updatevalue, string fieldname, string fieldvalue);
         bool ExistRecord(string sqlcommand);
         string ExistRecord(string sqlcommand, string fieldname);
-        string __chkSqlstr(string sqlcommand);
     }
 }

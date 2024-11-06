@@ -6,10 +6,11 @@ using System.ComponentModel;
 using System.Text;
 using System.Web;
 using Microsoft.Data.SqlClient;
+using Silmoon.Data.SqlServer.Extensions;
 
 namespace Silmoon.Data.SqlServer
 {
-    public class SqlUtil : SqlCommonTemplate, IDisposable, ISqlOperate
+    public class SqlUtil : ISqlOperate, IDisposable
     {
         string conStr;
         int selectCommandTimeout { get; set; } = 30;
@@ -74,7 +75,7 @@ namespace Silmoon.Data.SqlServer
         /// <returns></returns>
         public int ExecuteNonQuery(string sqlCommandText)
         {
-            using (SqlCommand myCmd = new SqlCommand(__chkSqlstr(sqlCommandText), Connection))
+            using (SqlCommand myCmd = new SqlCommand(SqlHelper.SafeSqlWord(sqlCommandText), Connection))
             {
                 return myCmd.ExecuteNonQuery();
             }
@@ -100,13 +101,13 @@ namespace Silmoon.Data.SqlServer
         /// </summary>
         /// <param name="sqlCommandText">SQL命令</param>
         /// <returns></returns>
-        public SqlDataReader GetDataReader(string sqlCommandText) => new SqlCommand(__chkSqlstr(sqlCommandText), Connection).ExecuteReader();
+        public SqlDataReader GetDataReader(string sqlCommandText) => new SqlCommand(SqlHelper.SafeSqlWord(sqlCommandText), Connection).ExecuteReader();
         /// <summary>
         /// 返回一个SqlCommand对象
         /// </summary>
         /// <param name="sqlCommandText">SQL命令</param>
         /// <returns></returns>
-        public SqlCommand GetCommand(string sqlCommandText) => new SqlCommand(__chkSqlstr(sqlCommandText), Connection);
+        public SqlCommand GetCommand(string sqlCommandText) => new SqlCommand(SqlHelper.SafeSqlWord(sqlCommandText), Connection);
         /// <summary>
         /// 获取一个数据适配器。
         /// </summary>
@@ -114,7 +115,7 @@ namespace Silmoon.Data.SqlServer
         /// <returns></returns>
         public SqlDataAdapter GetDataAdapter(string sqlCommandText)
         {
-            var result = new SqlDataAdapter(__chkSqlstr(sqlCommandText), Connection);
+            var result = new SqlDataAdapter(SqlHelper.SafeSqlWord(sqlCommandText), Connection);
             result.SelectCommand.CommandTimeout = selectCommandTimeout;
             return result;
         }
@@ -226,11 +227,5 @@ namespace Silmoon.Data.SqlServer
 
 
         public void Dispose() => Connection.Dispose();
-
-        public string __chkSqlstr(string sqlCommandText)
-        {
-            //HttpContext.Current.Response.Write(sqlCommandText);
-            return sqlCommandText;
-        }
     }
 }

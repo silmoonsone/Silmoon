@@ -1,6 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
 using Silmoon.Data.QueryModel;
-using Silmoon.Data.SqlServer.SqlInternal;
 using Silmoon.Extension;
 using System;
 using System.Collections.Generic;

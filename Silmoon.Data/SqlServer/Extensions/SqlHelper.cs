@@ -12,6 +12,7 @@ using Silmoon.Extension;
 using Silmoon.Runtime;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using Silmoon.Collections;
+using System.Text.RegularExpressions;
 
 namespace Silmoon.Data.SqlServer.Extensions
 {
@@ -228,6 +229,13 @@ namespace Silmoon.Data.SqlServer.Extensions
                     }
                 }
             }
+        }
+
+        public static string SafeSqlWord(string word)
+        {
+            if (!word.IsNullOrEmpty() && Regex.IsMatch(word, @"^[a-zA-Z0-9]+$"))
+                return word;
+            else throw new ArgumentException("Input contains invalid characters. Only a-z, A-Z, and 0-9 are allowed.");
         }
     }
 }
