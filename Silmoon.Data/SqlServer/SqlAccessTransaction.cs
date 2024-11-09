@@ -10,25 +10,25 @@ namespace Silmoon.Data.SqlServer
 {
     public class SqlAccessTransaction : IDisposable
     {
-        private SqlAccess access = null;
+        private SqlServerOperate SqlServerOperate = null;
         public SqlTransaction Transaction { get; set; }
-        public SqlAccessTransaction(SqlAccess access, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
+        public SqlAccessTransaction(SqlServerOperate sqlServerOperate, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
-            this.access = access;
-            Transaction = access.Connection.BeginTransaction(isolationLevel);
+            SqlServerOperate = sqlServerOperate;
+            Transaction = sqlServerOperate.Connection.BeginTransaction(isolationLevel);
         }
-        public SqlAccessTransaction(SqlAccess access, bool setCurrentTransaction = true, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
+        public SqlAccessTransaction(SqlServerOperate sqlServerOperate, bool setCurrentTransaction = true, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
-            this.access = access;
-            Transaction = access.Connection.BeginTransaction(isolationLevel);
-            if (setCurrentTransaction) this.access.SetCurrentTranscation(Transaction);
+            SqlServerOperate = sqlServerOperate;
+            Transaction = sqlServerOperate.Connection.BeginTransaction(isolationLevel);
+            if (setCurrentTransaction) SqlServerOperate.SetCurrentTranscation(Transaction);
         }
 
         public void Dispose()
         {
             Transaction.Dispose();
-            this.access.SetCurrentTranscation(null);
-            access = null;
+            SqlServerOperate.SetCurrentTranscation(null);
+            SqlServerOperate = null;
             Transaction = null;
         }
     }

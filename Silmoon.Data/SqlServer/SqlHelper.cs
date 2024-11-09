@@ -10,11 +10,19 @@ using System.Text.Json;
 using Newtonsoft.Json;
 using Silmoon.Extension;
 using Silmoon.Runtime;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 using Silmoon.Collections;
-using System.Text.RegularExpressions;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace Silmoon.Data.SqlServer.Extensions
+/* 项目“Silmoon.Data (net8.0)”的未合并的更改
+添加项:
+using Silmoon;
+using Silmoon.Data;
+using Silmoon.Data.SqlServer;
+using Silmoon.Data.SqlServer.Extensions;
+using Silmoon.Data.SqlServer;
+*/
+
+namespace Silmoon.Data.SqlServer
 {
     public static class SqlHelper
     {
@@ -26,7 +34,7 @@ namespace Silmoon.Data.SqlServer.Extensions
 
             while (reader.Read())
             {
-                var r = DeserializeObject<T>(reader, excludedField, false);
+                var r = reader.DeserializeObject<T>(excludedField, false);
                 result.Add(r.Result);
                 data.Add(r.DataCollection);
             }
@@ -36,7 +44,7 @@ namespace Silmoon.Data.SqlServer.Extensions
         public static (T Result, NameObjectCollection<object> DataCollection) DeserializeObject<T>(this SqlDataReader reader, string[] excludedField = null, bool closeReader = true) where T : new()
         {
             T obj = new T();
-            return DeserializeObject(reader, obj, excludedField, closeReader);
+            return reader.DeserializeObject(obj, excludedField, closeReader);
         }
         public static (T Result, NameObjectCollection<object> DataCollection) DeserializeObject<T>(this SqlDataReader reader, T obj, string[] excludedField = null, bool closeReader = true) where T : new()
         {
@@ -87,7 +95,7 @@ namespace Silmoon.Data.SqlServer.Extensions
 
             for (int i = 0; i < result.Length; i++)
             {
-                var r = DeserializeObject<T>(dt.Rows[i], excludedField);
+                var r = dt.Rows[i].DeserializeObject<T>(excludedField);
                 result[i] = r.Result;
                 data[i] = r.DataCollection;
             }
@@ -97,7 +105,7 @@ namespace Silmoon.Data.SqlServer.Extensions
         public static (T Result, NameObjectCollection<object> DataCollection) DeserializeObject<T>(this DataRow row, string[] excludedField = null) where T : new()
         {
             T obj = new T();
-            return DeserializeObject(row, obj, excludedField);
+            return row.DeserializeObject(obj, excludedField);
         }
         public static (T Result, NameObjectCollection<object> DataCollection) DeserializeObject<T>(this DataRow row, T obj, string[] excludedField = null) where T : new()
         {
@@ -230,12 +238,23 @@ namespace Silmoon.Data.SqlServer.Extensions
                 }
             }
         }
-
         public static string SafeSqlWord(string word)
         {
-            if (!word.IsNullOrEmpty() && Regex.IsMatch(word, @"^[a-zA-Z0-9]+$"))
-                return word;
-            else throw new ArgumentException("Input contains invalid characters. Only a-z, A-Z, and 0-9 are allowed.");
+            if (string.IsNullOrWhiteSpace(word))
+                throw new ArgumentException("Input cannot be null, empty, or whitespace.");
+
+            foreach (char c in word)
+            {
+                if (!(c >= 'a' && c <= 'z') &&
+                    !(c >= 'A' && c <= 'Z') &&
+                    !(c >= '0' && c <= '9') &&
+                    c != '_') // Allow underscore
+                {
+                    throw new ArgumentException("Input contains invalid characters. Only a-z, A-Z, 0-9, and _ are allowed.");
+                }
+            }
+
+            return word;
         }
     }
 }

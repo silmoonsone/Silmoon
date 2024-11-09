@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Text;
 using Silmoon.Runtime;
 
-namespace Silmoon.Data.SqlServer.Extensions
+namespace Silmoon.Extension
 {
     public static class PropertyInfoExtension
     {

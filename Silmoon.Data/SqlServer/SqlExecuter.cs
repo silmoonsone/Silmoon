@@ -11,28 +11,25 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Silmoon.Runtime;
-using Silmoon.Data.SqlServer.Extensions;
 
 namespace Silmoon.Data.SqlServer
 {
     public class SqlExecuter : IDisposable
     {
-        SqlUtil SqlUtil { get; set; }
-        SqlAccess SqlAccess { get; set; }
+        SqlServerOperate SqlServerOperate { get; set; }
         public SqlConnection SqlConnection { get; }
 
         public SqlExecuter(string connectionString)
         {
             SqlConnection = new SqlConnection(connectionString);
             SqlConnection.Open();
-            SqlUtil = new SqlUtil(SqlConnection);
-            SqlAccess = new SqlAccess(SqlConnection);
+            SqlServerOperate = new SqlServerOperate(SqlConnection);
         }
         public SqlExecuteResult AddObject<T>(string tableName, T obj)
         {
             var fieldInfos = getFieldInfos(obj, false);
 
-            string sql = $"INSERT INTO [{onlyWords(tableName)}] (";
+            string sql = $"INSERT INTO [{SqlHelper.SafeSqlWord(tableName)}] (";
             foreach (var item in fieldInfos)
             {
                 sql += "[" + item.Value.Name + "], ";
@@ -45,7 +42,7 @@ namespace Silmoon.Data.SqlServer
             }
             sql = sql.Substring(0, sql.Length - 2);
             sql += ")";
-            var cmd = SqlAccess.GetCommand(sql);
+            var cmd = SqlServerOperate.GetDataCommand(sql);
             cmd.AddParameters(fieldInfos);
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
@@ -71,7 +68,7 @@ namespace Silmoon.Data.SqlServer
             makeOffset(ref sql, ref options);
 
 
-            var cmd = SqlAccess.GetCommand(sql);
+            var cmd = SqlServerOperate.GetDataCommand(sql);
             cmd.AddParameters(fieldInfos);
             using (var reader = cmd.ExecuteReader())
             {
@@ -99,7 +96,7 @@ namespace Silmoon.Data.SqlServer
             makeOffset(ref sql, ref options);
 
 
-            var cmd = SqlAccess.GetCommand(sql);
+            var cmd = SqlServerOperate.GetDataCommand(sql);
             cmd.AddParameters(fieldInfos);
             using (var reader = cmd.ExecuteReader())
             {
@@ -129,7 +126,7 @@ namespace Silmoon.Data.SqlServer
             makeOrderBy(ref sql, ref tableName, ref options);
             makeOffset(ref sql, ref options);
 
-            var cmd = SqlAccess.GetCommand(sql);
+            var cmd = SqlServerOperate.GetDataCommand(sql);
             cmd.AddParameters(fieldInfos);
 
             using (var reader = cmd.ExecuteReader())
@@ -158,7 +155,7 @@ namespace Silmoon.Data.SqlServer
             makeOrderBy(ref sql, ref tableName, ref options);
             makeOffset(ref sql, ref options);
 
-            var cmd = SqlAccess.GetCommand(sql);
+            var cmd = SqlServerOperate.GetDataCommand(sql);
             cmd.AddParameters(fieldInfos);
 
 
@@ -187,7 +184,7 @@ namespace Silmoon.Data.SqlServer
             makeOrderBy(ref sql, ref tableName, ref options);
             makeOffset(ref sql, ref options);
 
-            var cmd = SqlAccess.GetCommand(sql);
+            var cmd = SqlServerOperate.GetDataCommand(sql);
             cmd.AddParameters(fieldInfos);
 
 
@@ -220,7 +217,7 @@ namespace Silmoon.Data.SqlServer
             makeOrderBy(ref sql, ref tableName, ref options);
             makeOffset(ref sql, ref options);
 
-            var cmd = SqlAccess.GetCommand(sql);
+            var cmd = SqlServerOperate.GetDataCommand(sql);
             cmd.AddParameters(fieldInfos);
 
             using (var reader = cmd.ExecuteReader())
@@ -264,7 +261,7 @@ namespace Silmoon.Data.SqlServer
                 makeWhereString(ref sql, ref tableName, ref fieldInfos);
             else sql += " WHERE " + whereString;
 
-            var cmd = SqlAccess.GetCommand(sql);
+            var cmd = SqlServerOperate.GetDataCommand(sql);
 
             cmd.AddParameters(getFieldInfos(obj, false), setNames);
             cmd.AddParameters(fieldInfos);
@@ -298,7 +295,7 @@ namespace Silmoon.Data.SqlServer
                 makeWhereString(ref sql, ref tableName, ref fieldInfos);
             else sql += " WHERE " + whereString;
 
-            var cmd = SqlAccess.GetCommand(sql);
+            var cmd = SqlServerOperate.GetDataCommand(sql);
 
             cmd.AddParameters(getFieldInfos(obj, false), updateFieldNames);
             cmd.AddParameters(fieldInfos);
@@ -315,7 +312,7 @@ namespace Silmoon.Data.SqlServer
 
             makeWhereString(ref sql, ref tableName, ref fieldInfos);
 
-            var cmd = SqlAccess.GetCommand(sql);
+            var cmd = SqlServerOperate.GetDataCommand(sql);
             cmd.AddParameters(fieldInfos);
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
@@ -328,7 +325,7 @@ namespace Silmoon.Data.SqlServer
 
             makeWhereString(ref sql, ref tableName, ref fieldInfos);
 
-            var cmd = SqlAccess.GetCommand(sql);
+            var cmd = SqlServerOperate.GetDataCommand(sql);
             cmd.AddParameters(fieldInfos);
             int i = cmd.ExecuteNonQuery();
             return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
@@ -344,7 +341,7 @@ namespace Silmoon.Data.SqlServer
                 sql += " WHERE " + whereString;
             }
 
-            var cmd = SqlAccess.GetCommand(sql);
+            var cmd = SqlServerOperate.GetDataCommand(sql);
             cmd.AddParameters(fieldInfos);
 
             int i = cmd.ExecuteNonQuery();
@@ -359,7 +356,7 @@ namespace Silmoon.Data.SqlServer
 
             makeWhereString(ref sql, ref tableName, ref fieldInfos);
 
-            var cmd = SqlAccess.GetCommand(sql);
+            var cmd = SqlServerOperate.GetDataCommand(sql);
             cmd.AddParameters(fieldInfos);
 
             var result = cmd.ExecuteScalar();
@@ -373,7 +370,7 @@ namespace Silmoon.Data.SqlServer
 
             makeWhereString(ref sql, ref tableName, ref fieldInfos);
 
-            var cmd = SqlAccess.GetCommand(sql);
+            var cmd = SqlServerOperate.GetDataCommand(sql);
             cmd.AddParameters(fieldInfos);
 
             var result = cmd.ExecuteScalar();
@@ -387,7 +384,7 @@ namespace Silmoon.Data.SqlServer
 
             if (!string.IsNullOrEmpty(whereString)) sql += " WHERE " + whereString;
 
-            var cmd = SqlAccess.GetCommand(sql);
+            var cmd = SqlServerOperate.GetDataCommand(sql);
             cmd.AddParameters(fieldInfos);
 
             var result = cmd.ExecuteScalar();
@@ -396,11 +393,11 @@ namespace Silmoon.Data.SqlServer
 
         public SqlExecuteResult<bool> CreateTable<T>(string tableName)
         {
-            var isExistResult = TableIsExist(tableName);
+            var isExistResult = IsTableExists(tableName);
             if (isExistResult.Result) return new SqlExecuteResult<bool>() { Result = false, ResponseRows = isExistResult.ResponseRows, ExecuteSqlString = isExistResult.ExecuteSqlString };
             var props = typeof(T).GetProperties();
 
-            string sql = $"CREATE TABLE [{onlyWords(tableName)}]\r\n";
+            string sql = $"CREATE TABLE [{SqlHelper.SafeSqlWord(tableName)}]\r\n";
             sql += $"(\r\n";
             sql += $"[id] int NOT NULL IDENTITY (1, 1),\r\n";
             foreach (var item in props)
@@ -472,30 +469,21 @@ namespace Silmoon.Data.SqlServer
             }
             sql += ")  ON [PRIMARY]\r\n";
             //sql += "TEXTIMAGE_ON [PRIMARY]\r\n";
-            var result = SqlUtil.ExecuteNonQuery(sql);
+            var result = SqlServerOperate.ExecuteNonQuery(sql);
             return new SqlExecuteResult<bool>() { Result = true, ExecuteSqlString = sql, ResponseRows = result };
         }
-        public SqlExecuteResult<bool> TableIsExist(string tableName)
+        public SqlExecuteResult<bool> IsTableExists(string tableName)
         {
             var sql = $"SELECT TOP 1 * FROM [SYSOBJECTS] WHERE id = OBJECT_ID(N'{tableName}')";
-            var result = SqlUtil.GetRecordCount(sql);
+            var result = SqlServerOperate.GetRecordCount(sql);
 
             return new SqlExecuteResult<bool>() { Result = result != 0, ExecuteSqlString = sql, ResponseRows = result };
         }
 
 
-        public SqlAccessTransaction BeginTransaction(bool setCurrentTransaction = true, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
-        {
-            return SqlAccess.BeginTransaction(setCurrentTransaction, isolationLevel);
-        }
-        public void CommitTransaction(SqlAccessTransaction transaction)
-        {
-            SqlAccess.CommitTransaction(transaction);
-        }
-        public void RollbackTransaction(SqlAccessTransaction transaction)
-        {
-            SqlAccess.RollbackTransaction(transaction);
-        }
+        public SqlAccessTransaction BeginTransaction(bool setCurrentTransaction = true, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted) => SqlServerOperate.BeginTransaction(setCurrentTransaction, isolationLevel);
+        public void CommitTransaction(SqlAccessTransaction transaction) => SqlServerOperate.CommitTransaction(transaction);
+        public void RollbackTransaction(SqlAccessTransaction transaction) => SqlServerOperate.RollbackTransaction(transaction);
 
 
 
@@ -607,11 +595,6 @@ namespace Silmoon.Data.SqlServer
             return propertyNames;
         }
 
-
-        private string onlyWords(string s)
-        {
-            return s;
-        }
 
         public void Dispose()
         {
