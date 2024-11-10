@@ -28,26 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
-            button1 = new Button();
+            ctlAesEncryptTestButton = new Button();
             textBox1 = new TextBox();
-            button2 = new Button();
-            button3 = new Button();
-            button4 = new Button();
-            ctlKeyFileEncryptoBtn = new Button();
-            button5 = new Button();
-            ctlDownloadButton = new Button();
+            ctlCompressTestButton = new Button();
+            ctlSubStringTestButton = new Button();
+            ctlCopyTestButton = new Button();
+            ctlKeyFileEncryptoButton = new Button();
+            ctlJsonHelperTestButton = new Button();
+            ctlDownloadTestButton = new Button();
             label1 = new Label();
+            ctlSqlServerTestButton = new Button();
             SuspendLayout();
             // 
-            // button1
+            // ctlAesEncryptTestButton
             // 
-            button1.Location = new Point(574, 132);
-            button1.Name = "button1";
-            button1.Size = new Size(97, 23);
-            button1.TabIndex = 1;
-            button1.Text = "AesEncrypt";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            ctlAesEncryptTestButton.Location = new Point(495, 12);
+            ctlAesEncryptTestButton.Name = "ctlAesEncryptTestButton";
+            ctlAesEncryptTestButton.Size = new Size(163, 23);
+            ctlAesEncryptTestButton.TabIndex = 1;
+            ctlAesEncryptTestButton.Text = "AesEncrypt";
+            ctlAesEncryptTestButton.UseVisualStyleBackColor = true;
+            ctlAesEncryptTestButton.Click += ctlAesEncryptTestButton_Click;
             // 
             // textBox1
             // 
@@ -57,65 +58,65 @@
             textBox1.Size = new Size(477, 426);
             textBox1.TabIndex = 0;
             // 
-            // button2
+            // ctlCompressTestButton
             // 
-            button2.Location = new Point(574, 161);
-            button2.Name = "button2";
-            button2.Size = new Size(97, 23);
-            button2.TabIndex = 2;
-            button2.Text = "Compress";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
+            ctlCompressTestButton.Location = new Point(495, 41);
+            ctlCompressTestButton.Name = "ctlCompressTestButton";
+            ctlCompressTestButton.Size = new Size(163, 23);
+            ctlCompressTestButton.TabIndex = 2;
+            ctlCompressTestButton.Text = "Compress";
+            ctlCompressTestButton.UseVisualStyleBackColor = true;
+            ctlCompressTestButton.Click += ctlCompressTestButton_Click;
             // 
-            // button3
+            // ctlSubStringTestButton
             // 
-            button3.Location = new Point(574, 190);
-            button3.Name = "button3";
-            button3.Size = new Size(97, 23);
-            button3.TabIndex = 3;
-            button3.Text = "EncodingSubString";
-            button3.UseVisualStyleBackColor = true;
-            button3.Click += button3_Click;
+            ctlSubStringTestButton.Location = new Point(495, 70);
+            ctlSubStringTestButton.Name = "ctlSubStringTestButton";
+            ctlSubStringTestButton.Size = new Size(163, 23);
+            ctlSubStringTestButton.TabIndex = 3;
+            ctlSubStringTestButton.Text = "EncodingSubString";
+            ctlSubStringTestButton.UseVisualStyleBackColor = true;
+            ctlSubStringTestButton.Click += ctlSubStringTestButton_Click;
             // 
-            // button4
+            // ctlCopyTestButton
             // 
-            button4.Location = new Point(574, 219);
-            button4.Name = "button4";
-            button4.Size = new Size(97, 23);
-            button4.TabIndex = 4;
-            button4.Text = "button4";
-            button4.UseVisualStyleBackColor = true;
-            button4.Click += button4_Click;
+            ctlCopyTestButton.Location = new Point(495, 99);
+            ctlCopyTestButton.Name = "ctlCopyTestButton";
+            ctlCopyTestButton.Size = new Size(163, 23);
+            ctlCopyTestButton.TabIndex = 4;
+            ctlCopyTestButton.Text = "Copy";
+            ctlCopyTestButton.UseVisualStyleBackColor = true;
+            ctlCopyTestButton.Click += ctlCopyTestButton_Click;
             // 
-            // ctlKeyFileEncryptoBtn
+            // ctlKeyFileEncryptoButton
             // 
-            ctlKeyFileEncryptoBtn.Location = new Point(574, 261);
-            ctlKeyFileEncryptoBtn.Name = "ctlKeyFileEncryptoBtn";
-            ctlKeyFileEncryptoBtn.Size = new Size(97, 23);
-            ctlKeyFileEncryptoBtn.TabIndex = 5;
-            ctlKeyFileEncryptoBtn.Text = "RSA加解密";
-            ctlKeyFileEncryptoBtn.UseVisualStyleBackColor = true;
-            ctlKeyFileEncryptoBtn.Click += ctlKeyFileEncryptoBtn_Click;
+            ctlKeyFileEncryptoButton.Location = new Point(495, 128);
+            ctlKeyFileEncryptoButton.Name = "ctlKeyFileEncryptoButton";
+            ctlKeyFileEncryptoButton.Size = new Size(163, 23);
+            ctlKeyFileEncryptoButton.TabIndex = 5;
+            ctlKeyFileEncryptoButton.Text = "KeyFileEncrypt";
+            ctlKeyFileEncryptoButton.UseVisualStyleBackColor = true;
+            ctlKeyFileEncryptoButton.Click += ctlKeyFileEncryptoButton_Click;
             // 
-            // button5
+            // ctlJsonHelperTestButton
             // 
-            button5.Location = new Point(574, 290);
-            button5.Name = "button5";
-            button5.Size = new Size(97, 23);
-            button5.TabIndex = 6;
-            button5.Text = "JsonHelperTest";
-            button5.UseVisualStyleBackColor = true;
-            button5.Click += button5_Click;
+            ctlJsonHelperTestButton.Location = new Point(495, 157);
+            ctlJsonHelperTestButton.Name = "ctlJsonHelperTestButton";
+            ctlJsonHelperTestButton.Size = new Size(163, 23);
+            ctlJsonHelperTestButton.TabIndex = 6;
+            ctlJsonHelperTestButton.Text = "JsonHelperTest";
+            ctlJsonHelperTestButton.UseVisualStyleBackColor = true;
+            ctlJsonHelperTestButton.Click += ctlJsonHelperTestButton_Click;
             // 
-            // ctlDownloadButton
+            // ctlDownloadTestButton
             // 
-            ctlDownloadButton.Location = new Point(574, 319);
-            ctlDownloadButton.Name = "ctlDownloadButton";
-            ctlDownloadButton.Size = new Size(97, 23);
-            ctlDownloadButton.TabIndex = 7;
-            ctlDownloadButton.Text = "Download";
-            ctlDownloadButton.UseVisualStyleBackColor = true;
-            ctlDownloadButton.Click += ctlDownloadButton_Click;
+            ctlDownloadTestButton.Location = new Point(495, 186);
+            ctlDownloadTestButton.Name = "ctlDownloadTestButton";
+            ctlDownloadTestButton.Size = new Size(163, 23);
+            ctlDownloadTestButton.TabIndex = 7;
+            ctlDownloadTestButton.Text = "Download";
+            ctlDownloadTestButton.UseVisualStyleBackColor = true;
+            ctlDownloadTestButton.Click += ctlDownloadTestButton_Click;
             // 
             // label1
             // 
@@ -126,21 +127,33 @@
             label1.TabIndex = 8;
             label1.Text = "label1";
             // 
+            // ctlSqlServerTestButton
+            // 
+            ctlSqlServerTestButton.Location = new Point(495, 215);
+            ctlSqlServerTestButton.Name = "ctlSqlServerTestButton";
+            ctlSqlServerTestButton.Size = new Size(163, 23);
+            ctlSqlServerTestButton.TabIndex = 9;
+            ctlSqlServerTestButton.Text = "SqlServerTest...";
+            ctlSqlServerTestButton.UseVisualStyleBackColor = true;
+            ctlSqlServerTestButton.Click += ctlSqlServerTestButton_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 466);
+            ClientSize = new Size(670, 466);
+            Controls.Add(ctlSqlServerTestButton);
             Controls.Add(label1);
-            Controls.Add(ctlDownloadButton);
-            Controls.Add(button5);
-            Controls.Add(ctlKeyFileEncryptoBtn);
-            Controls.Add(button4);
-            Controls.Add(button3);
-            Controls.Add(button2);
+            Controls.Add(ctlDownloadTestButton);
+            Controls.Add(ctlJsonHelperTestButton);
+            Controls.Add(ctlKeyFileEncryptoButton);
+            Controls.Add(ctlCopyTestButton);
+            Controls.Add(ctlSubStringTestButton);
+            Controls.Add(ctlCompressTestButton);
             Controls.Add(textBox1);
-            Controls.Add(button1);
+            Controls.Add(ctlAesEncryptTestButton);
             Name = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Form1";
             ResumeLayout(false);
             PerformLayout();
@@ -148,14 +161,15 @@
 
         #endregion
 
-        private Button button1;
+        private Button ctlAesEncryptTestButton;
         private TextBox textBox1;
-        private Button button2;
-        private Button button3;
-        private Button button4;
-        private Button ctlKeyFileEncryptoBtn;
-        private Button button5;
-        private Button ctlDownloadButton;
+        private Button ctlCompressTestButton;
+        private Button ctlSubStringTestButton;
+        private Button ctlCopyTestButton;
+        private Button ctlKeyFileEncryptoButton;
+        private Button ctlJsonHelperTestButton;
+        private Button ctlDownloadTestButton;
         private Label label1;
+        private Button ctlSqlServerTestButton;
     }
 }

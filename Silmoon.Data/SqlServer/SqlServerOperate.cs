@@ -74,24 +74,19 @@ namespace Silmoon.Data.SqlServer
         /// </summary>
         /// <param name="sqlCommandText">SQL命令</param>
         /// <returns></returns>
-        public SqlDataReader GetDataReader(string sqlCommandText) => new SqlCommand(SqlHelper.SafeSqlWord(sqlCommandText), Connection).ExecuteReader();
+        public SqlDataReader GetDataReader(string sqlCommandText) => new SqlCommand(sqlCommandText, Connection, Transaction).ExecuteReader();
         /// <summary>
         /// 返回一个SqlCommand对象
         /// </summary>
         /// <param name="sqlCommandText">SQL命令</param>
         /// <returns></returns>
-        public SqlCommand GetDataCommand(string sqlCommandText) => new SqlCommand(SqlHelper.SafeSqlWord(sqlCommandText), Connection);
+        public SqlCommand GetDataCommand(string sqlCommandText) => new SqlCommand(sqlCommandText, Connection, Transaction);
         /// <summary>
         /// 获取一个数据适配器。
         /// </summary>
         /// <param name="sqlCommandText">SQL语句</param>
         /// <returns></returns>
-        public SqlDataAdapter GetDataAdapter(string sqlCommandText)
-        {
-            var result = new SqlDataAdapter(SqlHelper.SafeSqlWord(sqlCommandText), Connection);
-            result.SelectCommand.CommandTimeout = selectCommandTimeout;
-            return result;
-        }
+        public SqlDataAdapter GetDataAdapter(string sqlCommandText) => new SqlDataAdapter(sqlCommandText, Connection);
         /// <summary>
         /// 获取一个内存数据表
         /// </summary>
@@ -122,7 +117,7 @@ namespace Silmoon.Data.SqlServer
         /// <returns></returns>
         public int ExecuteNonQuery(string sqlCommandText)
         {
-            using (SqlCommand sqlCommand = new SqlCommand(SqlHelper.SafeSqlWord(sqlCommandText), Connection))
+            using (SqlCommand sqlCommand = new SqlCommand(sqlCommandText, Connection))
             {
                 return sqlCommand.ExecuteNonQuery();
             }
