@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Silmoon.Collections;
 using Silmoon.Extension.Network;
 using Silmoon.Models;
 

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Silmoon.Collections;
 using Silmoon.Extension.Network;
 using System;
 using System.Collections.Generic;

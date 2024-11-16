@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Silmoon.Extension.Models.Types;
 using Silmoon.Extension.Models;
+using Silmoon.Collections;
 
 namespace Silmoon.Extension.Http
 {

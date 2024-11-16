@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.Collections;
+using System.Linq;
 
 namespace Silmoon.Data.SqlServer
 {
@@ -119,7 +120,7 @@ namespace Silmoon.Data.SqlServer
             string[] nameArr = (string[])_array.ToArray(typeof(string));
             dt.Clear();
             dt.Dispose();
-            return StringHelper.FindFormStringArray(nameArr, database);
+            return nameArr.Contains(database);
         }
         /// <summary>
         /// 检查一个用户名是否存在
@@ -134,7 +135,7 @@ namespace Silmoon.Data.SqlServer
             string[] nameArr = (string[])_array.ToArray(typeof(string));
             dt.Clear();
             dt.Dispose();
-            return StringHelper.FindFormStringArray(nameArr, username);
+            return nameArr.Contains(username);
         }
         /// <summary>
         /// 设置用户密码

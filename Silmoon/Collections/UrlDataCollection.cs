@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace Silmoon
+namespace Silmoon.Collections
 {
     public class UrlDataCollection : IEnumerable
     {
@@ -101,7 +101,7 @@ namespace Silmoon
             {
                 s += "&" + AppendValue;
             }
-            return HashHelper.GetMD5Hash(s);
+            return s.GetMD5Hash();
         }
         public byte[] GetSign(string AppendKey, string AppendValue, bool IgnoreEmptyValue, bool RequireValueUrlEncode, Func<string, byte[]> SignatureFunction, params string[] IgnoreKeys)
         {

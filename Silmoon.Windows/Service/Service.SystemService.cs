@@ -4,6 +4,7 @@ using System.Text;
 using Silmoon.Net;
 using Microsoft.Win32;
 using System.Net.Sockets;
+using System.Linq;
 
 namespace Silmoon.Windows.Service.SystemService
 {
@@ -32,13 +33,11 @@ namespace Silmoon.Windows.Service.SystemService
 
 
             RegistryKey k1 = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile", true);
-            if (!StringHelper.FindFormStringArray(k1.GetSubKeyNames(), "GloballyOpenPorts"))
-                k1.CreateSubKey("GloballyOpenPorts");
+            if (!k1.GetSubKeyNames().Contains("GloballyOpenPorts")) k1.CreateSubKey("GloballyOpenPorts");
             k1.Close();
 
             RegistryKey k2 = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\GloballyOpenPorts", true);
-            if (!StringHelper.FindFormStringArray(k2.GetSubKeyNames(), "List"))
-                k2.CreateSubKey("List");
+            if (!k2.GetSubKeyNames().Contains("List")) k2.CreateSubKey("List");
             k2.Close();
 
             RegistryKey k3 = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\GloballyOpenPorts\List", true);
