@@ -36,7 +36,7 @@ namespace Silmoon.Secure
         }
         public static string GeneratorPrivateKey(int keyBytes = 1024)
         {
-            string result = "";
+            string result = string.Empty;
             using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(keyBytes))
             {
                 result = rsa.ToXmlString(true);
@@ -207,7 +207,7 @@ namespace Silmoon.Secure
         public static string DesEncrypt(string data, string KEY_64, string IV_64)
         {
             if (data is null) return null;
-            if (data == "") return "";
+            if (data == string.Empty) return string.Empty;
 
             byte[] odata = data.GetBytes();
             byte[] byKey = KEY_64.GetBytes();
@@ -238,7 +238,7 @@ namespace Silmoon.Secure
         public static string DesDecrypt(string data, string KEY_64, string IV_64)
         {
             if (data is null) return null;
-            if (data == "") return "";
+            if (data == string.Empty) return string.Empty;
 
             byte[] odata = Convert.FromBase64String(data);
             byte[] byKey = KEY_64.GetBytes();

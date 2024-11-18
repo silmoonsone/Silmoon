@@ -22,8 +22,8 @@ namespace Silmoon.Windows.Service.SystemService
         /// <param name="name"></param>
         public static void AddSharedAccessFirewallPort(int port, ProtocolType protocol, bool enable, string name)
         {
-            string protocolStr = "";
-            string enableStr = "";
+            string protocolStr = string.Empty;
+            string enableStr = string.Empty;
             if (protocol == ProtocolType.Tcp) { protocolStr = "TCP"; }
             else if (protocol == ProtocolType.Udp) { protocolStr = "UDP"; }
 

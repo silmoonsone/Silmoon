@@ -19,7 +19,7 @@ namespace Silmoon.Net
         {
             string[] ipstrArr = ip.ToString().Split(new string[] { "." }, StringSplitOptions.None);
             int cyccount = 0;
-            string restring = "";
+            string restring = string.Empty;
             foreach (string ipConStr in ipstrArr)
             {
                 cyccount++;
@@ -35,7 +35,7 @@ namespace Silmoon.Net
         /// <returns></returns>
         public static int GetSubNetMaskCode(IPAddress ip)
         {
-            return (int)((int)IPv4ToBinaryAddress(ip).Replace(".", "").LastIndexOf("1")) + 1;
+            return IPv4ToBinaryAddress(ip).Replace(".", "").LastIndexOf("1") + 1;
         }
         public static IPAddress GetIPv4SubNetAddress(int submask)
         {

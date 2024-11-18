@@ -10,6 +10,7 @@ namespace Silmoon
 {
     public static class StringHelper
     {
+        public const string EmptyString = "";
         /// <summary>
         /// 把数组中的所有元素作为字符串使用一个指定的分隔符合并。
         /// </summary>
@@ -19,7 +20,7 @@ namespace Silmoon
         /// <param name="SplitString">分隔符</param>
         /// <param name="RemoveLastSplitString">是否移除最后一个分隔符</param>
         /// <returns></returns>
-        public static string MergeStringArray(Array array, string SplitString, bool RemoveLastSplitString = true, string perfixString = "", string suffixString = "")
+        public static string MergeStringArray(Array array, string SplitString, bool RemoveLastSplitString = true, string perfixString = EmptyString, string suffixString = EmptyString)
         {
             string result = string.Empty;
             if (array == null || array.Length == 0) return result;
@@ -36,7 +37,7 @@ namespace Silmoon
         /// <param name="nameValueSeparator">名字与值之间的分隔符</param>
         /// <param name="perNameChar">名字前缀</param>
         /// <returns></returns>
-        public static NameValueCollection AnalyzeNameValue(string[] array, string nameValueSeparator = ":", string perNameChar = "")
+        public static NameValueCollection AnalyzeNameValue(string[] array, string nameValueSeparator = ":", string perNameChar = EmptyString)
         {
             NameValueCollection result = new NameValueCollection();
             if (array.IsNullOrEmpty()) return result;

@@ -27,7 +27,7 @@ namespace Silmoon.Collections
                 {
                     if (item.Key == key)
                     {
-                        if (result == null) result = "";
+                        if (result == null) result = string.Empty;
                         result += item.Value + ",";
                     }
                 }
@@ -84,7 +84,7 @@ namespace Silmoon.Collections
             }
             array.Sort();
 
-            string s = "";
+            string s = string.Empty;
 
             foreach (var item in array) s += item + "&";
             s = s.TrimEnd('&');
@@ -114,7 +114,7 @@ namespace Silmoon.Collections
             }
             array.Sort();
 
-            string s = "";
+            string s = string.Empty;
 
             foreach (var item in array) s += item + "&";
             s = s.TrimEnd('&');
@@ -172,7 +172,7 @@ namespace Silmoon.Collections
                     }
                 }
 
-                string s = "";
+                string s = string.Empty;
 
                 foreach (var item in array) s += item + "&";
                 return s.TrimEnd('&');

@@ -11,7 +11,7 @@ namespace Silmoon.Secure
         public static string EncryptSilmoonBinary(string s)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(s);
-            string restring = "";
+            string restring = string.Empty;
             foreach (byte b in bytes)
             {
                 restring += b.ToString() + ",";

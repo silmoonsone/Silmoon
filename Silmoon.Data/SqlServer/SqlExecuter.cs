@@ -495,7 +495,7 @@ namespace Silmoon.Data.SqlServer
             }
             else if (options.FieldOption == SelectFieldOption.SpecifiedObject)
             {
-                string s = "";
+                string s = string.Empty;
                 foreach (var item in fieldInfos)
                 {
                     if (options.ExcludedField?.Contains(item.Value.Name) ?? false) continue;

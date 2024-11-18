@@ -67,7 +67,7 @@ namespace Silmoon.Windows.Net.NetworkInformation
         /// <returns></returns>
         public static IPAddress GetDefaultGateWay()
         {
-            string ip = "";
+            string ip = string.Empty;
             try
             {
                 ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");

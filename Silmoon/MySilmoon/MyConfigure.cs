@@ -12,13 +12,13 @@ namespace Silmoon.MySilmoon
     [Obsolete]
     public class MyConfigure
     {
-        static string LicenseEncryptedString = "";
+        static string LicenseEncryptedString = string.Empty;
 
         public static void ClearCache()
         {
-            LicenseEncryptedString = "";
+            LicenseEncryptedString = string.Empty;
         }
-        public static VersionResult GetRemoteVersion(string productString, string userIdentity = "")
+        public static VersionResult GetRemoteVersion(string productString, string userIdentity = StringHelper.EmptyString)
         {
             VersionResult result = new VersionResult();
             try
@@ -63,16 +63,16 @@ namespace Silmoon.MySilmoon
 
         public static string GetLicenseEncryptedString(string productString, bool force = false)
         {
-            if (force) LicenseEncryptedString = "";
+            if (force) LicenseEncryptedString = string.Empty;
             if (!string.IsNullOrEmpty(LicenseEncryptedString)) return LicenseEncryptedString;
 
             string sysDatFile = Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\slf.dat";
-            string appendKey = "";
-            string keyFileContent = "";
+            string appendKey = string.Empty;
+            string keyFileContent = string.Empty;
 
             if (File.Exists(sysDatFile))
             {
-                if (File.Exists("license.slf") && (keyFileContent = File.ReadAllText("license.slf")) != "")
+                if (File.Exists("license.slf") && (keyFileContent = File.ReadAllText("license.slf")) != string.Empty)
                 {
                     string[] lines = File.ReadAllLines(sysDatFile);
                     foreach (var item in lines)
@@ -88,7 +88,7 @@ namespace Silmoon.MySilmoon
                         }
                     }
 
-                    if (appendKey != "")
+                    if (appendKey != string.Empty)
                     {
                         using (CSEncrypt enc = new CSEncrypt(appendKey))
                         {
@@ -140,7 +140,7 @@ namespace Silmoon.MySilmoon
         {
             NameValueCollection values = GetLicenseEncryptedConfigure(productString);
             string clientString = values["userIdentity"];
-            return clientString ?? "";
+            return clientString ?? string.Empty;
         }
     }
 }

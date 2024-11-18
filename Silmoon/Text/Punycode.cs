@@ -24,7 +24,7 @@ namespace Silmoon.Text
         {
             domain = domain.Replace("。", ".");
             string[] domainArray = domain.Split(new string[] { "." }, StringSplitOptions.None);
-            string result = "";
+            string result = string.Empty;
             foreach (string item in domainArray)
             {
                 if (isIDN(item))
@@ -48,7 +48,7 @@ namespace Silmoon.Text
         {
             domain = domain.Replace("。", ".");
             string[] domainArray = domain.Split(new string[] { "." }, StringSplitOptions.None);
-            string result = "";
+            string result = string.Empty;
             foreach (string item in domainArray)
             {
                 if (item == "")

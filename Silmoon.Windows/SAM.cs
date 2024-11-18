@@ -189,8 +189,8 @@ namespace Silmoon.Windows
     {
         public string Username;
         public string Password;
-        public string Fullname = "";
-        public string Description = "";
+        public string Fullname = string.Empty;
+        public string Description = string.Empty;
         public int UserFlags = 66049;
     }
 

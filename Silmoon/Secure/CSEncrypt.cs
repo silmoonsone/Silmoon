@@ -67,7 +67,7 @@ namespace Silmoon.Secure
         /// <returns>经过加密的串</returns>   
         public string EncryptoByte(string Source)
         {
-            if (Source == "") return "";
+            if (Source == string.Empty) return "";
             byte[] bytIn = UTF8Encoding.UTF8.GetBytes(Source);
             MemoryStream ms = new MemoryStream();
             mobjCryptoService.Key = GetLegalKey();
@@ -89,7 +89,7 @@ namespace Silmoon.Secure
         {
             try
             {
-                if (EncryptString.DiscryptSilmoonBinary(Source) == "") return "";
+                if (EncryptString.DiscryptSilmoonBinary(Source) == string.Empty) return "";
                 byte[] bytIn = Convert.FromBase64String(EncryptString.DiscryptSilmoonBinary(Source));
                 MemoryStream ms = new MemoryStream(bytIn, 0, bytIn.Length);
                 mobjCryptoService.Key = GetLegalKey();
@@ -99,7 +99,7 @@ namespace Silmoon.Secure
                 StreamReader sr = new StreamReader(cs);
                 return sr.ReadToEnd();
             }
-            catch { return ""; }
+            catch { return string.Empty; }
         }
         /// <summary>   
         /// 加密方法   
@@ -108,7 +108,7 @@ namespace Silmoon.Secure
         /// <returns>经过加密的串</returns>   
         public string Encrypt(string Source)
         {
-            if (Source == "") return "";
+            if (Source == string.Empty) return string.Empty;
             byte[] bytIn = UTF8Encoding.UTF8.GetBytes(Source);
             MemoryStream ms = new MemoryStream();
             mobjCryptoService.Key = GetLegalKey();
@@ -130,7 +130,7 @@ namespace Silmoon.Secure
         {
             try
             {
-                if (Source == "") return "";
+                if (Source == string.Empty) return "";
                 byte[] bytIn = Convert.FromBase64String(Source);
                 MemoryStream ms = new MemoryStream(bytIn, 0, bytIn.Length);
                 mobjCryptoService.Key = GetLegalKey();
@@ -140,7 +140,7 @@ namespace Silmoon.Secure
                 StreamReader sr = new StreamReader(cs);
                 return sr.ReadToEnd();
             }
-            catch { return ""; }
+            catch { return string.Empty; }
         }
 
         /// <summary>   

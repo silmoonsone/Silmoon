@@ -60,7 +60,7 @@ namespace Silmoon.Extension
             }
             array.Sort();
 
-            string s = "";
+            string s = StringHelper.EmptyString;
 
             foreach (var item in array) s += item + "&";
 

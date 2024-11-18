@@ -37,7 +37,7 @@ namespace Silmoon.Windows.Forms
             else
             {
                 MessageBox.Show("¥ÌŒÛ ‰»ÎOK£°", "£°", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                ConfirmTextBox.Text = "";
+                ConfirmTextBox.Text = string.Empty;
             }
             if (Ok) DialogResult = DialogResult.OK;
         }

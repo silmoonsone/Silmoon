@@ -135,7 +135,7 @@ namespace Silmoon.Extension
             // 去除输入字符串中可能存在的分隔符
             //input = input.Replace(separator, "");
 
-            string result = "";
+            string result = string.Empty;
             for (int i = 0; i < input.Length; i += groupSize)
             {
                 int length = Math.Min(groupSize, input.Length - i);
@@ -273,14 +273,14 @@ namespace Silmoon.Extension
             }
 
             // 生成用于替换的字符串
-            string replaceWith = replacement != "" ? new string(replacement[0], length) : "";
+            string replaceWith = replacement != string.Empty ? new string(replacement[0], length) : string.Empty;
 
             // 返回替换后的字符串
             return value.Substring(0, index) + replaceWith + value.Substring(index + length);
         }
         public static string RepeatString(this string value, int repeateTimes)
         {
-            string s = "";
+            string s = string.Empty;
             for (int i = 0; i < repeateTimes; i++)
             {
                 s += value;
@@ -387,7 +387,7 @@ namespace Silmoon.Extension
 
             return StateSet<Strength>.Create(Strength.Strong); //由数字、字母、符号构成的密码
         }
-        public static string Substring(this string str, int count, string suffix = "") => str.Length > count ? str.Substring(0, count) + suffix : str;
+        public static string Substring(this string str, int count, string suffix = StringHelper.EmptyString) => str.Length > count ? str.Substring(0, count) + suffix : str;
         /// <summary>
         /// 强制脱去HTML、script标签
         /// </summary>

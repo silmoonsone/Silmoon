@@ -324,7 +324,7 @@ namespace Silmoon.Windows.Forms
                         closeArgs = e;
                         e.Cancel = true;
                         ThreadHelper.ExecAsync(closeProc);
-                        this.Text = "";
+                        this.Text = string.Empty;
                         if (this.WindowState == FormWindowState.Maximized)
                             this.WindowState = FormWindowState.Normal;
                     }

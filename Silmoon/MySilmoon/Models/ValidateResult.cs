@@ -12,9 +12,9 @@ namespace Silmoon.MySilmoon.Models
         public int ExpiredVersion = -1;
         public int NotificationVersion = -1;
         public int LatestVersion = -1;
-        public string Notice = "";
-        public string UpgradeNotice = "";
-        public string ExpiredNotice = "";
+        public string Notice = string.Empty;
+        public string UpgradeNotice = string.Empty;
+        public string ExpiredNotice = string.Empty;
 
         public VersionResult()
         {

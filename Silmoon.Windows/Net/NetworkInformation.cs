@@ -330,7 +330,7 @@ namespace Silmoon.Windows.Net.NetworkInformation
         }
         private string convert_state(int state)
         {
-            string strg_state = "";
+            string strg_state = string.Empty;
             switch (state)
             {
                 case MIB_TCP_STATE_CLOSED: strg_state = "CLOSED"; break;
