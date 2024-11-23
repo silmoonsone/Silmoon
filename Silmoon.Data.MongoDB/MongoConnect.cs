@@ -1,5 +1,4 @@
 ﻿using MongoDB.Driver;
-using Silmoon.MySilmoon;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,7 +9,7 @@ namespace Silmoon.Data.MongoDB
     {
         public MongoClient Client { get; private set; }
         public MongoUrl MongoUrl { get; private set; }
-        string url { get; set; }
+        string ConnectionString { get; set; }
 
         [Obsolete]
         public MongoConnect(MongoClient mongoClient = null)
@@ -18,15 +17,15 @@ namespace Silmoon.Data.MongoDB
             if (mongoClient is null) Connect();
             else Client = mongoClient;
         }
-        public MongoConnect(string url, bool delayConnect = false)
+        public MongoConnect(string connectionString, bool delayConnect = false)
         {
-            this.url = url;
+            ConnectionString = connectionString;
             if (!delayConnect) Connect();
         }
         //void Connect() => Client = new MongoClient(MongoUrl ??= new MongoUrl(Configure.ConfigJson["mongodb"].Value<string>()));
         private void Connect()
         {
-            if (MongoUrl is null) MongoUrl = new MongoUrl(url);
+            if (MongoUrl is null) MongoUrl = new MongoUrl(ConnectionString);
             Client = new MongoClient(MongoUrl);
         }
     }

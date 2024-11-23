@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Silmoon.Models
 {
+    [Obsolete]
     public class ObservableCollectionEx<T> : ObservableCollection<T>
     {
         private bool _suppressNotification = false;

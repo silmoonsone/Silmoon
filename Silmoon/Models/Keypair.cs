@@ -12,14 +12,14 @@ namespace Silmoon.Models
         {
 
         }
-        public Keypair(string PublicKey, string PrivateKey)
+        public Keypair(string publicKey, string privateKey)
         {
-            this.PublicKey = PublicKey;
-            this.PrivateKey = PrivateKey;
+            PublicKey = publicKey;
+            PrivateKey = privateKey;
         }
-        public static Keypair Create(string PublicKey, string PrivateKey)
+        public static Keypair Create(string publicKey, string privateKey)
         {
-            return new Keypair(PublicKey, PrivateKey);
+            return new Keypair(publicKey, privateKey);
         }
     }
 }
