@@ -31,6 +31,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决�
 		sn.snk = sn.snk
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Runtime", "Silmoon.Runtime\Silmoon.Runtime.csproj", "{30D14160-5500-42CF-8EB9-94CFB36CA419}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silmoon.Runtime.Testing", "Silmoon.Runtime.Testing", "{28B5EA76-99E0-4655-9EB7-F6B8906FB036}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Runtime.Testing", "Silmoon.Runtime.Testing\Silmoon.Runtime.Testing.csproj", "{BAE25391-0B80-47BB-95F6-F338BCBDDA31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Runtime.TestingCode", "Silmoon.Runtime.TestingCode\Silmoon.Runtime.TestingCode.csproj", "{F021B357-6FD0-4356-BDB5-65CB4F9518CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,12 +81,28 @@ Global
 		{BE136316-834E-4AAE-855C-E5C6F6A3AA0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE136316-834E-4AAE-855C-E5C6F6A3AA0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE136316-834E-4AAE-855C-E5C6F6A3AA0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30D14160-5500-42CF-8EB9-94CFB36CA419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30D14160-5500-42CF-8EB9-94CFB36CA419}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30D14160-5500-42CF-8EB9-94CFB36CA419}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30D14160-5500-42CF-8EB9-94CFB36CA419}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAE25391-0B80-47BB-95F6-F338BCBDDA31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAE25391-0B80-47BB-95F6-F338BCBDDA31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAE25391-0B80-47BB-95F6-F338BCBDDA31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAE25391-0B80-47BB-95F6-F338BCBDDA31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F021B357-6FD0-4356-BDB5-65CB4F9518CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F021B357-6FD0-4356-BDB5-65CB4F9518CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F021B357-6FD0-4356-BDB5-65CB4F9518CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F021B357-6FD0-4356-BDB5-65CB4F9518CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BAE25391-0B80-47BB-95F6-F338BCBDDA31} = {28B5EA76-99E0-4655-9EB7-F6B8906FB036}
+		{F021B357-6FD0-4356-BDB5-65CB4F9518CE} = {28B5EA76-99E0-4655-9EB7-F6B8906FB036}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {18B93CD3-1A51-425B-89D1-03A0565D2E21}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal
