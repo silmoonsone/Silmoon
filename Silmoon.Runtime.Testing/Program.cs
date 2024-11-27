@@ -10,9 +10,9 @@ using Silmoon.Runtime.Testing;
 
 //byte[] assemblyBytes = File.ReadAllBytes("../../../../SourceCode.Storage/bin/Debug/net8.0/SourceCode.Storage.dll");
 string[] sourceCodeFiles = [
-        @"../../../../SourceCode.Storage/MyStorage.cs",
-        @"../../../../SourceCode.Storage/Storage.cs",
-        @"../../../../SourceCode.Storage/IStorage.cs",
+        @"../../../../Silmoon.Runtime.TestingCode/MyStorage.cs",
+        @"../../../../Silmoon.Runtime.TestingCode/Storage.cs",
+        @"../../../../Silmoon.Runtime.TestingCode/IStorage.cs",
     ];
 
 Compiler compiler = new Compiler();
@@ -34,7 +34,7 @@ else
     Console.WriteLine($"Compilation success...(size: {result.Binary.Length}, hash:{result.Binary.GetSHA256Hash().ToHexString()})");
     Console.WriteLine();
     var assemblyDefinition = AssemblyDefinition.ReadAssembly(new MemoryStream(result.Binary));
-    var typeDefinition = assemblyDefinition.MainModule.GetType("SourceCode.Storage.MyStorage");
+    var typeDefinition = assemblyDefinition.MainModule.GetType("Silmoon.Runtime.TestingCode.MyStorage");
 
     if (typeDefinition is null)
     {
@@ -60,7 +60,7 @@ else
 
         while (true)
         {
-            var context = new AssemblyLoadContextEx("MyAssembly", true);
+            var context = new AssemblyLoadContextEx("MyAssembly", null, null, true);
             using var codeStream = result.Binary.GetStream();
             var assembly = context.LoadFromStream(codeStream);
             Console.WriteLine("Load assembly binarycode ok");

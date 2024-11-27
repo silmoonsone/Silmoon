@@ -10,18 +10,29 @@ namespace Silmoon.Runtime
 {
     public class AssemblyLoadContextEx : AssemblyLoadContext
     {
-        public AssemblyLoadContextEx()
+        public event Func<AssemblyName, Assembly?> OnLoad;
+        public AssemblyLoadContextEx(string? name, IEnumerable<string> assemblyNames, IEnumerable<string> assemblyPaths, bool isCollectible = false) : base(name, isCollectible)
         {
-
-        }
-        public AssemblyLoadContextEx(string? name, bool isCollectible = false) : base(name, isCollectible)
-        {
-
+            if (assemblyNames is not null)
+            {
+                foreach (var item in assemblyNames)
+                {
+                    LoadFromAssemblyName(new AssemblyName(item));
+                }
+            }
+            if (assemblyPaths is not null)
+            {
+                foreach (var item in assemblyPaths)
+                {
+                    LoadFromAssemblyPath(new FileInfo(item).FullName);
+                }
+            }
         }
         protected override Assembly? Load(AssemblyName assemblyName)
         {
-            Console.WriteLine($"Load => " + assemblyName.FullName);
-            return base.Load(assemblyName);
+            var result = OnLoad?.Invoke(assemblyName);
+            if (result is null) return base.Load(assemblyName);
+            else return result;
         }
     }
 }
