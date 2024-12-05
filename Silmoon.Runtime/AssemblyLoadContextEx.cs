@@ -11,18 +11,18 @@ namespace Silmoon.Runtime
     public class AssemblyLoadContextEx : AssemblyLoadContext
     {
         public event Func<AssemblyName, Assembly?> OnLoad;
-        public AssemblyLoadContextEx(string? name, IEnumerable<string> assemblyNames, IEnumerable<string> assemblyPaths, bool isCollectible = false) : base(name, isCollectible)
+        public AssemblyLoadContextEx(string? name, IEnumerable<string> referrerAssemblyNames, IEnumerable<string> referrerAssemblyPaths, bool isCollectible = false) : base(name, isCollectible)
         {
-            if (assemblyNames is not null)
+            if (referrerAssemblyNames is not null)
             {
-                foreach (var item in assemblyNames)
+                foreach (var item in referrerAssemblyNames)
                 {
                     LoadFromAssemblyName(new AssemblyName(item));
                 }
             }
-            if (assemblyPaths is not null)
+            if (referrerAssemblyPaths is not null)
             {
-                foreach (var item in assemblyPaths)
+                foreach (var item in referrerAssemblyPaths)
                 {
                     LoadFromAssemblyPath(new FileInfo(item).FullName);
                 }

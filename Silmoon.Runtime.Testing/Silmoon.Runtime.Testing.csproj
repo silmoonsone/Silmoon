@@ -8,11 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Silmoon" Version="1.6.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Silmoon.Runtime\Silmoon.Runtime.csproj" />
+    <ProjectReference Include="..\Silmoon\Silmoon.csproj" />
   </ItemGroup>
 
 </Project>

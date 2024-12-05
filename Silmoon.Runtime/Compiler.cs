@@ -20,7 +20,7 @@ namespace Silmoon.Runtime
                     optimizationLevel: OptimizationLevel.Release,
                     deterministic: true);
         }
-        public async Task<CompilerResult> CompileSourceFilesAsync(string assemblyName, IEnumerable<string> filePaths, CSharpCompilationOptions compilationOptions = null, string[] additionAssemblyReferenceFileNames = null, string[] additionAssemblyNames = null, bool additionCurrentAssemblyReferences = false)
+        public async Task<CompilerResult> CompileSourceFilesAsync(string assemblyName, IEnumerable<string> filePaths, CSharpCompilationOptions compilationOptions = null, string[] referrerAssemblyPaths = null, string[] referrerAssemblyNames = null, bool isReferrerCurrentAssembly = false)
         {
             var syntaxTrees = new List<SyntaxTree>();
 
@@ -31,19 +31,18 @@ namespace Silmoon.Runtime
                 syntaxTrees.Add(syntaxTree);
             }
 
-            return CompileAsync(syntaxTrees, assemblyName, compilationOptions, additionAssemblyReferenceFileNames, additionAssemblyNames, additionCurrentAssemblyReferences);
+            return CompileAsync(syntaxTrees, assemblyName, compilationOptions, referrerAssemblyPaths, referrerAssemblyNames, isReferrerCurrentAssembly);
         }
-        public CompilerResult CompileAsync(IEnumerable<SyntaxTree> syntaxTrees, string assemblyName, CSharpCompilationOptions compilationOptions = null, string[] additionAssemblyReferenceFileNames = null, string[] additionAssemblyNames = null, bool additionCurrentAssemblyReferences = false)
+        public CompilerResult CompileAsync(IEnumerable<SyntaxTree> syntaxTrees, string assemblyName, CSharpCompilationOptions compilationOptions = null, string[] referrerAssemblyPaths = null, string[] referrerAssemblyNames = null, bool isReferrerCurrentAssembly = false)
         {
             if (compilationOptions is null) compilationOptions = GetDefaultCSharpCompilerOptions();
             List<MetadataReference> references = [];
-            if (!additionAssemblyReferenceFileNames.IsNullOrEmpty())
-                additionAssemblyReferenceFileNames.Each(fileName => references.Add(MetadataReference.CreateFromFile(fileName)));
 
-            if (!additionAssemblyNames.IsNullOrEmpty())
-                additionAssemblyNames.Each(assemblyName => references.Add(MetadataReference.CreateFromFile(Assembly.Load(assemblyName).Location)));
+            if (!referrerAssemblyPaths.IsNullOrEmpty()) referrerAssemblyPaths.Each(fileName => references.Add(MetadataReference.CreateFromFile(fileName)));
 
-            if (additionCurrentAssemblyReferences)
+            if (!referrerAssemblyNames.IsNullOrEmpty()) referrerAssemblyNames.Each(assemblyName => references.Add(MetadataReference.CreateFromFile(Assembly.Load(assemblyName).Location)));
+
+            if (isReferrerCurrentAssembly)
             {
                 var additionalReferences = AppDomain.CurrentDomain.GetAssemblies().Where(a => !a.IsDynamic && !a.Location.IsNullOrEmpty()).Select(a => MetadataReference.CreateFromFile(a.Location));
                 references.AddRange(additionalReferences);
