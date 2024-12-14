@@ -76,5 +76,22 @@ namespace Silmoon.Net.Models
         {
             return $"{Host}:{Port}";
         }
+        public override bool Equals(object obj)
+        {
+            var other = obj as HostEndPoint;
+            return Host == other.Host && Port == other.Port;
+        }
+        public override int GetHashCode()
+        {
+            return Host.GetHashCode() ^ Port.GetHashCode();
+        }
+        public static bool operator ==(HostEndPoint a, HostEndPoint b)
+        {
+            return a.Equals(b);
+        }
+        public static bool operator !=(HostEndPoint a, HostEndPoint b)
+        {
+            return !a.Equals(b);
+        }
     }
 }
