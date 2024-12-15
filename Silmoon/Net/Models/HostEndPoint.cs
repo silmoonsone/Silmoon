@@ -78,7 +78,9 @@ namespace Silmoon.Net.Models
         }
         public override bool Equals(object obj)
         {
+            if (obj is default(HostEndPoint) && this is default(HostEndPoint)) return true;
             var other = obj as HostEndPoint;
+            if (other is default(HostEndPoint)) return true;
             return Host == other.Host && Port == other.Port;
         }
         public override int GetHashCode()
