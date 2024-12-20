@@ -21,7 +21,7 @@ namespace WinFormTest
         public MongoDBTestForm()
         {
             InitializeComponent();
-            session = MongoExecuter.StartSession();
+            session = MongoExecuter.StartSession(false);
         }
 
         private void ctlStartSessionButton_Click(object sender, EventArgs e) => session.StartTransaction();

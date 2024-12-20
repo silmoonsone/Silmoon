@@ -35,11 +35,23 @@ namespace Silmoon.Data.MongoDB
 
         public void AddObject<T>(string collectionName, T obj, IClientSessionHandle sessionHandle = null)
         {
-            if (obj != null) GetCollection<T>(collectionName).InsertOne(sessionHandle, obj);
+            if (obj != null)
+            {
+                if (sessionHandle is null)
+                    GetCollection<T>(collectionName).InsertOne(obj);
+                else
+                    GetCollection<T>(collectionName).InsertOne(sessionHandle, obj);
+            }
         }
         public void AddObjects<T>(string collectionName, T[] obj, IClientSessionHandle sessionHandle = null)
         {
-            if (!obj.IsNullOrEmpty()) GetCollection<T>(collectionName).InsertMany(sessionHandle, obj);
+            if (!obj.IsNullOrEmpty())
+            {
+                if (sessionHandle is null)
+                    GetCollection<T>(collectionName).InsertMany(obj);
+                else
+                    GetCollection<T>(collectionName).InsertMany(sessionHandle, obj);
+            }
         }
 
 
@@ -114,11 +126,22 @@ namespace Silmoon.Data.MongoDB
 
         public dynamic GetGroupingResult<T, TKey, TNewResult>(string collectionName, FilterDefinition<T> filterDefinition, Expression<Func<T, TKey>> id, Expression<Func<IGrouping<TKey, T>, TNewResult>> grouping, IClientSessionHandle sessionHandle)
         {
-            var result = GetCollection<T>(collectionName).Aggregate(sessionHandle)
+            if (sessionHandle is null)
+            {
+                var result = GetCollection<T>(collectionName).Aggregate()
+                    .Match(filterDefinition)
+                    .Group(id, grouping)
+                    .ToList().ToArray();
+                return result;
+            }
+            else
+            {
+                var result = GetCollection<T>(collectionName).Aggregate(sessionHandle)
                 .Match(filterDefinition)
                 .Group(id, grouping)
                 .ToList().ToArray();
-            return result;
+                return result;
+            }
         }
 
         #region internal_functions
@@ -240,48 +263,210 @@ namespace Silmoon.Data.MongoDB
         }
         #endregion
 
-        public UpdateResult SetObject<T>(string collectionName, T obj, object findByObject, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params string[] updateObjectFieldNames) => GetCollection<T>(collectionName).UpdateOne(sessionHandle, MakeAeqFilter<T>(findByObject), MakeUpdate(obj, updateObjectFieldNames), new UpdateOptions() { IsUpsert = isUpsert });
-        public UpdateResult SetObject<T>(string collectionName, T obj, object findByObject, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateExpressions) => GetCollection<T>(collectionName).UpdateOne(sessionHandle, MakeAeqFilter<T>(findByObject), MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
-        public UpdateResult SetObject<T>(string collectionName, T obj, FilterDefinition<T> filterDefinition, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params string[] updateObjectFieldNames) => GetCollection<T>(collectionName).UpdateOne(sessionHandle, filterDefinition, MakeUpdate(obj, updateObjectFieldNames), new UpdateOptions() { IsUpsert = isUpsert });
-        public UpdateResult SetObject<T>(string collectionName, T obj, FilterDefinition<T> filterDefinition, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateExpressions) => GetCollection<T>(collectionName).UpdateOne(sessionHandle, filterDefinition, MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
-        public UpdateResult SetObject<T>(string collectionName, T obj, Expression<Func<T, bool>> filterFunc, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateExpressions) => GetCollection<T>(collectionName).UpdateOne(sessionHandle, (FilterDefinition<T>)filterFunc, MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
+        public UpdateResult SetObject<T>(string collectionName, T obj, object findByObject, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params string[] updateObjectFieldNames)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).UpdateOne(MakeAeqFilter<T>(findByObject), MakeUpdate(obj, updateObjectFieldNames), new UpdateOptions() { IsUpsert = isUpsert });
+            else
+                return GetCollection<T>(collectionName).UpdateOne(sessionHandle, MakeAeqFilter<T>(findByObject), MakeUpdate(obj, updateObjectFieldNames), new UpdateOptions() { IsUpsert = isUpsert });
+        }
 
-        public UpdateResult SetObjects<T>(string collectionName, T obj, object findByObject, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params string[] updateObjectFieldNames) => GetCollection<T>(collectionName).UpdateMany(sessionHandle, MakeAeqFilter<T>(findByObject), MakeUpdate(obj, updateObjectFieldNames), new UpdateOptions() { IsUpsert = isUpsert });
-        public UpdateResult SetObjects<T>(string collectionName, T obj, object findByObject, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateExpressions) => GetCollection<T>(collectionName).UpdateMany(sessionHandle, MakeAeqFilter<T>(findByObject), MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
-        public UpdateResult SetObjects<T>(string collectionName, T obj, FilterDefinition<T> filterDefinition, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params string[] updateObjectFieldNames) => GetCollection<T>(collectionName).UpdateMany(sessionHandle, filterDefinition, MakeUpdate(obj, updateObjectFieldNames), new UpdateOptions() { IsUpsert = isUpsert });
-        public UpdateResult SetObjects<T>(string collectionName, T obj, FilterDefinition<T> filterDefinition, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateExpressions) => GetCollection<T>(collectionName).UpdateMany(sessionHandle, filterDefinition, MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
-        public UpdateResult SetObjects<T>(string collectionName, T obj, Expression<Func<T, bool>> filterFunc, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateExpressions) => GetCollection<T>(collectionName).UpdateMany(sessionHandle, (FilterDefinition<T>)filterFunc, MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
+        public UpdateResult SetObject<T>(string collectionName, T obj, object findByObject, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateExpressions)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).UpdateOne(MakeAeqFilter<T>(findByObject), MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
+            else
+                return GetCollection<T>(collectionName).UpdateOne(sessionHandle, MakeAeqFilter<T>(findByObject), MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
+        }
 
+        public UpdateResult SetObject<T>(string collectionName, T obj, FilterDefinition<T> filterDefinition, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params string[] updateObjectFieldNames)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).UpdateOne(filterDefinition, MakeUpdate(obj, updateObjectFieldNames), new UpdateOptions() { IsUpsert = isUpsert });
+            else
+                return GetCollection<T>(collectionName).UpdateOne(sessionHandle, filterDefinition, MakeUpdate(obj, updateObjectFieldNames), new UpdateOptions() { IsUpsert = isUpsert });
+        }
 
-        public ReplaceOneResult ReplaceObject<T>(string collectionName, T obj, object findByObject, bool isUpsert = false, IClientSessionHandle sessionHandle = null) => GetCollection<T>(collectionName).ReplaceOne(sessionHandle, MakeAeqFilter<T>(findByObject), obj, new ReplaceOptions() { IsUpsert = isUpsert });
-        public ReplaceOneResult ReplaceObject<T>(string collectionName, T obj, FilterDefinition<T> filterDefinition, bool isUpsert = false, IClientSessionHandle sessionHandle = null) => GetCollection<T>(collectionName).ReplaceOne(sessionHandle, filterDefinition, obj, new ReplaceOptions() { IsUpsert = isUpsert });
+        public UpdateResult SetObject<T>(string collectionName, T obj, FilterDefinition<T> filterDefinition, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateExpressions)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).UpdateOne(filterDefinition, MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
+            else
+                return GetCollection<T>(collectionName).UpdateOne(sessionHandle, filterDefinition, MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
+        }
 
-        public DeleteResult DeleteObject<T>(string collectionName, object findByObject, IClientSessionHandle sessionHandle = null) => GetCollection<T>(collectionName).DeleteOne(sessionHandle, MakeAeqFilter<T>(findByObject));
-        public DeleteResult DeleteObject<T>(string collectionName, FilterDefinition<T> filterDefinition, IClientSessionHandle sessionHandle = null) => GetCollection<T>(collectionName).DeleteOne(sessionHandle, filterDefinition);
-        public DeleteResult DeleteObject<T>(string collectionName, Expression<Func<T, bool>> filterFunc, IClientSessionHandle sessionHandle = null) => GetCollection<T>(collectionName).DeleteOne(sessionHandle, filterFunc);
-        public DeleteResult DeleteObjects<T>(string collectionName, object findByObject, IClientSessionHandle sessionHandle = null) => GetCollection<T>(collectionName).DeleteMany(sessionHandle, MakeAeqFilter<T>(findByObject));
-        public DeleteResult DeleteObjects<T>(string collectionName, FilterDefinition<T> filterDefinition, IClientSessionHandle sessionHandle = null) => GetCollection<T>(collectionName).DeleteMany(sessionHandle, filterDefinition);
-        public DeleteResult DeleteObjects<T>(string collectionName, Expression<Func<T, bool>> filterFunc, IClientSessionHandle sessionHandle = null) => GetCollection<T>(collectionName).DeleteMany(sessionHandle, filterFunc);
+        public UpdateResult SetObject<T>(string collectionName, T obj, Expression<Func<T, bool>> filterFunc, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateExpressions)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).UpdateOne((FilterDefinition<T>)filterFunc, MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
+            else
+                return GetCollection<T>(collectionName).UpdateOne(sessionHandle, (FilterDefinition<T>)filterFunc, MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
+        }
 
-        public int Count<T>(string collectionName, object findByObject, IClientSessionHandle sessionHandle = null) => (int)GetCollection<T>(collectionName).CountDocuments(sessionHandle, MakeAeqFilter<T>(findByObject));
+        public UpdateResult SetObjects<T>(string collectionName, T obj, object findByObject, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params string[] updateObjectFieldNames)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).UpdateMany(MakeAeqFilter<T>(findByObject), MakeUpdate(obj, updateObjectFieldNames), new UpdateOptions() { IsUpsert = isUpsert });
+            else
+                return GetCollection<T>(collectionName).UpdateMany(sessionHandle, MakeAeqFilter<T>(findByObject), MakeUpdate(obj, updateObjectFieldNames), new UpdateOptions() { IsUpsert = isUpsert });
+        }
+
+        public UpdateResult SetObjects<T>(string collectionName, T obj, object findByObject, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateExpressions)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).UpdateMany(MakeAeqFilter<T>(findByObject), MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
+            else
+                return GetCollection<T>(collectionName).UpdateMany(sessionHandle, MakeAeqFilter<T>(findByObject), MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
+        }
+
+        public UpdateResult SetObjects<T>(string collectionName, T obj, FilterDefinition<T> filterDefinition, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params string[] updateObjectFieldNames)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).UpdateMany(filterDefinition, MakeUpdate(obj, updateObjectFieldNames), new UpdateOptions() { IsUpsert = isUpsert });
+            else
+                return GetCollection<T>(collectionName).UpdateMany(sessionHandle, filterDefinition, MakeUpdate(obj, updateObjectFieldNames), new UpdateOptions() { IsUpsert = isUpsert });
+        }
+
+        public UpdateResult SetObjects<T>(string collectionName, T obj, FilterDefinition<T> filterDefinition, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateExpressions)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).UpdateMany(filterDefinition, MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
+            else
+                return GetCollection<T>(collectionName).UpdateMany(sessionHandle, filterDefinition, MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
+        }
+
+        public UpdateResult SetObjects<T>(string collectionName, T obj, Expression<Func<T, bool>> filterFunc, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateExpressions)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).UpdateMany((FilterDefinition<T>)filterFunc, MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
+            else
+                return GetCollection<T>(collectionName).UpdateMany(sessionHandle, (FilterDefinition<T>)filterFunc, MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
+        }
+
+        public ReplaceOneResult ReplaceObject<T>(string collectionName, T obj, object findByObject, bool isUpsert = false, IClientSessionHandle sessionHandle = null)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).ReplaceOne(MakeAeqFilter<T>(findByObject), obj, new ReplaceOptions() { IsUpsert = isUpsert });
+            else
+                return GetCollection<T>(collectionName).ReplaceOne(sessionHandle, MakeAeqFilter<T>(findByObject), obj, new ReplaceOptions() { IsUpsert = isUpsert });
+        }
+
+        public ReplaceOneResult ReplaceObject<T>(string collectionName, T obj, FilterDefinition<T> filterDefinition, bool isUpsert = false, IClientSessionHandle sessionHandle = null)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).ReplaceOne(filterDefinition, obj, new ReplaceOptions() { IsUpsert = isUpsert });
+            else
+                return GetCollection<T>(collectionName).ReplaceOne(sessionHandle, filterDefinition, obj, new ReplaceOptions() { IsUpsert = isUpsert });
+        }
+
+        public DeleteResult DeleteObject<T>(string collectionName, object findByObject, IClientSessionHandle sessionHandle = null)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).DeleteOne(MakeAeqFilter<T>(findByObject));
+            else
+                return GetCollection<T>(collectionName).DeleteOne(sessionHandle, MakeAeqFilter<T>(findByObject));
+        }
+
+        public DeleteResult DeleteObject<T>(string collectionName, FilterDefinition<T> filterDefinition, IClientSessionHandle sessionHandle = null)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).DeleteOne(filterDefinition);
+            else
+                return GetCollection<T>(collectionName).DeleteOne(sessionHandle, filterDefinition);
+        }
+
+        public DeleteResult DeleteObject<T>(string collectionName, Expression<Func<T, bool>> filterFunc, IClientSessionHandle sessionHandle = null)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).DeleteOne(filterFunc);
+            else
+                return GetCollection<T>(collectionName).DeleteOne(sessionHandle, filterFunc);
+        }
+
+        public DeleteResult DeleteObjects<T>(string collectionName, object findByObject, IClientSessionHandle sessionHandle = null)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).DeleteMany(MakeAeqFilter<T>(findByObject));
+            else
+                return GetCollection<T>(collectionName).DeleteMany(sessionHandle, MakeAeqFilter<T>(findByObject));
+        }
+
+        public DeleteResult DeleteObjects<T>(string collectionName, FilterDefinition<T> filterDefinition, IClientSessionHandle sessionHandle = null)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).DeleteMany(filterDefinition);
+            else
+                return GetCollection<T>(collectionName).DeleteMany(sessionHandle, filterDefinition);
+        }
+
+        public DeleteResult DeleteObjects<T>(string collectionName, Expression<Func<T, bool>> filterFunc, IClientSessionHandle sessionHandle = null)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).DeleteMany(filterFunc);
+            else
+                return GetCollection<T>(collectionName).DeleteMany(sessionHandle, filterFunc);
+        }
+
+        public int Count<T>(string collectionName, object findByObject, IClientSessionHandle sessionHandle = null)
+        {
+            if (sessionHandle is null)
+                return (int)GetCollection<T>(collectionName).CountDocuments(MakeAeqFilter<T>(findByObject));
+            else
+                return (int)GetCollection<T>(collectionName).CountDocuments(sessionHandle, MakeAeqFilter<T>(findByObject));
+        }
+
         [Obsolete]
-        public int Count<T>(string collectionName, ExpandoObject findByObject, IClientSessionHandle sessionHandle = null) => (int)GetCollection<T>(collectionName).CountDocuments(sessionHandle, MakeAeqFilter<T>(findByObject));
-        public int Count<T>(string collectionName, Expression<Func<T, bool>> filterFunc, IClientSessionHandle sessionHandle = null) => (int)GetCollection<T>(collectionName).CountDocuments(sessionHandle, filterFunc);
-        public int Count<T>(string collectionName, FilterDefinition<T> filterDefinition, IClientSessionHandle sessionHandle = null) => (int)GetCollection<T>(collectionName).CountDocuments(sessionHandle, filterDefinition);
-        public bool Exists<T>(string collectionName, Expression<Func<T, bool>> filterFunc, IClientSessionHandle sessionHandle = null) => GetCollection<T>(collectionName).Find(sessionHandle, filterFunc).Any();
+        public int Count<T>(string collectionName, ExpandoObject findByObject, IClientSessionHandle sessionHandle = null)
+        {
+            if (sessionHandle is null)
+                return (int)GetCollection<T>(collectionName).CountDocuments(MakeAeqFilter<T>(findByObject));
+            else
+                return (int)GetCollection<T>(collectionName).CountDocuments(sessionHandle, MakeAeqFilter<T>(findByObject));
+        }
+
+        public int Count<T>(string collectionName, Expression<Func<T, bool>> filterFunc, IClientSessionHandle sessionHandle = null)
+        {
+            if (sessionHandle is null)
+                return (int)GetCollection<T>(collectionName).CountDocuments(filterFunc);
+            else
+                return (int)GetCollection<T>(collectionName).CountDocuments(sessionHandle, filterFunc);
+        }
+
+        public int Count<T>(string collectionName, FilterDefinition<T> filterDefinition, IClientSessionHandle sessionHandle = null)
+        {
+            if (sessionHandle is null)
+                return (int)GetCollection<T>(collectionName).CountDocuments(filterDefinition);
+            else
+                return (int)GetCollection<T>(collectionName).CountDocuments(sessionHandle, filterDefinition);
+        }
+
+        public bool Exists<T>(string collectionName, Expression<Func<T, bool>> filterFunc, IClientSessionHandle sessionHandle = null)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).Find(filterFunc).Any();
+            else
+                return GetCollection<T>(collectionName).Find(sessionHandle, filterFunc).Any();
+        }
 
         public string CreateIndex<T>(string collectionName, Expression<Func<T, object>> keyFunc, bool isUnique = false, IClientSessionHandle sessionHandle = null)
         {
-            var indexModel = new CreateIndexModel<T>(Builders<T>.IndexKeys.Ascending(keyFunc), new CreateIndexOptions() { Unique = isUnique });
-            return GetCollection<T>(collectionName).Indexes.CreateOne(sessionHandle, indexModel);
+            if (sessionHandle is null)
+            {
+                var indexModel = new CreateIndexModel<T>(Builders<T>.IndexKeys.Ascending(keyFunc), new CreateIndexOptions() { Unique = isUnique });
+                return GetCollection<T>(collectionName).Indexes.CreateOne(indexModel);
+            }
+            else
+            {
+                var indexModel = new CreateIndexModel<T>(Builders<T>.IndexKeys.Ascending(keyFunc), new CreateIndexOptions() { Unique = isUnique });
+                return GetCollection<T>(collectionName).Indexes.CreateOne(sessionHandle, indexModel);
+
+            }
         }
 
         UpdateDefinition<T> MakeUpdate<T>(T obj, params string[] updateObjectFieldNames)
         {
             var paras = obj.GetProperties();
-
             var updateBuilder = Builders<T>.Update;
-
             UpdateDefinition<T> update = null;
 
             foreach (var item in paras)
@@ -290,8 +475,7 @@ namespace Silmoon.Data.MongoDB
                 {
                     if (update is null)
                         update = updateBuilder.Set(item.Key, item.Value.GetValue(obj));
-                    else
-                        update = update.Set(item.Key, item.Value.GetValue(obj));
+                    else update = update.Set(item.Key, item.Value.GetValue(obj));
                 }
             }
 
@@ -304,22 +488,13 @@ namespace Silmoon.Data.MongoDB
             {
                 // 解析表达式，获取字段的名称和值
                 var memberExpression = expr.Body as MemberExpression;
-                if (memberExpression == null && expr.Body is UnaryExpression unaryExpression)
-                {
-                    memberExpression = unaryExpression.Operand as MemberExpression;
-                }
 
-                if (memberExpression == null)
-                {
-                    throw new ArgumentException("无效的表达式。只支持属性表达式。");
-                }
+                if (memberExpression == null && expr.Body is UnaryExpression unaryExpression) memberExpression = unaryExpression.Operand as MemberExpression;
+                if (memberExpression == null) throw new ArgumentException("无效的表达式。只支持属性表达式。");
 
                 var propertyName = memberExpression.Member.Name;
                 var propertyInfo = memberExpression.Member as PropertyInfo;
-                if (propertyInfo == null)
-                {
-                    throw new ArgumentException($"表达式指向的成员'{propertyName}'不是一个属性。");
-                }
+                if (propertyInfo == null) throw new ArgumentException($"表达式指向的成员'{propertyName}'不是一个属性。");
 
                 var propertyValue = propertyInfo.GetValue(obj);
                 return Builders<T>.Update.Set(propertyName, propertyValue);
@@ -354,7 +529,13 @@ namespace Silmoon.Data.MongoDB
         public IMongoCollection<T> GetCollection<T>(string collectionName) => Database.GetCollection<T>(collectionName);
         public IQueryable<T> GetQueryable<T>(string collectionName) => GetCollection<T>(collectionName).AsQueryable();
 
-        public IClientSessionHandle StartSession() => Connect.Client.StartSession();
+        public IClientSessionHandle StartSession(bool startTranscation)
+        {
+            var sessionHandle = Connect.Client.StartSession();
+            if (startTranscation) sessionHandle.StartTransaction();
+            return sessionHandle;
+        }
+
         public void EndSession(IClientSessionHandle session) => session.Dispose();
     }
 }
