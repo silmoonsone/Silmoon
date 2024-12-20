@@ -8,12 +8,15 @@ using System.Web;
 using Microsoft.Data.SqlClient;
 using System.Transactions;
 using IsolationLevel = System.Data.IsolationLevel;
+using System.Reflection;
 
 namespace Silmoon.Data.SqlServer
 {
     public class SqlServerOperate : IDisposable
     {
-        string conStr;
+        private SqlTransaction SqlTransaction { get; set; }
+
+        string ConnectionString { get; set; }
         int selectCommandTimeout { get; set; } = 30;
 
         /// <summary>
@@ -24,13 +27,8 @@ namespace Silmoon.Data.SqlServer
             get { return selectCommandTimeout; }
             set { selectCommandTimeout = value; }
         }
-        public string Connectionstring
-        {
-            get { return conStr; }
-            set { conStr = value; }
-        }
-        public SqlConnection Connection { get; }
-        public SqlTransaction Transaction { get; private set; }
+
+        public SqlConnection Connection { get; private set; }
 
 
         /// <summary>
@@ -57,7 +55,7 @@ namespace Silmoon.Data.SqlServer
         public SqlServerOperate(string connectionString)
         {
             Connection = new SqlConnection();
-            conStr = connectionString;
+            ConnectionString = connectionString;
         }
         /// <summary>
         /// 创建MS SQL数据源的实例
@@ -74,13 +72,13 @@ namespace Silmoon.Data.SqlServer
         /// </summary>
         /// <param name="sqlCommandText">SQL命令</param>
         /// <returns></returns>
-        public SqlDataReader GetDataReader(string sqlCommandText) => new SqlCommand(sqlCommandText, Connection, Transaction).ExecuteReader();
+        public SqlDataReader GetDataReader(string sqlCommandText) => new SqlCommand(sqlCommandText, Connection, SqlTransaction).ExecuteReader();
         /// <summary>
         /// 返回一个SqlCommand对象
         /// </summary>
         /// <param name="sqlCommandText">SQL命令</param>
         /// <returns></returns>
-        public SqlCommand GetDataCommand(string sqlCommandText) => new SqlCommand(sqlCommandText, Connection, Transaction);
+        public SqlCommand GetDataCommand(string sqlCommandText) => new SqlCommand(sqlCommandText, Connection, SqlTransaction);
         /// <summary>
         /// 获取一个数据适配器。
         /// </summary>
@@ -102,13 +100,6 @@ namespace Silmoon.Data.SqlServer
             }
         }
 
-        public SqlAccessTransaction BeginTransaction(bool setCurrentTransaction = true, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted) => new SqlAccessTransaction(this, setCurrentTransaction, isolationLevel);
-        public void CommitTransaction(SqlAccessTransaction transaction) => transaction.Transaction.Commit();
-        public void RollbackTransaction(SqlAccessTransaction transaction) => transaction.Transaction.Rollback();
-        public void SetCurrentTranscation(SqlTransaction transaction) => Transaction = transaction;
-
-
-
 
         /// <summary>
         /// 执行一个没有返回或不需要返回的SQL，并且返回响应行数
@@ -117,7 +108,7 @@ namespace Silmoon.Data.SqlServer
         /// <returns></returns>
         public int ExecuteNonQuery(string sqlCommandText)
         {
-            using (SqlCommand sqlCommand = new SqlCommand(sqlCommandText, Connection))
+            using (var sqlCommand = GetDataCommand(sqlCommandText))
             {
                 return sqlCommand.ExecuteNonQuery();
             }
@@ -129,11 +120,10 @@ namespace Silmoon.Data.SqlServer
         /// <returns></returns>
         public int GetRecordCount(string sqlCommandText)
         {
-            using (SqlDataReader sqlDataReader = GetDataReader(sqlCommandText))
+            using (var cmd = GetDataCommand(sqlCommandText))
             {
-                int result = 0;
-                while (sqlDataReader.Read()) result++;
-                return result;
+                var result = cmd.ExecuteScalar();
+                return Convert.ToInt32(result);
             }
         }
 
@@ -229,7 +219,31 @@ namespace Silmoon.Data.SqlServer
             }
         }
 
+        public SqlTransaction BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
+        {
+            SqlTransaction = Connection.BeginTransaction(isolationLevel);
+            return SqlTransaction;
+        }
+        public void CommitTransaction()
+        {
+            SqlTransaction.Commit();
+            SqlTransaction.Dispose();
+            SqlTransaction = null;
+        }
+        public void RollbackTransaction()
+        {
+            SqlTransaction.Rollback();
+            SqlTransaction.Dispose();
+            SqlTransaction = null;
+        }
 
-        public void Dispose() => Connection.Dispose();
+
+        public void Dispose()
+        {
+            SqlTransaction?.Dispose();
+            SqlTransaction = null;
+            Connection.Dispose();
+            Connection = null;
+        }
     }
 }

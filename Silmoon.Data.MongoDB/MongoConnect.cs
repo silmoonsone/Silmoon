@@ -11,12 +11,6 @@ namespace Silmoon.Data.MongoDB
         public MongoUrl MongoUrl { get; private set; }
         string ConnectionString { get; set; }
 
-        [Obsolete]
-        public MongoConnect(MongoClient mongoClient = null)
-        {
-            if (mongoClient is null) Connect();
-            else Client = mongoClient;
-        }
         public MongoConnect(string connectionString, bool delayConnect = false)
         {
             ConnectionString = connectionString;

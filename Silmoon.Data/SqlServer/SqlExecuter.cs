@@ -68,13 +68,15 @@ namespace Silmoon.Data.SqlServer
             makeOffset(ref sql, ref options);
 
 
-            var cmd = SqlServerOperate.GetDataCommand(sql);
-            cmd.AddParameters(fieldInfos);
-            using (var reader = cmd.ExecuteReader())
+            using (var cmd = SqlServerOperate.GetDataCommand(sql))
             {
-                if (!reader.Read()) return new SqlExecuteResult<T>(reader.RecordsAffected, sql, default);
-                var obj = reader.DeserializeObject(new T(), options.ExcludedField);
-                return new SqlExecuteResult<T>(reader.RecordsAffected, sql, obj);
+                cmd.AddParameters(fieldInfos);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (!reader.Read()) return new SqlExecuteResult<T>(reader.RecordsAffected, sql, default);
+                    var obj = reader.DeserializeObject(new T(), options.ExcludedField);
+                    return new SqlExecuteResult<T>(reader.RecordsAffected, sql, obj);
+                }
             }
         }
         public SqlExecuteResult<T> GetObject<T>(string tableName, ExpandoObject whereObject, SqlQueryOptions options = null) where T : new()
@@ -96,13 +98,15 @@ namespace Silmoon.Data.SqlServer
             makeOffset(ref sql, ref options);
 
 
-            var cmd = SqlServerOperate.GetDataCommand(sql);
-            cmd.AddParameters(fieldInfos);
-            using (var reader = cmd.ExecuteReader())
+            using (var cmd = SqlServerOperate.GetDataCommand(sql))
             {
-                if (!reader.Read()) return new SqlExecuteResult<T>(reader.RecordsAffected, sql, default);
-                var obj = reader.DeserializeObject(new T(), options.ExcludedField);
-                return new SqlExecuteResult<T>(reader.RecordsAffected, sql, obj);
+                cmd.AddParameters(fieldInfos);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (!reader.Read()) return new SqlExecuteResult<T>(reader.RecordsAffected, sql, default);
+                    var obj = reader.DeserializeObject(new T(), options.ExcludedField);
+                    return new SqlExecuteResult<T>(reader.RecordsAffected, sql, obj);
+                }
             }
         }
         public SqlExecuteResult<T> GetObjectWithWhere<T>(string tableName, string whereString, object whereObject = null, SqlQueryOptions options = null) where T : new()
@@ -126,14 +130,15 @@ namespace Silmoon.Data.SqlServer
             makeOrderBy(ref sql, ref tableName, ref options);
             makeOffset(ref sql, ref options);
 
-            var cmd = SqlServerOperate.GetDataCommand(sql);
-            cmd.AddParameters(fieldInfos);
-
-            using (var reader = cmd.ExecuteReader())
+            using (var cmd = SqlServerOperate.GetDataCommand(sql))
             {
-                if (!reader.Read()) return new SqlExecuteResult<T>(reader.RecordsAffected, sql, default);
-                var obj = reader.DeserializeObject(new T(), options.ExcludedField);
-                return new SqlExecuteResult<T>(reader.RecordsAffected, sql, obj);
+                cmd.AddParameters(fieldInfos);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (!reader.Read()) return new SqlExecuteResult<T>(reader.RecordsAffected, sql, default);
+                    var obj = reader.DeserializeObject(new T(), options.ExcludedField);
+                    return new SqlExecuteResult<T>(reader.RecordsAffected, sql, obj);
+                }
             }
         }
 
@@ -155,15 +160,15 @@ namespace Silmoon.Data.SqlServer
             makeOrderBy(ref sql, ref tableName, ref options);
             makeOffset(ref sql, ref options);
 
-            var cmd = SqlServerOperate.GetDataCommand(sql);
-            cmd.AddParameters(fieldInfos);
-
-
-            using (var reader = cmd.ExecuteReader())
+            using (var cmd = SqlServerOperate.GetDataCommand(sql))
             {
-                //if (!reader.Read()) return default;
-                var obj = reader.DeserializeObjects<T>(options.ExcludedField);
-                return new SqlExecuteResults<T[]>(reader.RecordsAffected, sql, obj);
+                cmd.AddParameters(fieldInfos);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    //if (!reader.Read()) return default;
+                    var obj = reader.DeserializeObjects<T>(options.ExcludedField);
+                    return new SqlExecuteResults<T[]>(reader.RecordsAffected, sql, obj);
+                }
             }
         }
         public SqlExecuteResults<T[]> GetObjects<T>(string tableName, ExpandoObject whereObject = null, SqlQueryOptions options = null) where T : new()
@@ -184,15 +189,15 @@ namespace Silmoon.Data.SqlServer
             makeOrderBy(ref sql, ref tableName, ref options);
             makeOffset(ref sql, ref options);
 
-            var cmd = SqlServerOperate.GetDataCommand(sql);
-            cmd.AddParameters(fieldInfos);
-
-
-            using (var reader = cmd.ExecuteReader())
+            using (var cmd = SqlServerOperate.GetDataCommand(sql))
             {
-                //if (!reader.Read()) return default;
-                var obj = reader.DeserializeObjects<T>(options.ExcludedField);
-                return new SqlExecuteResults<T[]>(reader.RecordsAffected, sql, obj);
+                cmd.AddParameters(fieldInfos);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    //if (!reader.Read()) return default;
+                    var obj = reader.DeserializeObjects<T>(options.ExcludedField);
+                    return new SqlExecuteResults<T[]>(reader.RecordsAffected, sql, obj);
+                }
             }
         }
         public SqlExecuteResults<T[]> GetObjectsWithWhere<T>(string tableName, string whereString = null, object whereObject = null, SqlQueryOptions options = null) where T : new()
@@ -217,14 +222,15 @@ namespace Silmoon.Data.SqlServer
             makeOrderBy(ref sql, ref tableName, ref options);
             makeOffset(ref sql, ref options);
 
-            var cmd = SqlServerOperate.GetDataCommand(sql);
-            cmd.AddParameters(fieldInfos);
-
-            using (var reader = cmd.ExecuteReader())
+            using (var cmd = SqlServerOperate.GetDataCommand(sql))
             {
-                //if (!reader.Read()) return default;
-                var obj = reader.DeserializeObjects<T>(options.ExcludedField);
-                return new SqlExecuteResults<T[]>(reader.RecordsAffected, sql, obj);
+                cmd.AddParameters(fieldInfos);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    //if (!reader.Read()) return default;
+                    var obj = reader.DeserializeObjects<T>(options.ExcludedField);
+                    return new SqlExecuteResults<T[]>(reader.RecordsAffected, sql, obj);
+                }
             }
         }
 
@@ -261,13 +267,14 @@ namespace Silmoon.Data.SqlServer
                 makeWhereString(ref sql, ref tableName, ref fieldInfos);
             else sql += " WHERE " + whereString;
 
-            var cmd = SqlServerOperate.GetDataCommand(sql);
+            using (var cmd = SqlServerOperate.GetDataCommand(sql))
+            {
+                cmd.AddParameters(getFieldInfos(obj, false), setNames);
+                cmd.AddParameters(fieldInfos);
 
-            cmd.AddParameters(getFieldInfos(obj, false), setNames);
-            cmd.AddParameters(fieldInfos);
-
-            int returnLine = cmd.ExecuteNonQuery();
-            return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = returnLine };
+                int returnLine = cmd.ExecuteNonQuery();
+                return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = returnLine };
+            }
         }
         SqlExecuteResult SetObjectInternal<T>(string tableName, T obj, string whereString, object whereObject, params Expression<Func<T, object>>[] updateExpressions)
         {
@@ -295,100 +302,97 @@ namespace Silmoon.Data.SqlServer
                 makeWhereString(ref sql, ref tableName, ref fieldInfos);
             else sql += " WHERE " + whereString;
 
-            var cmd = SqlServerOperate.GetDataCommand(sql);
+            using (var cmd = SqlServerOperate.GetDataCommand(sql))
+            {
+                cmd.AddParameters(getFieldInfos(obj, false), updateFieldNames);
+                cmd.AddParameters(fieldInfos);
 
-            cmd.AddParameters(getFieldInfos(obj, false), updateFieldNames);
-            cmd.AddParameters(fieldInfos);
-
-            int returnLine = cmd.ExecuteNonQuery();
-            return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = returnLine };
+                int returnLine = cmd.ExecuteNonQuery();
+                return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = returnLine };
+            }
         }
 
         public SqlExecuteResult DeleteObject(string tableName, object whereObject)
         {
             string sql = $"DELETE [{tableName}]";
-
             var fieldInfos = getFieldInfos(whereObject, true);
-
             makeWhereString(ref sql, ref tableName, ref fieldInfos);
 
-            var cmd = SqlServerOperate.GetDataCommand(sql);
-            cmd.AddParameters(fieldInfos);
-            int i = cmd.ExecuteNonQuery();
-            return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
+            using (var cmd = SqlServerOperate.GetDataCommand(sql))
+            {
+                cmd.AddParameters(fieldInfos);
+                int i = cmd.ExecuteNonQuery();
+                return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
+            }
         }
         public SqlExecuteResult DeleteObject(string tableName, ExpandoObject whereObject)
         {
             string sql = $"DELETE [{tableName}]";
-
             var fieldInfos = getFieldInfos(whereObject, true);
-
             makeWhereString(ref sql, ref tableName, ref fieldInfos);
 
-            var cmd = SqlServerOperate.GetDataCommand(sql);
-            cmd.AddParameters(fieldInfos);
-            int i = cmd.ExecuteNonQuery();
-            return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
+            using (var cmd = SqlServerOperate.GetDataCommand(sql))
+            {
+                cmd.AddParameters(fieldInfos);
+                int i = cmd.ExecuteNonQuery();
+                return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
+            }
         }
         public SqlExecuteResult DeleteObject(string tableName, string whereString, object whereObject = null)
         {
             string sql = $"DELETE [{tableName}]";
-
             var fieldInfos = getFieldInfos(whereObject, true);
-
             if (!string.IsNullOrEmpty(whereString))
             {
                 sql += " WHERE " + whereString;
             }
 
-            var cmd = SqlServerOperate.GetDataCommand(sql);
-            cmd.AddParameters(fieldInfos);
-
-            int i = cmd.ExecuteNonQuery();
-            return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
+            using (var cmd = SqlServerOperate.GetDataCommand(sql))
+            {
+                cmd.AddParameters(fieldInfos);
+                int i = cmd.ExecuteNonQuery();
+                return new SqlExecuteResult() { ExecuteSqlString = sql, ResponseRows = i };
+            }
         }
 
         public int Count(string tableName, object whereObject)
         {
-            string sql = $"SELECT COUNT(id) FROM [{tableName}]";
-
+            string sql = $"SELECT COUNT(*) FROM [{tableName}]";
             var fieldInfos = getFieldInfos(whereObject, true);
-
             makeWhereString(ref sql, ref tableName, ref fieldInfos);
 
-            var cmd = SqlServerOperate.GetDataCommand(sql);
-            cmd.AddParameters(fieldInfos);
-
-            var result = cmd.ExecuteScalar();
-            return Convert.ToInt32(result);
+            using (var cmd = SqlServerOperate.GetDataCommand(sql))
+            {
+                cmd.AddParameters(fieldInfos);
+                var result = cmd.ExecuteScalar();
+                return Convert.ToInt32(result);
+            }
         }
         public int Count(string tableName, ExpandoObject whereObject)
         {
-            string sql = $"SELECT COUNT(id) FROM [{tableName}]";
-
+            string sql = $"SELECT COUNT(*) FROM [{tableName}]";
             var fieldInfos = getFieldInfos(whereObject, true);
-
             makeWhereString(ref sql, ref tableName, ref fieldInfos);
 
-            var cmd = SqlServerOperate.GetDataCommand(sql);
-            cmd.AddParameters(fieldInfos);
-
-            var result = cmd.ExecuteScalar();
-            return Convert.ToInt32(result);
+            using (var cmd = SqlServerOperate.GetDataCommand(sql))
+            {
+                cmd.AddParameters(fieldInfos);
+                var result = cmd.ExecuteScalar();
+                return Convert.ToInt32(result);
+            }
         }
         public int Count(string tableName, string whereString, object whereObject = null)
         {
-            string sql = $"SELECT COUNT(id) FROM [{tableName}]";
-
+            string sql = $"SELECT COUNT(*) FROM [{tableName}]";
             var fieldInfos = getFieldInfos(whereObject, true);
-
             if (!string.IsNullOrEmpty(whereString)) sql += " WHERE " + whereString;
 
-            var cmd = SqlServerOperate.GetDataCommand(sql);
-            cmd.AddParameters(fieldInfos);
-
-            var result = cmd.ExecuteScalar();
-            return Convert.ToInt32(result);
+            using (var cmd = SqlServerOperate.GetDataCommand(sql))
+            {
+                cmd.AddParameters(fieldInfos);
+                var result = cmd.ExecuteScalar();
+                return Convert.ToInt32(result);
+            }
         }
 
         public SqlExecuteResult<bool> CreateTable<T>(string tableName)
@@ -474,18 +478,15 @@ namespace Silmoon.Data.SqlServer
         }
         public SqlExecuteResult<bool> IsTableExists(string tableName)
         {
-            var sql = $"SELECT TOP 1 * FROM [SYSOBJECTS] WHERE id = OBJECT_ID(N'{tableName}')";
+            var sql = $"SELECT TOP 1 COUNT(*) FROM [SYSOBJECTS] WHERE id = OBJECT_ID(N'{tableName}')";
             var result = SqlServerOperate.GetRecordCount(sql);
-
             return new SqlExecuteResult<bool>() { Result = result != 0, ExecuteSqlString = sql, ResponseRows = result };
         }
 
 
-        public SqlAccessTransaction BeginTransaction(bool setCurrentTransaction = true, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted) => SqlServerOperate.BeginTransaction(setCurrentTransaction, isolationLevel);
-        public void CommitTransaction(SqlAccessTransaction transaction) => SqlServerOperate.CommitTransaction(transaction);
-        public void RollbackTransaction(SqlAccessTransaction transaction) => SqlServerOperate.RollbackTransaction(transaction);
-
-
+        public SqlTransaction BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted) => SqlServerOperate.BeginTransaction(isolationLevel);
+        public void CommitTransaction(SqlTransaction sqlTransaction) => SqlServerOperate.CommitTransaction();
+        public void RollbackTransaction(SqlTransaction sqlTransaction) => SqlServerOperate.RollbackTransaction();
 
         private string makeSelectFieldString(Dictionary<string, SimplePropertyInfo> fieldInfos, string tableName, ref SqlQueryOptions options)
         {
@@ -597,10 +598,6 @@ namespace Silmoon.Data.SqlServer
 
 
         public void Dispose()
-        {
-            SqlConnection.Dispose();
-        }
-        ~SqlExecuter()
         {
             SqlConnection.Dispose();
         }

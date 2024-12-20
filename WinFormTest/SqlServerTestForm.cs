@@ -20,18 +20,21 @@ namespace WinFormTest
 
         private void ctlMainTestButton_Click(object sender, EventArgs e)
         {
-            using SqlExecuter sqlExecuter = new SqlExecuter("Server=(local); Uid=LibraryTest; Pwd=LibraryTest; Database=LibraryTest; TrustServerCertificate=true");
-            sqlExecuter.CreateTable<User>("users");
+            using SqlExecuter sqlExecuter = new SqlExecuter("Server=(local); Uid=TestDB; Pwd=TestDB; Database=TestDB; TrustServerCertificate=true");
             var user = new User()
             {
-                Username = "silmoon1"
+                Username = "Silmoon"
             };
+
             using (var trans = sqlExecuter.BeginTransaction())
             {
+                sqlExecuter.CreateTable<User>("users");
+
                 sqlExecuter.AddObject("users", user);
                 sqlExecuter.CommitTransaction(trans);
             }
-            sqlExecuter.AddObject("users", user);
+
+            //sqlExecuter.AddObject("users", user);
 
         }
     }

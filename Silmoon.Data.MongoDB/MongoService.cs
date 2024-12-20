@@ -38,10 +38,10 @@ namespace Silmoon.Data.MongoDB
         }
 
 
-        public virtual void Add<T>(T obj) where T : IIdObject => Executer.AddObject(MakeTableName<T>(), obj);
-        public virtual void Adds<T>(T[] objs) where T : IIdObject => Executer.AddObjects(MakeTableName<T>(), objs);
+        public virtual void Add<T>(T obj, IClientSessionHandle sessionHandle = null) where T : IIdObject => Executer.AddObject(MakeTableName<T>(), obj, sessionHandle);
+        public virtual void Adds<T>(T[] objs, IClientSessionHandle sessionHandle = null) where T : IIdObject => Executer.AddObjects(MakeTableName<T>(), objs, sessionHandle);
 
-        public virtual T[] Gets<T>(Expression<Func<T, bool>> whereFunc, int? offset = null, int? count = null) where T : IIdObject
+        public virtual T[] Gets<T>(Expression<Func<T, bool>> whereFunc, int? offset = null, int? count = null, IClientSessionHandle sessionHandle = null) where T : IIdObject
         {
             var result = (IQueryable<T>)Executer.GetQueryable<T>(MakeTableName<T>());
             if (whereFunc != null) result = result.Where(whereFunc);
@@ -49,7 +49,7 @@ namespace Silmoon.Data.MongoDB
             if (count.HasValue) result = result.Take(count.Value);
             return result.ToArray();
         }
-        public virtual T[] Gets<T, TOrderKey>(Expression<Func<T, bool>> whereFunc, Expression<Func<T, TOrderKey>> orderFunc, bool? ascending, int? offset = null, int? count = null) where T : IIdObject
+        public virtual T[] Gets<T, TOrderKey>(Expression<Func<T, bool>> whereFunc, Expression<Func<T, TOrderKey>> orderFunc, bool? ascending, int? offset = null, int? count = null, IClientSessionHandle sessionHandle = null) where T : IIdObject
         {
             var result = (IQueryable<T>)Executer.GetQueryable<T>(MakeTableName<T>());
             if (whereFunc != null) result = result.Where(whereFunc);
@@ -62,7 +62,7 @@ namespace Silmoon.Data.MongoDB
             if (count.HasValue) result = result.Take(count.Value);
             return result.ToArray();
         }
-        public virtual IQueryable<T> GetsQuery<T>(Expression<Func<T, bool>> whereFunc, int? offset = null, int? count = null) where T : IIdObject
+        public virtual IQueryable<T> GetsQuery<T>(Expression<Func<T, bool>> whereFunc, int? offset = null, int? count = null, IClientSessionHandle sessionHandle = null) where T : IIdObject
         {
             var result = (IQueryable<T>)Executer.GetQueryable<T>(MakeTableName<T>());
             if (whereFunc != null) result = result.Where(whereFunc);
@@ -70,7 +70,7 @@ namespace Silmoon.Data.MongoDB
             if (count.HasValue) result = result.Take(count.Value);
             return result;
         }
-        public virtual IQueryable<T> GetsQuery<T, TOrderKey>(Expression<Func<T, bool>> whereFunc, Expression<Func<T, TOrderKey>> orderFunc, bool? ascending, int? offset = null, int? count = null) where T : IIdObject
+        public virtual IQueryable<T> GetsQuery<T, TOrderKey>(Expression<Func<T, bool>> whereFunc, Expression<Func<T, TOrderKey>> orderFunc, bool? ascending, int? offset = null, int? count = null, IClientSessionHandle sessionHandle = null) where T : IIdObject
         {
             var result = (IQueryable<T>)Executer.GetQueryable<T>(MakeTableName<T>());
             if (whereFunc != null) result = result.Where(whereFunc);
@@ -84,14 +84,14 @@ namespace Silmoon.Data.MongoDB
             return result;
         }
 
-        public virtual T Get<T>(Expression<Func<T, bool>> whereFunc) where T : IIdObject
+        public virtual T Get<T>(Expression<Func<T, bool>> whereFunc, IClientSessionHandle sessionHandle = null) where T : IIdObject
         {
             //return Executer.GetObject(MakeTableName<T>(),whereFunc,);
             var result = (IQueryable<T>)Executer.GetQueryable<T>(MakeTableName<T>());
             if (whereFunc != null) result = result.Where(whereFunc);
             return result.FirstOrDefault();
         }
-        public virtual T Get<T, TOrderKey>(Expression<Func<T, bool>> whereFunc, Expression<Func<T, TOrderKey>> orderFunc, bool? ascending) where T : IIdObject
+        public virtual T Get<T, TOrderKey>(Expression<Func<T, bool>> whereFunc, Expression<Func<T, TOrderKey>> orderFunc, bool? ascending, IClientSessionHandle sessionHandle = null) where T : IIdObject
         {
             var result = (IQueryable<T>)Executer.GetQueryable<T>(MakeTableName<T>());
             if (whereFunc != null) result = result.Where(whereFunc);
@@ -103,36 +103,36 @@ namespace Silmoon.Data.MongoDB
             return result.FirstOrDefault();
         }
 
-        public virtual UpdateResult Set<T>(T obj, Expression<Func<T, bool>> whereFunc = null, params Expression<Func<T, object>>[] updateFields) where T : IIdObject
+        public virtual UpdateResult Set<T>(T obj, Expression<Func<T, bool>> whereFunc = null, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateFields) where T : IIdObject
         {
             if (whereFunc != null)
-                return Executer.SetObject(MakeTableName<T>(), obj, whereFunc, false, updateFields);
+                return Executer.SetObject(MakeTableName<T>(), obj, whereFunc, false, sessionHandle, updateFields);
             else
-                return Executer.SetObject(MakeTableName<T>(), obj, Builders<T>.Filter.Empty, false, updateFields);
+                return Executer.SetObject(MakeTableName<T>(), obj, Builders<T>.Filter.Empty, false, sessionHandle, updateFields);
         }
-        public virtual UpdateResult Sets<T>(T obj, Expression<Func<T, bool>> whereFunc = null, params Expression<Func<T, object>>[] updateFields) where T : IIdObject
+        public virtual UpdateResult Sets<T>(T obj, Expression<Func<T, bool>> whereFunc = null, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateFields) where T : IIdObject
         {
             if (whereFunc != null)
-                return Executer.SetObjects(MakeTableName<T>(), obj, whereFunc, false, updateFields);
+                return Executer.SetObjects(MakeTableName<T>(), obj, whereFunc, false, sessionHandle, updateFields);
             else
-                return Executer.SetObjects(MakeTableName<T>(), obj, Builders<T>.Filter.Empty, false, updateFields);
+                return Executer.SetObjects(MakeTableName<T>(), obj, Builders<T>.Filter.Empty, false, sessionHandle, updateFields);
         }
-        public virtual UpdateResult Set<T>(T obj, bool isUpsert = false, Expression<Func<T, bool>> whereFunc = null, params Expression<Func<T, object>>[] updateFields) where T : IIdObject
+        public virtual UpdateResult Set<T>(T obj, bool isUpsert = false, Expression<Func<T, bool>> whereFunc = null, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateFields) where T : IIdObject
         {
             if (whereFunc != null)
-                return Executer.SetObject(MakeTableName<T>(), obj, whereFunc, isUpsert, updateFields);
+                return Executer.SetObject(MakeTableName<T>(), obj, whereFunc, isUpsert, sessionHandle, updateFields);
             else
-                return Executer.SetObject(MakeTableName<T>(), obj, Builders<T>.Filter.Empty, isUpsert, updateFields);
+                return Executer.SetObject(MakeTableName<T>(), obj, Builders<T>.Filter.Empty, isUpsert, sessionHandle, updateFields);
         }
-        public virtual UpdateResult Sets<T>(T obj, bool isUpsert = false, Expression<Func<T, bool>> whereFunc = null, params Expression<Func<T, object>>[] updateFields) where T : IIdObject
+        public virtual UpdateResult Sets<T>(T obj, bool isUpsert = false, Expression<Func<T, bool>> whereFunc = null, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateFields) where T : IIdObject
         {
             if (whereFunc != null)
-                return Executer.SetObjects(MakeTableName<T>(), obj, whereFunc, isUpsert, updateFields);
+                return Executer.SetObjects(MakeTableName<T>(), obj, whereFunc, isUpsert, sessionHandle, updateFields);
             else
-                return Executer.SetObjects(MakeTableName<T>(), obj, Builders<T>.Filter.Empty, isUpsert, updateFields);
+                return Executer.SetObjects(MakeTableName<T>(), obj, Builders<T>.Filter.Empty, isUpsert, sessionHandle, updateFields);
         }
 
-        public virtual DeleteResult Delete<T>(Expression<Func<T, bool>> whereFunc) where T : IIdObject
+        public virtual DeleteResult Delete<T>(Expression<Func<T, bool>> whereFunc, IClientSessionHandle sessionHandle = null) where T : IIdObject
         {
             if (whereFunc != null)
                 return Executer.DeleteObject(MakeTableName<T>(), whereFunc);
@@ -140,7 +140,7 @@ namespace Silmoon.Data.MongoDB
                 return Executer.DeleteObject(MakeTableName<T>(), Builders<T>.Filter.Empty);
         }
 
-        public virtual DeleteResult Deletes<T>(Expression<Func<T, bool>> whereFunc) where T : IIdObject
+        public virtual DeleteResult Deletes<T>(Expression<Func<T, bool>> whereFunc, IClientSessionHandle sessionHandle = null) where T : IIdObject
         {
             if (whereFunc != null)
                 return Executer.DeleteObjects(MakeTableName<T>(), whereFunc);
