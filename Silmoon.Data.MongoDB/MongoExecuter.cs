@@ -270,7 +270,6 @@ namespace Silmoon.Data.MongoDB
             else
                 return GetCollection<T>(collectionName).UpdateOne(sessionHandle, MakeAeqFilter<T>(findByObject), MakeUpdate(obj, updateObjectFieldNames), new UpdateOptions() { IsUpsert = isUpsert });
         }
-
         public UpdateResult SetObject<T>(string collectionName, T obj, object findByObject, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateExpressions)
         {
             if (sessionHandle is null)
@@ -278,7 +277,6 @@ namespace Silmoon.Data.MongoDB
             else
                 return GetCollection<T>(collectionName).UpdateOne(sessionHandle, MakeAeqFilter<T>(findByObject), MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
         }
-
         public UpdateResult SetObject<T>(string collectionName, T obj, FilterDefinition<T> filterDefinition, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params string[] updateObjectFieldNames)
         {
             if (sessionHandle is null)
@@ -286,7 +284,6 @@ namespace Silmoon.Data.MongoDB
             else
                 return GetCollection<T>(collectionName).UpdateOne(sessionHandle, filterDefinition, MakeUpdate(obj, updateObjectFieldNames), new UpdateOptions() { IsUpsert = isUpsert });
         }
-
         public UpdateResult SetObject<T>(string collectionName, T obj, FilterDefinition<T> filterDefinition, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateExpressions)
         {
             if (sessionHandle is null)
@@ -294,7 +291,6 @@ namespace Silmoon.Data.MongoDB
             else
                 return GetCollection<T>(collectionName).UpdateOne(sessionHandle, filterDefinition, MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
         }
-
         public UpdateResult SetObject<T>(string collectionName, T obj, Expression<Func<T, bool>> filterFunc, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateExpressions)
         {
             if (sessionHandle is null)
@@ -302,7 +298,6 @@ namespace Silmoon.Data.MongoDB
             else
                 return GetCollection<T>(collectionName).UpdateOne(sessionHandle, (FilterDefinition<T>)filterFunc, MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
         }
-
         public UpdateResult SetObjects<T>(string collectionName, T obj, object findByObject, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params string[] updateObjectFieldNames)
         {
             if (sessionHandle is null)
@@ -310,7 +305,6 @@ namespace Silmoon.Data.MongoDB
             else
                 return GetCollection<T>(collectionName).UpdateMany(sessionHandle, MakeAeqFilter<T>(findByObject), MakeUpdate(obj, updateObjectFieldNames), new UpdateOptions() { IsUpsert = isUpsert });
         }
-
         public UpdateResult SetObjects<T>(string collectionName, T obj, object findByObject, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateExpressions)
         {
             if (sessionHandle is null)
@@ -318,7 +312,6 @@ namespace Silmoon.Data.MongoDB
             else
                 return GetCollection<T>(collectionName).UpdateMany(sessionHandle, MakeAeqFilter<T>(findByObject), MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
         }
-
         public UpdateResult SetObjects<T>(string collectionName, T obj, FilterDefinition<T> filterDefinition, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params string[] updateObjectFieldNames)
         {
             if (sessionHandle is null)
@@ -326,7 +319,6 @@ namespace Silmoon.Data.MongoDB
             else
                 return GetCollection<T>(collectionName).UpdateMany(sessionHandle, filterDefinition, MakeUpdate(obj, updateObjectFieldNames), new UpdateOptions() { IsUpsert = isUpsert });
         }
-
         public UpdateResult SetObjects<T>(string collectionName, T obj, FilterDefinition<T> filterDefinition, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateExpressions)
         {
             if (sessionHandle is null)
@@ -334,7 +326,6 @@ namespace Silmoon.Data.MongoDB
             else
                 return GetCollection<T>(collectionName).UpdateMany(sessionHandle, filterDefinition, MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
         }
-
         public UpdateResult SetObjects<T>(string collectionName, T obj, Expression<Func<T, bool>> filterFunc, bool isUpsert = false, IClientSessionHandle sessionHandle = null, params Expression<Func<T, object>>[] updateExpressions)
         {
             if (sessionHandle is null)
@@ -342,7 +333,6 @@ namespace Silmoon.Data.MongoDB
             else
                 return GetCollection<T>(collectionName).UpdateMany(sessionHandle, (FilterDefinition<T>)filterFunc, MakeUpdate(obj, updateExpressions), new UpdateOptions() { IsUpsert = isUpsert });
         }
-
         public ReplaceOneResult ReplaceObject<T>(string collectionName, T obj, object findByObject, bool isUpsert = false, IClientSessionHandle sessionHandle = null)
         {
             if (sessionHandle is null)
@@ -350,7 +340,6 @@ namespace Silmoon.Data.MongoDB
             else
                 return GetCollection<T>(collectionName).ReplaceOne(sessionHandle, MakeAeqFilter<T>(findByObject), obj, new ReplaceOptions() { IsUpsert = isUpsert });
         }
-
         public ReplaceOneResult ReplaceObject<T>(string collectionName, T obj, FilterDefinition<T> filterDefinition, bool isUpsert = false, IClientSessionHandle sessionHandle = null)
         {
             if (sessionHandle is null)
@@ -358,7 +347,6 @@ namespace Silmoon.Data.MongoDB
             else
                 return GetCollection<T>(collectionName).ReplaceOne(sessionHandle, filterDefinition, obj, new ReplaceOptions() { IsUpsert = isUpsert });
         }
-
         public DeleteResult DeleteObject<T>(string collectionName, object findByObject, IClientSessionHandle sessionHandle = null)
         {
             if (sessionHandle is null)
@@ -366,7 +354,6 @@ namespace Silmoon.Data.MongoDB
             else
                 return GetCollection<T>(collectionName).DeleteOne(sessionHandle, MakeAeqFilter<T>(findByObject));
         }
-
         public DeleteResult DeleteObject<T>(string collectionName, FilterDefinition<T> filterDefinition, IClientSessionHandle sessionHandle = null)
         {
             if (sessionHandle is null)
@@ -374,7 +361,6 @@ namespace Silmoon.Data.MongoDB
             else
                 return GetCollection<T>(collectionName).DeleteOne(sessionHandle, filterDefinition);
         }
-
         public DeleteResult DeleteObject<T>(string collectionName, Expression<Func<T, bool>> filterFunc, IClientSessionHandle sessionHandle = null)
         {
             if (sessionHandle is null)
@@ -382,7 +368,6 @@ namespace Silmoon.Data.MongoDB
             else
                 return GetCollection<T>(collectionName).DeleteOne(sessionHandle, filterFunc);
         }
-
         public DeleteResult DeleteObjects<T>(string collectionName, object findByObject, IClientSessionHandle sessionHandle = null)
         {
             if (sessionHandle is null)
@@ -390,7 +375,6 @@ namespace Silmoon.Data.MongoDB
             else
                 return GetCollection<T>(collectionName).DeleteMany(sessionHandle, MakeAeqFilter<T>(findByObject));
         }
-
         public DeleteResult DeleteObjects<T>(string collectionName, FilterDefinition<T> filterDefinition, IClientSessionHandle sessionHandle = null)
         {
             if (sessionHandle is null)
@@ -398,7 +382,6 @@ namespace Silmoon.Data.MongoDB
             else
                 return GetCollection<T>(collectionName).DeleteMany(sessionHandle, filterDefinition);
         }
-
         public DeleteResult DeleteObjects<T>(string collectionName, Expression<Func<T, bool>> filterFunc, IClientSessionHandle sessionHandle = null)
         {
             if (sessionHandle is null)
@@ -414,30 +397,35 @@ namespace Silmoon.Data.MongoDB
             else
                 return (int)GetCollection<T>(collectionName).CountDocuments(sessionHandle, MakeAeqFilter<T>(findByObject));
         }
-
         [Obsolete]
-        public int Count<T>(string collectionName, ExpandoObject findByObject, IClientSessionHandle sessionHandle = null)
+        public long Count<T>(string collectionName, ExpandoObject findByObject, IClientSessionHandle sessionHandle = null)
         {
             if (sessionHandle is null)
-                return (int)GetCollection<T>(collectionName).CountDocuments(MakeAeqFilter<T>(findByObject));
+                return GetCollection<T>(collectionName).CountDocuments(MakeAeqFilter<T>(findByObject));
             else
-                return (int)GetCollection<T>(collectionName).CountDocuments(sessionHandle, MakeAeqFilter<T>(findByObject));
+                return GetCollection<T>(collectionName).CountDocuments(sessionHandle, MakeAeqFilter<T>(findByObject));
         }
-
-        public int Count<T>(string collectionName, Expression<Func<T, bool>> filterFunc, IClientSessionHandle sessionHandle = null)
+        public long Count<T>(string collectionName, Expression<Func<T, bool>> filterFunc, IClientSessionHandle sessionHandle = null)
         {
             if (sessionHandle is null)
-                return (int)GetCollection<T>(collectionName).CountDocuments(filterFunc);
+                return GetCollection<T>(collectionName).CountDocuments(filterFunc);
             else
-                return (int)GetCollection<T>(collectionName).CountDocuments(sessionHandle, filterFunc);
+                return GetCollection<T>(collectionName).CountDocuments(sessionHandle, filterFunc);
         }
-
-        public int Count<T>(string collectionName, FilterDefinition<T> filterDefinition, IClientSessionHandle sessionHandle = null)
+        public long Count<T>(string collectionName, FilterDefinition<T> filterDefinition, IClientSessionHandle sessionHandle = null)
         {
             if (sessionHandle is null)
-                return (int)GetCollection<T>(collectionName).CountDocuments(filterDefinition);
+                return GetCollection<T>(collectionName).CountDocuments(filterDefinition);
             else
-                return (int)GetCollection<T>(collectionName).CountDocuments(sessionHandle, filterDefinition);
+                return GetCollection<T>(collectionName).CountDocuments(sessionHandle, filterDefinition);
+        }
+        public long EstimatedCount<T>(string collectionName)
+        {
+            return GetCollection<T>(collectionName).EstimatedDocumentCount();
+        }
+        public long EstimatedCount(string collectionName)
+        {
+            return GetCollection<BsonDocument>(collectionName).EstimatedDocumentCount();
         }
 
         public bool Exists<T>(string collectionName, Expression<Func<T, bool>> filterFunc, IClientSessionHandle sessionHandle = null)
@@ -527,7 +515,13 @@ namespace Silmoon.Data.MongoDB
         }
 
         public IMongoCollection<T> GetCollection<T>(string collectionName) => Database.GetCollection<T>(collectionName);
-        public IQueryable<T> GetQueryable<T>(string collectionName) => GetCollection<T>(collectionName).AsQueryable();
+        public IQueryable<T> GetQueryable<T>(string collectionName, IClientSessionHandle sessionHandle = null)
+        {
+            if (sessionHandle is null)
+                return GetCollection<T>(collectionName).AsQueryable();
+            else
+                return GetCollection<T>(collectionName).AsQueryable(sessionHandle);
+        }
 
         public IClientSessionHandle StartSession(bool startTranscation)
         {
@@ -535,7 +529,6 @@ namespace Silmoon.Data.MongoDB
             if (startTranscation) sessionHandle.StartTransaction();
             return sessionHandle;
         }
-
         public void EndSession(IClientSessionHandle session) => session.Dispose();
     }
 }
