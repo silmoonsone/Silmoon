@@ -1,16 +1,14 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Silmoon.Data.MongoDB.Converters;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Silmoon.Data.MongoDB
+namespace Silmoon.Data.MongoDB.Extensions
 {
-    public class FilterHelper
+    public static class JsonSerializerSettingsBsonExtension
     {
-        public static void AddAllJsonConverters(JsonSerializerSettings jsonSerializerSettings)
+        public static void AddAllBsonConverters(this JsonSerializerSettings jsonSerializerSettings)
         {
             jsonSerializerSettings.Converters.Add(new ObjectIdArrayJsonConverter());
             jsonSerializerSettings.Converters.Add(new ObjectIdJsonConverter());

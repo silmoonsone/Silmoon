@@ -14,7 +14,7 @@
 
   <PropertyGroup>
     <PackageId>Silmoon.Extension</PackageId>
-    <Version>1.6.2</Version>
+    <Version>1.6.3</Version>
     <Authors>SILMOON</Authors>
     <Company>SILMOON LLC</Company>
     <Description>Silmoon SDK</Description>

@@ -166,12 +166,5 @@ namespace Silmoon.Extension
             T jo = JsonConvert.DeserializeObject<T>(s);
             return jo;
         }
-
-        public static void AddAllJsonConverters(JsonSerializerSettings jsonSerializerSettings)
-        {
-            jsonSerializerSettings.Converters.Add(new IPAddressJsonConverter());
-            jsonSerializerSettings.Converters.Add(new HostEndPointJsonConverter());
-            jsonSerializerSettings.Converters.Add(new BigIntegerJsonConverter());
-        }
     }
 }
