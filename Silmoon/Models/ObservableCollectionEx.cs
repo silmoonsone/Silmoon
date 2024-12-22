@@ -6,7 +6,6 @@ using System.Text;
 
 namespace Silmoon.Models
 {
-    [Obsolete]
     public class ObservableCollectionEx<T> : ObservableCollection<T>
     {
         private bool _suppressNotification = false;
@@ -38,14 +37,14 @@ namespace Silmoon.Models
             if (!_suppressNotification) base.OnCollectionChanged(e);
         }
 
-        public void SuppressNotification(Func<bool> action, NotifyCollectionChangedAction notifyCollectionChangedAction = NotifyCollectionChangedAction.Reset)
+        public virtual void SuppressNotification(Func<bool> action, NotifyCollectionChangedAction notifyCollectionChangedAction = NotifyCollectionChangedAction.Reset)
         {
             _suppressNotification = true;
             var result = action.Invoke();
             _suppressNotification = false;
             if (result) OnCollectionChanged(new NotifyCollectionChangedEventArgs(notifyCollectionChangedAction));
         }
-        public void AddRange(IEnumerable<T> collection, NotifyCollectionChangedAction notifyCollectionChangedAction = NotifyCollectionChangedAction.Add)
+        public virtual void AddRange(IEnumerable<T> collection, NotifyCollectionChangedAction notifyCollectionChangedAction = NotifyCollectionChangedAction.Add)
         {
             SuppressNotification(() =>
             {

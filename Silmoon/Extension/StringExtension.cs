@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -511,30 +512,37 @@ namespace Silmoon.Extension
         /// <summary>
         /// 检查字符串是否是IPv4地址
         /// </summary>
-        /// <param name="IP"></param>
+        /// <param name="ipAddress"></param>
         /// <returns></returns>
-        public static bool IsIPv4Address(this string IP)
+        public static bool IsIPv4Address(this string ipAddress)
         {
-            if (string.IsNullOrEmpty(IP)) return false;
-            Regex regex = new Regex(@"^(\d+)\.(\d+)\.(\d+)\.(\d+)$");
-            if (regex.IsMatch(IP))
-            {
-                if (Regex.IsMatch(IP, @"^0\.\d+\.0\.\d+$")) return false;
-                string[] arr = IP.Split('.');
-                if (int.Parse(arr[0]) < 256 && int.Parse(arr[1]) < 256 && int.Parse(arr[2]) < 256 && int.Parse(arr[3]) < 256) return true;
-            }
-            return false;
+            //if (string.IsNullOrEmpty(ipAddress)) return false;
+            //Regex regex = new Regex(@"^(\d+)\.(\d+)\.(\d+)\.(\d+)$");
+            //if (regex.IsMatch(ipAddress))
+            //{
+            //    if (Regex.IsMatch(ipAddress, @"^0\.\d+\.0\.\d+$")) return false;
+            //    string[] arr = ipAddress.Split('.');
+            //    if (int.Parse(arr[0]) < 256 && int.Parse(arr[1]) < 256 && int.Parse(arr[2]) < 256 && int.Parse(arr[3]) < 256) return true;
+            //}
+            //return false;
+            if (ipAddress.IsNullOrEmpty()) return false;
+            var result = IPAddress.TryParse(ipAddress, out var address);
+            return result && address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork;
         }
         /// <summary>
         /// 检查字符串是否是IPv6地址
         /// </summary>
-        /// <param name="IP"></param>
+        /// <param name="ipAddress"></param>
         /// <returns></returns>
-        public static bool IsIPv6Address(this string IP)
+        public static bool IsIPv6Address(this string ipAddress)
         {
-            if (string.IsNullOrEmpty(IP)) return false;
-            Regex regex = new Regex(@"^([\da-fA-F]{1,4}:){7}[\da-fA-F]{1,4}$");
-            return regex.IsMatch(IP);
+            //if (string.IsNullOrEmpty(IP)) return false;
+            //Regex regex = new Regex(@"^([\da-fA-F]{1,4}:){7}[\da-fA-F]{1,4}$");
+            //return regex.IsMatch(IP);
+            if (ipAddress.IsNullOrEmpty()) return false;
+            ipAddress = ipAddress.TrimStart('[').TrimEnd(']');
+            var result = IPAddress.TryParse(ipAddress, out var address);
+            return result && address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6;
         }
         /// <summary>
         /// 检查字符串是否是IP地址，使用了IPv4和IPv6的检查

@@ -48,52 +48,63 @@ namespace Silmoon.Net.Models
         }
         public static HostEndPoint Parse(string endPointString)
         {
-            if (endPointString.IsNullOrEmpty()) throw new ArgumentException("str is null or empty");
+            if (string.IsNullOrWhiteSpace(endPointString))
+                throw new ArgumentException("Endpoint string is null or empty");
 
-            //str include ip6 addresss
+            // Handle IPv6 with port
             if (endPointString.Contains("]:"))
             {
-                //ip6
-                string[] parts = endPointString.Split(new string[] { "]:" }, StringSplitOptions.RemoveEmptyEntries);
-                if (parts.Length != 2) throw new FormatException("Invalid HostEndPoint format");
-                int port = int.Parse(parts[1]);
-                if (port < 0 || port > 65535)
+                var parts = endPointString.Split(new[] { "]:" }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length != 2)
                     throw new FormatException("Invalid HostEndPoint format");
-                return new HostEndPoint(parts[0].Substring(1), port);
+
+                if (!int.TryParse(parts[1], out int port) || port < 0 || port > 65535)
+                    throw new FormatException("Invalid port");
+
+                return new HostEndPoint(parts[0].TrimStart('['), port);
             }
-            else
-            {
-                //ip4
-                string[] parts = endPointString.Split(':');
-                if (parts.Length != 2) throw new FormatException("Invalid HostEndPoint format");
-                int port = int.Parse(parts[1]);
-                if (port < 0 || port > 65535)
-                    throw new FormatException("Invalid HostEndPoint format");
-                return new HostEndPoint(parts[0], port);
-            }
+
+            // Handle IPv4 or hostname with port
+            var partsIPv4 = endPointString.Split(':');
+            if (partsIPv4.Length != 2)
+                throw new FormatException("Invalid HostEndPoint format");
+
+            if (!int.TryParse(partsIPv4[1], out int portIPv4) || portIPv4 < 0 || portIPv4 > 65535)
+                throw new FormatException("Invalid port");
+
+            return new HostEndPoint(partsIPv4[0], portIPv4);
         }
+
         public override string ToString()
         {
-            return $"{Host}:{Port}";
+            if (Host.IsIPv6Address())
+                return $"[{Host}]:{Port}";
+            else
+                return $"{Host}:{Port}";
         }
         public override bool Equals(object obj)
         {
-            if (obj is default(HostEndPoint) && this is default(HostEndPoint)) return true;
-            var other = obj as HostEndPoint;
-            if (other is default(HostEndPoint)) return true;
-            return Host == other.Host && Port == other.Port;
+            // 先检查类型，如果不是 HostEndPoint，直接返回 false
+            if (!(obj is HostEndPoint)) return false;
+
+            // 强制转换 obj 为 HostEndPoint 后再比较
+            var other = (HostEndPoint)obj;
+            return Host.Equals(other.Host, StringComparison.OrdinalIgnoreCase) && Port == other.Port;
         }
         public override int GetHashCode()
         {
-            return Host.GetHashCode() ^ Port.GetHashCode();
+            return (Host?.GetHashCode() ?? 0) ^ Port.GetHashCode();
         }
         public static bool operator ==(HostEndPoint a, HostEndPoint b)
         {
+            if (a is null && b is null) return true;
+            if (a is null || b is null) return false;
             return a.Equals(b);
         }
+
         public static bool operator !=(HostEndPoint a, HostEndPoint b)
         {
-            return !a.Equals(b);
+            return !(a == b);
         }
     }
 }
