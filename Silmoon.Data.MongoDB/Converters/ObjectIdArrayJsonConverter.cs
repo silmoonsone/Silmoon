@@ -3,29 +3,29 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Silmoon.Extension;
 
 namespace Silmoon.Data.MongoDB.Converters
 {
-    public class ObjectIdArrayJsonConverter : JsonConverter
+    public class ObjectIdArrayJsonConverter : JsonConverter<List<ObjectId>>
     {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, List<ObjectId> value, JsonSerializer serializer)
         {
-            var objectIdList = value as IEnumerable<ObjectId>;
-            if (objectIdList == null)
+            if (value == null)
             {
                 writer.WriteNull();
                 return;
             }
 
             writer.WriteStartArray();
-            foreach (var objectId in objectIdList)
+            foreach (var objectId in value)
             {
                 writer.WriteValue(objectId.ToString());
             }
             writer.WriteEndArray();
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override List<ObjectId> ReadJson(JsonReader reader, Type objectType, List<ObjectId> existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.StartArray)
             {
@@ -38,7 +38,7 @@ namespace Silmoon.Data.MongoDB.Converters
                     }
 
                     var objectIdString = (string)reader.Value;
-                    objectIdList.Add(string.IsNullOrEmpty(objectIdString) ? ObjectId.Empty : ObjectId.Parse(objectIdString));
+                    objectIdList.Add(objectIdString.IsNullOrEmpty() ? ObjectId.Empty : ObjectId.Parse(objectIdString));
                 }
                 return objectIdList;
             }
@@ -46,24 +46,6 @@ namespace Silmoon.Data.MongoDB.Converters
             {
                 throw new Exception($"Unexpected token parsing List<ObjectId>. Expected StartArray, got {reader.TokenType}");
             }
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            // 检查 objectType 是否是 List<> 的泛型类型
-            if (!objectType.IsGenericType)
-            {
-                return false;
-            }
-
-            // 检查泛型类型是否为 List<>
-            if (objectType.GetGenericTypeDefinition() != typeof(List<>))
-            {
-                return false;
-            }
-
-            // 检查 List<> 的泛型参数是否为 ObjectId
-            return objectType.GetGenericArguments()[0] == typeof(ObjectId);
         }
     }
 }

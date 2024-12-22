@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using Silmoon.Collections;
+using Silmoon.Extension.Converters;
 using Silmoon.Extension.Network;
 using Silmoon.Models;
 using System;
@@ -166,6 +167,11 @@ namespace Silmoon.Extension
             return jo;
         }
 
-
+        public static void AddAllJsonConverters(JsonSerializerSettings jsonSerializerSettings)
+        {
+            jsonSerializerSettings.Converters.Add(new IPAddressJsonConverter());
+            jsonSerializerSettings.Converters.Add(new HostEndPointJsonConverter());
+            jsonSerializerSettings.Converters.Add(new BigIntegerJsonConverter());
+        }
     }
 }

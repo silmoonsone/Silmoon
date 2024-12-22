@@ -6,26 +6,22 @@ using System.Text;
 
 namespace Silmoon.Extension.Converters
 {
-    public class BigIntegerJsonConverter : JsonConverter
+    public class BigIntegerJsonConverter : JsonConverter<BigInteger>
     {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, BigInteger value, JsonSerializer serializer)
         {
             serializer.Serialize(writer, value.ToString());
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override BigInteger ReadJson(JsonReader reader, Type objectType, BigInteger existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             if (reader.TokenType != JsonToken.String)
             {
-                throw new Exception($"Unexpected token parsing ObjectId. Expected String.get{reader.TokenType}");
+                throw new Exception($"Unexpected token parsing BigInteger. Expected String, got {reader.TokenType}");
             }
+
             var value = (string)reader.Value;
             return string.IsNullOrEmpty(value) ? 0 : BigInteger.Parse(value);
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            return typeof(BigInteger).IsAssignableFrom(objectType);
         }
     }
 }
