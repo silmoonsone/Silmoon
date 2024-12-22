@@ -46,14 +46,18 @@ namespace Silmoon.Models
         }
         public virtual void AddRange(IEnumerable<T> collection, NotifyCollectionChangedAction notifyCollectionChangedAction = NotifyCollectionChangedAction.Add)
         {
-            SuppressNotification(() =>
+            if (collection is null) return;
+            else
             {
-                foreach (var item in collection)
+                SuppressNotification(() =>
                 {
-                    Add(item);
-                }
-                return true;
-            }, notifyCollectionChangedAction);
+                    foreach (var item in collection)
+                    {
+                        Add(item);
+                    }
+                    return true;
+                }, notifyCollectionChangedAction);
+            }
         }
         public void Notify(NotifyCollectionChangedAction notifyCollectionChangedAction)
         {
