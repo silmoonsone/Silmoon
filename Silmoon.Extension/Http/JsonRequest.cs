@@ -64,7 +64,8 @@ namespace Silmoon.Extension.Http
                 {
                     using (var response = await client.SendAsync(httpRequestMessage))
                     {
-                        if (response.Headers.GetValues("HttpContentGzipCompression")?.FirstOrDefault().ToBool() ?? false)
+
+                        if (response.Headers.TryGetValues("HttpContentGzipCompression", out var httpContentGzipCompression) && httpContentGzipCompression.FirstOrDefault().ToBool())
                         {
                             byte[] compressedData = await response.Content.ReadAsByteArrayAsync();
                             string decodeString = CompressHelper.DecompressByteArrayToString(compressedData);

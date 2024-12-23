@@ -6,6 +6,7 @@ using Silmoon.Compress;
 using Silmoon.Runtime;
 using Silmoon.Core;
 using Silmoon.Data.Models;
+using Silmoon.Extension.Http;
 
 namespace WinFormTest
 {
@@ -77,6 +78,7 @@ namespace WinFormTest
         private async void ctlJsonHelperTestButton_Click(object sender, EventArgs e)
         {
             var result = await JsonHelperV2.GetJsonAsync("https://api.trongrid.io/v1/blocks/47355207/events?limit=200");
+            //var result = await JsonRequest.GetAsync<object>("https://localhost:7052/App/TestGzipApi");
         }
 
         private async void ctlDownloadTestButton_Click(object sender, EventArgs e)
