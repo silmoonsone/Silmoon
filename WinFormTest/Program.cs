@@ -28,8 +28,8 @@ internal static class Program
         //if (await Test()) return;
 
         ApplicationConfiguration.Initialize();
-        //Application.Run(new Form1());
-        Application.Run(new MongoDBTestForm());
+        Application.Run(new Form1());
+        //Application.Run(new MongoDBTestForm());
         //Application.Run(new SqlServerTestForm());
         await Task.CompletedTask;
     }

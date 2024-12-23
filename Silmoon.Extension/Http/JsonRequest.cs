@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Silmoon.Collections;
+using Silmoon.Compress;
 using Silmoon.Extension.Network;
 using Silmoon.Models;
 
@@ -62,8 +64,18 @@ namespace Silmoon.Extension.Http
                 {
                     using (var response = await client.SendAsync(httpRequestMessage))
                     {
-                        JsonRequestResult<T> result = new JsonRequestResult<T>(response.StatusCode, await response.Content.ReadAsStringAsync());
-                        return result;
+                        if (response.Headers.GetValues("HttpContentGzipCompression")?.FirstOrDefault().ToBool() ?? false)
+                        {
+                            byte[] compressedData = await response.Content.ReadAsByteArrayAsync();
+                            string decodeString = CompressHelper.DecompressByteArrayToString(compressedData);
+                            JsonRequestResult<T> result = new JsonRequestResult<T>(response.StatusCode, decodeString);
+                            return result;
+                        }
+                        else
+                        {
+                            JsonRequestResult<T> result = new JsonRequestResult<T>(response.StatusCode, await response.Content.ReadAsStringAsync());
+                            return result;
+                        }
                     }
                 }
                 catch (Exception ex)

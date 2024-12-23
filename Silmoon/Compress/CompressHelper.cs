@@ -14,9 +14,10 @@ namespace Silmoon.Compress
         public static byte[] Compress(byte[] data) => data.Compress();
         public static byte[] Decompress(byte[] compressedData) => compressedData.Decompress();
 
-        public static string CompressStringToBase64String(string text)
+        public static string CompressStringToBase64String(string text, Encoding encoding = null)
         {
-            var bytes = Encoding.UTF8.GetBytes(text);
+            if (encoding is null) encoding = Encoding.UTF8;
+            var bytes = encoding.GetBytes(text);
             using (var outputStream = new MemoryStream())
             {
                 using (var gZipStream = new GZipStream(outputStream, CompressionMode.Compress))
@@ -26,14 +27,15 @@ namespace Silmoon.Compress
                 return Convert.ToBase64String(outputStream.ToArray());
             }
         }
-        public static string DecompressBase64StringToString(string base64CompressedText)
+        public static string DecompressBase64StringToString(string base64CompressedText, Encoding encoding = null)
         {
             var bytes = Convert.FromBase64String(base64CompressedText);
             using (var inputStream = new MemoryStream(bytes))
             {
                 using (var gZipStream = new GZipStream(inputStream, CompressionMode.Decompress))
                 {
-                    using (var streamReader = new StreamReader(gZipStream, Encoding.UTF8))
+                    if (encoding is null) encoding = Encoding.UTF8;
+                    using (var streamReader = new StreamReader(gZipStream, encoding))
                     {
                         return streamReader.ReadToEnd();
                     }
@@ -41,9 +43,10 @@ namespace Silmoon.Compress
             }
         }
 
-        public static string CompressStringToHexString(string text)
+        public static string CompressStringToHexString(string text, Encoding encoding = null)
         {
-            var bytes = Encoding.UTF8.GetBytes(text);
+            if (encoding is null) encoding = Encoding.UTF8;
+            var bytes = encoding.GetBytes(text);
             using (var outputStream = new MemoryStream())
             {
                 using (var gZipStream = new GZipStream(outputStream, CompressionMode.Compress))
@@ -53,19 +56,33 @@ namespace Silmoon.Compress
                 return outputStream.ToArray().ToHexString();
             }
         }
-        public static string DecompressHexStringToString(string hexStringCompressedText)
+        public static string DecompressHexStringToString(string hexStringCompressedText, Encoding encoding = null)
         {
             var bytes = hexStringCompressedText.HexStringToByteArray();
             using (var inputStream = new MemoryStream(bytes.Data))
             {
                 using (var gZipStream = new GZipStream(inputStream, CompressionMode.Decompress))
                 {
-                    using (var streamReader = new StreamReader(gZipStream, Encoding.UTF8))
+                    if (encoding is null) encoding = Encoding.UTF8;
+                    using (var streamReader = new StreamReader(gZipStream, encoding))
                     {
                         return streamReader.ReadToEnd();
                     }
                 }
             }
+        }
+
+        public static byte[] CompressStringToByteArray(string text, Encoding encoding = null)
+        {
+            if (encoding is null) encoding = Encoding.UTF8;
+            var data = encoding.GetBytes(text);
+            return data.Compress();
+        }
+        public static string DecompressByteArrayToString(byte[] compressedBytes, Encoding encoding = null)
+        {
+            var decompressedBytes = compressedBytes.Decompress();
+            if (encoding is null) encoding = Encoding.UTF8;
+            return encoding.GetString(decompressedBytes);
         }
 
         public static void ExtractGZipFile(string zipPath, string extractPath)
