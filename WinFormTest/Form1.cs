@@ -5,7 +5,6 @@ using Silmoon.Extension;
 using Silmoon.Compress;
 using Silmoon.Runtime;
 using Silmoon.Core;
-using Silmoon.Data.Models;
 using Silmoon.Extension.Http;
 
 namespace WinFormTest
@@ -89,13 +88,8 @@ namespace WinFormTest
             client.DownloadCompleted += (sender, e) => MessageBox.Show("Download completed.");
             await client.DownloadFileAsync("https://huobao-bin.oss-cn-qingdao.aliyuncs.com/bin/mongodb/mongod.exe", "D:\\test\\bin.bin");
         }
-
-        private void ctlSqlServerTestButton_Click(object sender, EventArgs e)
-        {
-            new SqlServerTestForm().Show();
-        }
     }
-    class User : SqlObject
+    class User
     {
         public string Username { get; set; }
     }

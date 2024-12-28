@@ -3,8 +3,6 @@ using MongoDB.Bson.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Silmoon;
-using Silmoon.Data.MongoDB.Converters;
-using Silmoon.Data.MongoDB.Serializer;
 using Silmoon.Extension;
 using Silmoon.Extension.Http;
 using System.Collections.ObjectModel;
@@ -43,13 +41,13 @@ internal static class Program
     }
     static bool JsonTest()
     {
-        JsonConvert.DefaultSettings = new Func<JsonSerializerSettings>(() =>
-        {
-            var settings = new JsonSerializerSettings();
-            settings.Converters.Add(new ObjectIdJsonConverter());
-            return settings;
-        });
-        BsonSerializer.RegisterSerializer(typeof(JObject), new JObjectBsonDocumentConvertSerializer());
+        //JsonConvert.DefaultSettings = new Func<JsonSerializerSettings>(() =>
+        //{
+        //    var settings = new JsonSerializerSettings();
+        //    settings.Converters.Add(new ObjectIdJsonConverter());
+        //    return settings;
+        //});
+        //BsonSerializer.RegisterSerializer(typeof(JObject), new JObjectBsonDocumentConvertSerializer());
 
 
         string str = "66716225527bf03331c3b18b";

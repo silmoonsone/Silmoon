@@ -15,8 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Silmoon.Core\Silmoon.Core.csproj" />
-    <ProjectReference Include="..\Silmoon.Data.MongoDB\Silmoon.Data.MongoDB.csproj" />
-    <ProjectReference Include="..\Silmoon.Data\Silmoon.Data.csproj" />
     <ProjectReference Include="..\Silmoon.Extension\Silmoon.Extension.csproj" />
     <ProjectReference Include="..\Silmoon\Silmoon.csproj" />
   </ItemGroup>
