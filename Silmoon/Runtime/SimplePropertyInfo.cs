@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Silmoon.Runtime
 {
+    [Obsolete]
     public class SimplePropertyInfo
     {
         public string Name { get; set; }

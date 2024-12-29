@@ -6,6 +6,7 @@ using Silmoon.Compress;
 using Silmoon.Runtime;
 using Silmoon.Core;
 using Silmoon.Extension.Http;
+using Silmoon.Attributes;
 
 namespace WinFormTest
 {
@@ -88,13 +89,21 @@ namespace WinFormTest
             client.DownloadCompleted += (sender, e) => MessageBox.Show("Download completed.");
             await client.DownloadFileAsync("https://huobao-bin.oss-cn-qingdao.aliyuncs.com/bin/mongodb/mongod.exe", "D:\\test\\bin.bin");
         }
+
+        private void ctlTestObjectRefButton_Click(object sender, EventArgs e)
+        {
+            UserEx userEx = new UserEx() { id = 1, Username = "a", Password = "b" };
+            var result = userEx.GetPropertyValues("id");
+        }
     }
     class User
     {
+        public int id { get; set; }
         public string Username { get; set; }
     }
     class UserEx : User
     {
+        [IgnoreProperty]
         public string Password { get; set; }
     }
 }

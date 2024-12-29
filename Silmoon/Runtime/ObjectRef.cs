@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Silmoon.Attributes;
+using Silmoon.Extension;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -49,6 +51,7 @@ namespace Silmoon.Runtime
             return propertyNames.ToArray();
         }
 
+        [Obsolete]
         public static Dictionary<string, PropertyInfo> GetProperties(this object obj, params string[] exclude)
         {
             Dictionary<string, PropertyInfo> propertyNames = new Dictionary<string, PropertyInfo>();
@@ -63,6 +66,7 @@ namespace Silmoon.Runtime
             }
             return propertyNames;
         }
+        [Obsolete]
         public static Dictionary<string, SimplePropertyInfo> GetProperties(this ExpandoObject obj, params string[] exclude)
         {
             Dictionary<string, SimplePropertyInfo> propertyNames = new Dictionary<string, SimplePropertyInfo>();
@@ -77,5 +81,22 @@ namespace Silmoon.Runtime
             return propertyNames;
         }
 
+        public static Dictionary<string, PropertyValueInfo> GetPropertyValues(this object obj, params string[] excludePropertyNames)
+        {
+            var excludedNameSet = new HashSet<string>(excludePropertyNames);
+            Dictionary<string, PropertyValueInfo> propertyNames = new Dictionary<string, PropertyValueInfo>();
+            if (obj != null)
+            {
+                var propertyInfos = obj.GetType().GetProperties();
+                foreach (var item in propertyInfos)
+                {
+                    if (!excludedNameSet.Contains(item.Name) && item.GetCustomAttribute<IgnorePropertyAttribute>() == null)
+                    {
+                        propertyNames[item.Name] = item.GetPropertyValueInfo(obj);
+                    }
+                }
+            }
+            return propertyNames;
+        }
     }
 }
