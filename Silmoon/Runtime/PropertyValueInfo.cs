@@ -17,13 +17,13 @@ namespace Silmoon.Runtime
             Value = value;
         }
         public string Name => Info.Name;
-        public MemberTypes MemberTypes => Info.MemberType;
+        public Type Type => Info.PropertyType;
         public PropertyInfo Info { get; }
         public T Value { get; set; }
         public override string ToString()
         {
-            string reflectedType = Info.ReflectedType?.ToString() ?? "Unknown";
-            string propertyType = Info.PropertyType?.ToString() ?? "Unknown";
+            string reflectedType = Info.ReflectedType?.ToString() ?? "[Unknown]";
+            string propertyType = Type?.ToString() ?? "[Unknown]";
             return $"Name={Name}; Value={Value}; Type={reflectedType}.{propertyType};";
         }
     }
