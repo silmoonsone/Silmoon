@@ -7,6 +7,7 @@ using Silmoon.Runtime;
 using Silmoon.Core;
 using Silmoon.Extension.Http;
 using Silmoon.Attributes;
+using System.Dynamic;
 
 namespace WinFormTest
 {
@@ -92,8 +93,13 @@ namespace WinFormTest
 
         private void ctlTestObjectRefButton_Click(object sender, EventArgs e)
         {
-            UserEx userEx = new UserEx() { id = 1, Username = "a", Password = "b" };
-            var result = userEx.GetPropertyValues("id");
+            //var userEx = new UserEx { id = 1, Username = "a", Password = "b" };
+            dynamic userEx = new ExpandoObject();
+            userEx.id = 1;
+            userEx.Username = "a";
+            userEx.Password = "b";
+            var result = ((ExpandoObject)userEx).GetPropertyValueInfoDictionary("id");
+            //var result = userEx.GetPropertyValueInfoDictionary();
         }
     }
     class User
