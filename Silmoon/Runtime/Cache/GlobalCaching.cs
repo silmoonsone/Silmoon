@@ -101,11 +101,7 @@ namespace Silmoon.Runtime.Cache
                 List<TKey> readyToClears = new List<TKey>();
                 foreach (var item in Items)
                 {
-                    if (item.Value.Value == null)
-                    {
-                        readyToClears.Add(item.Key);
-                    }
-                    else if (item.Value.ExipreAt < DateTime.Now)
+                    if (item.Value.ExipreAt < DateTime.Now)
                     {
                         readyToClears.Add(item.Key);
                     }
