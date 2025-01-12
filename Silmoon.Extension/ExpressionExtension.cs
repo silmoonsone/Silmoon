@@ -32,5 +32,18 @@ namespace Silmoon.Extension
             else
                 throw new NotSupportedException($"Only MemberInitExpression is supported, found {expression.Body.GetType().Name}");
         }
+        public static string GetSelectExpression<T>(this Expression<Func<T, object>> expression)
+        {
+            switch (expression.Body)
+            {
+                case MemberExpression member:
+                    return member.Member.Name; // 直接属性访问
+                case UnaryExpression unary when unary.Operand is MemberExpression member:
+                    return member.Member.Name; // 转换后的属性访问（如强制转换）
+                default:
+                    throw new NotSupportedException($"Unsupported select expression: {expression.Body.GetType().Name}");
+            }
+        }
+
     }
 }
