@@ -8,6 +8,7 @@ using Silmoon.Core;
 using Silmoon.Extension.Http;
 using Silmoon.Attributes;
 using System.Dynamic;
+using Silmoon.Collections;
 
 namespace WinFormTest
 {
@@ -100,6 +101,17 @@ namespace WinFormTest
             userEx.Password = "b";
             var result = ((ExpandoObject)userEx).GetPropertyValueInfoDictionary("id");
             //var result = userEx.GetPropertyValueInfoDictionary();
+        }
+
+        private async void ctlJsonRequestTestButton_Click(object sender, EventArgs e)
+        {
+            var data = new UrlDataCollection
+            {
+                { "secret", "" },
+                { "response", "" }
+            };
+
+            var result = await JsonRequest.PostFormDataAsync<object>("https://challenges.cloudflare.com/turnstile/v0/siteverify", data, null);
         }
     }
     class User

@@ -109,5 +109,12 @@ namespace Silmoon.Extension
                 return result.ToLocalTime();
             else return result;
         }
+        public static bool IsInNowRange(this DateTime targetTime, TimeSpan BeforeTime, TimeSpan AfterTime)
+        {
+            // 计算时间差
+            TimeSpan timeDifference = DateTime.Now - targetTime;
+            // 检查时间差是否在范围内
+            return -timeDifference <= BeforeTime && timeDifference <= AfterTime;
+        }
     }
 }

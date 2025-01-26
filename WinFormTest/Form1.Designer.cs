@@ -38,6 +38,7 @@
             ctlDownloadTestButton = new Button();
             label1 = new Label();
             ctlTestObjectRefButton = new Button();
+            ctlJsonRequestTestButton = new Button();
             SuspendLayout();
             // 
             // ctlAesEncryptTestButton
@@ -137,11 +138,22 @@
             ctlTestObjectRefButton.UseVisualStyleBackColor = true;
             ctlTestObjectRefButton.Click += ctlTestObjectRefButton_Click;
             // 
+            // ctlJsonRequestTestButton
+            // 
+            ctlJsonRequestTestButton.Location = new Point(495, 244);
+            ctlJsonRequestTestButton.Name = "ctlJsonRequestTestButton";
+            ctlJsonRequestTestButton.Size = new Size(163, 23);
+            ctlJsonRequestTestButton.TabIndex = 10;
+            ctlJsonRequestTestButton.Text = "JsonRequest Test";
+            ctlJsonRequestTestButton.UseVisualStyleBackColor = true;
+            ctlJsonRequestTestButton.Click += ctlJsonRequestTestButton_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(670, 466);
+            Controls.Add(ctlJsonRequestTestButton);
             Controls.Add(ctlTestObjectRefButton);
             Controls.Add(label1);
             Controls.Add(ctlDownloadTestButton);
@@ -171,5 +183,6 @@
         private Button ctlDownloadTestButton;
         private Label label1;
         private Button ctlTestObjectRefButton;
+        private Button ctlJsonRequestTestButton;
     }
 }

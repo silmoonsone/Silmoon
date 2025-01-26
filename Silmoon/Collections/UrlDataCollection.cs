@@ -201,7 +201,10 @@ namespace Silmoon.Collections
 
             foreach (var item in list)
             {
-                keyValuePairs.Add(new KeyValuePair<string, string>(item.Key, item.Value.ToString()));
+                if (item.Value is null)
+                    keyValuePairs.Add(new KeyValuePair<string, string>(item.Key, null));
+                else
+                    keyValuePairs.Add(new KeyValuePair<string, string>(item.Key, item.Value.ToString()));
             }
 
             return keyValuePairs;
