@@ -1,9 +1,9 @@
-﻿using Silmoon.Extension.Models.Identities.Enums;
+﻿using Silmoon.Extension.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Silmoon.Extension.Models.Identities
+namespace Silmoon.Extension.Interfaces
 {
     public interface IDefaultUserIdentity
     {

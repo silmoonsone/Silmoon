@@ -1,6 +1,6 @@
 using Silmoon.Extension;
-using Silmoon.Extension.Models.Identities;
-using Silmoon.Extension.Models.Identities.Enums;
+using Silmoon.Extension.Enums;
+using Silmoon.Extension.Interfaces;
 using Silmoon.Models;
 using Silmoon.Web.Extension;
 using Silmoon.Web.Extensions;

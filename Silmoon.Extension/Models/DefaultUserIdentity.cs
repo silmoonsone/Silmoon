@@ -1,10 +1,11 @@
-﻿using Silmoon.Extension.Models.Identities.Enums;
+﻿using Silmoon.Extension.Enums;
+using Silmoon.Extension.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace Silmoon.Extension.Models.Identities
+namespace Silmoon.Extension.Models
 {
     [Serializable]
     public class DefaultUserIdentity : IDefaultUserIdentity

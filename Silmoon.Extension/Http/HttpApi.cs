@@ -7,9 +7,9 @@ using System.Collections.Specialized;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Silmoon.Extension.Models.Types;
 using Silmoon.Extension.Models;
 using Silmoon.Collections;
+using Silmoon.Extension.Enums;
 
 namespace Silmoon.Extension.Http
 {

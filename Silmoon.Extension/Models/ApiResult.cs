@@ -5,7 +5,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Silmoon.Extension;
-using Silmoon.Extension.Models.Types;
+using Silmoon.Extension.Enums;
 
 namespace Silmoon.Extension.Models
 {
