@@ -22,15 +22,16 @@ namespace Silmoon.Threading
         /// <param name="action">要执行的操作。</param>
         public void Debounce(Action action)
         {
+            if (action is null) return;
             // 取消之前的延迟任务
             _cts?.Cancel();
+            _cts?.Dispose();
             _cts = new CancellationTokenSource();
-            var token = _cts.Token;
 
-            Task.Delay(_delayMilliseconds, token).ContinueWith(t =>
+            Task.Delay(_delayMilliseconds, _cts.Token).ContinueWith(t =>
             {
                 if (!t.IsCanceled) action?.Invoke();
-            }, TaskScheduler.FromCurrentSynchronizationContext());
+            }, CancellationToken.None, TaskContinuationOptions.NotOnFaulted, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         /// <summary>
@@ -38,17 +39,18 @@ namespace Silmoon.Threading
         /// </summary>
         /// <param name="action">要执行的异步操作。</param>
         /// <returns></returns>
-        public async void DebounceAsync(Func<Task> action)
+        public async Task DebounceAsync(Func<Task> action)
         {
+            if (action is null) return;
             // 取消之前的延迟任务
             _cts?.Cancel();
+            _cts?.Dispose();
             _cts = new CancellationTokenSource();
-            var token = _cts.Token;
 
             try
             {
-                await Task.Delay(_delayMilliseconds, token);
-                if (!token.IsCancellationRequested)
+                await Task.Delay(_delayMilliseconds, _cts.Token);
+                if (!_cts.Token.IsCancellationRequested)
                 {
                     await action?.Invoke();
                 }
