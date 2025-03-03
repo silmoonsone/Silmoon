@@ -19,5 +19,18 @@ namespace Silmoon.Extension
             else
                 return nullResult;
         }
+        public static void IfTrue(this bool value, Action action)
+        {
+            if (value) action();
+        }
+        public static void IfFalse(this bool value, Action action)
+        {
+            if (!value) action();
+        }
+        public static void IfElse(this bool value, Action trueAction, Action falseAction)
+        {
+            if (value) trueAction();
+            else falseAction();
+        }
     }
 }
