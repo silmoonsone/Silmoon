@@ -17,21 +17,39 @@ namespace Silmoon.Extension
                 List<PropertyValueInfo> results = new List<PropertyValueInfo>();
                 foreach (MemberAssignment memberAssignment in body.Bindings)
                 {
-                    if (memberAssignment.Expression is ConstantExpression constantExpression)
-                    {
-                        string name = memberAssignment.Member.Name;
-                        var value = constantExpression.Value;
-                        var type = constantExpression.Type;
-                        results.Add(new PropertyValueInfo(name, type, value));
-                    }
-                    else
-                        throw new NotSupportedException($"Only constant expressions are supported, found {memberAssignment.Expression.GetType().Name}");
+                    string name = memberAssignment.Member.Name;
+                    var value = GetValue(memberAssignment.Expression);
+                    var type = value != null ? value.GetType() : typeof(object);
+                    results.Add(new PropertyValueInfo(name, type, value));
                 }
                 return results.ToArray();
             }
             else
-                throw new NotSupportedException($"Only MemberInitExpression is supported, found {expression.Body.GetType().Name}");
+                throw new NotSupportedException("Only MemberInitExpression is supported, found " + expression.Body.GetType().Name);
         }
+
+        private static object GetValue(Expression expression)
+        {
+            switch (expression.NodeType)
+            {
+                case ExpressionType.Constant:
+                    return ((ConstantExpression)expression).Value;
+                case ExpressionType.MemberAccess:
+                case ExpressionType.Call:
+                case ExpressionType.Convert:
+                case ExpressionType.New:
+                case ExpressionType.NewArrayInit:
+                case ExpressionType.NewArrayBounds:
+                case ExpressionType.ArrayIndex:
+                case ExpressionType.Conditional:
+                    var lambda = Expression.Lambda(expression);
+                    var compiled = lambda.Compile();
+                    return compiled.DynamicInvoke();
+                default:
+                    throw new NotSupportedException("Expression type '" + expression.GetType().Name + "' is not supported.");
+            }
+        }
+
         public static string GetSelectExpression<T>(this Expression<Func<T, object>> expression)
         {
             switch (expression.Body)
@@ -44,6 +62,5 @@ namespace Silmoon.Extension
                     throw new NotSupportedException($"Unsupported select expression: {expression.Body.GetType().Name}");
             }
         }
-
     }
 }
