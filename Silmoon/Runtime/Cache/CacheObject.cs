@@ -9,7 +9,7 @@ namespace Silmoon.Runtime.Cache
     [Serializable]
     public class CacheObject<TKey, TValue>
     {
-        public DateTime ExipreAt { get; set; }
+        public DateTime ExpireAt { get; set; }
         public TValue Value { get; set; }
         public TKey Key { get; set; }
     }

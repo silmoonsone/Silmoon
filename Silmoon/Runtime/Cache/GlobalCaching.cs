@@ -28,11 +28,11 @@ namespace Silmoon.Runtime.Cache
                 if (Items.TryGetValue(Key, out CacheObject<TKey, TValue> existingItem))
                 {
                     existingItem.Value = Value;
-                    existingItem.ExipreAt = ExpireAt.Value;
+                    existingItem.ExpireAt = ExpireAt.Value;
                 }
                 else
                 {
-                    var item = new CacheObject<TKey, TValue>() { Key = Key, Value = Value, ExipreAt = ExpireAt.Value };
+                    var item = new CacheObject<TKey, TValue>() { Key = Key, Value = Value, ExpireAt = ExpireAt.Value };
                     Items.Add(Key, item);
                 }
             }
@@ -45,7 +45,7 @@ namespace Silmoon.Runtime.Cache
                 if (Items.ContainsKey(Key))
                 {
                     var item = Items[Key];
-                    if (AddExpireTime.HasValue) item.ExipreAt = item.ExipreAt.Add(AddExpireTime.Value);
+                    if (AddExpireTime.HasValue) item.ExpireAt = item.ExpireAt.Add(AddExpireTime.Value);
                     return (true, item.Value);
                 }
                 else
@@ -101,7 +101,7 @@ namespace Silmoon.Runtime.Cache
                 List<TKey> readyToClears = new List<TKey>();
                 foreach (var item in Items)
                 {
-                    if (item.Value.ExipreAt < DateTime.Now)
+                    if (item.Value.ExpireAt < DateTime.Now)
                     {
                         readyToClears.Add(item.Key);
                     }
