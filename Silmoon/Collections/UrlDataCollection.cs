@@ -220,9 +220,9 @@ namespace Silmoon.Collections
         public static UrlDataCollection FromNameValueCollection(NameValueCollection nameValueCollection)
         {
             UrlDataCollection result = new UrlDataCollection();
-            foreach (var key in nameValueCollection.AllKeys)
+            for (int i = 0; i < nameValueCollection.Count; i++)
             {
-                result.Add(key, nameValueCollection[key]);
+                result.Add(nameValueCollection.GetKey(i), nameValueCollection[i]);
             }
             return result;
         }
