@@ -91,10 +91,9 @@ namespace Silmoon.Extension
                 return decompressedStream.ToArray();
             }
         }
-        public static MimeInfo ToMimeInfo(this byte[] data)
+        public static MimeInfo GetMimeInfo(this byte[] data)
         {
-            if (data == null || data.Length < 12)
-                return null;
+            if (data == null || data.Length < 12) return null;
 
             var ascii = Encoding.ASCII;
 
@@ -123,21 +122,15 @@ namespace Silmoon.Extension
 
             // WEBP
             if (ascii.GetString(data, 0, 4) == "RIFF" && ascii.GetString(data, 8, 4) == "WEBP")
-            {
                 return new MimeInfo { Extension = "webp", Mime = "image/webp", CategroyType = FileCategroyType.Image };
-            }
 
             // WAV
             if (ascii.GetString(data, 0, 4) == "RIFF" && ascii.GetString(data, 8, 4) == "WAVE")
-            {
                 return new MimeInfo { Extension = "wav", Mime = "audio/wav", CategroyType = FileCategroyType.Audio };
-            }
 
             // AVI
             if (ascii.GetString(data, 0, 4) == "RIFF" && ascii.GetString(data, 8, 4) == "AVI ")
-            {
                 return new MimeInfo { Extension = "avi", Mime = "video/x-msvideo", CategroyType = FileCategroyType.Video };
-            }
 
             // 🧪 标准魔数匹配
             foreach (var sig in MimeInfo._signatures)
