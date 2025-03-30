@@ -1,4 +1,6 @@
-﻿using Silmoon.Models.Interfaces;
+﻿using Silmoon.Enums;
+using Silmoon.Models;
+using Silmoon.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -88,6 +90,83 @@ namespace Silmoon.Extension
                 }
                 return decompressedStream.ToArray();
             }
+        }
+        public static MimeInfo ToMimeInfo(this byte[] data)
+        {
+            if (data == null || data.Length < 12)
+                return null;
+
+            var ascii = Encoding.ASCII;
+
+            // 🎯 特殊结构识别
+            string boxType = ascii.GetString(data, 4, 4);
+            if (boxType == "ftyp")
+            {
+                string majorBrand = ascii.GetString(data, 8, 4);
+                switch (majorBrand)
+                {
+                    case "mp42":
+                    case "isom":
+                    case "avc1":
+                        return new MimeInfo { Extension = "mp4", Mime = "video/mp4", CategroyType = FileCategroyType.Video };
+                    case "M4A ":
+                    case "M4B ":
+                    case "M4P ":
+                        return new MimeInfo { Extension = "m4a", Mime = "audio/mp4", CategroyType = FileCategroyType.Audio };
+                    case "heic":
+                    case "heix":
+                        return new MimeInfo { Extension = "heic", Mime = "image/heic", CategroyType = FileCategroyType.Image };
+                    case "avif":
+                        return new MimeInfo { Extension = "avif", Mime = "image/avif", CategroyType = FileCategroyType.Image };
+                }
+            }
+
+            // WEBP
+            if (ascii.GetString(data, 0, 4) == "RIFF" && ascii.GetString(data, 8, 4) == "WEBP")
+            {
+                return new MimeInfo { Extension = "webp", Mime = "image/webp", CategroyType = FileCategroyType.Image };
+            }
+
+            // WAV
+            if (ascii.GetString(data, 0, 4) == "RIFF" && ascii.GetString(data, 8, 4) == "WAVE")
+            {
+                return new MimeInfo { Extension = "wav", Mime = "audio/wav", CategroyType = FileCategroyType.Audio };
+            }
+
+            // AVI
+            if (ascii.GetString(data, 0, 4) == "RIFF" && ascii.GetString(data, 8, 4) == "AVI ")
+            {
+                return new MimeInfo { Extension = "avi", Mime = "video/x-msvideo", CategroyType = FileCategroyType.Video };
+            }
+
+            // 🧪 标准魔数匹配
+            foreach (var sig in MimeInfo._signatures)
+            {
+                if (data.Length >= sig.Offset + sig.Magic.Length)
+                {
+                    bool match = true;
+                    for (int i = 0; i < sig.Magic.Length; i++)
+                    {
+                        if (data[sig.Offset + i] != sig.Magic[i])
+                        {
+                            match = false;
+                            break;
+                        }
+                    }
+
+                    if (match)
+                    {
+                        return new MimeInfo
+                        {
+                            Extension = sig.Extension,
+                            Mime = sig.Mime,
+                            CategroyType = sig.Category
+                        };
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }

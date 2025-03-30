@@ -13,7 +13,7 @@
 
   <PropertyGroup>
     <PackageId>Silmoon</PackageId>
-    <Version>1.7.6</Version>
+    <Version>1.7.7</Version>
     <Authors>SILMOON</Authors>
     <Company>SILMOON LLC</Company>
     <Description>Silmoon SDK</Description>
