@@ -8,7 +8,9 @@ namespace Silmoon.Extension
 {
     public static class StreamExtension
     {
-        public static byte[] ToBytes(this Stream stream, bool AutoSeek = true)
+        [Obsolete]
+        public static byte[] ToBytes(this Stream stream, bool AutoSeek = true) => GetByteArray(stream, AutoSeek);
+        public static byte[] GetByteArray(this Stream stream, bool AutoSeek = true)
         {
             if (AutoSeek && !stream.CanSeek) throw new NotSupportedException("流不支持读取或者搜索，无法操作");
 
@@ -22,7 +24,9 @@ namespace Silmoon.Extension
             if (seek) stream.Position = postion;
             return result;
         }
-        public async static Task<byte[]> ToBytesAsync(this Stream stream, long? Length = null, bool AutoSeek = true)
+        [Obsolete]
+        public async static Task<byte[]> ToBytesAsync(this Stream stream, long? Length = null, bool AutoSeek = true) => await GetByteArrayAsync(stream, Length, AutoSeek);
+        public async static Task<byte[]> GetByteArrayAsync(this Stream stream, long? Length = null, bool AutoSeek = true)
         {
             if (AutoSeek && !stream.CanSeek) throw new NotSupportedException("流不支持读取或者搜索，无法操作");
 
@@ -38,6 +42,7 @@ namespace Silmoon.Extension
             return result;
 
         }
+        [Obsolete]
         public static string MakeToString(this Stream stream, Encoding encoding = default)
         {
             if (encoding == null) encoding = Encoding.UTF8;
@@ -47,7 +52,7 @@ namespace Silmoon.Extension
 
                 stream.Position = 0;
 
-                string result = encoding.GetString(stream.ToBytes());
+                string result = encoding.GetString(stream.GetByteArray());
                 //byte[] buff = new byte[stream.Length];
                 //fixed (byte* pB = buff)
                 //{
@@ -64,21 +69,17 @@ namespace Silmoon.Extension
                 throw new NotSupportedException("流不支持读取或者搜索，无法操作");
             }
         }
-        public static async Task<string> ReadToEndAsync(this Stream stream)
+        public static async Task<string> ReadToEndAsync(this Stream stream, Encoding encoding = default)
         {
-            using (StreamReader reader = new StreamReader(stream))
+            if (encoding == null) encoding = Encoding.UTF8;
+            using (StreamReader reader = new StreamReader(stream, encoding))
             {
                 return await reader.ReadToEndAsync();
             }
         }
-        public static string ReadToEnd(this Stream stream)
-        {
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                return reader.ReadToEnd();
-            }
-        }
-        public static byte[] WhileReadAllToByteArray(this Stream stream, int totalSize)
+        [Obsolete]
+        public static byte[] WhileReadAllToByteArray(this Stream stream, int totalSize) => WhileReadToByteArray(stream, totalSize);
+        public static byte[] WhileReadToByteArray(this Stream stream, int totalSize)
         {
             byte[] buffer = new byte[totalSize];
             int readed = 0, readRound;
