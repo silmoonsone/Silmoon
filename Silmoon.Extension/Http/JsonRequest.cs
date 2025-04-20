@@ -42,18 +42,23 @@ namespace Silmoon.Extension.Http
         public static HttpRequestMessage CreateRequest(string url, HttpMethod httpMethod, JsonRequestSetting jsonRequestSetting)
         {
             if (jsonRequestSetting is null) jsonRequestSetting = JsonRequestSetting.Default;
-            Uri uri = new Uri(url);
-            HttpRequestMessage request = new HttpRequestMessage(httpMethod, url);
-            request.Headers.Add("User-Agent", "Silmoon.Extension_JsonHelper/1.0");
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(httpMethod, url);
+            httpRequestMessage = CreateRequest(httpRequestMessage, jsonRequestSetting);
+            return httpRequestMessage;
+        }
+        public static HttpRequestMessage CreateRequest(HttpRequestMessage httpRequestMessage, JsonRequestSetting jsonRequestSetting)
+        {
+            if (jsonRequestSetting is null) jsonRequestSetting = JsonRequestSetting.Default;
+            httpRequestMessage.Headers.Add("User-Agent", "Silmoon.Extension_JsonHelper/1.0");
 
             DefaultRequestHostHeaders.Each(x =>
             {
-                if (x.Key == "*" || uri.Host.ToLower() == x.Key.ToLower())
-                    x.Value.Each(y => y.Value.Each(z => request.Headers.Add(y.Key, z)));
+                if (x.Key == "*" || httpRequestMessage.RequestUri.Host.ToLower() == x.Key.ToLower())
+                    x.Value.Each(y => y.Value.Each(z => httpRequestMessage.Headers.Add(y.Key, z)));
             });
 
-            jsonRequestSetting.RequestHeaders.Each(x => x.Value.Each(y => request.Headers.Add(x.Key, y)));
-            return request;
+            jsonRequestSetting.RequestHeaders.Each(x => x.Value.Each(y => httpRequestMessage.Headers.Add(x.Key, y)));
+            return httpRequestMessage;
         }
 
         public static async Task<JsonRequestResult<T>> ExecuteAsync<T>(HttpRequestMessage httpRequestMessage, JsonRequestSetting jsonRequestSetting = null)
@@ -114,6 +119,21 @@ namespace Silmoon.Extension.Http
         }
         #endregion
 
+        public static async Task<JsonRequestResult<T>> SendContentAsync<T>(string url, HttpMethod httpMethod, HttpContent content, JsonRequestSetting jsonRequestSetting)
+        {
+            using (var request = CreateRequest(url, httpMethod, jsonRequestSetting))
+            {
+                request.Content = content;
+                return await ExecuteAsync<T>(request, jsonRequestSetting);
+            }
+        }
+        public static async Task<JsonRequestResult<T>> SendAsync<T>(HttpRequestMessage httpRequestMessage, JsonRequestSetting jsonRequestSetting)
+        {
+            using (var request = CreateRequest(httpRequestMessage, jsonRequestSetting))
+            {
+                return await ExecuteAsync<T>(request, jsonRequestSetting);
+            }
+        }
 
         public static Task<JsonRequestResult<T>> GetAsync<T>(string url, JsonRequestSetting jsonRequestSetting = null) => GetAsync<T>(url, null, jsonRequestSetting);
         public static Task<JsonRequestResult<T>> GetAsync<T>(string url, UrlDataCollection queryStringUrlDataCollection, JsonRequestSetting jsonRequestSetting = null) => SendAsyncWithoutBody<T>(url, HttpMethod.Get, queryStringUrlDataCollection, jsonRequestSetting);
