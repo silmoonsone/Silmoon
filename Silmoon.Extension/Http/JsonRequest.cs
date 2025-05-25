@@ -119,7 +119,7 @@ namespace Silmoon.Extension.Http
         }
         #endregion
 
-        public static async Task<JsonRequestResult<T>> SendContentAsync<T>(string url, HttpMethod httpMethod, HttpContent content, JsonRequestSetting jsonRequestSetting)
+        public static async Task<JsonRequestResult<T>> SendContentAsync<T>(string url, HttpMethod httpMethod, HttpContent content, JsonRequestSetting jsonRequestSetting = null)
         {
             using (var request = CreateRequest(url, httpMethod, jsonRequestSetting))
             {
@@ -127,7 +127,7 @@ namespace Silmoon.Extension.Http
                 return await ExecuteAsync<T>(request, jsonRequestSetting);
             }
         }
-        public static async Task<JsonRequestResult<T>> SendAsync<T>(HttpRequestMessage httpRequestMessage, JsonRequestSetting jsonRequestSetting)
+        public static async Task<JsonRequestResult<T>> SendAsync<T>(HttpRequestMessage httpRequestMessage, JsonRequestSetting jsonRequestSetting = null)
         {
             using (var request = CreateRequest(httpRequestMessage, jsonRequestSetting))
             {

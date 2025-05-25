@@ -37,8 +37,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Runtime.TestingCode
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppTesting", "ConsoleAppTesting\ConsoleAppTesting.csproj", "{FA65A3F4-9E99-47A0-A522-4C4C978792F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.SdkApi", "Silmoon.SdkApi\Silmoon.SdkApi.csproj", "{7B0A5E22-0559-4B18-9BB3-3C4B5122C8C9}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,10 +87,6 @@ Global
 		{FA65A3F4-9E99-47A0-A522-4C4C978792F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA65A3F4-9E99-47A0-A522-4C4C978792F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA65A3F4-9E99-47A0-A522-4C4C978792F1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7B0A5E22-0559-4B18-9BB3-3C4B5122C8C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B0A5E22-0559-4B18-9BB3-3C4B5122C8C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B0A5E22-0559-4B18-9BB3-3C4B5122C8C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B0A5E22-0559-4B18-9BB3-3C4B5122C8C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,7 +98,7 @@ Global
 		{FA65A3F4-9E99-47A0-A522-4C4C978792F1} = {28B5EA76-99E0-4655-9EB7-F6B8906FB036}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {18B93CD3-1A51-425B-89D1-03A0565D2E21}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal
