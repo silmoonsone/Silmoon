@@ -58,9 +58,6 @@ namespace Silmoon
         {
             Index = endTime - length;
         }
-        public override string ToString()
-        {
-            return Index.ToString("yyyy-MM-dd HH:mm:ss") + "->" + EndTime.ToString("yyyy-MM-dd HH:mm:ss");
-        }
+        public override string ToString() => Index.ToString() + "->" + EndTime.ToString();
     }
 }

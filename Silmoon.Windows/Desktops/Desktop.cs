@@ -38,7 +38,7 @@ namespace Silmoon.Windows.Desktops
         IntPtr hwnd, // handle of window      
         int dwTime, // duration of animation      
         int dwFlags // animation type      
-        ); 
+        );
 
         public static bool SetAreoArea(IntPtr ptr, ref MARGINS margins)
         {

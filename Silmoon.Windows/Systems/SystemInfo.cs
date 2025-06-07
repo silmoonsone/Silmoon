@@ -6,8 +6,6 @@ using System.Diagnostics;
 using System.Management;
 using System.Collections;
 using System.IO;
-using Silmoon.Windows.Win32.API.APIStructs;
-using Silmoon.Windows.Win32.API.APIEnum;
 
 namespace Silmoon.Windows.Systems
 {
