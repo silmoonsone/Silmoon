@@ -34,7 +34,7 @@ namespace Silmoon.Extension
         }
         public static BigInteger ToBigInteger(this decimal amount, int decimals)
         {
-            BigInteger result = (BigInteger)(amount * 10m.Pow(decimals));
+            BigInteger result = (BigInteger)(amount * (decimal)Math.Pow(10.0, decimals));
             return result;
         }
         public static string GetPercentString(this decimal value)

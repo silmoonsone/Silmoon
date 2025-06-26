@@ -14,6 +14,17 @@ namespace Silmoon.Extension
 {
     public static class StringExtension
     {
+        public static BigInteger[] ToBigIntegerArray(this string[] strArray)
+        {
+            if (strArray is null) return null;
+            List<BigInteger> bigIntegers = new List<BigInteger>();
+            foreach (var item in strArray)
+            {
+                bigIntegers.Add(BigInteger.Parse(item));
+            }
+            return bigIntegers.ToArray();
+        }
+
         public static bool IsNullOrEmpty(this string value) => string.IsNullOrEmpty(value);
         public static int GetLengthEncoded(this string value, Encoding encoding) => encoding.GetByteCount(value);
         public static int GetLengthSpecial(this string s)
