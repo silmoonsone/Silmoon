@@ -720,14 +720,59 @@ namespace Silmoon.Extension
             }
             return true.ToStateSet(bytes);
         }
-        public static BigInteger HexStringToBigInteger(this string value)
+        /// <summary>
+        /// 把十六进制字符串转换成 <see cref="BigInteger"/>。
+        /// </summary>
+        /// <param name="hex">可以带或不带 0x / 0X 前缀，允许大小写混写。</param>
+        /// <param name="signed">
+        /// true  (默认) ➜ 按 **二补码** 解析，最高位是 1 时得到负数；  
+        /// false ➜ 把整个十六进制串视作 **无符号正数**（即使最高位是 1 也保证结果为正）。
+        /// </param>
+        /// <exception cref="ArgumentNullException">hex 为 null/空/全空白。</exception>
+        /// <remarks>
+        /// - .NET 5+ 直接使用 <c>Convert.FromHexString</c> + <c>new BigInteger(span, isUnsigned: …)</c>，  
+        ///   全路径向量化实现，性能最佳。  
+        /// - 如果只能在早于 .NET 5 的环境运行，会自动 fallback 到“补 00 前缀”技巧，不影响调用代码。
+        /// </remarks>
+        public static BigInteger HexStringToBigInteger(this string hex, bool signed = true)
         {
-            if (string.IsNullOrEmpty(value)) throw new ArgumentNullException(nameof(value));
-            if (value.StartsWith("0x")) value = value.Substring(2);
+            if (string.IsNullOrWhiteSpace(hex))
+                throw new ArgumentNullException(nameof(hex));
 
-            return BigInteger.Parse(value, NumberStyles.HexNumber);
+            // 去掉 0x / 0X 前缀
+            if (hex.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+                hex = hex.Substring(2);
+
+#if NET5_0_OR_GREATER
+        if (!signed)
+        {
+            // —— 高性能无符号路径 ——
+            // 1. 如果字符数为奇数，先补一个 0；Convert.FromHexString 需要偶数字符数
+            if ((hex.Length & 1) == 1)
+                hex = '0' + hex;
+
+            // 2. 十六进制 → byte[]（大端）—— Convert.FromHexString 是硬件加速的
+            byte[] bytes = Convert.FromHexString(hex);
+
+            // 3. BigInteger 构造函数：isUnsigned = true 保证正数，isBigEndian = true 直接省去反转
+            return new BigInteger(bytes, /* isUnsigned */ true, /* isBigEndian */ true);  // :contentReference[oaicite:0]{index=0}
         }
+#endif
+            // —— 有符号路径，或老版本框架 fallback —— 
+            // NumberStyles.HexNumber = AllowHexSpecifier + Leading/TrailingWhite
+            BigInteger result = BigInteger.Parse(hex, NumberStyles.HexNumber);
 
+#if !NET5_0_OR_GREATER
+            if (!signed && result.Sign < 0)
+            {
+                // 老框架又要求无符号？用补位法：+ 2^(4*digitCount)
+                // digitCount = 去掉前导 0 后的位数
+                int bitCount = 4 * hex.TrimStart('0').Length;
+                result += BigInteger.One << bitCount;
+            }
+#endif
+            return result;
+        }
 
         public static string Base64UrlToBase64(this string base64Url)
         {
