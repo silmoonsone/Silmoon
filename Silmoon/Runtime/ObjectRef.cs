@@ -108,5 +108,63 @@ namespace Silmoon.Runtime
             }
             return propertyNames;
         }
+
+        public static Type[] GetTypesWithAttribute<T>() where T : Attribute => GetTypesWithAttribute<T>(null, true);
+        public static Type[] GetTypesWithAttribute<T>(string @namespace = null, bool includeSubNamespace = true) where T : Attribute
+        {
+            var loadedAssemblies = new List<Assembly>(AppDomain.CurrentDomain.GetAssemblies());
+            var entryAssembly = Assembly.GetEntryAssembly();
+            if (entryAssembly != null)
+            {
+                foreach (var name in entryAssembly.GetReferencedAssemblies())
+                {
+                    if (!loadedAssemblies.Any(a => a.GetName().Name == name.Name))
+                    {
+                        try
+                        {
+                            var assembly = Assembly.Load(name);
+                            loadedAssemblies.Add(assembly);
+                        }
+                        catch { /* 可选：记录日志 */ }
+                    }
+                }
+            }
+
+            var types = new List<Type>();
+            foreach (var assembly in loadedAssemblies)
+            {
+                Type[] assemblyTypes;
+                try
+                {
+                    assemblyTypes = assembly.GetTypes();
+                }
+                catch (ReflectionTypeLoadException ex)
+                {
+                    assemblyTypes = ex.Types.Where(t => t != null).ToArray();
+                }
+
+                foreach (var type in assemblyTypes)
+                {
+                    if (type == null) continue;
+                    if (type.GetCustomAttribute<T>() == null) continue;
+                    if (@namespace == null) { types.Add(type); continue; }
+                    if (type.Namespace == null) continue;
+                    if (includeSubNamespace)
+                    {
+                        if (type.Namespace == @namespace || type.Namespace.StartsWith(@namespace + ".")) types.Add(type);
+                    }
+                    else
+                    {
+                        if (type.Namespace == @namespace) types.Add(type);
+                    }
+                }
+            }
+            return types.ToArray();
+        }
+        public static Type[] GetTypesWithAttributeFromAssembly<T>(string assemblyName, string @namespace = null, bool includeSubNamespace = true) where T : Attribute
+        {
+            var assembly = Assembly.Load(assemblyName);
+            return assembly.GetTypes().Where(t => t.GetCustomAttribute<T>() != null && (@namespace == null || (t.Namespace != null && (includeSubNamespace ? (t.Namespace == @namespace || t.Namespace.StartsWith(@namespace + ".")) : t.Namespace == @namespace)))).ToArray();
+        }
     }
 }
