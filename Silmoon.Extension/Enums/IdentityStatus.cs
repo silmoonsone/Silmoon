@@ -5,7 +5,6 @@ using System.Text;
 
 namespace Silmoon.Extension.Enums
 {
-    [Flags]
     public enum IdentityStatus
     {
         [Display(Name = "被封禁")]

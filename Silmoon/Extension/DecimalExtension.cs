@@ -21,6 +21,14 @@ namespace Silmoon.Extension
             zhCN.NumberFormat.CurrencyDecimalDigits = currencyDecimalDigits;
             return value.ToString("C", zhCN);
         }
+        public static string ToUSDT(this decimal value, int currencyDecimalDigits = 6, string symbol = "₮")
+        {
+            // 格式化为指定小数位
+            string formatted = value.ToString($"N{currencyDecimalDigits}", CultureInfo.InvariantCulture);
+            // 拼接自定义货币符号
+            return $"{symbol}{formatted}";
+        }
+
         public static decimal Pow(this decimal x, int y)
         {
             //decimal result = 1;

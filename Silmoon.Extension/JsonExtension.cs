@@ -13,9 +13,11 @@ namespace Silmoon.Extension
 
         public static string ToJsonString(this object obj) => JsonConvert.SerializeObject(obj);
         public static string ToJsonString(this object obj, JsonSerializerSettings settings) => JsonConvert.SerializeObject(obj, settings);
-        public static string ToFormattedJsonString(this object obj)
+        public static string ToFormattedJsonString(this object obj) => ToFormattedJsonString(obj, JsonConvert.DefaultSettings?.Invoke() ?? new JsonSerializerSettings());
+
+        public static string ToFormattedJsonString(this object obj, JsonSerializerSettings settings)
         {
-            JsonSerializer serializer = new JsonSerializer();
+            JsonSerializer serializer = JsonSerializer.Create(settings);
             if (obj != null)
             {
                 using (StringWriter textWriter = new StringWriter())
@@ -30,6 +32,7 @@ namespace Silmoon.Extension
                 return "null";
             }
         }
+
         public static T[] ToObjects<T>(this JArray array)
         {
             T[] result = new T[array.Count];
