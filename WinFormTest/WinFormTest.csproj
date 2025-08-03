@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Bson" Version="3.4.1" />
+    <PackageReference Include="MongoDB.Bson" Version="3.4.2" />
   </ItemGroup>
 
   <ItemGroup>
