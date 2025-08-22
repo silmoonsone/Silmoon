@@ -31,6 +31,7 @@ Expression<Func<App, App>> expression2 = x => new App()
 
 var result2 = expression2.GetMemberAssignment();
 
-
+//var result = ExpressionExtension.GetPreprotyNamesExpressions<User>([x => x.Username, x => x.Password]);
+//Console.WriteLine(result.ToJsonString());
 
 Console.ReadKey();

@@ -50,7 +50,7 @@ namespace Silmoon.Extension
             }
         }
 
-        public static string GetSelectExpression<T>(this Expression<Func<T, object>> expression)
+        public static string GetPreprotyNameExpression<T>(this Expression<Func<T, object>> expression)
         {
             switch (expression.Body)
             {
@@ -61,6 +61,30 @@ namespace Silmoon.Extension
                 default:
                     throw new NotSupportedException($"Unsupported select expression: {expression.Body.GetType().Name}");
             }
+        }
+        public static List<string> GetPreprotyNamesExpressions<T>(params Expression<Func<T, object>>[] expressions) => GetPreprotyNamesExpressions((IEnumerable<Expression<Func<T, object>>>)expressions);
+        public static List<string> GetPreprotyNamesExpressions<T>(this IEnumerable<Expression<Func<T, object>>> expressions)
+        {
+            var fieldNames = new List<string>();
+
+            foreach (var expression in expressions)
+            {
+                switch (expression.Body)
+                {
+                    case MemberExpression member:
+                        fieldNames.Add(member.Member.Name);
+                        break;
+
+                    case UnaryExpression unary when unary.Operand is MemberExpression member:
+                        fieldNames.Add(member.Member.Name);
+                        break;
+
+                    default:
+                        throw new NotSupportedException($"Unsupported expression: {expression.Body.GetType().Name}");
+                }
+            }
+
+            return fieldNames;
         }
     }
 }
