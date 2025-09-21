@@ -9,11 +9,15 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <PropertyGroup>
     <PackageId>Silmoon</PackageId>
-    <Version>1.8.7</Version>
+    <Version>2.0.0</Version>
     <Authors>SILMOON</Authors>
     <Company>SILMOON LLC</Company>
     <Description>Silmoon SDK</Description>
@@ -23,6 +27,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>silmoon</PackageTags>
     <PackageIcon>logo.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageOutputPath>..\packages_out</PackageOutputPath>
   </PropertyGroup>
 
