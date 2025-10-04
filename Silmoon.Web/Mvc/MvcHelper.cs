@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
 using System.Web.Routing;
+using Silmoon.Extension;
 
 namespace Silmoon.Web.Mvc
 {

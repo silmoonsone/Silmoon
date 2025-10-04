@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Silmoon
+namespace Silmoon.Types
 {
     /// <summary>
     /// 以实际的时间表示一个时间段，比如上午10点到下午2点。

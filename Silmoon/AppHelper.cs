@@ -7,10 +7,15 @@ namespace Silmoon
 {
     public class AppHelper
     {
+        public static string[] CommandLineArgs { get; private set; }
+        static AppHelper()
+        {
+            CommandLineArgs = Environment.GetCommandLineArgs();
+        }
         public static string GetAppRunPath()
         {
             // 存储命令行参数的第一个元素
-            var commandLineArg = Environment.GetCommandLineArgs()[0];
+            var commandLineArg = CommandLineArgs[0];
 
             // 检查命令行参数是否是完全限定路径
             bool isFullPath = commandLineArg.EndsWith(@"\") || commandLineArg.EndsWith("/");

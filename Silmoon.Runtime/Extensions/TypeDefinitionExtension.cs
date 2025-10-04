@@ -10,7 +10,11 @@ namespace Silmoon.Runtime.Extensions
 {
     public static class TypeDefinitionExtension
     {
-        // 获取所有接口，包括基类实现的接口
+        /// <summary>
+        /// 获取所有接口，包括基类实现的接口
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static List<InterfaceImplementation> GetAllInterfaces(this TypeDefinition type)
         {
             // 使用 HashSet 记录接口名称，确保接口的唯一性
@@ -48,7 +52,11 @@ namespace Silmoon.Runtime.Extensions
             return interfaces;
         }
 
-        // 获取所有基类，迭代方式避免深度递归
+        /// <summary>
+        /// 获取所有基类，迭代方式避免深度递归
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static List<TypeDefinition> GetAllBaseTypes(this TypeDefinition type)
         {
             var baseTypes = new List<TypeDefinition>();

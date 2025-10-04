@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Silmoon.Arrays;
 using System.Collections;
+using Silmoon.Arrays;
+using Silmoon.Types;
 
 namespace Silmoon.Threading
 {
