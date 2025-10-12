@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Silmoon.Text
+namespace Silmoon.Types
 {
     /// <summary>
     /// Punycode IDN编码操作
@@ -239,14 +239,14 @@ namespace Silmoon.Text
             {
                 delta = delta / 2;
             }
-            delta = delta + (delta / numpoints);
+            delta = delta + delta / numpoints;
             int k = 0;
-            while (delta > ((BASE - TMIN) * TMAX) / 2)
+            while (delta > (BASE - TMIN) * TMAX / 2)
             {
                 delta = delta / (BASE - TMIN);
                 k = k + BASE;
             }
-            return k + ((BASE - TMIN + 1) * delta) / (delta + SKEW);
+            return k + (BASE - TMIN + 1) * delta / (delta + SKEW);
         }
         private static bool isBasic(char c)
         {
@@ -290,7 +290,7 @@ namespace Silmoon.Text
         {
             foreach (char item in s)
             {
-                if ((int)item > 256)
+                if (item > 256)
                 {
                     return true;
                 }
