@@ -14,6 +14,100 @@ namespace Silmoon.Extension
 {
     public static class StringExtension
     {
+        // 编译时正则表达式缓存，提升性能
+        private static readonly Regex EmailRegex = new Regex(@"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$", RegexOptions.Compiled);
+        private static readonly Regex MobilePhoneRegex = new Regex(@"^((1[3,5,6,8][0-9])|(14[5,7])|(17[0,1,2,3,5,6,7,8])|(19[1,8,9]))\d{8}$", RegexOptions.Compiled);
+        private static readonly Regex PhoneRegex = new Regex(@"^(\d{3,4}-)?\d{6,8}$", RegexOptions.Compiled);
+        private static readonly Regex BusinessLicenseRegex = new Regex(@"^[0-9A-Z]{8}-[0-9A-Z]$", RegexOptions.Compiled);
+        private static readonly Regex UrlRegex = new Regex(@"^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})(:[0-9]{1,5})?([\/\w \.-]*)*\/?$", RegexOptions.Compiled);
+        private static readonly Regex HttpsUrlRegex = new Regex(@"^https:\/\/([\da-z\.-]+)\.([a-z\.]{2,6})(:[0-9]{1,5})?([\/\w \.-]*)*\/?$", RegexOptions.Compiled);
+        private static readonly Regex HtmlTagRegex = new Regex("<.*?>", RegexOptions.Compiled);
+        /// <summary>
+        /// 将字符串数组中的所有元素使用指定的分隔符合并成一个字符串。
+        /// </summary>
+        /// <param name="array">要合并的字符串数组</param>
+        /// <param name="split">用于分隔元素的字符串</param>
+        /// <param name="removeLastSplit">是否移除最后一个分隔符，默认为 true</param>
+        /// <param name="prefix">每个元素的前缀，默认为空字符串</param>
+        /// <param name="suffix">每个元素的后缀，默认为空字符串</param>
+        /// <returns>合并后的字符串</returns>
+        /// <example>
+        /// <code>
+        /// string[] items = {"apple", "banana", "cherry"};
+        /// string result = items.Join(", "); // 结果: "apple, banana, cherry"
+        /// 
+        /// string[] tags = {"C#", "JavaScript", "Python"};
+        /// string html = tags.Join("", true, "&lt;", "&gt;"); // 结果: "&lt;C#&gt;&lt;JavaScript&gt;&lt;Python&gt;"
+        /// </code>
+        /// </example>
+        public static string Join(this string[] array, string split, bool removeLastSplit = true, string prefix = StringHelper.EmptyString, string suffix = StringHelper.EmptyString)
+        {
+            if (array == null || array.Length == 0) return string.Empty;
+
+            var stringBuilder = new StringBuilder();
+            foreach (object s in array)
+            {
+                stringBuilder.Append(prefix);
+                stringBuilder.Append(s);
+                stringBuilder.Append(suffix);
+                stringBuilder.Append(split);
+            }
+
+            if (removeLastSplit && stringBuilder.Length > 0)
+            {
+                stringBuilder.Length -= split.Length;
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// 从字符串数组中移除重复的元素，返回一个新的不包含重复元素的数组。
+        /// 保持元素的原始顺序。
+        /// </summary>
+        /// <param name="array">要去重的字符串数组</param>
+        /// <returns>不包含重复元素的新数组，如果输入为 null 或空数组则返回空数组</returns>
+        /// <example>
+        /// <code>
+        /// string[] items = {"apple", "banana", "apple", "cherry", "banana"};
+        /// string[] unique = items.Distinct(); // 结果: {"apple", "banana", "cherry"}
+        /// 
+        /// string[] empty = null;
+        /// string[] result = empty.Distinct(); // 结果: {}
+        /// </code>
+        /// </example>
+        public static string[] Distinct(this string[] array)
+        {
+            if (array == null || array.Length == 0) return array ?? new string[0];
+
+            var seen = new HashSet<string>();
+            var result = new List<string>(array.Length); // 预分配容量
+
+            foreach (string item in array)
+            {
+                if (seen.Add(item)) // HashSet.Add 返回 true 表示元素不存在
+                {
+                    result.Add(item);
+                }
+            }
+
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// 将字符串数组转换为 BigInteger 数组。
+        /// </summary>
+        /// <param name="strArray">要转换的字符串数组</param>
+        /// <returns>BigInteger 数组，如果输入为 null 则返回 null</returns>
+        /// <exception cref="FormatException">当字符串无法解析为数字时抛出</exception>
+        /// <example>
+        /// <code>
+        /// string[] numbers = {"12345678901234567890", "98765432109876543210"};
+        /// BigInteger[] bigInts = numbers.ToBigIntegerArray();
+        /// 
+        /// string[] invalid = {"123", "abc", "456"}; // 会抛出 FormatException
+        /// </code>
+        /// </example>
         public static BigInteger[] ToBigIntegerArray(this string[] strArray)
         {
             if (strArray is null) return null;
@@ -25,9 +119,57 @@ namespace Silmoon.Extension
             return bigIntegers.ToArray();
         }
 
+        /// <summary>
+        /// 检查字符串是否为 null 或空字符串。
+        /// </summary>
+        /// <param name="value">要检查的字符串</param>
+        /// <returns>如果字符串为 null 或空字符串则返回 true，否则返回 false</returns>
+        /// <example>
+        /// <code>
+        /// string text1 = null;
+        /// bool result1 = text1.IsNullOrEmpty(); // 结果: true
+        /// 
+        /// string text2 = "";
+        /// bool result2 = text2.IsNullOrEmpty(); // 结果: true
+        /// 
+        /// string text3 = "Hello";
+        /// bool result3 = text3.IsNullOrEmpty(); // 结果: false
+        /// </code>
+        /// </example>
         public static bool IsNullOrEmpty(this string value) => string.IsNullOrEmpty(value);
+        /// <summary>
+        /// 获取字符串在指定编码下的字节长度。
+        /// </summary>
+        /// <param name="value">要计算长度的字符串</param>
+        /// <param name="encoding">用于编码的字符编码</param>
+        /// <returns>字符串在指定编码下的字节数</returns>
+        /// <example>
+        /// <code>
+        /// string text = "Hello 世界";
+        /// int utf8Length = text.GetLengthEncoded(Encoding.UTF8); // 结果: 11 (UTF-8编码)
+        /// int asciiLength = text.GetLengthEncoded(Encoding.ASCII); // 结果: 7 (ASCII编码，中文字符会被替换)
+        /// </code>
+        /// </example>
         public static int GetLengthEncoded(this string value, Encoding encoding) => encoding.GetByteCount(value);
-        public static int GetLengthSpecial(this string s)
+        /// <summary>
+        /// 获取字符串的显示长度，考虑中文字符占两个显示位置。
+        /// 用于在等宽字体环境下计算字符串的实际显示宽度。
+        /// </summary>
+        /// <param name="s">要计算显示长度的字符串</param>
+        /// <returns>字符串的显示长度，中文字符计为2，英文字符计为1</returns>
+        /// <example>
+        /// <code>
+        /// string text1 = "Hello";
+        /// int length1 = text1.GetDisplayLength(); // 结果: 5
+        /// 
+        /// string text2 = "你好";
+        /// int length2 = text2.GetDisplayLength(); // 结果: 4
+        /// 
+        /// string text3 = "Hello世界";
+        /// int length3 = text3.GetDisplayLength(); // 结果: 9 (5 + 4)
+        /// </code>
+        /// </example>
+        public static int GetDisplayLength(this string s)
         {
             // 如果字符串为空或者为 null，直接返回长度为0
             if (string.IsNullOrEmpty(s)) return 0;
@@ -54,17 +196,72 @@ namespace Silmoon.Extension
             return count;
         }
 
+
+        /// <summary>
+        /// 检查字符串是否只包含数字字符。
+        /// </summary>
+        /// <param name="value">要检查的字符串</param>
+        /// <returns>如果字符串只包含数字字符则返回 true，否则返回 false</returns>
+        /// <example>
+        /// <code>
+        /// string text1 = "12345";
+        /// bool result1 = text1.IsNumber(); // 结果: true
+        /// 
+        /// string text2 = "123.45";
+        /// bool result2 = text2.IsNumber(); // 结果: false (包含小数点)
+        /// 
+        /// string text3 = "abc123";
+        /// bool result3 = text3.IsNumber(); // 结果: false (包含字母)
+        /// </code>
+        /// </example>
         public static bool IsNumber(this string value)
         {
             if (string.IsNullOrEmpty(value)) return false;
             return value.All(char.IsDigit);
         }
+        /// <summary>
+        /// 检查字符串是否可以解析为 decimal 类型的数值。
+        /// </summary>
+        /// <param name="value">要检查的字符串</param>
+        /// <returns>如果字符串可以解析为 decimal 则返回 true，否则返回 false</returns>
+        /// <example>
+        /// <code>
+        /// string text1 = "123.45";
+        /// bool result1 = text1.IsDecimal(); // 结果: true
+        /// 
+        /// string text2 = "-99.99";
+        /// bool result2 = text2.IsDecimal(); // 结果: true
+        /// 
+        /// string text3 = "abc";
+        /// bool result3 = text3.IsDecimal(); // 结果: false
+        /// 
+        /// string text4 = "123,456.78";
+        /// bool result4 = text4.IsDecimal(); // 结果: false (包含千位分隔符)
+        /// </code>
+        /// </example>
         public static bool IsDecimal(this string value)
         {
             decimal result;
             return decimal.TryParse(value, out result);
         }
 
+        /// <summary>
+        /// 按指定编码的字节长度截取字符串。
+        /// 主要用于处理包含中文字符的字符串，确保截取后的字符串不会破坏字符的完整性。
+        /// </summary>
+        /// <param name="s">要截取的字符串</param>
+        /// <param name="length">要截取的字节长度</param>
+        /// <param name="encoding">用于编码的字符编码</param>
+        /// <returns>截取后的字符串</returns>
+        /// <example>
+        /// <code>
+        /// string text = "Hello世界";
+        /// string result = text.SubstringEncoded(7, Encoding.UTF8); // 结果: "Hello世" (7个字节)
+        /// 
+        /// string chinese = "你好世界";
+        /// string sub = chinese.SubstringEncoded(6, Encoding.UTF8); // 结果: "你好" (6个字节，3个字符)
+        /// </code>
+        /// </example>
         public static string SubstringEncoded(this string s, int length, Encoding encoding)
         {
             if (s.IsNullOrEmpty()) return s;
@@ -100,7 +297,24 @@ namespace Silmoon.Extension
             }
             return encoding.GetString(bytes, 0, i);
         }
-        public static string SubstringSpecial(this string s, int startIndex, int length)
+        /// <summary>
+        /// 按显示长度截取字符串，考虑中文字符占两个显示位置。
+        /// 用于在等宽字体环境下按显示宽度截取字符串。
+        /// </summary>
+        /// <param name="s">要截取的字符串</param>
+        /// <param name="startIndex">开始索引（按显示长度计算）</param>
+        /// <param name="length">要截取的显示长度</param>
+        /// <returns>截取后的字符串</returns>
+        /// <example>
+        /// <code>
+        /// string text = "Hello世界";
+        /// string result = text.SubstringByDisplayLength(0, 7); // 结果: "Hello世" (7个显示位置)
+        /// 
+        /// string chinese = "你好世界";
+        /// string sub = chinese.SubstringByDisplayLength(2, 4); // 结果: "好世" (从第2个位置开始，4个显示位置)
+        /// </code>
+        /// </example>
+        public static string SubstringByDisplayLength(this string s, int startIndex, int length)
         {
             // 如果字符串为空或者为 null，直接返回原始的字符串
             if (string.IsNullOrEmpty(s)) return s;
@@ -140,6 +354,24 @@ namespace Silmoon.Extension
             return result.ToString();
         }
 
+
+        /// <summary>
+        /// 在字符串中按指定间隔插入分隔符。
+        /// 常用于格式化数字、银行卡号等需要分组显示的字符串。
+        /// </summary>
+        /// <param name="input">要处理的字符串</param>
+        /// <param name="groupSize">每组字符的数量</param>
+        /// <param name="separator">分隔符，默认为空格</param>
+        /// <returns>插入分隔符后的字符串</returns>
+        /// <example>
+        /// <code>
+        /// string number = "1234567890";
+        /// string formatted = number.InsertSeparator(4, " "); // 结果: "1234 5678 90"
+        /// 
+        /// string card = "1234567890123456";
+        /// string cardFormatted = card.InsertSeparator(4, "-"); // 结果: "1234-5678-9012-3456"
+        /// </code>
+        /// </example>
         public static string InsertSeparator(this string input, int groupSize, string separator = " ")
         {
             if (string.IsNullOrEmpty(input)) return input;
@@ -147,21 +379,38 @@ namespace Silmoon.Extension
             // 去除输入字符串中可能存在的分隔符
             //input = input.Replace(separator, "");
 
-            string result = string.Empty;
+            var stringBuilder = new StringBuilder(input.Length + (input.Length / groupSize) * separator.Length);
             for (int i = 0; i < input.Length; i += groupSize)
             {
                 int length = Math.Min(groupSize, input.Length - i);
-                result += input.Substring(i, length);
+                stringBuilder.Append(input.Substring(i, length));
 
                 if (i + length < input.Length)
                 {
-                    result += separator;
+                    stringBuilder.Append(separator);
                 }
             }
 
-            return result;
+            return stringBuilder.ToString();
         }
 
+        /// <summary>
+        /// 从字符串末尾开始截取指定长度的子字符串。
+        /// </summary>
+        /// <param name="s">要截取的字符串</param>
+        /// <param name="endIndex">从末尾开始截取的字符数量</param>
+        /// <param name="strictMode">是否启用严格模式，严格模式下会检查参数有效性</param>
+        /// <returns>截取后的字符串</returns>
+        /// <exception cref="ArgumentOutOfRangeException">当 strictMode 为 true 且 endIndex 超出字符串长度时抛出</exception>
+        /// <example>
+        /// <code>
+        /// string text = "Hello World";
+        /// string result = text.EndSubstring(5); // 结果: "World"
+        /// 
+        /// string shortText = "Hi";
+        /// string result2 = shortText.EndSubstring(5); // 结果: "Hi" (超出长度时返回原字符串)
+        /// </code>
+        /// </example>
         public static string EndSubstring(this string s, int endIndex, bool strictMode = false)
         {
             if (string.IsNullOrEmpty(s)) return s;
@@ -230,6 +479,32 @@ namespace Silmoon.Extension
             return data;
         }
         public static string TrimWithoutNull(this string value) => value?.Trim();
+        /// <summary>
+        /// 将字符串转换为布尔值。
+        /// 支持多种表示真/假的字符串格式，包括中英文。
+        /// </summary>
+        /// <param name="value">要转换的字符串</param>
+        /// <param name="defaultResult">当字符串不匹配任何已知格式时的默认返回值</param>
+        /// <param name="stringNullOrEmptyResult">当字符串为 null 或空时的返回值</param>
+        /// <returns>转换后的布尔值</returns>
+        /// <example>
+        /// <code>
+        /// string text1 = "true";
+        /// bool result1 = text1.ToBool(); // 结果: true
+        /// 
+        /// string text2 = "是";
+        /// bool result2 = text2.ToBool(); // 结果: true
+        /// 
+        /// string text3 = "false";
+        /// bool result3 = text3.ToBool(); // 结果: false
+        /// 
+        /// string text4 = "unknown";
+        /// bool result4 = text4.ToBool(); // 结果: false (默认值)
+        /// 
+        /// string text5 = "unknown";
+        /// bool result5 = text5.ToBool(true); // 结果: true (自定义默认值)
+        /// </code>
+        /// </example>
         public static bool ToBool(this string value, bool defaultResult = false, bool stringNullOrEmptyResult = false)
         {
             if (string.IsNullOrEmpty(value)) return stringNullOrEmptyResult;
@@ -290,45 +565,127 @@ namespace Silmoon.Extension
             // 返回替换后的字符串
             return value.Substring(0, index) + replaceWith + value.Substring(index + length);
         }
-        public static string RepeatString(this string value, int repeateTimes)
+        /// <summary>
+        /// 重复字符串指定次数。
+        /// </summary>
+        /// <param name="value">要重复的字符串</param>
+        /// <param name="repeatCount">重复次数</param>
+        /// <returns>重复后的字符串，如果输入为空或重复次数小于等于0则返回空字符串</returns>
+        /// <example>
+        /// <code>
+        /// string text = "Hello";
+        /// string result = text.Repeat(3); // 结果: "HelloHelloHello"
+        /// 
+        /// string dash = "-";
+        /// string line = dash.Repeat(10); // 结果: "----------"
+        /// 
+        /// string empty = "test".Repeat(0); // 结果: ""
+        /// </code>
+        /// </example>
+        public static string Repeat(this string value, int repeatCount)
         {
-            string s = string.Empty;
-            for (int i = 0; i < repeateTimes; i++)
+            if (string.IsNullOrEmpty(value) || repeatCount <= 0) return string.Empty;
+            if (repeatCount == 1) return value;
+
+            var stringBuilder = new StringBuilder(value.Length * repeatCount);
+            for (int i = 0; i < repeatCount; i++)
             {
-                s += value;
+                stringBuilder.Append(value);
             }
-            return s;
+            return stringBuilder.ToString();
         }
+
+        /// <summary>
+        /// 使用指定字符串填充字符串到指定长度。
+        /// 如果字符串长度不足，则在前面或后面添加填充字符；如果长度超出，则返回原字符串。
+        /// </summary>
+        /// <param name="str">要填充的字符串</param>
+        /// <param name="Length">目标长度</param>
+        /// <param name="FillStr">用于填充的字符串</param>
+        /// <param name="Append">是否在字符串后面填充，true 为后面，false 为前面</param>
+        /// <returns>填充后的字符串</returns>
+        /// <example>
+        /// <code>
+        /// string text = "Hello";
+        /// string padded = text.Fill(10, "0", true); // 结果: "Hello00000"
+        /// 
+        /// string number = "123";
+        /// string paddedNumber = number.Fill(6, "0", false); // 结果: "000123"
+        /// </code>
+        /// </example>
         public static string Fill(this string str, int Length, string FillStr, bool Append = true)
         {
             int clength = Length - str.Length;
             if (clength < 1) return str;
 
-            for (int i = 0; i < clength; i++)
+            var stringBuilder = new StringBuilder(Length);
+            if (Append)
             {
-                if (Append) str += FillStr;
-                else str = FillStr + str;
+                stringBuilder.Append(str);
+                for (int i = 0; i < clength; i++)
+                {
+                    stringBuilder.Append(FillStr);
+                }
             }
-            return str;
+            else
+            {
+                for (int i = 0; i < clength; i++)
+                {
+                    stringBuilder.Append(FillStr);
+                }
+                stringBuilder.Append(str);
+            }
+            return stringBuilder.ToString();
         }
         /// <summary>
-        /// 保持一个可能过长字符串的长度，如果过长，则截断字符串
+        /// 截断过长的字符串，在中间插入省略符。
+        /// 如果字符串长度超过指定长度，则保留前后部分并在中间插入省略符。
         /// </summary>
-        /// <param name="value">原字符串</param>
-        /// <param name="maxlen">最大长度</param>
-        /// <param name="str">截断时，使用一个特定的字符串进行衔接</param>
-        /// <returns></returns>
+        /// <param name="value">要处理的字符串</param>
+        /// <param name="maxlen">最大允许长度</param>
+        /// <param name="str">省略符字符串，如 "..."</param>
+        /// <returns>截断后的字符串，如果原字符串长度不超过 maxlen 则返回原字符串</returns>
+        /// <example>
+        /// <code>
+        /// string longText = "这是一个很长的字符串，需要被截断";
+        /// string truncated = longText.KeepLessStringLength(10, "..."); // 结果: "这是一个...截断"
+        /// 
+        /// string shortText = "短文本";
+        /// string result = shortText.KeepLessStringLength(10, "..."); // 结果: "短文本" (未截断)
+        /// </code>
+        /// </example>
         public static string KeepLessStringLength(this string value, int maxlen, string str)
         {
             if (value.Length > maxlen)
             {
                 int halflen = (maxlen - str.Length) / 2;
-                string result = value.Substring(0, halflen);
-                result += str + value.Substring(value.Length - halflen, halflen);
-                return result;
+                var stringBuilder = new StringBuilder(maxlen);
+                stringBuilder.Append(value.Substring(0, halflen));
+                stringBuilder.Append(str);
+                stringBuilder.Append(value.Substring(value.Length - halflen, halflen));
+                return stringBuilder.ToString();
             }
             else return value;
         }
+        /// <summary>
+        /// 调整字符串长度，支持截断和填充操作。
+        /// 如果字符串长度超出目标长度则截断，如果不足则填充。
+        /// </summary>
+        /// <param name="str">要调整的字符串</param>
+        /// <param name="Length">目标长度</param>
+        /// <param name="SubStringFromStart">截断时是否从开头截取，true 为从开头，false 为从末尾</param>
+        /// <param name="PadChar">填充字符</param>
+        /// <param name="Append">填充时是否在字符串后面填充，true 为后面，false 为前面</param>
+        /// <returns>调整长度后的字符串</returns>
+        /// <example>
+        /// <code>
+        /// string text = "Hello World";
+        /// string adjusted = text.AdjustStringLength(5, true, '0', true); // 结果: "Hello" (截断)
+        /// 
+        /// string shortText = "Hi";
+        /// string padded = shortText.AdjustStringLength(5, true, '0', true); // 结果: "Hi000" (填充)
+        /// </code>
+        /// </example>
         public static string AdjustStringLength(this string str, int Length, bool SubStringFromStart, char PadChar, bool Append)
         {
             if (str.Length > Length)
@@ -340,21 +697,22 @@ namespace Silmoon.Extension
             }
             else if (str.Length < Length)
             {
+                var stringBuilder = new StringBuilder(Length);
                 var padding = new string(PadChar, Length - str.Length);
                 if (Append)
-                    str = str + padding;
+                {
+                    stringBuilder.Append(str);
+                    stringBuilder.Append(padding);
+                }
                 else
-                    str = padding + str;
+                {
+                    stringBuilder.Append(padding);
+                    stringBuilder.Append(str);
+                }
+                str = stringBuilder.ToString();
             }
             return str;
         }
-        public enum Strength
-        {
-            Invalid = 0,
-            Weak = 1,
-            Normal = 2,
-            Strong = 3,
-        };
         /// <summary>
         /// 计算密码强度
         /// </summary>
@@ -405,31 +763,63 @@ namespace Silmoon.Extension
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static string StripHtml(this string str) => Regex.Replace(str, "<.*?>", string.Empty);
-        public static bool CheckStringLengthGte(this string str, int length) => str?.Length >= length;
+        public static string StripHtml(this string str) => HtmlTagRegex.Replace(str, string.Empty);
+        public static bool HasLengthGreaterThanOrEqual(this string str, int length) => str?.Length >= length;
+
+        /// <summary>
+        /// 检查字符串长度是否大于等于指定长度
+        /// </summary>
+        /// <param name="str">字符串</param>
+        /// <param name="length">长度</param>
+        /// <returns></returns>
+        [Obsolete("方法名 'CheckStringLengthGte' 不够清晰，请使用 'HasLengthGreaterThanOrEqual' 方法", false)]
+        public static bool CheckStringLengthGte(this string str, int length) => HasLengthGreaterThanOrEqual(str, length);
 
 
         /// <summary>
-        /// 字符串是否是电子邮件地址
+        /// 检查字符串是否为有效的电子邮件地址格式。
         /// </summary>
-        /// <param name="Email"></param>
-        /// <returns></returns>
+        /// <param name="Email">要检查的电子邮件地址字符串</param>
+        /// <returns>如果字符串符合电子邮件地址格式则返回 true，否则返回 false</returns>
+        /// <example>
+        /// <code>
+        /// string email1 = "user@example.com";
+        /// bool result1 = email1.IsEmail(); // 结果: true
+        /// 
+        /// string email2 = "invalid-email";
+        /// bool result2 = email2.IsEmail(); // 结果: false
+        /// 
+        /// string email3 = "test@domain.co.uk";
+        /// bool result3 = email3.IsEmail(); // 结果: true
+        /// </code>
+        /// </example>
         public static bool IsEmail(this string Email)
         {
             if (string.IsNullOrEmpty(Email)) return false;
-            Regex regex = new Regex(@"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
-            return regex.IsMatch(Email);
+            return EmailRegex.IsMatch(Email);
         }
         /// <summary>
-        /// 字符串是否是手机号码
+        /// 检查字符串是否为有效的中国大陆手机号码格式。
+        /// 支持主流的手机号段：13x、14x、15x、16x、17x、18x、19x。
         /// </summary>
-        /// <param name="MobilePhone"></param>
-        /// <returns></returns>
+        /// <param name="MobilePhone">要检查的手机号码字符串</param>
+        /// <returns>如果字符串符合中国大陆手机号码格式则返回 true，否则返回 false</returns>
+        /// <example>
+        /// <code>
+        /// string phone1 = "13812345678";
+        /// bool result1 = phone1.IsMobilePhone(); // 结果: true
+        /// 
+        /// string phone2 = "12345678901";
+        /// bool result2 = phone2.IsMobilePhone(); // 结果: false (不是有效号段)
+        /// 
+        /// string phone3 = "15912345678";
+        /// bool result3 = phone3.IsMobilePhone(); // 结果: true
+        /// </code>
+        /// </example>
         public static bool IsMobilePhone(this string MobilePhone)
         {
             if (string.IsNullOrEmpty(MobilePhone)) return false;
-            Regex regex = new Regex(@"^((1[3,5,6,8][0-9])|(14[5,7])|(17[0,1,2,3,5,6,7,8])|(19[1,8,9]))\d{8}$");
-            return regex.IsMatch(MobilePhone);
+            return MobilePhoneRegex.IsMatch(MobilePhone);
         }
         /// <summary>
         /// 字符串是否是固定电话号码
@@ -439,8 +829,7 @@ namespace Silmoon.Extension
         public static bool IsPhone(this string Phone)
         {
             if (string.IsNullOrEmpty(Phone)) return false;
-            Regex regex = new Regex(@"^(\d{3,4}-)?\d{6,8}$");
-            return regex.IsMatch(Phone);
+            return PhoneRegex.IsMatch(Phone);
         }
         /// <summary>
         /// 字符串是否是身份证号码
@@ -497,8 +886,7 @@ namespace Silmoon.Extension
         public static bool IsBusinessLicense(this string BusinessLicense)
         {
             if (string.IsNullOrEmpty(BusinessLicense)) return false;
-            Regex regex = new Regex(@"^[0-9A-Z]{8}-[0-9A-Z]$");
-            return regex.IsMatch(BusinessLicense);
+            return BusinessLicenseRegex.IsMatch(BusinessLicense);
         }
         /// <summary>
         /// 检查字符串是否是Url
@@ -509,16 +897,7 @@ namespace Silmoon.Extension
         public static bool IsUrl(this string Url, bool RequireHttps = false)
         {
             if (Url.IsNullOrEmpty()) return false;
-            // 验证 URL 的正则表达式
-            string pattern = RequireHttps ?
-                @"^https:\/\/([\da-z\.-]+)\.([a-z\.]{2,6})(:[0-9]{1,5})?([\/\w \.-]*)*\/?$" :
-                @"^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})(:[0-9]{1,5})?([\/\w \.-]*)*\/?$";
-
-            // 创建一个 Regex 对象
-            Regex regex = new Regex(pattern);
-
-            // 检查 URL 是否符合格式
-            return regex.IsMatch(Url);
+            return RequireHttps ? HttpsUrlRegex.IsMatch(Url) : UrlRegex.IsMatch(Url);
         }
         /// <summary>
         /// 检查字符串是否是IPv4地址
@@ -711,7 +1090,10 @@ namespace Silmoon.Extension
 
             if (numberChars % 2 != 0)
             {
-                hex = "0" + hex;
+                var stringBuilder = new StringBuilder(numberChars + 1);
+                stringBuilder.Append('0');
+                stringBuilder.Append(hex);
+                hex = stringBuilder.ToString();
                 numberChars = hex.Length;
             }
             for (int i = 0; i < numberChars; i += 2)
@@ -791,6 +1173,43 @@ namespace Silmoon.Extension
             // 将标准 Base64 格式的字符串转换为 Base64URL
             return base64.Replace('+', '-').Replace('/', '_').TrimEnd('=');
         }
+        #region Obsolete Methods - 兼容性保留，将在未来版本中删除
 
+        /// <summary>
+        /// 重复字符串指定次数
+        /// </summary>
+        /// <param name="value">要重复的字符串</param>
+        /// <param name="repeateTimes">重复次数（已废弃，请使用 repeatCount 参数的新版本方法）</param>
+        /// <returns></returns>
+        [Obsolete("方法名 'RepeatString' 不够清晰，请使用 'Repeat' 方法", false)]
+        public static string RepeatString(this string value, int repeateTimes) => Repeat(value, repeateTimes);
+
+        /// <summary>
+        /// 获取字符串的显示长度（考虑中文字符占两个位置）
+        /// </summary>
+        /// <param name="s">字符串</param>
+        /// <returns></returns>
+        [Obsolete("方法名 'GetLengthSpecial' 不够清晰，请使用 'GetDisplayLength' 方法", false)]
+        public static int GetLengthSpecial(this string s) => GetDisplayLength(s);
+
+        /// <summary>
+        /// 按显示长度截取字符串（考虑中文字符占两个位置）
+        /// </summary>
+        /// <param name="s">字符串</param>
+        /// <param name="startIndex">开始索引</param>
+        /// <param name="length">显示长度</param>
+        /// <returns></returns>
+        [Obsolete("方法名 'SubstringSpecial' 不够清晰，请使用 'SubstringByDisplayLength' 方法", false)]
+        public static string SubstringSpecial(this string s, int startIndex, int length) => SubstringByDisplayLength(s, startIndex, length);
+
+        #endregion
+
+        public enum Strength
+        {
+            Invalid = 0,
+            Weak = 1,
+            Normal = 2,
+            Strong = 3,
+        };
     }
 }
