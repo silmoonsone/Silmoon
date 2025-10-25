@@ -53,7 +53,7 @@ else
 
         Console.WriteLine();
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("=".RepeatString(Console.BufferWidth));
+        Console.WriteLine("=".Repeat(Console.BufferWidth));
         Console.ResetColor();
         Console.WriteLine("Running...");
         Console.WriteLine();

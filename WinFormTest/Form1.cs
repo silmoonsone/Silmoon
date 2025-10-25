@@ -54,7 +54,7 @@ namespace WinFormTest
 
         private void ctlSubStringTestButton_Click(object sender, EventArgs e)
         {
-            var result = textBox1.Text.SubstringSpecial(2, 4);
+            var result = textBox1.Text.SubstringByDisplayLength(2, 4);
             MessageBox.Show(result);
         }
 
