@@ -12,6 +12,9 @@ namespace Silmoon.Extension
 {
     public static class ByteArrayExtension
     {
+        // 十六进制字符查找表，避免 ToString("x2") 的字符串分配
+        private static readonly char[] HexChars = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+
         public static MemoryStream GetStream(this byte[] bytes) => new MemoryStream(bytes);
         public static BinaryReader GetBinaryReader(this byte[] bytes) => new BinaryReader(GetStream(bytes));
         /// <summary>
@@ -50,24 +53,6 @@ namespace Silmoon.Extension
             return encoding.GetString(data);
         }
         public static string GetBase64String(this byte[] data) => data is null ? null : Convert.ToBase64String(data);
-        public static string ToHexString(this byte[] value, bool TrimPerfixZero, bool Add0xPrefix = false)
-        {
-            if (value == null) return null;
-
-            StringBuilder sb = new StringBuilder(value.Length * 2);
-            foreach (byte b in value)
-            {
-                //if (TrimPerfixZero && sb.Length == 0 && b == 0) continue;
-                sb.Append(b.ToString("x2"));
-            }
-
-            var hexStr = sb.ToString();
-            if (TrimPerfixZero) hexStr = hexStr.TrimStart('0');
-
-            if (Add0xPrefix) return "0x" + hexStr;
-            else return hexStr;
-        }
-        public static string ToHexString(this byte[] value) => ToHexString(value, false, false);
         public static byte[] Compress(this byte[] data)
         {
             using (var outputStream = new MemoryStream())
@@ -160,6 +145,47 @@ namespace Silmoon.Extension
             }
 
             return null;
+        }
+
+
+        public static string ToHexString(this byte[] value, bool TrimPerfixZero = false, bool Add0xPrefix = false)
+        {
+            if (value == null) return null;
+            return ToHexStringCore(value, TrimPerfixZero, Add0xPrefix);
+        }
+        public static string ToHexString(this Span<byte> value, bool TrimPerfixZero = false, bool Add0xPrefix = false) => ToHexStringCore(value, TrimPerfixZero, Add0xPrefix);
+        public static string ToHexString(this ReadOnlySpan<byte> value, bool TrimPerfixZero = false, bool Add0xPrefix = false) => ToHexStringCore(value, TrimPerfixZero, Add0xPrefix);
+        private static string ToHexStringCore(ReadOnlySpan<byte> value, bool trimPrefixZero, bool add0xPrefix)
+        {
+            if (value.IsEmpty) return add0xPrefix ? "0x0" : "0";
+#if NET5_0_OR_GREATER
+            string hexStr = Convert.ToHexString(value);
+#else
+
+            // 使用 StringBuilder 预分配容量，通过查找表避免 ToString("x2") 的字符串分配
+            StringBuilder stringBuilder = new StringBuilder(value.Length * 2);
+            for (int i = 0; i < value.Length; i++)
+            {
+                byte b = value[i];
+                stringBuilder.Append(HexChars[b >> 4]);
+                stringBuilder.Append(HexChars[b & 0x0F]);
+            }
+            string hexStr = stringBuilder.ToString();
+#endif
+
+
+            // 处理前导零的移除
+            if (trimPrefixZero)
+            {
+                hexStr = hexStr.TrimStart('0');
+                // 如果所有字符都是 '0'，至少保留一个 '0'
+                if (string.IsNullOrEmpty(hexStr))
+                {
+                    hexStr = "0";
+                }
+            }
+
+            return add0xPrefix ? "0x" + hexStr : hexStr;
         }
     }
 }

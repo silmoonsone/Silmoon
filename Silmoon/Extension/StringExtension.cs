@@ -1,4 +1,4 @@
-﻿using Silmoon.Models;
+using Silmoon.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -22,6 +22,26 @@ namespace Silmoon.Extension
         private static readonly Regex UrlRegex = new Regex(@"^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})(:[0-9]{1,5})?([\/\w \.-]*)*\/?$", RegexOptions.Compiled);
         private static readonly Regex HttpsUrlRegex = new Regex(@"^https:\/\/([\da-z\.-]+)\.([a-z\.]{2,6})(:[0-9]{1,5})?([\/\w \.-]*)*\/?$", RegexOptions.Compiled);
         private static readonly Regex HtmlTagRegex = new Regex("<.*?>", RegexOptions.Compiled);
+
+        /// <summary>
+        /// 检查字符串是否为 null 或空字符串。
+        /// </summary>
+        /// <param name="value">要检查的字符串</param>
+        /// <returns>如果字符串为 null 或空字符串则返回 true，否则返回 false</returns>
+        /// <example>
+        /// <code>
+        /// string text1 = null;
+        /// bool result1 = text1.IsNullOrEmpty(); // 结果: true
+        /// 
+        /// string text2 = "";
+        /// bool result2 = text2.IsNullOrEmpty(); // 结果: true
+        /// 
+        /// string text3 = "Hello";
+        /// bool result3 = text3.IsNullOrEmpty(); // 结果: false
+        /// </code>
+        /// </example>
+        public static bool IsNullOrEmpty(this string value) => string.IsNullOrEmpty(value);
+
         /// <summary>
         /// 将字符串数组中的所有元素使用指定的分隔符合并成一个字符串。
         /// </summary>
@@ -45,7 +65,7 @@ namespace Silmoon.Extension
             if (array == null || array.Length == 0) return string.Empty;
 
             var stringBuilder = new StringBuilder();
-            foreach (object s in array)
+            foreach (string s in array)
             {
                 stringBuilder.Append(prefix);
                 stringBuilder.Append(s);
@@ -119,82 +139,193 @@ namespace Silmoon.Extension
             return bigIntegers.ToArray();
         }
 
+
+
+
         /// <summary>
-        /// 检查字符串是否为 null 或空字符串。
+        /// 获取文本经过指定编码后的字节长度。
         /// </summary>
-        /// <param name="value">要检查的字符串</param>
-        /// <returns>如果字符串为 null 或空字符串则返回 true，否则返回 false</returns>
-        /// <example>
-        /// <code>
-        /// string text1 = null;
-        /// bool result1 = text1.IsNullOrEmpty(); // 结果: true
-        /// 
-        /// string text2 = "";
-        /// bool result2 = text2.IsNullOrEmpty(); // 结果: true
-        /// 
-        /// string text3 = "Hello";
-        /// bool result3 = text3.IsNullOrEmpty(); // 结果: false
-        /// </code>
-        /// </example>
-        public static bool IsNullOrEmpty(this string value) => string.IsNullOrEmpty(value);
+        /// <param name="value"></param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
+        public static int GetEncodingByteCount(this string value, Encoding encoding) => encoding.GetByteCount(value);
         /// <summary>
-        /// 获取字符串在指定编码下的字节长度。
+        /// 获取字符串按照实际显示出来的占用文本空间的宽度（列数）。如英文占用1宽度，中文占用2宽度。
         /// </summary>
-        /// <param name="value">要计算长度的字符串</param>
-        /// <param name="encoding">用于编码的字符编码</param>
-        /// <returns>字符串在指定编码下的字节数</returns>
-        /// <example>
-        /// <code>
-        /// string text = "Hello 世界";
-        /// int utf8Length = text.GetLengthEncoded(Encoding.UTF8); // 结果: 11 (UTF-8编码)
-        /// int asciiLength = text.GetLengthEncoded(Encoding.ASCII); // 结果: 7 (ASCII编码，中文字符会被替换)
-        /// </code>
-        /// </example>
-        public static int GetLengthEncoded(this string value, Encoding encoding) => encoding.GetByteCount(value);
-        /// <summary>
-        /// 获取字符串的显示长度，考虑中文字符占两个显示位置。
-        /// 用于在等宽字体环境下计算字符串的实际显示宽度。
-        /// </summary>
-        /// <param name="s">要计算显示长度的字符串</param>
-        /// <returns>字符串的显示长度，中文字符计为2，英文字符计为1</returns>
-        /// <example>
-        /// <code>
-        /// string text1 = "Hello";
-        /// int length1 = text1.GetDisplayLength(); // 结果: 5
-        /// 
-        /// string text2 = "你好";
-        /// int length2 = text2.GetDisplayLength(); // 结果: 4
-        /// 
-        /// string text3 = "Hello世界";
-        /// int length3 = text3.GetDisplayLength(); // 结果: 9 (5 + 4)
-        /// </code>
-        /// </example>
-        public static int GetDisplayLength(this string s)
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static int GetDisplayWidth(this string value)
         {
-            // 如果字符串为空或者为 null，直接返回长度为0
-            if (string.IsNullOrEmpty(s)) return 0;
+            if (string.IsNullOrEmpty(value)) return 0;
 
-            // 创建一个 TextElementEnumerator 对象来遍历字符串中的文本元素
-            // TextElementEnumerator 可以正确处理由多个 Unicode 标量组成的复合字符
-            var enumerator = StringInfo.GetTextElementEnumerator(s);
+            var e = StringInfo.GetTextElementEnumerator(value);
+            int width = 0;
 
-            int count = 0;  // 记录已处理的字符数
-
-            // 遍历字符串中的每一个文本元素
-            while (enumerator.MoveNext())
+            while (e.MoveNext())
             {
-                string textElement = enumerator.GetTextElement(); // 获取当前的文本元素（一个完整的字符）
-
-                // 检查当前字符是否为非西文字符
-                // 这里我们简单地假定任何非 ASCII 字符都为非西文字符
-                bool isNonWestern = textElement.Any(c => c > 127);
-
-                count += isNonWestern ? 2 : 1;  // 非西文字符占两个位置，西文字符占一个位置
+                width += GetElementWidth(e.GetTextElement());
             }
 
-            // 返回计算出的长度
-            return count;
+            return width;
         }
+        /// <summary>
+        /// 按照实际显示出来的占用文本空间的宽度（列数）截取字符串片段，如英文占用1，中文占用2的宽度进行截取。
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="startIndex"></param>
+        /// <param name="length"></param>
+        /// <returns>返回截取的字符串片段</returns>
+        public static string SubstringDisplayWidth(this string value, int startIndex, int length)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+            if (length <= 0) return string.Empty;
+            if (startIndex < 0) startIndex = 0;
+
+            var e = StringInfo.GetTextElementEnumerator(value);
+            var stringBuilder = new StringBuilder();
+
+            int pos = 0;      // 已走过的显示列数
+            int taken = 0;    // 已截取的显示列数
+
+            while (e.MoveNext())
+            {
+                string te = e.GetTextElement();
+                int w = GetElementWidth(te);
+
+                int nextPos = pos + w;
+
+                // 关键点：只要“当前元素起点 < startIndex”，就跳过（即 startIndex 落在元素内部也会跳过它）
+                if (pos < startIndex)
+                {
+                    pos = nextPos;
+                    continue;
+                }
+
+                if (taken + w > length) break;
+
+                stringBuilder.Append(te);
+                taken += w;
+                pos = nextPos;
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        #region 辅助方法：计算文本元素宽度
+        /// <summary>
+        /// 计算一个“文本元素”(text element)的显示宽度（列数）。
+        /// </summary>
+        /// <remarks>
+        /// - 控制字符 / 组合附加符号 / VS / ZWJ 等视为 0 列；
+        /// - 普通字符视为 1 列；
+        /// - CJK/全角/部分 Emoji 视为 2 列（近似规则，和终端/字体可能存在差异）。
+        /// - 若一个 textElement 全由零宽码点组成，为避免外层循环不前进，返回 1 作为兜底。
+        /// </remarks>
+        private static int GetElementWidth(string textElement)
+        {
+            if (string.IsNullOrEmpty(textElement)) return 0;
+
+#if NET5_0_OR_GREATER
+            int width = 0;
+
+            foreach (var rune in textElement.EnumerateRunes())
+            {
+                int cp = rune.Value;
+
+                // 控制字符：通常按 0（你也可以按 1，视场景）
+                if (cp <= 0x1F || (cp >= 0x7F && cp <= 0x9F)) continue;
+
+                // 变体选择符 / ZWJ / 组合附加符号：零宽
+                if (IsZeroWidth(cp)) continue;
+
+                width = Math.Max(width, IsWide(cp) ? 2 : 1);
+                if (width == 2) break; // 我们模型里最大就是 2
+            }
+
+            // 防止出现“全是零宽码点”的 textElement 导致宽度为 0 -> 外层循环 pos 不前进
+            return width == 0 ? 1 : width;
+#else
+            // 老框架没有 Rune：按 UTF-16 遍历 textElement 的码点（代理项合并）
+            int width = 0;
+
+            for (int i = 0; i < textElement.Length; i++)
+            {
+                int cp;
+                // 合并 surrogate pair
+                if (char.IsHighSurrogate(textElement[i]) && i + 1 < textElement.Length && char.IsLowSurrogate(textElement[i + 1]))
+                {
+                    cp = char.ConvertToUtf32(textElement[i], textElement[i + 1]);
+                    i++; // 消耗掉低代理项
+                }
+                else cp = textElement[i];
+
+                // 控制字符：按 0 列
+                if (cp <= 0x1F || (cp >= 0x7F && cp <= 0x9F)) continue;
+
+                // 变体选择符 / ZWJ / 组合附加符号：零宽
+                if (IsZeroWidth(cp)) continue;
+
+                width = Math.Max(width, IsWide(cp) ? 2 : 1);
+                if (width == 2) break;
+            }
+
+            // 防止全是零宽导致宽度=0 -> 外层 pos 不前进
+            return width == 0 ? 1 : width;
+#endif
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsZeroWidth(int cp)
+        {
+            // Combining marks（常见组合附加符号范围）
+            if ((cp >= 0x0300 && cp <= 0x036F) ||
+                (cp >= 0x1AB0 && cp <= 0x1AFF) ||
+                (cp >= 0x1DC0 && cp <= 0x1DFF) ||
+                (cp >= 0x20D0 && cp <= 0x20FF) ||
+                (cp >= 0xFE20 && cp <= 0xFE2F))
+                return true;
+
+            // Variation Selectors
+            if ((cp >= 0xFE00 && cp <= 0xFE0F) || (cp >= 0xE0100 && cp <= 0xE01EF))
+                return true;
+
+            // ZWJ / ZWNJ
+            if (cp == 0x200D || cp == 0x200C)
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// 判断码点在等宽终端中是否更可能显示为 2 列（近似规则，非绝对）。
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsWide(int cp)
+        {
+            // 近似 wcwidth 的“宽字符”范围（更接近等宽终端效果）
+            if (cp >= 0x1100 && cp <= 0x115F) return true;           // Hangul Jamo init
+            if (cp == 0x2329 || cp == 0x232A) return true;
+            if (cp >= 0x2E80 && cp <= 0xA4CF) return true;           // CJK / Yi / 等
+            if (cp >= 0xAC00 && cp <= 0xD7A3) return true;           // Hangul syllables
+            if (cp >= 0xF900 && cp <= 0xFAFF) return true;           // CJK compatibility ideographs
+            if (cp >= 0xFE10 && cp <= 0xFE19) return true;
+            if (cp >= 0xFE30 && cp <= 0xFE6F) return true;
+            if (cp >= 0xFF00 && cp <= 0xFF60) return true;           // Fullwidth forms
+            if (cp >= 0xFFE0 && cp <= 0xFFE6) return true;
+
+            // CJK 扩展区（超出 BMP）
+            if (cp >= 0x20000 && cp <= 0x2FFFD) return true;
+            if (cp >= 0x30000 && cp <= 0x3FFFD) return true;
+
+            // Emoji（实际显示很多环境按 2 列更贴近）
+            if (cp >= 0x1F000 && cp <= 0x1FAFF) return true;
+            if (cp >= 0x2600 && cp <= 0x27BF) return true;           // 常见符号/ dingbats（不少终端按 2）
+
+            return false;
+        }
+        #endregion
+
+
 
 
         /// <summary>
@@ -239,120 +370,79 @@ namespace Silmoon.Extension
         /// bool result4 = text4.IsDecimal(); // 结果: false (包含千位分隔符)
         /// </code>
         /// </example>
-        public static bool IsDecimal(this string value)
-        {
-            decimal result;
-            return decimal.TryParse(value, out result);
-        }
+        public static bool IsDecimal(this string value) => decimal.TryParse(value, out decimal result);
 
         /// <summary>
-        /// 按指定编码的字节长度截取字符串。
-        /// 主要用于处理包含中文字符的字符串，确保截取后的字符串不会破坏字符的完整性。
+        /// 按指定 <paramref name="encoding"/> 的“字节长度上限”截取字符串片段（从 <paramref name="startIndex"/> 开始），
+        /// 并保证不会在多字节字符（如 UTF-8 中文、Emoji 等）中间截断，避免产生乱码或替换字符（�）。
         /// </summary>
-        /// <param name="s">要截取的字符串</param>
-        /// <param name="length">要截取的字节长度</param>
-        /// <param name="encoding">用于编码的字符编码</param>
-        /// <returns>截取后的字符串</returns>
+        /// <param name="s">要截取的字符串。</param>
+        /// <param name="startIndex">
+        /// 起始位置（按 .NET 字符索引，即 UTF-16 的 char 索引；不是字节索引）。
+        /// </param>
+        /// <param name="maxBytes">
+        /// 截取后的内容在 <paramref name="encoding"/> 编码下的最大字节数（byte count 上限）。
+        /// </param>
+        /// <param name="encoding">用于计算字节长度与解码的编码（如 <see cref="Encoding.UTF8"/>）。</param>
+        /// <returns>
+        /// 从 <paramref name="startIndex"/> 开始截取的字符串片段，满足：
+        /// 1) 其在 <paramref name="encoding"/> 下编码后的字节长度 &lt;= <paramref name="maxBytes"/>；
+        /// 2) 不会破坏字符边界（不会截断一个字符的编码字节序列）。
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// <see cref="string.Substring(int,int)"/> 按“字符个数（UTF-16 char）”截取，并不关心 UTF-8 等编码后的字节长度；
+        /// 当你需要“字段/协议/存储”按字节限长时（例如最多 N 字节），应使用本方法。
+        /// </para>
+        /// <para>
+        /// 注意：<paramref name="startIndex"/> 是字符索引，不是字节索引。若你手头只有“字节偏移”，需要另行转换。
+        /// </para>
+        /// </remarks>
         /// <example>
         /// <code>
-        /// string text = "Hello世界";
-        /// string result = text.SubstringEncoded(7, Encoding.UTF8); // 结果: "Hello世" (7个字节)
-        /// 
-        /// string chinese = "你好世界";
-        /// string sub = chinese.SubstringEncoded(6, Encoding.UTF8); // 结果: "你好" (6个字节，3个字符)
+        /// // UTF-8 下：汉字通常 3 字节；ASCII 1 字节
+        /// string text = "你好世界"; // 4 个 char，UTF-8 共 12 字节
+        ///
+        /// // Substring 按字符截取：从 0 开始取 3 个字符 => "你好世"
+        /// // 但它的 UTF-8 字节长度是 9（并不会自动限制到 3 字节）
+        /// string a = text.Substring(0, 3);                     // "你好世"
+        ///
+        /// // SubstringEncoded 按 UTF-8 字节截取：最多 3 字节 => 只能容纳 1 个汉字
+        /// string b = text.SubstringEncoded(0, 3, Encoding.UTF8); // "你"
+        ///
+        /// // 带 startIndex：从 "世界" 开始最多 3 字节 => "世"
+        /// string c = text.SubstringEncoded(2, 3, Encoding.UTF8); // "世"
+        ///
+        /// // 混合更直观：
+        /// string mixed = "A你B"; // UTF-8 字节：A(1) + 你(3) + B(1) = 5
+        /// string d1 = mixed.Substring(0, 2);                      // "A你"（字符截取）UTF-8=4字节
+        /// string d2 = mixed.SubstringEncoded(0, 2, Encoding.UTF8); // "A"（2字节只够放 A）
         /// </code>
         /// </example>
-        public static string SubstringEncoded(this string s, int length, Encoding encoding)
+        public static string SubstringEncoded(this string s, int startIndex, int maxBytes, Encoding encoding)
         {
-            if (s.IsNullOrEmpty()) return s;
-            byte[] bytes = encoding.GetBytes(s);
-            int n = 0;  //  表示当前的字节数
-            int i = 0;  //  要截取的字节数
-            for (; i < bytes.GetLength(0) && n < length; i++)
-            {
-                //  偶数位置，如0、2、4等，为UCS2编码中两个字节的第一个字节
-                if (i % 2 == 0)
-                {
-                    n++;      //  在UCS2第一个字节时n加1
-                }
-                else
-                {
-                    //  当UCS2编码的第二个字节大于0时，该UCS2字符为汉字，一个汉字算两个字节
-                    if (bytes[i] > 0)
-                    {
-                        n++;
-                    }
-                }
-            }
-            //  如果i为奇数时，处理成偶数
-            if (i % 2 == 1)
-            {
-                //  该UCS2字符是汉字时，去掉这个截一半的汉字
-                if (bytes[i] > 0)
-                    i = i - 1;
-                //  该UCS2字符是字母或数字，则保留该字符
-                else
-
-                    i = i + 1;
-            }
-            return encoding.GetString(bytes, 0, i);
-        }
-        /// <summary>
-        /// 按显示长度截取字符串，考虑中文字符占两个显示位置。
-        /// 用于在等宽字体环境下按显示宽度截取字符串。
-        /// </summary>
-        /// <param name="s">要截取的字符串</param>
-        /// <param name="startIndex">开始索引（按显示长度计算）</param>
-        /// <param name="length">要截取的显示长度</param>
-        /// <returns>截取后的字符串</returns>
-        /// <example>
-        /// <code>
-        /// string text = "Hello世界";
-        /// string result = text.SubstringByDisplayLength(0, 7); // 结果: "Hello世" (7个显示位置)
-        /// 
-        /// string chinese = "你好世界";
-        /// string sub = chinese.SubstringByDisplayLength(2, 4); // 结果: "好世" (从第2个位置开始，4个显示位置)
-        /// </code>
-        /// </example>
-        public static string SubstringByDisplayLength(this string s, int startIndex, int length)
-        {
-            // 如果字符串为空或者为 null，直接返回原始的字符串
             if (string.IsNullOrEmpty(s)) return s;
+            if (startIndex == s.Length) return string.Empty;
+            if (startIndex > s.Length) throw new ArgumentOutOfRangeException(nameof(startIndex));
+            if (maxBytes <= 0) return string.Empty;
+            if (encoding == null) throw new ArgumentNullException(nameof(encoding));
 
-            // 创建一个 TextElementEnumerator 对象来遍历字符串中的文本元素
-            // TextElementEnumerator 可以正确处理由多个 Unicode 标量组成的复合字符
-            var enumerator = StringInfo.GetTextElementEnumerator(s);
+            // 仅对需要截取的尾部片段进行编码（避免整串 GetBytes 的大分配）
+            string tail = (startIndex == 0) ? s : s.Substring(startIndex);
 
-            var result = new StringBuilder();
-            int count = 0;  // 记录已处理的字符数
+            byte[] bytes = encoding.GetBytes(tail);
+            if (bytes.Length <= maxBytes) return tail;
 
-            // 遍历字符串中的每一个文本元素
-            while (enumerator.MoveNext())
-            {
-                string textElement = enumerator.GetTextElement(); // 获取当前的文本元素（一个完整的字符）
+            Decoder decoder = encoding.GetDecoder();
 
-                // 检查当前字符是否为非西文字符
-                // 这里我们简单地假定任何非 ASCII 字符都为非西文字符
-                bool isNonWestern = textElement.Any(c => c > 127);
+            // 输出字符数不可能超过输入字节数，因此用 maxBytes 作为 char 缓冲上界（偏保守但简单可靠）。
+            char[] chars = new char[maxBytes];
 
-                // 调整 startIndex 的计算，考虑非西文字符的长度
-                if (startIndex > 0)
-                {
-                    startIndex -= isNonWestern ? 2 : 1;
-                    continue;
-                }
+            decoder.Convert(bytes, 0, maxBytes, chars, 0, chars.Length, flush: false, out int _, out int charsUsed, out bool _);
 
-                // 如果已处理的字符数加上当前字符的长度大于期望的长度，则停止遍历
-                if (count + (isNonWestern ? 2 : 1) > length) break;
-
-                // 添加到结果字符串中
-                result.Append(textElement);
-                count += isNonWestern ? 2 : 1;  // 非西文字符占两个位置，西文字符占一个位置
-            }
-
-            // 返回结果字符串
-            return result.ToString();
+            return new string(chars, 0, charsUsed);
         }
+
 
 
         /// <summary>
@@ -375,20 +465,25 @@ namespace Silmoon.Extension
         public static string InsertSeparator(this string input, int groupSize, string separator = " ")
         {
             if (string.IsNullOrEmpty(input)) return input;
+            if (groupSize <= 0) throw new ArgumentOutOfRangeException(nameof(groupSize));
 
             // 去除输入字符串中可能存在的分隔符
             //input = input.Replace(separator, "");
 
             var stringBuilder = new StringBuilder(input.Length + (input.Length / groupSize) * separator.Length);
-            for (int i = 0; i < input.Length; i += groupSize)
-            {
-                int length = Math.Min(groupSize, input.Length - i);
-                stringBuilder.Append(input.Substring(i, length));
+            ReadOnlySpan<char> span = input.AsSpan();
 
-                if (i + length < input.Length)
-                {
-                    stringBuilder.Append(separator);
-                }
+            for (int i = 0; i < span.Length; i += groupSize)
+            {
+                int length = Math.Min(groupSize, span.Length - i);
+
+#if NETCOREAPP2_1_OR_GREATER || NET5_0_OR_GREATER
+                stringBuilder.Append(span.Slice(i, length));
+#else
+                stringBuilder.Append(input, i, length);
+#endif
+
+                if (i + length < span.Length) stringBuilder.Append(separator);
             }
 
             return stringBuilder.ToString();
@@ -465,9 +560,9 @@ namespace Silmoon.Extension
                 var result = (T)Enum.Parse(type, value, ignoreCase);
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                if (throwException) throw ex;
+                if (throwException) throw;  // 使用 throw 而不是 throw ex，以保留原始堆栈跟踪
                 else return default;
             }
         }
@@ -510,8 +605,6 @@ namespace Silmoon.Extension
             if (string.IsNullOrEmpty(value)) return stringNullOrEmptyResult;
             switch (value.ToLower())
             {
-                case null:
-                case "":
                 case "0":
                 case "n":
                 case "no":
@@ -554,13 +647,12 @@ namespace Silmoon.Extension
         public static string HidePart(this string value, int index, int length, string replacement = "*")
         {
             // 检查参数合法性
-            if (index < 0 || index >= value.Length || index + length > value.Length || length < 0)
-            {
-                throw new ArgumentOutOfRangeException("参数start或length的值不合法");
-            }
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (replacement == null) throw new ArgumentNullException(nameof(replacement));
+            if (index < 0 || index >= value.Length || index + length > value.Length || length < 0) throw new ArgumentOutOfRangeException("参数start或length的值不合法");
 
             // 生成用于替换的字符串
-            string replaceWith = replacement != string.Empty ? new string(replacement[0], length) : string.Empty;
+            string replaceWith = replacement.Length > 0 ? new string(replacement[0], length) : string.Empty;
 
             // 返回替换后的字符串
             return value.Substring(0, index) + replaceWith + value.Substring(index + length);
@@ -622,16 +714,28 @@ namespace Silmoon.Extension
             if (Append)
             {
                 stringBuilder.Append(str);
-                for (int i = 0; i < clength; i++)
+                // 优化：一次性追加重复的填充字符串，而不是循环追加
+                if (FillStr.Length == 1)
+                    stringBuilder.Append(FillStr[0], clength);
+                else
                 {
-                    stringBuilder.Append(FillStr);
+                    for (int i = 0; i < clength; i++)
+                    {
+                        stringBuilder.Append(FillStr);
+                    }
                 }
             }
             else
             {
-                for (int i = 0; i < clength; i++)
+                // 优化：一次性追加重复的填充字符串，而不是循环追加
+                if (FillStr.Length == 1)
+                    stringBuilder.Append(FillStr[0], clength);
+                else
                 {
-                    stringBuilder.Append(FillStr);
+                    for (int i = 0; i < clength; i++)
+                    {
+                        stringBuilder.Append(FillStr);
+                    }
                 }
                 stringBuilder.Append(str);
             }
@@ -831,6 +935,13 @@ namespace Silmoon.Extension
             if (string.IsNullOrEmpty(Phone)) return false;
             return PhoneRegex.IsMatch(Phone);
         }
+        // 身份证校验码对照表（符合GB11643-1999标准）
+        private static readonly string[] CardIdVerifyCodes = { "1", "0", "x", "9", "8", "7", "6", "5", "4", "3", "2" };
+        // 身份证加权因子
+        private static readonly int[] CardIdWeights = { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };
+        // 身份证省份代码（前两位）
+        private static readonly string CardIdProvinceCodes = "11x22x35x44x53x12x23x36x45x54x13x31x37x46x61x14x32x41x50x62x15x33x42x51x63x21x34x43x52x64x65x71x81x82x91";
+
         /// <summary>
         /// 字符串是否是身份证号码
         /// </summary>
@@ -847,34 +958,28 @@ namespace Silmoon.Extension
             }
 
             //省份验证
-            string address = "11x22x35x44x53x12x23x36x45x54x13x31x37x46x61x14x32x41x50x62x15x33x42x51x63x21x34x43x52x64x65x71x81x82x91";
-            if (address.IndexOf(CardId.Remove(2)) == -1)
-            {
-                return false;
-            }
+            string provinceCode = CardId.Substring(0, 2);
+            if (!CardIdProvinceCodes.Contains(provinceCode)) return false;
 
-            //生日验证
-            string birth = CardId.Substring(6, 8).Insert(6, "-").Insert(4, "-");
-            DateTime time = new DateTime();
-            if (DateTime.TryParse(birth, out time) == false)
-            {
-                return false;
-            }
+            //生日验证 - 身份证第7-14位是出生日期，格式YYYYMMDD
+            string birthYear = CardId.Substring(6, 4);
+            string birthMonth = CardId.Substring(10, 2);
+            string birthDay = CardId.Substring(12, 2);
+            string birth = $"{birthYear}-{birthMonth}-{birthDay}";
+            if (!DateTime.TryParse(birth, out DateTime _)) return false;
+
             //校验码验证
-            string[] arrVarifyCode = ("1,0,x,9,8,7,6,5,4,3,2").Split(',');
-            string[] Wi = ("7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2").Split(',');
-            char[] Ai = CardId.Remove(17).ToCharArray();
+            ReadOnlySpan<char> cardIdSpan = CardId.AsSpan(0, 17);
             int sum = 0;
             for (int i = 0; i < 17; i++)
             {
-                sum += int.Parse(Wi[i]) * int.Parse(Ai[i].ToString());
+                if (!char.IsDigit(cardIdSpan[i])) return false;
+                sum += CardIdWeights[i] * (cardIdSpan[i] - '0');
             }
-            int y = -1;
-            Math.DivRem(sum, 11, out y);
-            if (arrVarifyCode[y] != CardId.Substring(17, 1).ToLower())
-            {
-                return false;
-            }
+            int remainder = sum % 11;
+            char expectedCheckCode = CardIdVerifyCodes[remainder][0];
+            char actualCheckCode = char.ToLowerInvariant(CardId[17]);
+            if (expectedCheckCode != actualCheckCode) return false;
             return true;
             //符合GB11643-1999标准
         }
@@ -1009,36 +1114,27 @@ namespace Silmoon.Extension
 
 
 
-        public static string AppendUriQueryString(this string url, string queryString)
-        {
-            return url.Contains("?") ? $"{url}&{queryString}" : $"{url}?{queryString}";
-        }
-        public static string AppendUriQueryString(this string url, string key, string value)
-        {
-            return url.Contains("?") ? $"{url}&{HttpUtility.UrlEncode(key)}={HttpUtility.UrlEncode(value)}" : $"{url}?{HttpUtility.UrlEncode(key)}={HttpUtility.UrlEncode(value)}";
-        }
+        public static string AppendUriQueryString(this string url, string queryString) => url.Contains("?") ? $"{url}&{queryString}" : $"{url}?{queryString}";
+        public static string AppendUriQueryString(this string url, string key, string value) => url.Contains("?") ? $"{url}&{HttpUtility.UrlEncode(key)}={HttpUtility.UrlEncode(value)}" : $"{url}?{HttpUtility.UrlEncode(key)}={HttpUtility.UrlEncode(value)}";
 
         public static string RemoveUriQueryString(this string url, string key)
         {
-            if (!url.Contains("?") || string.IsNullOrEmpty(key))
-            {
-                return url;
-            }
+            if (string.IsNullOrEmpty(url) || !url.Contains("?") || string.IsNullOrEmpty(key)) return url;
 
             var baseUrl = url.Substring(0, url.IndexOf("?"));
             var queryString = url.Substring(url.IndexOf("?") + 1);
-            var newQueryString = string.Empty;
 
             var queryParams = HttpUtility.ParseQueryString(queryString);
             queryParams.Remove(key);
 
+            var newQueryString = string.Empty;
             if (queryParams.HasKeys())
             {
-                newQueryString = string.Join("&", queryParams.AllKeys
-                    .Select(k => $"{HttpUtility.UrlEncode(k)}={HttpUtility.UrlEncode(queryParams[k])}"));
+                newQueryString = string.Join("&", queryParams.AllKeys.Select(k => $"{HttpUtility.UrlEncode(k)}={HttpUtility.UrlEncode(queryParams[k])}"));
+                return $"{baseUrl}?{newQueryString}";
             }
+            else return baseUrl;
 
-            return $"{baseUrl}?{newQueryString}";
         }
         public static string GetUriQueryStringValueFromUrl(this string url, string key)
         {
@@ -1059,48 +1155,63 @@ namespace Silmoon.Extension
         /// <param name="str"></param>
         /// <param name="encoding"></param>
         /// <returns></returns>
-        public static byte[] GetBytes(this string str, Encoding encoding = null)
-        {
-            if (encoding is null) encoding = Encoding.UTF8;
-            return encoding.GetBytes(str);
-        }
+        public static byte[] GetBytes(this string str, Encoding encoding = null) => (encoding ?? Encoding.UTF8).GetBytes(str);
 
-        public static bool IsHexString(this string value)
+        public static bool IsHexString(this string value) => !string.IsNullOrEmpty(value) && IsHexString(value.AsSpan());
+        public static bool IsHexString(this ReadOnlySpan<char> span)
         {
-            bool isHex;
-            value = value.Substring(value.StartsWith("0x") ? 2 : 0);
-            foreach (var c in value)
+            // 支持 "0x" 和 "0X" 前缀
+            if (span.Length >= 2 && span[0] == '0' && (span[1] == 'x' || span[1] == 'X')) span = span.Slice(2);
+            if (span.Length == 0) return false;
+
+            foreach (var c in span)
             {
-                isHex = ((c >= '0' && c <= '9') ||
-                         (c >= 'a' && c <= 'f') ||
-                         (c >= 'A' && c <= 'F'));
-
+                bool isHex = (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
                 if (!isHex) return false;
             }
             return true;
         }
+        public static StateSet<bool, byte[]> HexStringToByteArray(this ReadOnlySpan<char> hexSpan)
+        {
+            // 重用 IsHexString 方法进行校验
+            if (!IsHexString(hexSpan)) return false.ToStateSet<byte[]>(null, "hex string value not is HexString.");
+
+            // 去掉 "0x" 或 "0X" 前缀（IsHexString 已经验证过格式，这里安全处理）
+            if (hexSpan.Length >= 2 && hexSpan[0] == '0' && (hexSpan[1] == 'x' || hexSpan[1] == 'X')) hexSpan = hexSpan.Slice(2);
+
+            // 计算字节数组长度：奇数长度需要向上取整
+            int numberChars = hexSpan.Length;
+            int byteCount = (numberChars + 1) / 2;  // 对于奇数长度，正确计算：3->2, 5->3
+            byte[] byteArrayResult = new byte[byteCount];
+
+            int byteIndex = 0;
+            int charIndex = 0;
+
+            // 如果是奇数长度，第一个字节只处理一个字符（高位补0）
+            if (numberChars % 2 != 0) byteArrayResult[byteIndex++] = (byte)GetHexValue(hexSpan[charIndex++]);
+
+            // 处理剩余的字符对
+            while (charIndex < numberChars)
+            {
+                byte high = (byte)GetHexValue(hexSpan[charIndex++]);
+                byte low = (byte)GetHexValue(hexSpan[charIndex++]);
+                byteArrayResult[byteIndex++] = (byte)((high << 4) | low);
+            }
+            return true.ToStateSet(byteArrayResult);
+        }
         public static StateSet<bool, byte[]> HexStringToByteArray(this string hex)
         {
             if (hex is null) return false.ToStateSet<byte[]>(null, "hex string value is null");
-            if (!IsHexString(hex)) return false.ToStateSet<byte[]>(null, "hex string value not is HexString.");
+            return HexStringToByteArray(hex.AsSpan());
+        }
 
-            if (hex.StartsWith("0x")) hex = hex.Substring(2);
-            int numberChars = hex.Length;
-            byte[] bytes = new byte[numberChars / 2];
-
-            if (numberChars % 2 != 0)
-            {
-                var stringBuilder = new StringBuilder(numberChars + 1);
-                stringBuilder.Append('0');
-                stringBuilder.Append(hex);
-                hex = stringBuilder.ToString();
-                numberChars = hex.Length;
-            }
-            for (int i = 0; i < numberChars; i += 2)
-            {
-                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
-            }
-            return true.ToStateSet(bytes);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static int GetHexValue(char c)
+        {
+            if (c >= '0' && c <= '9') return c - '0';
+            if (c >= 'A' && c <= 'F') return c - 'A' + 10;
+            if (c >= 'a' && c <= 'f') return c - 'a' + 10;
+            throw new ArgumentException($"Invalid hex character: {c}");
         }
         /// <summary>
         /// 把十六进制字符串转换成 <see cref="BigInteger"/>。
@@ -1126,19 +1237,19 @@ namespace Silmoon.Extension
                 hex = hex.Substring(2);
 
 #if NET5_0_OR_GREATER
-        if (!signed)
-        {
-            // —— 高性能无符号路径 ——
-            // 1. 如果字符数为奇数，先补一个 0；Convert.FromHexString 需要偶数字符数
-            if ((hex.Length & 1) == 1)
-                hex = '0' + hex;
+            if (!signed)
+            {
+                // —— 高性能无符号路径 ——
+                // 1. 如果字符数为奇数，先补一个 0；Convert.FromHexString 需要偶数字符数
+                if ((hex.Length & 1) == 1)
+                    hex = '0' + hex;
 
-            // 2. 十六进制 → byte[]（大端）—— Convert.FromHexString 是硬件加速的
-            byte[] bytes = Convert.FromHexString(hex);
+                // 2. 十六进制 → byte[]（大端）—— Convert.FromHexString 是硬件加速的
+                byte[] bytes = Convert.FromHexString(hex);
 
-            // 3. BigInteger 构造函数：isUnsigned = true 保证正数，isBigEndian = true 直接省去反转
-            return new BigInteger(bytes, /* isUnsigned */ true, /* isBigEndian */ true);  // :contentReference[oaicite:0]{index=0}
-        }
+                // 3. BigInteger 构造函数：isUnsigned = true 保证正数，isBigEndian = true 直接省去反转
+                return new BigInteger(bytes, /* isUnsigned */ true, /* isBigEndian */ true);  // :contentReference[oaicite:0]{index=0}
+            }
 #endif
             // —— 有符号路径，或老版本框架 fallback —— 
             // NumberStyles.HexNumber = AllowHexSpecifier + Leading/TrailingWhite
@@ -1189,8 +1300,8 @@ namespace Silmoon.Extension
         /// </summary>
         /// <param name="s">字符串</param>
         /// <returns></returns>
-        [Obsolete("方法名 'GetLengthSpecial' 不够清晰，请使用 'GetDisplayLength' 方法", false)]
-        public static int GetLengthSpecial(this string s) => GetDisplayLength(s);
+        [Obsolete("方法名 'GetLengthSpecial' 不够清晰，请使用 'GetDisplayWidth' 方法", false)]
+        public static int GetLengthSpecial(this string s) => GetDisplayWidth(s);
 
         /// <summary>
         /// 按显示长度截取字符串（考虑中文字符占两个位置）
@@ -1200,7 +1311,7 @@ namespace Silmoon.Extension
         /// <param name="length">显示长度</param>
         /// <returns></returns>
         [Obsolete("方法名 'SubstringSpecial' 不够清晰，请使用 'SubstringByDisplayLength' 方法", false)]
-        public static string SubstringSpecial(this string s, int startIndex, int length) => SubstringByDisplayLength(s, startIndex, length);
+        public static string SubstringSpecial(this string s, int startIndex, int length) => SubstringDisplayWidth(s, startIndex, length);
 
         #endregion
 

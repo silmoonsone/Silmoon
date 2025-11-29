@@ -7,8 +7,6 @@ namespace Silmoon.Extension
 {
     public static class SpecialConverter
     {
-        public static readonly DateTime SqlMinDateTime = DateTime.Parse("1/1/1753 00:00:00");
-
         public static long GetUnixTimestamp(DateTime dateTime) => new DateTimeOffset(dateTime).ToUnixTimeSeconds();
         public static DateTime FromUnixTimestamp(long timestamp) => DateTimeOffset.FromUnixTimeSeconds(timestamp).LocalDateTime;
 

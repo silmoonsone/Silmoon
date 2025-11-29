@@ -96,32 +96,26 @@ namespace Silmoon.Extension
             string hex;
 
 #if NET5_0_OR_GREATER
-        // -------- .NET 5+：走 Convert.ToHexString（硬件加速） --------
-        if (!signed)
-        {
-            // 无符号路径：直接获取大端 bytes
-            byte[] bytes = value.ToByteArray(isUnsigned: true, isBigEndian: true);  // :contentReference[oaicite:0]{index=0}
-            hex = Convert.ToHexString(bytes);                                       // :contentReference[oaicite:1]{index=1}
-        }
-        else
-        {
-            // 有符号路径：用默认 ToString("x")
-            hex = value.ToString("x");
-        }
+            // -------- .NET 5+：走 Convert.ToHexString（硬件加速） --------
+            if (!signed)
+            {
+                // 无符号路径：直接获取大端 bytes
+                byte[] bytes = value.ToByteArray(isUnsigned: true, isBigEndian: true);  // :contentReference[oaicite:0]{index=0}
+                hex = Convert.ToHexString(bytes);                                       // :contentReference[oaicite:1]{index=1}
+            }
+            else
+            {
+                // 有符号路径：用默认 ToString("x")
+                hex = value.ToString("x");
+            }
 
-        // Convert.ToHexString 总是大写
-        if (!upperCase && signed)  // 有符号路径里 hex 已是小写
-        {
-            hex = hex.ToLowerInvariant();
-        }
-        else if (!upperCase && !signed)
-        {
-            hex = hex.ToLowerInvariant();
-        }
-        else if (upperCase && signed)
-        {
-            hex = hex.ToUpperInvariant();
-        }
+            // Convert.ToHexString 总是大写
+            if (!upperCase && signed)  // 有符号路径里 hex 已是小写
+                hex = hex.ToLowerInvariant();
+            else if (!upperCase && !signed)
+                hex = hex.ToLowerInvariant();
+            else if (upperCase && signed)
+                hex = hex.ToUpperInvariant();
 #else
             // -------- 旧框架 fallback --------
             hex = value.ToString(upperCase ? "X" : "x");

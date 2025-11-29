@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net10.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,5 +30,9 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageOutputPath>..\packages_out</PackageOutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Memory" Version="4.6.3" />
+  </ItemGroup>
 
 </Project>

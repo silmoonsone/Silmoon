@@ -87,7 +87,7 @@ namespace Silmoon.Extension
                 stringBuilder.Append(split);
             }
 
-            if (removeLastSplit && stringBuilder.Length > 0)
+            if (removeLastSplit && stringBuilder.Length >= split.Length)
             {
                 stringBuilder.Length -= split.Length;
             }
@@ -138,7 +138,7 @@ namespace Silmoon.Extension
         /// bool result3 = list3.IsNullOrEmpty(); // 结果: false
         /// </code>
         /// </example>
-        public static bool IsNullOrEmpty<T>(this ICollection<T> array) => array == null || array?.Count == 0;
+        public static bool IsNullOrEmpty<T>(this ICollection<T> array) => array == null || array.Count == 0;
         /// <summary>
         /// 比较两个相同类型集合的差异，返回缺失和多余的元素。
         /// </summary>
@@ -168,15 +168,49 @@ namespace Silmoon.Extension
             var sourceList = sourceCollection.ToList();
             var destinationList = destinationCollection.ToList();
 
-            var missingItems = sourceList
-                .Where(sourceItem => !destinationList.Any(destItem => isEqualComparison(sourceItem, destItem)))
-                .Select(item => new DiffResult<T> { Data = item, Type = DiffType.Missing });
+            // 预分配容量，减少动态扩容
+            var differences = new List<DiffResult<T>>(sourceList.Count + destinationList.Count);
 
-            var extraItems = destinationList
-                .Where(destItem => !sourceList.Any(sourceItem => isEqualComparison(sourceItem, destItem)))
-                .Select(item => new DiffResult<T> { Data = item, Type = DiffType.Extra });
+            // 集合差语义：不消耗匹配，同一个元素可以匹配多个
+            // Missing：source 中每个元素，只要 destination 中"存在任意一个匹配"，就不算 Missing
+            for (int i = 0; i < sourceList.Count; i++)
+            {
+                var sourceItem = sourceList[i];
+                bool found = false;
+                // 使用 for 循环代替 Any，减少委托调用开销，提前退出优化
+                for (int j = 0; j < destinationList.Count; j++)
+                {
+                    if (isEqualComparison(sourceItem, destinationList[j]))
+                    {
+                        found = true;
+                        break; // 找到匹配即退出
+                    }
+                }
+                if (!found)
+                {
+                    differences.Add(new DiffResult<T> { Data = sourceItem, Type = DiffType.Missing });
+                }
+            }
 
-            var differences = missingItems.Concat(extraItems).ToList();
+            // Extra：destination 中每个元素，只要 source 中"存在任意一个匹配"，就不算 Extra
+            for (int j = 0; j < destinationList.Count; j++)
+            {
+                var destItem = destinationList[j];
+                bool found = false;
+                // 使用 for 循环代替 Any，减少委托调用开销，提前退出优化
+                for (int i = 0; i < sourceList.Count; i++)
+                {
+                    if (isEqualComparison(sourceList[i], destItem))
+                    {
+                        found = true;
+                        break; // 找到匹配即退出
+                    }
+                }
+                if (!found)
+                {
+                    differences.Add(new DiffResult<T> { Data = destItem, Type = DiffType.Extra });
+                }
+            }
 
             return differences;
         }
@@ -210,15 +244,49 @@ namespace Silmoon.Extension
             var sourceList = sourceCollection.ToList();
             var destinationList = destinationCollection.ToList();
 
-            var missingItems = sourceList
-                .Where(sourceItem => !destinationList.Any(destItem => isEqualComparison(sourceItem, destItem)))
-                .Select(item => new DiffResult<TSourceT, TDestinationT> { SourceData = item, Type = DiffType.Missing });
+            // 预分配容量，减少动态扩容
+            var differences = new List<DiffResult<TSourceT, TDestinationT>>(sourceList.Count + destinationList.Count);
 
-            var extraItems = destinationList
-                .Where(destItem => !sourceList.Any(sourceItem => isEqualComparison(sourceItem, destItem)))
-                .Select(item => new DiffResult<TSourceT, TDestinationT> { DestinationData = item, Type = DiffType.Extra });
+            // 集合差语义：不消耗匹配，同一个元素可以匹配多个
+            // Missing：source 中每个元素，只要 destination 中"存在任意一个匹配"，就不算 Missing
+            for (int i = 0; i < sourceList.Count; i++)
+            {
+                var sourceItem = sourceList[i];
+                bool found = false;
+                // 使用 for 循环代替 Any，减少委托调用开销，提前退出优化
+                for (int j = 0; j < destinationList.Count; j++)
+                {
+                    if (isEqualComparison(sourceItem, destinationList[j]))
+                    {
+                        found = true;
+                        break; // 找到匹配即退出
+                    }
+                }
+                if (!found)
+                {
+                    differences.Add(new DiffResult<TSourceT, TDestinationT> { SourceData = sourceItem, Type = DiffType.Missing });
+                }
+            }
 
-            var differences = missingItems.Concat(extraItems).ToList();
+            // Extra：destination 中每个元素，只要 source 中"存在任意一个匹配"，就不算 Extra
+            for (int j = 0; j < destinationList.Count; j++)
+            {
+                var destItem = destinationList[j];
+                bool found = false;
+                // 使用 for 循环代替 Any，减少委托调用开销，提前退出优化
+                for (int i = 0; i < sourceList.Count; i++)
+                {
+                    if (isEqualComparison(sourceList[i], destItem))
+                    {
+                        found = true;
+                        break; // 找到匹配即退出
+                    }
+                }
+                if (!found)
+                {
+                    differences.Add(new DiffResult<TSourceT, TDestinationT> { DestinationData = destItem, Type = DiffType.Extra });
+                }
+            }
 
             return differences;
         }
