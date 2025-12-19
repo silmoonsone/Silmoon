@@ -23,10 +23,13 @@ namespace Silmoon.Secure
                 {
                     rsa.FromXmlString(xml);
                 }
-                catch (Exception ex)
+                catch (Exception)
+                {
+                    throw;
+                }
+                finally
                 {
                     rsa.Dispose();
-                    throw ex;
                 }
                 defaultRSA = rsa;
                 return rsa;
@@ -58,7 +61,7 @@ namespace Silmoon.Secure
             return rsa;
         }
 
-
+        [Obsolete("建议使用AesEncryptV2和AesDecryptV2方法，支持IV向量，更安全。")]
         public static byte[] AesEncrypt(byte[] Data, byte[] Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
         {
             if (Data is null) return null;
@@ -78,6 +81,7 @@ namespace Silmoon.Secure
                 }
             }
         }
+        [Obsolete("建议使用AesEncryptV2和AesDecryptV2方法，支持IV向量，更安全。")]
         public static byte[] AesDecrypt(byte[] EncryptedData, byte[] Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
         {
             if (EncryptedData is null) return null;
@@ -97,12 +101,14 @@ namespace Silmoon.Secure
             }
         }
 
+        [Obsolete("建议使用AesEncryptV2和AesDecryptV2方法，支持IV向量，更安全。")]
         public static string AesEncryptStringToBase64String(string Data, string Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
         {
             var data = Data.GetBytes();
             var key = Key.GetBytes();
             return Convert.ToBase64String(AesEncrypt(data, key, CipherMode, PaddingMode));
         }
+        [Obsolete("建议使用AesEncryptV2和AesDecryptV2方法，支持IV向量，更安全。")]
         public static string AesDecryptBase64StringToString(string Based64String, string Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
         {
             var data = Convert.FromBase64String(Based64String);
@@ -110,11 +116,13 @@ namespace Silmoon.Secure
             return Encoding.UTF8.GetString(AesDecrypt(data, key, CipherMode, PaddingMode));
         }
 
+        [Obsolete("建议使用AesEncryptV2和AesDecryptV2方法，支持IV向量，更安全。")]
         public static string AesEncryptStringToHexString(string Data, byte[] Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
         {
             var data = Data.GetBytes();
             return AesEncrypt(data, Key, CipherMode, PaddingMode).ToHexString();
         }
+        [Obsolete("建议使用AesEncryptV2和AesDecryptV2方法，支持IV向量，更安全。")]
         public static string AesDecryptHexStringToString(string HexString, byte[] Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
         {
             var data = HexString.HexStringToByteArray();
@@ -203,7 +211,7 @@ namespace Silmoon.Secure
         }
 
 
-
+        [Obsolete("DES加密算法不安全，建议使用AES加密算法替代。")]
         public static string DesEncrypt(string data, string KEY_64, string IV_64)
         {
             if (data is null) return null;
@@ -215,6 +223,7 @@ namespace Silmoon.Secure
 
             return Convert.ToBase64String(DesEncrypt(odata, byKey, byIV));
         }
+        [Obsolete("DES加密算法不安全，建议使用AES加密算法替代。")]
         public static byte[] DesEncrypt(byte[] data, byte[] KEY_64, byte[] IV_64)
         {
             using (DESCryptoServiceProvider cryptoProvider = new DESCryptoServiceProvider())
@@ -235,6 +244,7 @@ namespace Silmoon.Secure
                 }
             }
         }
+        [Obsolete("DES加密算法不安全，建议使用AES加密算法替代。")]
         public static string DesDecrypt(string data, string KEY_64, string IV_64)
         {
             if (data is null) return null;
@@ -246,6 +256,7 @@ namespace Silmoon.Secure
 
             return Encoding.UTF8.GetString(DesDecrypt(odata, byKey, byIV));
         }
+        [Obsolete("DES加密算法不安全，建议使用AES加密算法替代。")]
         public static byte[] DesDecrypt(byte[] data, byte[] KEY_64, byte[] IV_64)
         {
             using (DESCryptoServiceProvider cryptoProvider = new DESCryptoServiceProvider())

@@ -18,7 +18,7 @@ namespace WinFormTest
         {
             InitializeComponent();
         }
-
+        [Obsolete]
         private void ctlAesEncryptTestButton_Click(object sender, EventArgs e)
         {
             string s = textBox1.Text.IsNullOrEmpty() ? "import tiktoken import tiktoken import tiktoken import tiktoken import tiktoken import tiktoken" : textBox1.Text;

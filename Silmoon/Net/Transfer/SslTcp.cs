@@ -70,7 +70,7 @@ namespace Silmoon.Net.Transfer
                 X509Store store = new X509Store(StoreName.Root);
                 store.Open(OpenFlags.ReadWrite);
                 X509Certificate2Collection certs = store.Certificates.Find(X509FindType.FindBySubjectName, "TestClient", false);
-                sslStream.AuthenticateAsClient("TestServer", certs, SslProtocols.Tls, false);
+                sslStream.AuthenticateAsClient("TestServer", certs, SslProtocols.Tls12, false);
 
                 Task.Run(() =>
                 {
@@ -306,7 +306,8 @@ namespace Silmoon.Net.Transfer
                     break;
                 default:
                     break;
-            };
+            }
+            ;
             OnEvent?.Invoke(this, new TcpEventArgs() { EventType = eventType, IPEndPoint = endPoint, Socket = socket });
         }
         void onDataReceived(Socket clientSocket, byte[] buffer, int len)

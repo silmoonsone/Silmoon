@@ -14,7 +14,7 @@ namespace Silmoon.Secure
         public static string GetMD5Hash(this string s, Encoding encoding) => s.GetBytes(encoding).GetMD5Hash().ToHexString();
         public static byte[] GetMD5Hash(this byte[] data)
         {
-            using (var c = new MD5CryptoServiceProvider())
+            using (var c = MD5.Create())
             {
                 byte[] result = c.ComputeHash(data);
                 return result;
@@ -25,7 +25,7 @@ namespace Silmoon.Secure
         public static string GetSHA1Hash(this string s, Encoding encoding) => s.GetBytes(encoding).GetSHA1Hash().ToHexString();
         public static byte[] GetSHA1Hash(this byte[] data)
         {
-            using (var c = new SHA1CryptoServiceProvider())
+            using (var c = SHA1.Create())
             {
                 byte[] result = c.ComputeHash(data);
                 return result;
@@ -36,7 +36,7 @@ namespace Silmoon.Secure
         public static string GetSHA256Hash(this string s, Encoding encoding) => s.GetBytes(encoding).GetSHA256Hash().ToHexString();
         public static byte[] GetSHA256Hash(this byte[] data)
         {
-            using (var c = new SHA256CryptoServiceProvider())
+            using (var c = SHA256.Create())
             {
                 byte[] result = c.ComputeHash(data);
                 return result;

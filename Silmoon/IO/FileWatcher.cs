@@ -54,7 +54,7 @@ namespace Silmoon.IO
                     }
                 }
             }
-            catch (Exception e) { throw e; }
+            catch (Exception) { throw; }
         }
         public void InitDirvers(bool subDirector)
         {

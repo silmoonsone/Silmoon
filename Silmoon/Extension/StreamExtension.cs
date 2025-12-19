@@ -20,7 +20,11 @@ namespace Silmoon.Extension
             if (seek) postion = stream.Position;
             if (seek) stream.Position = 0;
             byte[] result = new byte[stream.Length];
+#if NET5_0_OR_GREATER
+            stream.ReadExactly(result, 0, result.Length);
+#else
             stream.Read(result, 0, result.Length);
+#endif
             if (seek) stream.Position = postion;
             return result;
         }
