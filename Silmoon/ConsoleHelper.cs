@@ -90,22 +90,29 @@ namespace Silmoon
             { ConsoleColor.White, Background.White }
         };
 
+
+
+#if NET10_0_OR_GREATER
+        extension(Console)
+        {
+            public static string GetAnsiForegroundColorString(ConsoleColor color) => ForegroundColorMap.TryGetValue(color, out var code) ? code : Reset;
+            public static string GetAnsiBackgroundColorString(ConsoleColor color) => BackgroundColorMap.TryGetValue(color, out var code) ? code : Reset;
+            public static string GetAnsiColorString(ConsoleColor foregroundColor, ConsoleColor backgroundColor) => string.Concat(GetAnsiForegroundColorString(foregroundColor), GetAnsiBackgroundColorString(backgroundColor));
+
+            public static void ResetAnsiColor() => Console.Write(Reset);
+            public static void WriteWithColor(string text, ConsoleColor? foregroundColor = null, ConsoleColor? backgroundColor = null) => Console.Write(WarpStringANSIColor(text, foregroundColor, backgroundColor));
+            public static void WriteLineWithColor(string text, ConsoleColor? foregroundColor = null, ConsoleColor? backgroundColor = null) => Console.WriteLine(WarpStringANSIColor(text, foregroundColor, backgroundColor));
+            public static string WarpStringANSIColor(string text, ConsoleColor? foregroundColor = null, ConsoleColor? backgroundColor = null) => string.Concat(GetAnsiColorString(foregroundColor ?? Console.ForegroundColor, backgroundColor ?? Console.BackgroundColor), text, Reset);
+        }
+#else
         public static string GetAnsiForegroundColorString(ConsoleColor color) => ForegroundColorMap.TryGetValue(color, out var code) ? code : Reset;
         public static string GetAnsiBackgroundColorString(ConsoleColor color) => BackgroundColorMap.TryGetValue(color, out var code) ? code : Reset;
-        public static string GetAnsiColorString(ConsoleColor foregroundColor, ConsoleColor backgroundColor) => GetAnsiForegroundColorString(foregroundColor) + GetAnsiBackgroundColorString(backgroundColor);
+        public static string GetAnsiColorString(ConsoleColor foregroundColor, ConsoleColor backgroundColor) => string.Concat(GetAnsiForegroundColorString(foregroundColor), GetAnsiBackgroundColorString(backgroundColor));
 
         public static void ResetAnsiColor() => Console.Write(Reset);
-        public static void WriteWithColor(string text, ConsoleColor? foregroundColor = null, ConsoleColor? backgroundColor = null)
-        {
-            Console.Write(WarpStringANSIColor(text, foregroundColor, backgroundColor));
-        }
-        public static void WriteLineWithColor(string text, ConsoleColor? foregroundColor = null, ConsoleColor? backgroundColor = null)
-        {
-            Console.WriteLine(WarpStringANSIColor(text, foregroundColor, backgroundColor));
-        }
-        public static string WarpStringANSIColor(string text, ConsoleColor? foregroundColor = null, ConsoleColor? backgroundColor = null)
-        {
-            return GetAnsiColorString(foregroundColor ?? Console.ForegroundColor, backgroundColor ?? Console.BackgroundColor) + text + Reset;
-        }
+        public static void WriteWithColor(string text, ConsoleColor? foregroundColor = null, ConsoleColor? backgroundColor = null) => Console.Write(WarpStringANSIColor(text, foregroundColor, backgroundColor));
+        public static void WriteLineWithColor(string text, ConsoleColor? foregroundColor = null, ConsoleColor? backgroundColor = null) => Console.WriteLine(WarpStringANSIColor(text, foregroundColor, backgroundColor));
+        public static string WarpStringANSIColor(string text, ConsoleColor? foregroundColor = null, ConsoleColor? backgroundColor = null) => string.Concat(GetAnsiColorString(foregroundColor ?? Console.ForegroundColor, backgroundColor ?? Console.BackgroundColor), text, Reset);
+#endif
     }
 }
