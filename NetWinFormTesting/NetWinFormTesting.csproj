@@ -10,7 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Silmoon.Net\Silmoon.Net.csproj" />
     <ProjectReference Include="..\Silmoon\Silmoon.csproj" />
   </ItemGroup>
 
