@@ -1,13 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.1.11312.151 d18.0
+VisualStudioVersion = 18.1.11312.151
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Windows", "Silmoon.Windows\Silmoon.Windows.csproj", "{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Extension", "Silmoon.Extension\Silmoon.Extension.csproj", "{551D2440-C3F5-40DE-A7DA-D278DF2DB027}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Web", "Silmoon.Web\Silmoon.Web.csproj", "{4C84E5B1-E0CA-47DF-85FE-32292E771670}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silmoon.Net", "Silmoon.Net\Silmoon.Net.csproj", "{D595A3FA-798E-44A8-9CDA-AA688AF4A3B6}"
 EndProject
@@ -31,24 +27,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{28B5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppTesting", "ConsoleAppTesting\ConsoleAppTesting.csproj", "{FA65A3F4-9E99-47A0-A522-4C4C978792F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetWinFormTesting", "NetWinFormTesting\NetWinFormTesting.csproj", "{979EA452-BB7E-4ED7-9558-A6C133EED067}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{46A25DB6-96C7-48C5-B73D-24F8EBC1102D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{551D2440-C3F5-40DE-A7DA-D278DF2DB027}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{551D2440-C3F5-40DE-A7DA-D278DF2DB027}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{551D2440-C3F5-40DE-A7DA-D278DF2DB027}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{551D2440-C3F5-40DE-A7DA-D278DF2DB027}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4C84E5B1-E0CA-47DF-85FE-32292E771670}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4C84E5B1-E0CA-47DF-85FE-32292E771670}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4C84E5B1-E0CA-47DF-85FE-32292E771670}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4C84E5B1-E0CA-47DF-85FE-32292E771670}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D595A3FA-798E-44A8-9CDA-AA688AF4A3B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D595A3FA-798E-44A8-9CDA-AA688AF4A3B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D595A3FA-798E-44A8-9CDA-AA688AF4A3B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,6 +59,10 @@ Global
 		{FA65A3F4-9E99-47A0-A522-4C4C978792F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA65A3F4-9E99-47A0-A522-4C4C978792F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA65A3F4-9E99-47A0-A522-4C4C978792F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{979EA452-BB7E-4ED7-9558-A6C133EED067}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{979EA452-BB7E-4ED7-9558-A6C133EED067}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{979EA452-BB7E-4ED7-9558-A6C133EED067}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{979EA452-BB7E-4ED7-9558-A6C133EED067}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +70,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{D267F97E-6FCE-4567-8C63-3F30E9C5FCEB} = {28B5EA76-99E0-4655-9EB7-F6B8906FB036}
 		{FA65A3F4-9E99-47A0-A522-4C4C978792F1} = {28B5EA76-99E0-4655-9EB7-F6B8906FB036}
+		{979EA452-BB7E-4ED7-9558-A6C133EED067} = {28B5EA76-99E0-4655-9EB7-F6B8906FB036}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .
