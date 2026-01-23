@@ -1,0 +1,52 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      if: matrix.os == 'windows-latest'
+      run: |
+        dotnet build --no-restore
+        dotnet build --no-restore -c Release
+    - name: Build
+      if: matrix.os != 'windows-latest'
+      run: |
+        dotnet build Silmoon/Silmoon.csproj --no-restore
+        dotnet build Silmoon/Silmoon.csproj --no-restore -c Release
+        dotnet build Silmoon.Extension/Silmoon.Extension.csproj --no-restore
+        dotnet build Silmoon.Extension/Silmoon.Extension.csproj --no-restore -c Release
+        dotnet build Silmoon.Core/Silmoon.Core.csproj --no-restore
+        dotnet build Silmoon.Core/Silmoon.Core.csproj --no-restore -c Release
+        dotnet build Silmoon.Net/Silmoon.Net.csproj --no-restore
+        dotnet build Silmoon.Net/Silmoon.Net.csproj --no-restore -c Release
+        dotnet build ConsoleAppTesting/ConsoleAppTesting.csproj --no-restore
+        dotnet build ConsoleAppTesting/ConsoleAppTesting.csproj --no-restore -c Release
+    - name: Test
+      if: matrix.os == 'windows-latest'
+      run: dotnet test --no-build --verbosity normal
+    - name: Test
+      if: matrix.os != 'windows-latest'
+      run: dotnet test ConsoleAppTesting/ConsoleAppTesting.csproj --no-build --verbosity normal

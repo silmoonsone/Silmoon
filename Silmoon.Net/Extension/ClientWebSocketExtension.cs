@@ -59,7 +59,7 @@ namespace Silmoon.Net.Extension
                 bufferList.ForEach(d => completedData = completedData.Concat(d).ToArray());
                 return Encoding.UTF8.GetString(completedData, 0, receiveCount);
             }
-            catch (Exception e) { throw e; }
+            catch (Exception) { throw; }
         }
         public static async Task<string> ReceiveTask(this ClientWebSocket webSocket, Encoding encoding, long sizeLimit = 0, CancellationToken? cancellationToken = null, int bufferSize = 5120)
         {
@@ -84,7 +84,7 @@ namespace Silmoon.Net.Extension
                 bufferList.ForEach(d => completedData = completedData.Concat(d).ToArray());
                 return encoding.GetString(completedData, 0, receiveCount);
             }
-            catch (Exception e) { throw e; }
+            catch (Exception) { throw; }
         }
         public static async Task<string> ReceiveOnceTask(this ClientWebSocket webSocket, CancellationToken? cancellationToken = null, int bufferSize = 5120)
         {
@@ -97,7 +97,7 @@ namespace Silmoon.Net.Extension
                 var result = await webSocket.ReceiveAsync(array, cancellationToken.Value);
                 return Encoding.UTF8.GetString(buffer, 0, result.Count);
             }
-            catch (Exception e) { throw e; }
+            catch (Exception) { throw; }
         }
         public static async Task<string> ReceiveOnceTask(this ClientWebSocket webSocket, Encoding encoding, CancellationToken? cancellationToken = null, int bufferSize = 5120)
         {
@@ -110,7 +110,7 @@ namespace Silmoon.Net.Extension
                 var result = await webSocket.ReceiveAsync(array, cancellationToken.Value);
                 return encoding.GetString(buffer, 0, result.Count);
             }
-            catch (Exception e) { throw e; }
+            catch (Exception) { throw; }
         }
 
     }
