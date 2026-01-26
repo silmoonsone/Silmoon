@@ -1,15 +1,19 @@
 ﻿using ConsoleAppTesting;
 using Silmoon;
 using Silmoon.Extension;
+using Silmoon.Threading;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 
 internal class Program
 {
-    private static void Main(string[] args)
+    static AsyncLock asyncLock = AsyncLock.Create();
+    private static async Task Main(string[] args)
     {
-        NumberExtensionTest();
+        await AsyncLockTest();
+        //NumberExtensionTest();
         //StringExtensionTest();
         //ExpressionExtensionTest();
     }
@@ -69,5 +73,23 @@ internal class Program
         Console.WriteLine(b.Negative());
         Console.WriteLine(c.Negative());
         Console.WriteLine(d.Negative());
+    }
+
+    static async Task AsyncLockTest()
+    {
+        _ = AsyncWorkLockTest();
+        _ = AsyncWorkLockTest();
+        await AsyncWorkLockTest();
+    }
+    static async Task AsyncWorkLockTest()
+    {
+        Console.WriteLine($"Task {Thread.CurrentThread.ManagedThreadId} is waiting to acquire the lock.");
+        using (await asyncLock.LockAsync())
+        {
+            Console.WriteLine($"Task {Thread.CurrentThread.ManagedThreadId} acquired the lock.");
+            Console.WriteLine($"Task {Thread.CurrentThread.ManagedThreadId} is doing some work...");
+            await Task.Delay(1000); // Simulate some asynchronous work
+            Console.WriteLine($"Task {Thread.CurrentThread.ManagedThreadId} releasing the lock.");
+        }
     }
 }
