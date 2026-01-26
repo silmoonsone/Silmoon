@@ -26,7 +26,8 @@ namespace Silmoon.Extension
             if (value) trueAction();
             else falseAction();
         }
-
+        public static string GetDisplayText(this bool value, string trueDisplay = "On", string falseDisplay = "Off") => value ? trueDisplay : falseDisplay;
+        public static string GetDisplayText(this bool? value, string trueDisplay = "On", string falseDisplay = "Off", string nullDisplay = "None") => value.HasValue ? GetDisplayText(value.Value, trueDisplay, falseDisplay) : nullDisplay;
 #if NET10_0_OR_GREATER
         extension(bool)
         {

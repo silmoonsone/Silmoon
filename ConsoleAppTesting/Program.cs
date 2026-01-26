@@ -9,7 +9,8 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        StringExtensionTest();
+        NumberExtensionTest();
+        //StringExtensionTest();
         //ExpressionExtensionTest();
     }
     static void ExpressionExtensionTest()
@@ -56,5 +57,17 @@ internal class Program
         var result = hexString.HexStringToByteArray();
         Console.WriteLine(string.Join(", ", result.Data));
         Console.WriteLine();
+    }
+    static void NumberExtensionTest()
+    {
+        decimal a = -1.03m;
+        double b = 2;
+        float c = 3;
+        decimal d = 4;
+
+        Console.WriteLine(a.Negative());
+        Console.WriteLine(b.Negative());
+        Console.WriteLine(c.Negative());
+        Console.WriteLine(d.Negative());
     }
 }
