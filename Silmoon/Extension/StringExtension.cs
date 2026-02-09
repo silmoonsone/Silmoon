@@ -22,6 +22,8 @@ namespace Silmoon.Extension
         private static readonly Regex UrlRegex = new Regex(@"^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})(:[0-9]{1,5})?([\/\w \.-]*)*\/?$", RegexOptions.Compiled);
         private static readonly Regex HttpsUrlRegex = new Regex(@"^https:\/\/([\da-z\.-]+)\.([a-z\.]{2,6})(:[0-9]{1,5})?([\/\w \.-]*)*\/?$", RegexOptions.Compiled);
         private static readonly Regex HtmlTagRegex = new Regex("<.*?>", RegexOptions.Compiled);
+        /// <summary>ANSI 转义序列（CSI 与 OSC），用于 StripConsoleStyle</summary>
+        private static readonly Regex AnsiEscapeRegex = new Regex(@"\x1b(?:\[[\x30-\x3f]*[\x20-\x2f]*[\x40-\x7e]|\][^\x07]*(?:\x07|\x1b\\))?", RegexOptions.Compiled);
 
         /// <summary>
         /// 检查字符串是否为 null 或空字符串。
@@ -868,6 +870,27 @@ namespace Silmoon.Extension
         /// <param name="str"></param>
         /// <returns></returns>
         public static string StripHtml(this string str) => HtmlTagRegex.Replace(str, string.Empty);
+
+        /// <summary>
+        /// 去掉字符串中的控制台样式（ANSI 转义序列，如 \x1b[31m、\x1b[38;2;r;g;b;m 等）。
+        /// 适用于将带样式的控制台输出写入日志文件前脱去样式，避免日志中出现乱码或控制字符。
+        /// </summary>
+        /// <param name="str">可能包含 ANSI 转义序列的字符串</param>
+        /// <returns>移除所有 ANSI 转义序列后的纯文本；若 <paramref name="str"/> 为 null 则返回 null</returns>
+        /// <example>
+        /// <code>
+        /// string styled = "\x1b[31mError\x1b[0m: file not found";
+        /// string plain = styled.StripConsoleStyle(); // "Error: file not found"
+        /// string line = Console.ReadLine(); // 若控制台输出带样式，写入日志前脱样式
+        /// File.AppendAllText("app.log", line.StripConsoleStyle() + "\n");
+        /// </code>
+        /// </example>
+        public static string StripConsoleStyle(this string str)
+        {
+            if (str.IsNullOrEmpty()) return null;
+            return AnsiEscapeRegex.Replace(str, string.Empty);
+        }
+
         public static bool HasLengthGreaterThanOrEqual(this string str, int length) => str?.Length >= length;
 
         /// <summary>
