@@ -5,6 +5,7 @@ using Silmoon.Threading;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Testing;
 
 
 internal class Program
@@ -12,10 +13,10 @@ internal class Program
     static AsyncLock asyncLock = AsyncLock.Create();
     private static async Task Main(string[] args)
     {
-        await AsyncLockTest();
-        //NumberExtensionTest();
-        //StringExtensionTest();
         //ExpressionExtensionTest();
+        ExtensionTest.StringExtensionTest();
+        ////ExtensionTest.NumberExtensionTest();
+        //await AsyncLockTest();
     }
     static void ExpressionExtensionTest()
     {
@@ -44,35 +45,6 @@ internal class Program
         var result3 = ExpressionExtension.GetPreprotyNamesExpressions<User>([x => x.Username, x => x.Password]);
         Console.WriteLine(result3.ToJsonString());
         Console.WriteLine();
-    }
-    static void StringExtensionTest()
-    {
-        string chinese = "你好世界";
-        string englishAndChinese = "Hello世界";
-        Console.WriteLine(chinese.GetDisplayWidth());
-        Console.WriteLine(chinese.GetEncodingByteCount(Encoding.UTF8));
-        Console.WriteLine(englishAndChinese.SubstringDisplayWidth(4, 3));
-        Console.WriteLine();
-
-
-        byte[] bytes = [0, 1, 2, 3, 4, 5];
-        var hexString = bytes.ToHexString(true, true);
-        Console.WriteLine(hexString);
-        var result = hexString.HexStringToByteArray();
-        Console.WriteLine(string.Join(", ", result.Data));
-        Console.WriteLine();
-    }
-    static void NumberExtensionTest()
-    {
-        decimal a = -1.03m;
-        double b = 2;
-        float c = 3;
-        decimal d = 4;
-
-        Console.WriteLine(a.Negative());
-        Console.WriteLine(b.Negative());
-        Console.WriteLine(c.Negative());
-        Console.WriteLine(d.Negative());
     }
 
     static async Task AsyncLockTest()

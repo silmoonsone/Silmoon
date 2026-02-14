@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Silmoon.Extension\Silmoon.Extension.csproj" />
     <ProjectReference Include="..\Silmoon\Silmoon.csproj" />
+    <ProjectReference Include="..\Testing\Testing.csproj" />
   </ItemGroup>
 
 </Project>

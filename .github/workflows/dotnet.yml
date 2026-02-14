@@ -44,9 +44,11 @@ jobs:
         dotnet build Silmoon.Net/Silmoon.Net.csproj --no-restore -c Release
         dotnet build ConsoleAppTesting/ConsoleAppTesting.csproj --no-restore
         dotnet build ConsoleAppTesting/ConsoleAppTesting.csproj --no-restore -c Release
+        dotnet build Testing/Testing.csproj --no-restore
+        dotnet build Testing/Testing.csproj --no-restore -c Release
     - name: Test
       if: matrix.os == 'windows-latest'
       run: dotnet test --no-build --verbosity normal
     - name: Test
       if: matrix.os != 'windows-latest'
-      run: dotnet test ConsoleAppTesting/ConsoleAppTesting.csproj --no-build --verbosity normal
+      run: dotnet test Testing/Testing.csproj --no-build --verbosity normal
