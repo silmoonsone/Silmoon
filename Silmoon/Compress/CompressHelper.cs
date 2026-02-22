@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO.Compression;
 using System.IO;
 using System.Text;
-using static System.Net.Mime.MediaTypeNames;
 using Silmoon.Extension;
 using System.Threading.Tasks;
 

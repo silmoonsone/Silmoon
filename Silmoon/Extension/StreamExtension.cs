@@ -73,16 +73,14 @@ namespace Silmoon.Extension
                 throw new NotSupportedException("流不支持读取或者搜索，无法操作");
             }
         }
-        public static async Task<string> ReadToEndAsync(this Stream stream, Encoding encoding = default)
+        public static Task<string> ReadToEndAsync(this Stream stream, Encoding encoding = default)
         {
             if (encoding == null) encoding = Encoding.UTF8;
             using (StreamReader reader = new StreamReader(stream, encoding))
             {
-                return await reader.ReadToEndAsync();
+                return reader.ReadToEndAsync();
             }
         }
-        [Obsolete]
-        public static byte[] WhileReadAllToByteArray(this Stream stream, int totalSize) => WhileReadToByteArray(stream, totalSize);
         public static byte[] WhileReadToByteArray(this Stream stream, int totalSize)
         {
             byte[] buffer = new byte[totalSize];

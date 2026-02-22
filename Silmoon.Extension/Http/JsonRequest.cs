@@ -91,47 +91,47 @@ namespace Silmoon.Extension.Http
             }
         }
 
-        public static async Task<JsonRequestResult<T>> SendAsyncWithoutBody<T>(string url, HttpMethod httpMethod, UrlDataCollection queryStringUrlDataCollection, JsonRequestSetting jsonRequestSetting = null)
+        public static Task<JsonRequestResult<T>> SendAsyncWithoutBody<T>(string url, HttpMethod httpMethod, UrlDataCollection queryStringUrlDataCollection, JsonRequestSetting jsonRequestSetting = null)
         {
             if (queryStringUrlDataCollection != null) url = queryStringUrlDataCollection.AppendToUrl(url);
             using (var request = CreateRequest(url, httpMethod, jsonRequestSetting))
             {
-                return await ExecuteAsync<T>(request, jsonRequestSetting);
+                return ExecuteAsync<T>(request, jsonRequestSetting);
             }
         }
-        public static async Task<JsonRequestResult<ResponseT>> SendAsyncWithBody<ResponseT>(string url, HttpMethod httpMethod, object obj, UrlDataCollection queryStringUrlDataCollection, JsonRequestSetting jsonRequestSetting = null)
+        public static Task<JsonRequestResult<ResponseT>> SendAsyncWithBody<ResponseT>(string url, HttpMethod httpMethod, object obj, UrlDataCollection queryStringUrlDataCollection, JsonRequestSetting jsonRequestSetting = null)
         {
             if (queryStringUrlDataCollection != null) url = queryStringUrlDataCollection.AppendToUrl(url);
             using (var request = CreateRequest(url, httpMethod, jsonRequestSetting))
             {
                 request.Content = new StringContent(obj.ToJsonString(jsonRequestSetting?.JsonSerializerSettings), Encoding.UTF8, "application/json");
-                return await ExecuteAsync<ResponseT>(request, jsonRequestSetting);
+                return ExecuteAsync<ResponseT>(request, jsonRequestSetting);
             }
         }
-        public static async Task<JsonRequestResult<ResponseT>> SendAsyncWithBody<ResponseT, SendT>(string url, HttpMethod httpMethod, SendT obj, UrlDataCollection queryStringUrlDataCollection, JsonRequestSetting jsonRequestSetting = null)
+        public static Task<JsonRequestResult<ResponseT>> SendAsyncWithBody<ResponseT, SendT>(string url, HttpMethod httpMethod, SendT obj, UrlDataCollection queryStringUrlDataCollection, JsonRequestSetting jsonRequestSetting = null)
         {
             if (queryStringUrlDataCollection != null) url = queryStringUrlDataCollection.AppendToUrl(url);
             using (var request = CreateRequest(url, httpMethod, jsonRequestSetting))
             {
                 request.Content = new StringContent(obj.ToJsonString(jsonRequestSetting?.JsonSerializerSettings), Encoding.UTF8, "application/json");
-                return await ExecuteAsync<ResponseT>(request, jsonRequestSetting);
+                return ExecuteAsync<ResponseT>(request, jsonRequestSetting);
             }
         }
         #endregion
 
-        public static async Task<JsonRequestResult<T>> SendContentAsync<T>(string url, HttpMethod httpMethod, HttpContent content, JsonRequestSetting jsonRequestSetting = null)
+        public static Task<JsonRequestResult<T>> SendContentAsync<T>(string url, HttpMethod httpMethod, HttpContent content, JsonRequestSetting jsonRequestSetting = null)
         {
             using (var request = CreateRequest(url, httpMethod, jsonRequestSetting))
             {
                 request.Content = content;
-                return await ExecuteAsync<T>(request, jsonRequestSetting);
+                return ExecuteAsync<T>(request, jsonRequestSetting);
             }
         }
-        public static async Task<JsonRequestResult<T>> SendAsync<T>(HttpRequestMessage httpRequestMessage, JsonRequestSetting jsonRequestSetting = null)
+        public static Task<JsonRequestResult<T>> SendAsync<T>(HttpRequestMessage httpRequestMessage, JsonRequestSetting jsonRequestSetting = null)
         {
             using (var request = CreateRequest(httpRequestMessage, jsonRequestSetting))
             {
-                return await ExecuteAsync<T>(request, jsonRequestSetting);
+                return ExecuteAsync<T>(request, jsonRequestSetting);
             }
         }
 
@@ -146,7 +146,7 @@ namespace Silmoon.Extension.Http
 
 
         public static Task<JsonRequestResult<ResponseT>> PostAsync<ResponseT, PostT>(string url, PostT obj, UrlDataCollection queryStringUrlDataCollection, JsonRequestSetting jsonRequestSetting = null) => SendAsyncWithBody<ResponseT, PostT>(url, HttpMethod.Post, obj, queryStringUrlDataCollection, jsonRequestSetting);
-        public static async Task<JsonRequestResult<T>> PostFormDataAsync<T>(string url, UrlDataCollection postUrlDataCollection, UrlDataCollection queryStringUrlDataCollection = null, JsonRequestSetting jsonRequestSetting = null)
+        public static Task<JsonRequestResult<T>> PostFormDataAsync<T>(string url, UrlDataCollection postUrlDataCollection, UrlDataCollection queryStringUrlDataCollection = null, JsonRequestSetting jsonRequestSetting = null)
         {
             if (postUrlDataCollection is null) throw new ArgumentNullException(nameof(postUrlDataCollection));
 
@@ -154,24 +154,24 @@ namespace Silmoon.Extension.Http
             using (var request = CreateRequest(url, HttpMethod.Post, jsonRequestSetting))
             {
                 if (postUrlDataCollection != null) request.Content = new FormUrlEncodedContent(postUrlDataCollection.GetKeyValuePairs());
-                return await ExecuteAsync<T>(request, jsonRequestSetting);
+                return ExecuteAsync<T>(request, jsonRequestSetting);
             }
         }
-        public static async Task<JsonRequestResult<T>> PostMultipartFormDataData<T>(string url, MultipartFormDataContent multipartFormDataContent, UrlDataCollection queryStringUrlDataCollection = null, JsonRequestSetting jsonRequestSetting = null)
+        public static Task<JsonRequestResult<T>> PostMultipartFormDataData<T>(string url, MultipartFormDataContent multipartFormDataContent, UrlDataCollection queryStringUrlDataCollection = null, JsonRequestSetting jsonRequestSetting = null)
         {
             if (multipartFormDataContent is null) throw new ArgumentNullException(nameof(multipartFormDataContent));
             if (queryStringUrlDataCollection != null) url = queryStringUrlDataCollection.AppendToUrl(url);
             using (var request = CreateRequest(url, HttpMethod.Post, jsonRequestSetting))
             {
                 if (multipartFormDataContent != null) request.Content = multipartFormDataContent;
-                return await ExecuteAsync<T>(request, jsonRequestSetting);
+                return ExecuteAsync<T>(request, jsonRequestSetting);
             }
         }
-        public static async Task<JsonRequestResult<T>> PostMultipartFormDataData<T>(string url, UrlDataCollection postUrlDataCollection, UrlDataCollection queryStringUrlDataCollection = null, JsonRequestSetting jsonRequestSetting = null)
+        public static Task<JsonRequestResult<T>> PostMultipartFormDataData<T>(string url, UrlDataCollection postUrlDataCollection, UrlDataCollection queryStringUrlDataCollection = null, JsonRequestSetting jsonRequestSetting = null)
         {
             var multipartFormDataContent = new MultipartFormDataContent();
             postUrlDataCollection.GetKeyValuePairs().Each(x => multipartFormDataContent.Add(new StringContent(x.Value), x.Key));
-            return await PostMultipartFormDataData<T>(url, multipartFormDataContent, queryStringUrlDataCollection, jsonRequestSetting);
+            return PostMultipartFormDataData<T>(url, multipartFormDataContent, queryStringUrlDataCollection, jsonRequestSetting);
         }
 
 

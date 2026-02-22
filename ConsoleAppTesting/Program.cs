@@ -13,9 +13,9 @@ internal class Program
     static AsyncLock asyncLock = AsyncLock.Create();
     private static async Task Main(string[] args)
     {
-        //ExpressionExtensionTest();
-        ExtensionTest.StringExtensionTest();
-        ////ExtensionTest.NumberExtensionTest();
+        ExpressionExtensionTest();
+        //ExtensionTest.StringExtensionTest();
+        //ExtensionTest.NumberExtensionTest();
         //await AsyncLockTest();
     }
     static void ExpressionExtensionTest()
@@ -55,13 +55,13 @@ internal class Program
     }
     static async Task AsyncWorkLockTest()
     {
-        Console.WriteLine($"Task {Thread.CurrentThread.ManagedThreadId} is waiting to acquire the lock.");
+        Console.WriteLine($"Task {Environment.CurrentManagedThreadId} is waiting to acquire the lock.");
         using (await asyncLock.LockAsync())
         {
-            Console.WriteLine($"Task {Thread.CurrentThread.ManagedThreadId} acquired the lock.");
-            Console.WriteLine($"Task {Thread.CurrentThread.ManagedThreadId} is doing some work...");
+            Console.WriteLine($"Task {Environment.CurrentManagedThreadId} acquired the lock.");
+            Console.WriteLine($"Task {Environment.CurrentManagedThreadId} is doing some work...");
             await Task.Delay(1000); // Simulate some asynchronous work
-            Console.WriteLine($"Task {Thread.CurrentThread.ManagedThreadId} releasing the lock.");
+            Console.WriteLine($"Task {Environment.CurrentManagedThreadId} releasing the lock.");
         }
     }
 }
