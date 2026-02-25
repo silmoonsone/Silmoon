@@ -14,8 +14,10 @@ internal class Program
     private static async Task Main(string[] args)
     {
         ExpressionExtensionTest();
-        //ExtensionTest.StringExtensionTest();
-        //ExtensionTest.NumberExtensionTest();
+        GeneralTest.StringExtensionTest();
+        GeneralTest.NumberExtensionTest();
+        GeneralTest.HashTest();
+        GeneralTest.EncryptionTest();
         //await AsyncLockTest();
     }
     static void ExpressionExtensionTest()

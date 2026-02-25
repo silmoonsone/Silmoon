@@ -1,10 +1,11 @@
 ﻿using Silmoon.Extension;
+using Silmoon.Secure;
 using System.Linq.Expressions;
 using System.Text;
 
 namespace Testing
 {
-    public class ExtensionTest
+    public class GeneralTest
     {
         [Fact]
         public static void StringExtensionTest()
@@ -55,6 +56,41 @@ namespace Testing
             Console.WriteLine(d.Negative());
             Assert.Equal(-4, d.Negative());
         }
+        [Fact]
+        public static void HashTest()
+        {
+            string s = "Hello世界";
+            var md5Hash = s.GetMD5Hash();
+            Console.WriteLine(md5Hash);
+            Assert.Equal("0C904623F512630CDEE90AFBD0FB6E3C", md5Hash);
+            var sha1Hash = s.GetSHA1Hash();
+            Console.WriteLine(sha1Hash);
+            Assert.Equal("BF6FC0C837449B1E310CAFEFCC53DF5A30AF11EF", sha1Hash);
+            var sha256Hash = s.GetSHA256Hash();
+            Console.WriteLine(sha256Hash);
+            Assert.Equal("65C5437771864812AB040C07B86FD72432F9F55F7AC780EBAF02DE4CCFD28690".Replace(" ", ""), sha256Hash);
+        }
+        [Fact]
+        public static void EncryptionTest()
+        {
+            string data = "Hello世界";
+            string key = "1234567890123456";
 
+
+            var encrypted1 = EncryptHelper.AesEncryptStringToBase64String(data, key);
+            var decrypted2 = EncryptHelper.AesDecryptBase64StringToString(encrypted1, key);
+            Console.WriteLine(encrypted1);
+            Console.WriteLine(decrypted2);
+            Assert.Equal(data, decrypted2);
+
+            var encrypted2 = EncryptHelper.AesEncryptStringV2(data, key, false);
+            var decrypted3 = EncryptHelper.AesDecryptStringV2(encrypted2, key, false);
+            Console.WriteLine(encrypted2);
+            Console.WriteLine(decrypted3);
+            Assert.Equal(data, decrypted3);
+
+            Assert.Equal(encrypted1, encrypted2);
+            Assert.Equal(decrypted2, decrypted3);
+        }
     }
 }

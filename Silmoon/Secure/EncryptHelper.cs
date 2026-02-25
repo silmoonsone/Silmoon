@@ -62,19 +62,19 @@ namespace Silmoon.Secure
         }
 
         [Obsolete("建议使用AesEncryptV2和AesDecryptV2方法，支持IV向量，更安全。")]
-        public static byte[] AesEncrypt(byte[] Data, byte[] Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
+        public static byte[] AesEncrypt(byte[] data, byte[] Key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
         {
-            if (Data is null) return null;
-            if (Data.Length == 0) return new byte[0];
+            if (data is null) return null;
+            if (data.Length == 0) return new byte[0];
 
             using (RijndaelManaged aesProvider = new RijndaelManaged())
             {
                 aesProvider.Key = Key;
-                aesProvider.Mode = CipherMode;
-                aesProvider.Padding = PaddingMode;
+                aesProvider.Mode = cipherMode;
+                aesProvider.Padding = paddingMode;
                 using (ICryptoTransform cryptoTransform = aesProvider.CreateEncryptor())
                 {
-                    byte[] results = cryptoTransform.TransformFinalBlock(Data, 0, Data.Length);
+                    byte[] results = cryptoTransform.TransformFinalBlock(data, 0, data.Length);
                     aesProvider.Clear();
                     aesProvider.Dispose();
                     return results;
@@ -82,19 +82,19 @@ namespace Silmoon.Secure
             }
         }
         [Obsolete("建议使用AesEncryptV2和AesDecryptV2方法，支持IV向量，更安全。")]
-        public static byte[] AesDecrypt(byte[] EncryptedData, byte[] Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
+        public static byte[] AesDecrypt(byte[] encryptedData, byte[] Key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
         {
-            if (EncryptedData is null) return null;
-            if (EncryptedData.Length == 0) return new byte[0];
+            if (encryptedData is null) return null;
+            if (encryptedData.Length == 0) return new byte[0];
 
             using (RijndaelManaged aesProvider = new RijndaelManaged())
             {
                 aesProvider.Key = Key;
-                aesProvider.Mode = CipherMode;
-                aesProvider.Padding = PaddingMode;
+                aesProvider.Mode = cipherMode;
+                aesProvider.Padding = paddingMode;
                 using (ICryptoTransform cryptoTransform = aesProvider.CreateDecryptor())
                 {
-                    byte[] results = cryptoTransform.TransformFinalBlock(EncryptedData, 0, EncryptedData.Length);
+                    byte[] results = cryptoTransform.TransformFinalBlock(encryptedData, 0, encryptedData.Length);
                     aesProvider.Clear();
                     return results;
                 }
@@ -102,39 +102,39 @@ namespace Silmoon.Secure
         }
 
         [Obsolete("建议使用AesEncryptV2和AesDecryptV2方法，支持IV向量，更安全。")]
-        public static string AesEncryptStringToBase64String(string Data, string Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
+        public static string AesEncryptStringToBase64String(string data, string key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
         {
-            var data = Data.GetBytes();
-            var key = Key.GetBytes();
-            return Convert.ToBase64String(AesEncrypt(data, key, CipherMode, PaddingMode));
+            var dataBytes = data.GetBytes();
+            var keyBytes = key.GetBytes();
+            return Convert.ToBase64String(AesEncrypt(dataBytes, keyBytes, cipherMode, paddingMode));
         }
         [Obsolete("建议使用AesEncryptV2和AesDecryptV2方法，支持IV向量，更安全。")]
-        public static string AesDecryptBase64StringToString(string Based64String, string Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
+        public static string AesDecryptBase64StringToString(string Based64String, string key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
         {
             var data = Convert.FromBase64String(Based64String);
-            var key = Key.GetBytes();
-            return Encoding.UTF8.GetString(AesDecrypt(data, key, CipherMode, PaddingMode));
+            var keyBytes = key.GetBytes();
+            return Encoding.UTF8.GetString(AesDecrypt(data, keyBytes, cipherMode, paddingMode));
         }
 
         [Obsolete("建议使用AesEncryptV2和AesDecryptV2方法，支持IV向量，更安全。")]
-        public static string AesEncryptStringToHexString(string Data, byte[] Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
+        public static string AesEncryptStringToHexString(string data, byte[] key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
         {
-            var data = Data.GetBytes();
-            return AesEncrypt(data, Key, CipherMode, PaddingMode).ToHexString();
+            var dataBytes = data.GetBytes();
+            return AesEncrypt(dataBytes, key, cipherMode, paddingMode).ToHexString();
         }
         [Obsolete("建议使用AesEncryptV2和AesDecryptV2方法，支持IV向量，更安全。")]
-        public static string AesDecryptHexStringToString(string HexString, byte[] Key, CipherMode CipherMode = CipherMode.ECB, PaddingMode PaddingMode = PaddingMode.PKCS7)
+        public static string AesDecryptHexStringToString(string hexString, byte[] key, CipherMode cipherMode = CipherMode.ECB, PaddingMode paddingMode = PaddingMode.PKCS7)
         {
-            var data = HexString.HexStringToByteArray();
-            return AesDecrypt(data.Data, Key, CipherMode, PaddingMode).GetString();
+            var data = hexString.HexStringToByteArray();
+            return AesDecrypt(data.Data, key, cipherMode, paddingMode).GetString();
         }
 
 
 
-        public static byte[] AesEncryptV2(byte[] Data, string Key)
+        public static byte[] AesEncryptV2(byte[] data, string key)
         {
             byte[] iv = new byte[16];
-            byte[] keyBytes = Key.GetBytes();
+            byte[] keyBytes = key.GetBytes();
             byte[] array;
 
             using (Aes aes = Aes.Create())
@@ -144,15 +144,15 @@ namespace Silmoon.Secure
 
                 using (ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV))
                 {
-                    array = encryptor.TransformFinalBlock(Data, 0, Data.Length);
+                    array = encryptor.TransformFinalBlock(data, 0, data.Length);
                     return array;
                 }
             }
         }
-        public static byte[] AesDecryptV2(byte[] Data, string Key)
+        public static byte[] AesDecryptV2(byte[] data, string key)
         {
             byte[] iv = new byte[16];
-            byte[] keyBytes = Key.GetBytes();
+            byte[] keyBytes = key.GetBytes();
 
             using (Aes aes = Aes.Create())
             {
@@ -163,7 +163,7 @@ namespace Silmoon.Secure
 
                     using (ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV))
                     {
-                        byte[] array = decryptor.TransformFinalBlock(Data, 0, Data.Length);
+                        byte[] array = decryptor.TransformFinalBlock(data, 0, data.Length);
                         return array;
                     }
                 }
@@ -173,10 +173,10 @@ namespace Silmoon.Secure
                 }
             }
         }
-        public static string AesEncryptStringV2(string PlainText, string Key, bool UseHexString = true)
+        public static string AesEncryptStringV2(string PlainText, string key, bool useHexString = false)
         {
-            byte[] cipherBytes = AesEncryptV2(PlainText.GetBytes(), Key);
-            if (UseHexString)
+            byte[] cipherBytes = AesEncryptV2(PlainText.GetBytes(), key);
+            if (useHexString)
             {
                 StringBuilder stringBuilder = new StringBuilder(cipherBytes.Length * 2);
                 foreach (byte b in cipherBytes)
@@ -188,10 +188,10 @@ namespace Silmoon.Secure
             else
                 return Convert.ToBase64String(cipherBytes);
         }
-        public static string AesDecryptStringV2(string CipherText, string Key, bool UseHexString = true)
+        public static string AesDecryptStringV2(string CipherText, string key, bool useHexString = false)
         {
             byte[] cipherBytes;
-            if (UseHexString)
+            if (useHexString)
             {
                 cipherBytes = new byte[CipherText.Length / 2];
                 for (int i = 0; i < cipherBytes.Length; i++)
@@ -203,7 +203,7 @@ namespace Silmoon.Secure
             {
                 cipherBytes = Convert.FromBase64String(CipherText);
             }
-            byte[] plainBytes = AesDecryptV2(cipherBytes, Key);
+            byte[] plainBytes = AesDecryptV2(cipherBytes, key);
             if (plainBytes is null)
                 return null;
             else
