@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Extensions", "Silmoon.Extensions\Silmoon.Extensions.csproj", "{26EE8A65-83A7-4E6A-80C1-23ACF0ACC423}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silmoon.Extensions.Hosting", "Silmoon.Extensions.Hosting\Silmoon.Extensions.Hosting.csproj", "{A56B3172-09C4-450E-AAD8-190282880BEF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{26EE8A65-83A7-4E6A-80C1-23ACF0ACC423}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26EE8A65-83A7-4E6A-80C1-23ACF0ACC423}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26EE8A65-83A7-4E6A-80C1-23ACF0ACC423}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A56B3172-09C4-450E-AAD8-190282880BEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A56B3172-09C4-450E-AAD8-190282880BEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A56B3172-09C4-450E-AAD8-190282880BEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A56B3172-09C4-450E-AAD8-190282880BEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
