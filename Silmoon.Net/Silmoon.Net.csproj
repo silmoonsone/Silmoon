@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Silmoon.Extension\Silmoon.Extension.csproj" />
+    <ProjectReference Include="..\Silmoon.Extensions\Silmoon.Extensions.csproj" />
   </ItemGroup>
 
 </Project>

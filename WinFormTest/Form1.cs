@@ -1,11 +1,11 @@
 using Silmoon.Secure;
 using System.Text;
 using System.Text.RegularExpressions;
-using Silmoon.Extension;
+using Silmoon.Extensions;
 using Silmoon.Compress;
 using Silmoon.Runtime;
 using Silmoon.Core;
-using Silmoon.Extension.Http;
+using Silmoon.Extensions.Http;
 using Silmoon.Attributes;
 using System.Dynamic;
 using Silmoon.Collections;

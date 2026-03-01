@@ -4,6 +4,7 @@ using Newtonsoft.Json.Serialization;
 using Silmoon.Collections;
 using Silmoon.Extension.Converters;
 using Silmoon.Extension.Network;
+using Silmoon.Extensions;
 using Silmoon.Models;
 using System;
 using System.Collections.Generic;

@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Text.RegularExpressions;
+
+namespace Silmoon.Extensions
+{
+    public static class SpecialConverter
+    {
+        public static long GetUnixTimestamp(DateTime dateTime) => new DateTimeOffset(dateTime).ToUnixTimeSeconds();
+        public static DateTime FromUnixTimestamp(long timestamp) => DateTimeOffset.FromUnixTimeSeconds(timestamp).LocalDateTime;
+
+        public static object IfNullToDBNull<T>(T obj) => obj == null ? DBNull.Value : (object)obj;
+    }
+}

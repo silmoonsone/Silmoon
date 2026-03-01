@@ -1,4 +1,4 @@
-﻿using Silmoon.Extension;
+﻿using Silmoon.Extensions;
 using Silmoon.Secure;
 using System;
 using System.Collections;

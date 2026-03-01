@@ -3,8 +3,8 @@ using MongoDB.Bson.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Silmoon;
-using Silmoon.Extension;
-using Silmoon.Extension.Http;
+using Silmoon.Extensions;
+using Silmoon.Extensions.Http;
 using System.Collections.ObjectModel;
 
 namespace WinFormTest;

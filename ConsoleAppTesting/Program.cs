@@ -1,6 +1,6 @@
 ﻿using ConsoleAppTesting;
 using Silmoon;
-using Silmoon.Extension;
+using Silmoon.Extensions;
 using Silmoon.Threading;
 using System.Linq.Expressions;
 using System.Text;

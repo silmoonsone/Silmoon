@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO.Compression;
 using System.IO;
 using System.Text;
-using Silmoon.Extension;
+using Silmoon.Extensions;
 using System.Threading.Tasks;
 
 namespace Silmoon.Compress

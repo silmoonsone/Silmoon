@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using Silmoon.Collections;
 using Silmoon.Compress;
 using Silmoon.Extension.Network;
+using Silmoon.Extensions;
 using Silmoon.Models;
 
 namespace Silmoon.Extension.Http

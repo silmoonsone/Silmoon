@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Silmoon.Core.Authorization;
-using Silmoon.Extension;
+using Silmoon.Extensions;
 using Silmoon.Models;
 using Silmoon.Secure;
 

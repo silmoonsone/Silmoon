@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using Silmoon.Collections;
 using Silmoon.Extension.Network;
+using Silmoon.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;

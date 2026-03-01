@@ -1,4 +1,4 @@
-﻿using Silmoon.Extension;
+﻿using Silmoon.Extensions;
 using Silmoon.Core.Models;
 using Silmoon.Models;
 using Silmoon.Secure;
