@@ -1,4 +1,4 @@
-﻿#if NET
+#if NET
 #nullable enable
 using System;
 using System.Collections.Generic;
@@ -13,6 +13,11 @@ namespace Silmoon.Threading
         private readonly SemaphoreSlim semaphoreSlim = new(1, 1);
 
         public static AsyncLock Create() => new();
+
+        /// <summary>
+        /// 获取当前锁是否已被持有。true 表示已锁定，false 表示未锁定。
+        /// </summary>
+        public bool IsLocked => semaphoreSlim.CurrentCount == 0;
 
         public async ValueTask<Releaser> LockAsync(CancellationToken cancellationToken = default)
         {
@@ -32,17 +37,13 @@ namespace Silmoon.Threading
         }
         public Releaser? TryLock()
         {
-            if (semaphoreSlim.Wait(0))
-                return new Releaser(semaphoreSlim);
+            if (semaphoreSlim.Wait(0)) return new Releaser(semaphoreSlim);
             return null;
         }
         public async ValueTask<Releaser?> TryLockAsync(TimeSpan timeout, CancellationToken ct = default)
         {
-            if (timeout < TimeSpan.Zero && timeout != Timeout.InfiniteTimeSpan)
-                throw new ArgumentOutOfRangeException(nameof(timeout));
-
-            if (await semaphoreSlim.WaitAsync(timeout, ct).ConfigureAwait(false))
-                return new Releaser(semaphoreSlim);
+            if (timeout < TimeSpan.Zero && timeout != Timeout.InfiniteTimeSpan) throw new ArgumentOutOfRangeException(nameof(timeout));
+            if (await semaphoreSlim.WaitAsync(timeout, ct).ConfigureAwait(false)) return new Releaser(semaphoreSlim);
             return null;
         }
 
