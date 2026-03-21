@@ -554,7 +554,7 @@ namespace Silmoon.Extensions
             var result = (T)Enum.Parse(type, value, ignoreCase);
             return result;
         }
-        public static T ToEnum<T>(this string value, bool throwException, bool ignoreCase = false) where T : Enum
+        public static T ToEnum<T>(this string value, bool throwException, T defaultValue = default, bool ignoreCase = false) where T : Enum
         {
             try
             {
@@ -565,7 +565,7 @@ namespace Silmoon.Extensions
             catch (Exception)
             {
                 if (throwException) throw;  // 使用 throw 而不是 throw ex，以保留原始堆栈跟踪
-                else return default;
+                else return defaultValue;
             }
         }
 
