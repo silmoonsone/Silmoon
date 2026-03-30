@@ -39,6 +39,7 @@
             label1 = new Label();
             ctlTestObjectRefButton = new Button();
             ctlJsonRequestTestButton = new Button();
+            ctlAsyncLockTestButton = new Button();
             SuspendLayout();
             // 
             // ctlAesEncryptTestButton
@@ -148,11 +149,22 @@
             ctlJsonRequestTestButton.UseVisualStyleBackColor = true;
             ctlJsonRequestTestButton.Click += ctlJsonRequestTestButton_Click;
             // 
+            // ctlAsyncLockTestButton
+            // 
+            ctlAsyncLockTestButton.Location = new Point(495, 273);
+            ctlAsyncLockTestButton.Name = "ctlAsyncLockTestButton";
+            ctlAsyncLockTestButton.Size = new Size(163, 23);
+            ctlAsyncLockTestButton.TabIndex = 11;
+            ctlAsyncLockTestButton.Text = "AsyncLockTest";
+            ctlAsyncLockTestButton.UseVisualStyleBackColor = true;
+            ctlAsyncLockTestButton.Click += ctlAsyncLockTestButton_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(670, 466);
+            Controls.Add(ctlAsyncLockTestButton);
             Controls.Add(ctlJsonRequestTestButton);
             Controls.Add(ctlTestObjectRefButton);
             Controls.Add(label1);
@@ -184,5 +196,6 @@
         private Label label1;
         private Button ctlTestObjectRefButton;
         private Button ctlJsonRequestTestButton;
+        private Button ctlAsyncLockTestButton;
     }
 }

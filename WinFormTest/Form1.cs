@@ -9,6 +9,7 @@ using Silmoon.Extensions.Http;
 using Silmoon.Attributes;
 using System.Dynamic;
 using Silmoon.Collections;
+using Silmoon.Threading;
 
 namespace WinFormTest
 {
@@ -112,6 +113,19 @@ namespace WinFormTest
             };
 
             var result = await JsonRequest.PostFormDataAsync<object>("https://challenges.cloudflare.com/turnstile/v0/siteverify", data, null);
+        }
+        AsyncLock asyncLock = new AsyncLock();
+        private async void ctlAsyncLockTestButton_Click(object sender, EventArgs e)
+        {
+            if (asyncLock.IsLocked)
+            {
+                MessageBox.Show(this, "The lock is already acquired by another operation. Please wait.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                using var _ = await asyncLock.LockAsync();
+                await Task.Delay(2000);
+            }
         }
     }
     class User
