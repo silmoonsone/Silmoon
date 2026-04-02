@@ -141,8 +141,33 @@ namespace Silmoon.Extensions
             return bigIntegers.ToArray();
         }
 
+#if NET
+        public static bool ContainsAll(this string value, string[] values, StringComparison comparison = StringComparison.Ordinal)
+        {
+            if (string.IsNullOrEmpty(value)) return false;
+            if (values == null || values.Length == 0) return false;
 
+            foreach (var s in values)
+            {
+                if (string.IsNullOrEmpty(s)) continue;
+                if (!value.Contains(s, comparison)) return false;
+            }
+            return true;
+        }
 
+        public static bool ContainsAny(this string value, string[] values, StringComparison comparison = StringComparison.Ordinal)
+        {
+            if (string.IsNullOrEmpty(value)) return false;
+            if (values == null || values.Length == 0) return false;
+
+            foreach (var s in values)
+            {
+                if (string.IsNullOrEmpty(s)) continue;
+                if (value.Contains(s, comparison)) return true;
+            }
+            return false;
+        }
+#endif
 
         /// <summary>
         /// 获取文本经过指定编码后的字节长度。

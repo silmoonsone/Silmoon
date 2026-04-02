@@ -1,8 +1,9 @@
-﻿using System;
-using System.IO;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using Silmoon.Extensions.Hosting.Interfaces;
+using Silmoon.Extensions.Hosting.Options;
+using System;
+using System.IO;
 
 namespace Silmoon.Extensions.Hosting.Services;
 
@@ -31,4 +32,5 @@ public class SilmoonConfigureService : ISilmoonConfigureService
             ConfigJson = JsonHelperV2.LoadJsonFromFile(CurrentConfigFilePath);
         }
     }
+    public static SilmoonConfigureService CreateSingleton(SilmoonConfigureServiceOption options = null) => new SilmoonConfigureService(new OptionImpl<SilmoonConfigureServiceOption>(options));
 }
