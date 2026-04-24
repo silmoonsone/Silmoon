@@ -11,6 +11,7 @@ namespace Silmoon.Extensions
     public static class JsonExtension
     {
         static JsonSerializerSettings DefaultSetting = new JsonSerializerSettings();
+        static JsonSerializerSettings ForceTypeSetting = new JsonSerializerSettings();
         public static void Remove(this JToken token, string name) => ((JObject)token).Remove(name);
 
         public static string ToJsonString(this object obj) => ToJsonString(obj, JsonConvert.DefaultSettings?.Invoke() ?? DefaultSetting);
@@ -46,17 +47,15 @@ namespace Silmoon.Extensions
         public static string ToJsonString<T>(this object obj) => ToJsonString<T>(obj, JsonConvert.DefaultSettings?.Invoke() ?? DefaultSetting);
         public static string ToJsonString<T>(this object obj, JsonSerializerSettings settings)
         {
-            var settings2 = new JsonSerializerSettings(settings);
-            settings2.ContractResolver = new ForceBaseTypeResolver<T>();
-            var result = JsonConvert.SerializeObject(obj, settings2);
+            ForceTypeSetting.ContractResolver = new ForceBaseTypeResolver<T>();
+            var result = JsonConvert.SerializeObject(obj, ForceTypeSetting);
             return result;
         }
         public static string ToFormattedJsonString<T>(this object obj) => ToFormattedJsonString<T>(obj, JsonConvert.DefaultSettings?.Invoke() ?? DefaultSetting);
         public static string ToFormattedJsonString<T>(this object obj, JsonSerializerSettings settings)
         {
-            var settings2 = new JsonSerializerSettings(settings);
-            settings2.ContractResolver = new ForceBaseTypeResolver<T>();
-            JsonSerializer serializer = JsonSerializer.Create(settings2);
+            ForceTypeSetting.ContractResolver = new ForceBaseTypeResolver<T>();
+            JsonSerializer serializer = JsonSerializer.Create(ForceTypeSetting);
             if (obj != null)
             {
                 using (StringWriter textWriter = new StringWriter())
@@ -66,10 +65,7 @@ namespace Silmoon.Extensions
                     return textWriter.ToString();
                 }
             }
-            else
-            {
-                return "null";
-            }
+            else return "null";
         }
 
 #if NET10_0_OR_GREATER
@@ -85,11 +81,8 @@ namespace Silmoon.Extensions
         {
             protected override JsonContract CreateContract(Type objectType)
             {
-                // 运行时是派生类时，也强制用 TBase 的契约
-                if (typeof(TBase).IsAssignableFrom(objectType))
-                    return base.CreateContract(typeof(TBase));
-
-                return base.CreateContract(objectType);
+                if (typeof(TBase).IsAssignableFrom(objectType)) return base.CreateContract(typeof(TBase));
+                else return base.CreateContract(objectType);
             }
         }
     }
