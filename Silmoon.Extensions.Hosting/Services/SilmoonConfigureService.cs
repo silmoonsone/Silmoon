@@ -14,7 +14,7 @@ public class SilmoonConfigureService : ISilmoonConfigureService
     private SilmoonConfigureServiceOption Options { get; set; }
     public string CurrentConfigFilePath { get; set; }
 
-    public SilmoonConfigureService(IOptions<SilmoonConfigureServiceOption> options, ISilmoonConfigureFileReadService fileReadService = null)
+    public SilmoonConfigureService(IOptions<SilmoonConfigureServiceOption> options, ISilmoonConfigureFileReadService silmoonConfigureFileReadService = null)
     {
         Options = options.Value;
         if (Options.IsDebug is null)
@@ -24,17 +24,27 @@ public class SilmoonConfigureService : ISilmoonConfigureService
         }
         else
         {
-            if (File.Exists(Options.LocalConfigFile))
-                CurrentConfigFilePath = Options.LocalConfigFile;
+            if (silmoonConfigureFileReadService is null)
+            {
+                if (File.Exists(Options.LocalConfigFile))
+                    CurrentConfigFilePath = Options.LocalConfigFile;
+                else
+                    CurrentConfigFilePath = Options.DefaultConfigFile;
+            }
             else
-                CurrentConfigFilePath = Options.DefaultConfigFile;
+            {
+                if (silmoonConfigureFileReadService.FileExists(Options.LocalConfigFile))
+                    CurrentConfigFilePath = Options.LocalConfigFile;
+                else
+                    CurrentConfigFilePath = Options.DefaultConfigFile;
+            }
 
 
-            if (fileReadService is null)
+            if (silmoonConfigureFileReadService is null)
                 ConfigJson = JsonHelperV2.LoadJsonFromFile(CurrentConfigFilePath);
             else
             {
-                var jsonStr = fileReadService.GetFileContent(CurrentConfigFilePath);
+                var jsonStr = silmoonConfigureFileReadService.GetFileContent(CurrentConfigFilePath);
                 ConfigJson = JsonConvert.DeserializeObject<JObject>(jsonStr);
             }
         }
