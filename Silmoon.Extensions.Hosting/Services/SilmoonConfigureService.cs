@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Silmoon.Extensions.Hosting.Interfaces;
 using Silmoon.Extensions.Hosting.Options;
@@ -13,7 +14,7 @@ public class SilmoonConfigureService : ISilmoonConfigureService
     private SilmoonConfigureServiceOption Options { get; set; }
     public string CurrentConfigFilePath { get; set; }
 
-    public SilmoonConfigureService(IOptions<SilmoonConfigureServiceOption> options)
+    public SilmoonConfigureService(IOptions<SilmoonConfigureServiceOption> options, ISilmoonConfigureFileReadService fileReadService = null)
     {
         Options = options.Value;
         if (Options.IsDebug is null)
@@ -29,8 +30,14 @@ public class SilmoonConfigureService : ISilmoonConfigureService
                 CurrentConfigFilePath = Options.DefaultConfigFile;
 
 
-            ConfigJson = JsonHelperV2.LoadJsonFromFile(CurrentConfigFilePath);
+            if (fileReadService is null)
+                ConfigJson = JsonHelperV2.LoadJsonFromFile(CurrentConfigFilePath);
+            else
+            {
+                var jsonStr = fileReadService.GetFileContent(CurrentConfigFilePath);
+                ConfigJson = JsonConvert.DeserializeObject<JObject>(jsonStr);
+            }
         }
     }
-    public static SilmoonConfigureService CreateSingleton(SilmoonConfigureServiceOption options = null) => new SilmoonConfigureService(new OptionImpl<SilmoonConfigureServiceOption>(options));
+    public static SilmoonConfigureService CreateSingleton(SilmoonConfigureServiceOption options = null) => new SilmoonConfigureService(new OptionImpl<SilmoonConfigureServiceOption>(options), null);
 }

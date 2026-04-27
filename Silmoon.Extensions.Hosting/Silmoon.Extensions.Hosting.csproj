@@ -19,7 +19,7 @@
 
   <PropertyGroup>
     <PackageId>Silmoon.Extensions.Hosting</PackageId>
-    <Version>3.0.0-alpha.3</Version>
+    <Version>3.0.0-alpha.5</Version>
     <Authors>SILMOON</Authors>
     <Company>SILMOON LLC</Company>
     <Description>Silmoon SDK</Description>

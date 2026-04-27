@@ -23,6 +23,24 @@ namespace Silmoon.Extensions.Hosting.Extensions
             services.Configure(option);
             services.AddSingleton<ISilmoonConfigureService, TSilmoonConfigureService>();
         }
+
+        public static void AddSilmoonConfigure<TSilmoonConfigureService, TSilmoonConfigureFileReadService>(this IServiceCollection services) where TSilmoonConfigureService : class, ISilmoonConfigureService where TSilmoonConfigureFileReadService : class, ISilmoonConfigureFileReadService
+        {
+            ArgumentNullException.ThrowIfNull(services);
+
+            services.AddSingleton<ISilmoonConfigureFileReadService, TSilmoonConfigureFileReadService>();
+            services.AddSingleton<ISilmoonConfigureService, TSilmoonConfigureService>();
+        }
+        public static void AddSilmoonConfigure<TSilmoonConfigureService, TSilmoonConfigureFileReadService>(this IServiceCollection services, Action<SilmoonConfigureServiceOption> option) where TSilmoonConfigureService : class, ISilmoonConfigureService where TSilmoonConfigureFileReadService : class, ISilmoonConfigureFileReadService
+        {
+            ArgumentNullException.ThrowIfNull(services);
+            ArgumentNullException.ThrowIfNull(option);
+
+            services.AddSingleton<ISilmoonConfigureFileReadService, TSilmoonConfigureFileReadService>();
+            services.Configure(option);
+            services.AddSingleton<ISilmoonConfigureService, TSilmoonConfigureService>();
+        }
+
         public static void AddSilmoonConfigure(this IServiceCollection services)
         {
             ArgumentNullException.ThrowIfNull(services);
