@@ -12,9 +12,9 @@ public class SilmoonConfigureService : ISilmoonConfigureService
 {
     public JObject ConfigJson { get; private set; }
     private SilmoonConfigureServiceOption Options { get; set; }
-    public string CurrentConfigFilePath { get; set; }
+    public string CurrentConfigFile { get; private set; }
 
-    public SilmoonConfigureService(IOptions<SilmoonConfigureServiceOption> options, ISilmoonConfigureFileReadService silmoonConfigureFileReadService = null)
+    public SilmoonConfigureService(IOptions<SilmoonConfigureServiceOption> options, ISilmoonPlatformDirectoryService silmoonPlatformDirectoryService = null)
     {
         Options = options.Value;
         if (Options.IsDebug is null)
@@ -24,29 +24,26 @@ public class SilmoonConfigureService : ISilmoonConfigureService
         }
         else
         {
-            if (silmoonConfigureFileReadService is null)
+            if (silmoonPlatformDirectoryService is null)
             {
                 if (File.Exists(Options.LocalConfigFile))
-                    CurrentConfigFilePath = Options.LocalConfigFile;
+                    CurrentConfigFile = Options.LocalConfigFile;
                 else
-                    CurrentConfigFilePath = Options.DefaultConfigFile;
+                    CurrentConfigFile = Options.DefaultConfigFile;
             }
             else
             {
-                if (silmoonConfigureFileReadService.FileExists(Options.LocalConfigFile))
-                    CurrentConfigFilePath = Options.LocalConfigFile;
+                if (File.Exists(Path.Combine(silmoonPlatformDirectoryService.AppConfigDirectory, Options.LocalConfigFile)))
+                    CurrentConfigFile = Options.LocalConfigFile;
                 else
-                    CurrentConfigFilePath = Options.DefaultConfigFile;
+                    CurrentConfigFile = Options.DefaultConfigFile;
             }
 
 
-            if (silmoonConfigureFileReadService is null)
-                ConfigJson = JsonHelperV2.LoadJsonFromFile(CurrentConfigFilePath);
+            if (silmoonPlatformDirectoryService is null)
+                ConfigJson = JsonHelperV2.LoadJsonFromFile(CurrentConfigFile);
             else
-            {
-                var jsonStr = silmoonConfigureFileReadService.GetFileContent(CurrentConfigFilePath);
-                ConfigJson = JsonConvert.DeserializeObject<JObject>(jsonStr);
-            }
+                ConfigJson = JsonHelperV2.LoadJsonFromFile(Path.Combine(silmoonPlatformDirectoryService.AppConfigDirectory, CurrentConfigFile));
         }
     }
     public static SilmoonConfigureService CreateSingleton(SilmoonConfigureServiceOption options = null) => new SilmoonConfigureService(new OptionImpl<SilmoonConfigureServiceOption>(options), null);

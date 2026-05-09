@@ -24,19 +24,19 @@ namespace Silmoon.Extensions.Hosting.Extensions
             services.AddSingleton<ISilmoonConfigureService, TSilmoonConfigureService>();
         }
 
-        public static void AddSilmoonConfigure<TSilmoonConfigureService, TSilmoonConfigureFileReadService>(this IServiceCollection services) where TSilmoonConfigureService : class, ISilmoonConfigureService where TSilmoonConfigureFileReadService : class, ISilmoonConfigureFileReadService
+        public static void AddSilmoonConfigure<TSilmoonConfigureService, TSilmoonPlatformDirectoryService>(this IServiceCollection services) where TSilmoonConfigureService : class, ISilmoonConfigureService where TSilmoonPlatformDirectoryService : class, ISilmoonPlatformDirectoryService
         {
             ArgumentNullException.ThrowIfNull(services);
 
-            services.AddSingleton<ISilmoonConfigureFileReadService, TSilmoonConfigureFileReadService>();
+            services.AddSingleton<ISilmoonPlatformDirectoryService, TSilmoonPlatformDirectoryService>();
             services.AddSingleton<ISilmoonConfigureService, TSilmoonConfigureService>();
         }
-        public static void AddSilmoonConfigure<TSilmoonConfigureService, TSilmoonConfigureFileReadService>(this IServiceCollection services, Action<SilmoonConfigureServiceOption> option) where TSilmoonConfigureService : class, ISilmoonConfigureService where TSilmoonConfigureFileReadService : class, ISilmoonConfigureFileReadService
+        public static void AddSilmoonConfigure<TSilmoonConfigureService, TSilmoonPlatformDirectoryService>(this IServiceCollection services, Action<SilmoonConfigureServiceOption> option) where TSilmoonConfigureService : class, ISilmoonConfigureService where TSilmoonPlatformDirectoryService : class, ISilmoonPlatformDirectoryService
         {
             ArgumentNullException.ThrowIfNull(services);
             ArgumentNullException.ThrowIfNull(option);
 
-            services.AddSingleton<ISilmoonConfigureFileReadService, TSilmoonConfigureFileReadService>();
+            services.AddSingleton<ISilmoonPlatformDirectoryService, TSilmoonPlatformDirectoryService>();
             services.Configure(option);
             services.AddSingleton<ISilmoonConfigureService, TSilmoonConfigureService>();
         }

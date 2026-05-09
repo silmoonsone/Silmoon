@@ -16,7 +16,7 @@ namespace Silmoon.Extensions
         }
         extension(Directory)
         {
-            public static void CreateDirectory(string directoryPath) => FileHelper.CreateDirectory(directoryPath);
+            public static void CreateDirectoryRecursive(string directoryPath) => FileHelper.CreateDirectory(directoryPath);
             public static void ClearEmptyDirectory(string targetDirectoryPath, string reserveDirectoryPath) => FileHelper.ClearEmptyDirectory(targetDirectoryPath, reserveDirectoryPath);
         }
 #endif
