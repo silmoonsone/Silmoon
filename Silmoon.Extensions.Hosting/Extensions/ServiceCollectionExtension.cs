@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Silmoon.Extensions.Hosting.Interfaces;
 using Silmoon.Extensions.Hosting.Services;
 using System;
@@ -9,6 +10,19 @@ namespace Silmoon.Extensions.Hosting.Extensions
 {
     public static class ServiceCollectionExtension
     {
+        public static IServiceCollection AddSingletonStrict<TService>(this IServiceCollection services) where TService : class
+        {
+            if (services.Any(d => d.ServiceType == typeof(TService))) throw new InvalidOperationException($"Service '{typeof(TService).FullName}' has already been registered.");
+            services.AddSingleton<TService>();
+            return services;
+        }
+        public static IServiceCollection AddSingletonStrict<TService, TImplementation>(this IServiceCollection services) where TService : class where TImplementation : class, TService
+        {
+            if (services.Any(d => d.ServiceType == typeof(TService))) throw new InvalidOperationException($"Service '{typeof(TService).FullName}' has already been registered.");
+            services.AddSingleton<TService, TImplementation>();
+            return services;
+        }
+
         public static void AddSilmoonConfigure<TSilmoonConfigureService>(this IServiceCollection services) where TSilmoonConfigureService : class, ISilmoonConfigureService
         {
             ArgumentNullException.ThrowIfNull(services);
@@ -28,7 +42,7 @@ namespace Silmoon.Extensions.Hosting.Extensions
         {
             ArgumentNullException.ThrowIfNull(services);
 
-            services.AddSingleton<ISilmoonPlatformDirectoryService, TSilmoonPlatformDirectoryService>();
+            services.AddSingletonStrict<ISilmoonPlatformDirectoryService, TSilmoonPlatformDirectoryService>();
             services.AddSingleton<ISilmoonConfigureService, TSilmoonConfigureService>();
         }
         public static void AddSilmoonConfigure<TSilmoonConfigureService, TSilmoonPlatformDirectoryService>(this IServiceCollection services, Action<SilmoonConfigureServiceOption> option) where TSilmoonConfigureService : class, ISilmoonConfigureService where TSilmoonPlatformDirectoryService : class, ISilmoonPlatformDirectoryService
@@ -36,7 +50,7 @@ namespace Silmoon.Extensions.Hosting.Extensions
             ArgumentNullException.ThrowIfNull(services);
             ArgumentNullException.ThrowIfNull(option);
 
-            services.AddSingleton<ISilmoonPlatformDirectoryService, TSilmoonPlatformDirectoryService>();
+            services.AddSingletonStrict<ISilmoonPlatformDirectoryService, TSilmoonPlatformDirectoryService>();
             services.Configure(option);
             services.AddSingleton<ISilmoonConfigureService, TSilmoonConfigureService>();
         }
