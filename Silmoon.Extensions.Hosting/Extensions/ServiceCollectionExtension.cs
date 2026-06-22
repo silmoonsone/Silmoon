@@ -12,6 +12,7 @@ namespace Silmoon.Extensions.Hosting.Extensions
     {
         public static IServiceCollection AddSingletonStrict<TService>(this IServiceCollection services) where TService : class
         {
+            ArgumentNullException.ThrowIfNull(services);
             var type = typeof(TService);
             if (services.Any(d => d.ServiceType == type)) throw new InvalidOperationException($"Service '{type.FullName}' has already been registered.");
             services.AddSingleton<TService>();
@@ -19,6 +20,7 @@ namespace Silmoon.Extensions.Hosting.Extensions
         }
         public static IServiceCollection AddSingletonStrict<TService, TImplementation>(this IServiceCollection services) where TService : class where TImplementation : class, TService
         {
+            ArgumentNullException.ThrowIfNull(services);
             var type = typeof(TService);
             if (services.Any(d => d.ServiceType == type)) throw new InvalidOperationException($"Service '{type.FullName}' has already been registered.");
             services.AddSingleton<TService, TImplementation>();
@@ -26,6 +28,7 @@ namespace Silmoon.Extensions.Hosting.Extensions
         }
         public static IServiceCollection AddSingletonConcreteStrict<TService>(this IServiceCollection services) where TService : class
         {
+            ArgumentNullException.ThrowIfNull(services);
             var type = typeof(TService);
             if (services.Any(d => d.ServiceType == type && d.ImplementationType == type)) throw new InvalidOperationException($"Concrete singleton '{type.FullName}' has already been registered.");
             services.AddSingleton<TService>();

@@ -116,5 +116,11 @@ namespace Silmoon.Extensions
             // 检查时间差是否在范围内
             return -timeDifference <= BeforeTime && timeDifference <= AfterTime;
         }
+
+        public static DateTime GetDateStartOfWeek(this DateTime date, DayOfWeek startOfWeek = DayOfWeek.Sunday)
+        {
+            int diff = (8 + (date.DayOfWeek - startOfWeek)) % 7;
+            return date.Date.AddDays(-diff);
+        }
     }
 }
